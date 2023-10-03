@@ -5,6 +5,13 @@ body {
   font-size: var(--el-font-size-extra-small);
 }
 a {
-    color: var(--el-menu-text-color);
-    text-decoration: none;
+  color: var(--el-menu-text-color);
+  text-decoration: none;
+}
+
+.container-table {
+  margin-right: 300px;
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+  height: 400px;
 }
