@@ -19,7 +19,7 @@ export const useAddLineStore = defineStore("NewTextStore", {
   actions: {
     addProvider() {
       const newId = this.providers.length + 1;
-      this.providers.push({
+      this.$state.providers.push({
         id: newId,
         title: this.newText,
       });
