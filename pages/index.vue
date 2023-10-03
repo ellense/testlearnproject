@@ -1,11 +1,14 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
     <h2>Коммерческие условия</h2>
-    <el-table :data="tableData">
+    <el-table :data="tableData" border>
       <el-table-column prop="date" label="Date" width="140" />
       <el-table-column prop="name" label="Name" width="120" />
       <el-table-column prop="address" label="Address" />
     </el-table>
+    <el-toolbar>
+
+    </el-toolbar>
   </el-scrollbar>
 </template>
 
