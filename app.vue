@@ -77,7 +77,6 @@
 </template>
 
 <script lang="ts" setup>
-//import { ref } from "vue";
 import {
   Calendar,
   Document,
@@ -90,13 +89,12 @@ import {
 </script>
 
 <style scoped>
-
-h1{
+h1 {
   color: #337ecc;
 }
 .layout-container-demo .el-header {
   position: relative;
-  
+
   color: var(--el-text-color-primary);
   border-bottom: 1px solid var(--el-border-color);
 }
@@ -114,9 +112,8 @@ h1{
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  /* right: 20px; */
 }
 .el-menu-item {
-height: 40px;
+  height: 40px;
 }
 </style>
