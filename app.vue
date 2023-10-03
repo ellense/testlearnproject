@@ -1,9 +1,6 @@
 <template>
   <el-container class="layout-container-demo">
     <el-header style="text-align: right; font-size: 12px">
-      <div>
-        <h1>Управление коммерческими условиями поставщиков</h1>
-      </div>
       <div class="toolbar">
         <div>
           <h1>РЕТРО-БОНУС</h1>
@@ -80,7 +77,6 @@
 </template>
 
 <script lang="ts" setup>
-//import { ref } from "vue";
 import {
   Calendar,
   Document,
@@ -93,14 +89,11 @@ import {
 </script>
 
 <style scoped>
-
-h1{
+h1 {
   color: #337ecc;
 }
 .layout-container-demo .el-header {
   position: relative;
-  display: flex;
-  
   color: var(--el-text-color-primary);
   border-bottom: 1px solid var(--el-border-color);
 }
@@ -118,9 +111,8 @@ h1{
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  /* right: 20px; */
 }
 .el-menu-item {
-height: 40px;
+  height: 40px;
 }
 </style>

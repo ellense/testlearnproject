@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   },
   app:{
     head:{
-      title: 'Сайт'
+      title: 'Ретро-бонус'
     }
   },
   css:[
