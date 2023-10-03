@@ -5,15 +5,19 @@
         <h1>Управление коммерческими условиями поставщиков</h1>
       </div>
       <div class="toolbar">
+        <div>
+          <h1>РЕТРО-БОНУС</h1>
+        </div>
         <el-dropdown>
-          <el-icon style="margin-right: 8px; margin-top: 1px"
-            ><setting
+          <el-icon style="margin-right: 8px; margin-top: 1px" size="25"
+            ><User
           /></el-icon>
+
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>View</el-dropdown-item>
-              <el-dropdown-item>Add</el-dropdown-item>
-              <el-dropdown-item>Delete</el-dropdown-item>
+              <el-dropdown-item>Открыть</el-dropdown-item>
+              <el-dropdown-item>Редактировать</el-dropdown-item>
+              <el-dropdown-item>Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
@@ -24,37 +28,47 @@
       <el-aside width="200px">
         <el-scrollbar height="calc(100vh - 60px)">
           <el-menu style="font-size: 12px" active-color="#689EFF">
-            <el-menu-item index="1">
-              <nuxt-link to="/">
+            <nuxt-link to="/">
+              <el-menu-item index="1">
                 <el-icon><Document /></el-icon>
                 <span>Ком.условие</span>
-              </nuxt-link>
-            </el-menu-item>
-            <el-menu-item index="2">
-              <nuxt-link to="/entity">
-                <el-icon><Suitcase /></el-icon>
-                <span>Юридические лица</span>
-              </nuxt-link>
-            </el-menu-item>
-            <el-menu-item index="3">
-              <nuxt-link to="/graphic">
+              </el-menu-item>
+            </nuxt-link>
+            <nuxt-link to="/graphic">
+              <el-menu-item index="2">
                 <el-icon><Calendar /></el-icon>
                 <span>График расчетов</span>
-              </nuxt-link>
-            </el-menu-item>
-            <el-menu-item index="4">
-              <nuxt-link to="/invoice">
-                <el-icon><Calendar /></el-icon>
+              </el-menu-item>
+            </nuxt-link>
+            <nuxt-link to="/entity">
+              <el-menu-item index="3">
+                <el-icon><Suitcase /></el-icon>
+                <span>Юридические лица</span>
+              </el-menu-item>
+            </nuxt-link>
+            <nuxt-link to="/invoice">
+              <el-menu-item index="4">
+                <el-icon><Memo /></el-icon>
                 <span>Накладные</span>
-              </nuxt-link>
-            </el-menu-item>
-            <el-menu-item index="5">
-              <nuxt-link to="/provider">
-                <el-icon><Calendar /></el-icon>
+              </el-menu-item>
+            </nuxt-link>
+            <nuxt-link to="/provider">
+              <el-menu-item index="5">
+                <el-icon><Box /></el-icon>
                 <span>Поставщики</span>
-              </nuxt-link>
-            </el-menu-item>
+              </el-menu-item>
+            </nuxt-link>
+            <nuxt-link to="/product">
+              <el-menu-item index="6">
+                <el-icon><ShoppingCartFull /></el-icon>
+                <span>Товары</span>
+              </el-menu-item>
+            </nuxt-link>
           </el-menu>
+          <el-divider />
+          <div>
+            <el-text size="small">История</el-text>
+          </div>
         </el-scrollbar>
       </el-aside>
       <el-main>
@@ -67,10 +81,22 @@
 
 <script lang="ts" setup>
 //import { ref } from "vue";
-import { Calendar, Document, Suitcase, Setting } from "@element-plus/icons-vue";
+import {
+  Calendar,
+  Document,
+  Suitcase,
+  User,
+  Memo,
+  Box,
+  ShoppingCartFull,
+} from "@element-plus/icons-vue";
 </script>
 
 <style scoped>
+
+h1{
+  color: #337ecc;
+}
 .layout-container-demo .el-header {
   position: relative;
   display: flex;
@@ -83,22 +109,18 @@ import { Calendar, Document, Suitcase, Setting } from "@element-plus/icons-vue";
 }
 .layout-container-demo .el-menu {
   border-right: none;
-  font-size: 10px;
-}
-.layout-container-demo .el-menu title {
-  font-size: 10px;
-}
-.el-sub-menu__title {
-  font-size: 12px;
 }
 .layout-container-demo .el-main {
-  padding: 20px 0 20px 30px;
+  padding: 0 0 20px 30px;
 }
 .layout-container-demo .toolbar {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   height: 100%;
   /* right: 20px; */
+}
+.el-menu-item {
+height: 40px;
 }
 </style>
