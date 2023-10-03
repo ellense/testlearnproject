@@ -1,8 +1,11 @@
 <template>
   <el-container class="layout-container-demo">
     <el-header style="text-align: right; font-size: 12px">
+      <div>
+        <h1>Управление коммерческими условиями поставщиков</h1>
+      </div>
       <div class="toolbar">
-        <!-- <el-dropdown>
+        <el-dropdown>
           <el-icon style="margin-right: 8px; margin-top: 1px"
             ><setting
           /></el-icon>
@@ -13,10 +16,7 @@
               <el-dropdown-item>Delete</el-dropdown-item>
             </el-dropdown-menu>
           </template>
-        </el-dropdown> -->
-        <div>
-          <h1>Управление коммерческими условиями поставщиков</h1>
-        </div>
+        </el-dropdown>
       </div>
     </el-header>
 
@@ -73,6 +73,8 @@ import { Calendar, Document, Suitcase, Setting } from "@element-plus/icons-vue";
 <style scoped>
 .layout-container-demo .el-header {
   position: relative;
+  display: flex;
+  
   color: var(--el-text-color-primary);
   border-bottom: 1px solid var(--el-border-color);
 }
@@ -99,5 +101,4 @@ import { Calendar, Document, Suitcase, Setting } from "@element-plus/icons-vue";
   height: 100%;
   /* right: 20px; */
 }
-
 </style>
