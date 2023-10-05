@@ -4,6 +4,7 @@ body {
   font-family: "Open Sans", sans-serif;
   font-size: var(--el-font-size-extra-small);
 }
+
 a {
   color: var(--el-menu-text-color);
   text-decoration: none;
@@ -14,4 +15,23 @@ a {
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
   height: 400px;
+}
+
+.toolbarAdd {
+  display: inline-flex;
+  margin-bottom: 10px;
+  gap: 20px;
+}
+
+.scrollTable {
+  margin-right: 8px;
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+}
+
+.toolbarButton {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-right: 8px;
 }

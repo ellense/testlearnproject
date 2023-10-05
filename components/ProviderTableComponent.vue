@@ -1,4 +1,30 @@
 <template>
+  <div class="toolbarAdd">
+    <el-input
+      v-model="newScore"
+      label="Счет"
+      placeholder="Введите счет"
+      style="width: 200px"
+    ></el-input>
+    <el-input
+      v-model="newName"
+      placeholder="Введите наименование"
+      style="width: 200px"
+    ></el-input>
+    <el-input
+      v-model="newEntity"
+      placeholder=""
+      style="width: 200px"
+    ></el-input>
+
+    <!-- <el-select v-model="chooseEntity" value-key="" placeholder="Выберите Юр. лицо" clearable filterable @change=""> -->
+    <!-- <el-option v-for="item in options"
+    :key="item.value"
+    :label="item.label"
+    :value="item.value">
+    </el-option> -->
+    <!-- </el-select> -->
+  </div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
@@ -7,11 +33,11 @@
       @selection-change="handleSelectionChange"
       height="400"
     >
-      <el-table-column type="selection" />
+      <el-table-column property="selection" type="selection" width="55" />
       <el-table-column property="score" label="Счет" width="200">
         <template #default="scope">{{ scope.row.score }}</template>
       </el-table-column>
-      <el-table-column property="name" label="Наименование" width="600" />
+      <el-table-column property="name" label="Наименование" width="300" />
       <el-table-column
         property="nameEntity"
         label="Юридическое лицо"
@@ -20,8 +46,12 @@
     </el-table>
   </el-scrollbar>
 
-  <div style="margin-top: 20px">
+  <div class="toolbarButton" style="margin-top: 20px">
     <el-button @click="toggleSelection()">Очистить все</el-button>
+    <div v-if="newName"><el-button @click="addRows()">Добавить</el-button></div>
+    <div v-if="multipleSelection.length > 0">
+      <el-button @click="deleteSelectedRows()">Удалить</el-button>
+    </div>
   </div>
 </template>
 
@@ -34,9 +64,13 @@ interface Provider {
   name: string;
   nameEntity: string;
 }
+const newScore = ref<string>("");
+const newName = ref<string>("");
+const newEntity = ref<string>("");
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<Provider[]>([]);
+
 const toggleSelection = (rows?: Provider[]) => {
   if (rows) {
     rows.forEach((row) => {
@@ -53,7 +87,7 @@ const handleSelectionChange = (val: Provider[]) => {
   multipleSelection.value = val;
 };
 
-const tableData: Provider[] = [
+const tableData = ref<Provider[]>([
   {
     score: "5475682-89",
     name: "Tom",
@@ -119,13 +153,35 @@ const tableData: Provider[] = [
     name: "Tom",
     nameEntity: "No. 189, Grove St, Los Angeles",
   },
-];
+]);
+
+const addRows = () => {
+  // Добавление нового элемента на основе введенных данных
+  tableData.value.push({
+    score: newScore.value,
+    name: newName.value,
+    nameEntity: newEntity.value,
+  });
+
+  // Очистка полей ввода после добавления
+  newScore.value = "";
+  newName.value = "";
+  newEntity.value = "";
+};
+
+const deleteSelectedRows = () => {
+  const selectedRows: Provider[] = multipleSelection.value;
+
+  // Фильтруем tableData, оставляя только строки, которые не выбраны
+  if (tableData.value) {
+    tableData.value = tableData.value.filter((row: Provider) => {
+      return !selectedRows.includes(row);
+    });
+
+    // Очищаем выбранные строки после удаления
+    multipleSelection.value = [];
+  }
+};
 </script>
 
-<style scoped>
-.scrollTable {
-  margin-right: 300px;
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
-}
-</style>
+<style scoped></style>
