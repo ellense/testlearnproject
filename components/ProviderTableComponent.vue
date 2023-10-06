@@ -34,6 +34,7 @@
       height="400"
     >
       <el-table-column property="selection" type="selection" width="55" />
+      <el-table-column type="index" width="55" />
       <el-table-column property="score" label="Счет" width="200">
         <template #default="scope">{{ scope.row.score }}</template>
       </el-table-column>
@@ -48,7 +49,7 @@
 
   <div class="toolbarButton" style="margin-top: 20px">
     <el-button @click="toggleSelection()">Очистить все</el-button>
-    <div v-if="newName"><el-button @click="addRows()">Добавить</el-button></div>
+    <div v-if="newScore"><el-button @click="addRows()">Добавить</el-button></div>
     <div v-if="multipleSelection.length > 0">
       <el-button @click="deleteSelectedRows()">Удалить</el-button>
     </div>
@@ -67,6 +68,7 @@ interface Provider {
 const newScore = ref<string>("");
 const newName = ref<string>("");
 const newEntity = ref<string>("");
+
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<Provider[]>([]);
@@ -184,4 +186,6 @@ const deleteSelectedRows = () => {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+      
+</style>
