@@ -42,9 +42,14 @@
     >
       <el-table-column property="selection" type="selection" width="55" />
       <el-table-column type="index" width="55" />
-      <el-table-column property="number"  label="Номер" width="200" />
+      <el-table-column property="number" label="Номер" width="200" />
       <el-table-column property="summa" label="Сумма" width="300" />
-      <el-table-column property="dateInvoice" type="date" label="Дата" width="300" />
+      <el-table-column
+        property="dateInvoice"
+        type="date"
+        label="Дата"
+        width="300"
+      />
       <el-table-column
         property="nameProvider"
         label="Поставщик"
@@ -65,9 +70,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { ElTable } from "element-plus";
-
-
-
 
 interface IInvoice {
   number: number;
