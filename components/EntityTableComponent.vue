@@ -5,11 +5,13 @@
       placeholder="Name"
       style="width: 200px"
     ></el-input>
+     <!-- Добавляем поле для поиска по имени -->
+    <el-input v-model="search" placeholder="Search by Name" style="width: 200px"></el-input>
   </div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
-      :data="tableData"
+      :data="filteredTableData"
       style="width: 100%"
       @selection-change="handleSelectionChange"
       height="400"
@@ -24,6 +26,8 @@
     <div v-if="newName">
       <el-button @click="addItem()">Добавить элемент</el-button>
     </div>
+    
+    <el-button @click="deleteSelectedRows">Удалить выбранные</el-button>
   </div>
 </template>
 
@@ -58,6 +62,13 @@ const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val;
 };
 
+const search = ref("");
+
+const filteredTableData = computed(() => { //вычисляемое свойство
+  const searchValue = search.value.toLowerCase(); //нижний регистр
+  return tableData.value.filter((item) => item.name.toLowerCase().includes(searchValue));
+});
+
 const tableData = ref<User[]>([
   {
     // date: "2016-05-03",
@@ -81,5 +92,19 @@ const addItem = () => {
 
   // Очистка полей ввода после добавления
   newName.value = "";
+};
+
+const deleteSelectedRows = () => {
+  const selectedRows: User[] = multipleSelection.value;
+
+  // Фильтруем tableData, оставляя только строки, которые не выбраны
+  if (tableData.value) {
+    tableData.value = tableData.value.filter((row: User) => {
+      return !selectedRows.includes(row);
+    });
+
+    // Очищаем выбранные строки после удаления
+    multipleSelection.value = [];
+  }
 };
 </script>
