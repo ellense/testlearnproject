@@ -8,22 +8,17 @@
     ></el-input>
     <el-input
       v-model="newName"
-      placeholder="Введите наименование"
+      placeholder="Введите имя поставщика"
       style="width: 200px"
     ></el-input>
-    <el-input
-      v-model="newEntity"
-      placeholder=""
-      style="width: 200px"
-    ></el-input>
-
-    <!-- <el-select v-model="chooseEntity" value-key="" placeholder="Выберите Юр. лицо" clearable filterable @change=""> -->
-    <!-- <el-option v-for="item in options"
-    :key="item.value"
-    :label="item.label"
-    :value="item.value">
-    </el-option> -->
-    <!-- </el-select> -->
+    <el-select v-model="EntityName" clearable placeholder="Выберите Юр.Лицо">
+      <el-option
+        v-for="item in options"
+        :key="item.EntityName"
+        :label="item.label"
+        :value="item.EntityName"
+      />
+    </el-select>
   </div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
@@ -58,6 +53,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { ElTable } from "element-plus";
+import { storeToRefs } from "pinia";
+import { useEntityTableStore } from "~~/stores/entityTableStore";
+
+const store = useEntityTableStore();
 
 interface Provider {
   score: string;
@@ -70,6 +69,22 @@ const newEntity = ref<string>("");
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>();
 const multipleSelection = ref<Provider[]>([]);
+
+const EntityName = ref("");
+const options = ref<{ EntityName: string; label: string }[]>([]);
+
+store.initializeTableData();
+
+// Создаем вычисляемое свойство, которое получает и преобразует значения из стора
+const updateOptions = () => {
+  options.value = store.tableData.map((entity) => ({
+    EntityName: entity.name,
+    label: entity.name,
+  }));
+};
+
+// Вызываем метод для обновления options при создании компонента
+updateOptions();
 
 const toggleSelection = (rows?: Provider[]) => {
   if (rows) {
@@ -160,13 +175,13 @@ const addRows = () => {
   tableData.value.push({
     score: newScore.value,
     name: newName.value,
-    nameEntity: newEntity.value,
+    nameEntity: EntityName.value,
   });
 
   // Очистка полей ввода после добавления
   newScore.value = "";
   newName.value = "";
-  newEntity.value = "";
+  EntityName.value = "";
 };
 
 const deleteSelectedRows = () => {

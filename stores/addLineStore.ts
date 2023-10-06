@@ -6,7 +6,7 @@ interface IAddLineStore {
   providers: { id: number; title: string }[];
 }
 
-export const useAddLineStore = defineStore("NewTextStore", {
+export const useAddLineStore = defineStore("AddLineStore", {
   state: (): IAddLineStore => ({
     newText: "",
     historyProviders: [],

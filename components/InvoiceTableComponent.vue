@@ -73,7 +73,8 @@ const titleproviders = () => {
   stringProviders.value = names.value.join(", ");
 };
 
-const addItem = () => { //добавить рандом элемент
+const addItem = () => {
+  //добавить рандом элемент
   providers.value.push({
     id: providers.value.length + 1,
     title:
