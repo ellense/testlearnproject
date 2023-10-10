@@ -105,7 +105,7 @@ const tableData = ref<IInvoice[]>([
   {
     number: 34,
     summa: 3494003,
-    dateInvoice: new Date(2010, 9, 1),
+    dateInvoice: new Date("2010/09/10"),
     nameProvider: "Brown L.K.",
   },
 ]);
