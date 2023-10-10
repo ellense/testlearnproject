@@ -35,10 +35,6 @@
   </template>
   
   <script lang="ts" setup>
-  import { ref } from "vue";
-  import { ElTable } from "element-plus";
-  import { ElInput } from "element-plus";
-  import { storeToRefs } from "pinia";
   import { useKuTableStore } from "~~/stores/kuTableStore";
   
   const {

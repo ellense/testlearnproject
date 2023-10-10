@@ -2,8 +2,8 @@ import { defineStore } from "pinia";
 
 interface IInvoice {
   id: number;
-  number: number;
-  summa: number;
+  number: number| null;
+  summa: number | null;
   date: Date;
   nameProvider: string;
 }
@@ -11,8 +11,8 @@ interface IInvoice {
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
   state: () => ({
     newId: 0,
-    newNumber: 0,
-    newSum: 0,
+    newNumber: null,
+    newSum: null,
     newDate: new Date(""),
     ProviderName: "",
     multipleSelection: [] as IInvoice[],
@@ -25,14 +25,6 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     filteredTableData: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) => {
-        const numberMatch = item.number
-          .toString()
-          .toLowerCase()
-          .includes(searchValue);
-        const summaMatch = item.summa
-          .toString()
-          .toLowerCase()
-          .includes(searchValue);
         const dateMatch = item.date
           .toString()
           .toLowerCase()
@@ -41,7 +33,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
           .toLowerCase()
           .includes(searchValue);
 
-        return numberMatch || summaMatch || dateMatch || nameProviderMatch;
+        return  dateMatch || nameProviderMatch;
       });
     },
   },
@@ -74,8 +66,8 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
         date: this.newDate,
         nameProvider: this.ProviderName,
       });
-      this.newNumber = 0;
-      this.newSum = 0;
+      this.newNumber = null;
+      this.newSum = null;
       this.newDate = new Date("");
       this.ProviderName = "";
     },

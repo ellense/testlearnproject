@@ -45,9 +45,10 @@
       <el-table-column
         property="nameProvider"
         label="Поставщик"
+        width="300"
         show-overflow-tooltip
       />
-      <el-table-column property="category" label="Категория" width="300" />
+      <el-table-column property="category" label="Категория"  />
     </el-table>
   </el-scrollbar>
 
@@ -64,7 +65,6 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { ElTable } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
