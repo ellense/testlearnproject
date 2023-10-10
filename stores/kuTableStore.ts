@@ -4,6 +4,12 @@ interface IKu {
   name: string;
   id: number;
   kuNumber: string;
+  // percent: number;
+  // startDate: Date;
+  // endDate: Date;
+  // actualDate: Date;
+  // provider: string;
+  // typeGraphics: string;
 }
 
 export const useKuTableStore = defineStore("KuTableStore", {

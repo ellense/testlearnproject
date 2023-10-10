@@ -70,7 +70,6 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { ElTable } from "element-plus";
-
 interface IInvoice {
   number: number;
   summa: number;

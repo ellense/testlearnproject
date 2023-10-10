@@ -63,7 +63,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { ElTable } from "element-plus";
+//import { ElTable } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
