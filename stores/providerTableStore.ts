@@ -16,7 +16,7 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
     multipleSelection: [] as IProvider[],
     search: "",
     tableData: [] as IProvider[],
-    multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
+    multipleTableRef: null as Ref | null, 
   }),
 
   getters: {

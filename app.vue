@@ -116,4 +116,8 @@ h1 {
 .el-menu-item {
   height: 40px;
 }
+.el-text {
+  margin-left: 30px;
+}
+
 </style>

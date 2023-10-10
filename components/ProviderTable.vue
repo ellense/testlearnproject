@@ -33,7 +33,7 @@
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
-      :data="storeProvider.tableData"
+      :data="storeProvider.filteredTableData"
       style="width: 100%"
       @selection-change="storeProvider.handleSelectionChange"
       height="400"
