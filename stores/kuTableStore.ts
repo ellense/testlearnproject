@@ -1,17 +1,18 @@
 import { defineStore } from "pinia";
 
-interface IEntity {
+interface IKu {
   name: string;
   id: number;
+  kuNumber: string;
 }
 
-export const useEntityTableStore = defineStore("EntityTableStore", {
+export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newName: "",
     newId: 0,
-    multipleSelection: [] as IEntity[],
+    multipleSelection: [] as IKu[],
     search: "",
-    tableData: [] as IEntity[],
+    tableData: [] as IKu[],
     multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
   }),
 
@@ -29,7 +30,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
       this.multipleTableRef = ref;
     },
 
-    toggleSelection(evt: MouseEvent, rows?: IEntity[] | undefined) {
+    toggleSelection(evt: MouseEvent, rows?: IKu[] | undefined) {
       if (this.multipleTableRef) {
         if (rows) {
           rows.forEach((row) => {
@@ -40,14 +41,16 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
         }
       }
     },
-    handleSelectionChange(val: IEntity[]) {
+    handleSelectionChange(val: IKu[]) {
       this.multipleSelection = val;
     },
 
     addItem() {
+      const paddedId = String(this.tableData.length + 1).padStart(5, '0');
       this.tableData.push({
         name: this.newName,
         id: this.tableData.length + 1,
+        kuNumber: `КУ${paddedId}`,
       });
       this.newName = "";
     },
@@ -55,7 +58,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 
-      this.tableData = this.tableData.filter((row: IEntity) => {
+      this.tableData = this.tableData.filter((row: IKu) => {
         return !selectedRows.includes(row);
       });
 
@@ -64,8 +67,8 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     initializeTableData() {
       if (this.tableData.length === 0) {
         // Добавьте две сущности при инициализации стора
-        this.tableData.push({ name: "Tom", id: 1 });
-        this.tableData.push({ name: "Jerry", id: 2 });
+        this.tableData.push({ name: "Tom", id: 1, kuNumber: 'КУ00001' });
+        this.tableData.push({ name: "Jerry", id: 2,  kuNumber: 'КУ00002' });
       }
     },
   },
