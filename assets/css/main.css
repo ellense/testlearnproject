@@ -6,10 +6,10 @@ body {
 }
 
 a {
-  color: var(--el-menu-text-color);
   text-decoration: none;
 }
 
+/* контейнер для всей таблицы */
 .container-table {
   margin-right: 300px;
   border: 1px solid var(--el-border-color);
@@ -17,18 +17,21 @@ a {
   height: 400px;
 }
 
+/* панель с инпутами для ввода */
 .toolbarAdd {
   display: inline-flex;
   margin-bottom: 10px;
   gap: 20px;
 }
 
+/* скролл внутри таблицы без заголовка */
 .scrollTable {
   margin-right: 10px;
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
 }
 
+/* панель с кнопками внизу таблицы */
 .toolbarButton {
   display: flex;
   justify-content: flex-end;

@@ -16,15 +16,20 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
     multipleSelection: [] as IProvider[],
     search: "",
     tableData: [] as IProvider[],
-    multipleTableRef: null as Ref | null, 
+    multipleTableRef: null as Ref | null,
   }),
 
   getters: {
-    filteredTableData: (state) => {
+    searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) =>
-        item.name.toLowerCase().includes(searchValue)
-      );
+      return state.tableData.filter((item) => {
+        const nameMatch = item.name.toLowerCase().includes(searchValue);
+        const scoreMatch = item.score.toLowerCase().includes(searchValue);
+        const nameEntityMatch = item.nameEntity
+          .toLowerCase()
+          .includes(searchValue);
+        return nameMatch || scoreMatch || nameEntityMatch;
+      });
     },
   },
 

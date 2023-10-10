@@ -16,7 +16,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
   }),
 
   getters: {
-    filteredTableData: (state) => {
+    searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) =>
         item.name.toLowerCase().includes(searchValue)

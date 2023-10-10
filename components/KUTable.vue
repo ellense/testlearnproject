@@ -1,12 +1,5 @@
 <template>
-  <div class="toolbarAdd">
-    <!-- Добавляем поле для поиска по имени -->
-    <el-input
-      v-model="store.search"
-      placeholder="Поиск"
-      style="width: 200px"
-    ></el-input>
-  </div>
+  <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       :data="store.filteredTableData"
@@ -14,10 +7,29 @@
       @selection-change="store.handleSelectionChange"
       height="400"
     >
-      <el-table-column type="selection" width="55" />
-      <el-table-column property="name" label="Name" width="120" />
+      <el-table-column type="selection" width="55" show-overflow-tooltip />
+      <el-table-column
+        property="name"
+        label="Name"
+        width="120"
+        show-overflow-tooltip
+      />
       <el-table-column property="id" label="id" show-overflow-tooltip />
-      <el-table-column property="kuNumber" label="kuNumber" />
+      <el-table-column
+        property="kuNumber"
+        label="kuNumber"
+        show-overflow-tooltip
+      />
+      <el-table-column>
+        <template #header>
+          <el-input
+            v-model="store.search"
+            placeholder="Поиск"
+            style="width: 200px"
+            :prefix-icon="Search"
+          />
+        </template>
+      </el-table-column>
     </el-table>
   </el-scrollbar>
   <div class="toolbarButton" style="margin-top: 20px">
@@ -29,7 +41,7 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { storeToRefs } from "pinia";
+import { Search } from "@element-plus/icons-vue";
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useRouter } from "vue-router";
 
@@ -43,7 +55,6 @@ const {
   handleSelectionChange,
 } = useKuTableStore();
 
-
 const store = useKuTableStore();
 const router = useRouter();
 
@@ -51,7 +62,6 @@ const redirectToCreatePage = () => {
   // Используйте router.push для перехода на другую страницу
   router.push("/addKu");
 };
-
 
 store.initializeTableData();
 </script>

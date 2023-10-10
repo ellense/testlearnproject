@@ -52,7 +52,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
     },
 
     addItem() {
-      const paddedId = String(this.tableData.length + 1).padStart(5, '0');
+      const paddedId = String(this.tableData.length + 1).padStart(5, "0");
       this.tableData.push({
         name: this.newName,
         id: this.tableData.length + 1,
@@ -73,8 +73,8 @@ export const useKuTableStore = defineStore("KuTableStore", {
     initializeTableData() {
       if (this.tableData.length === 0) {
         // Добавьте две сущности при инициализации стора
-        this.tableData.push({ name: "Tom", id: 1, kuNumber: 'КУ00001' });
-        this.tableData.push({ name: "Jerry", id: 2,  kuNumber: 'КУ00002' });
+        this.tableData.push({ name: "Tom", id: 1, kuNumber: "КУ00001" });
+        this.tableData.push({ name: "Jerry", id: 2, kuNumber: "КУ00002" });
       }
     },
   },

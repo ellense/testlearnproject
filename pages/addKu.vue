@@ -27,6 +27,6 @@ const addItemAndNavigate = () => {
   store.addItem();
 
   // После выполнения действия, перейдите на другую страницу
-  router.push("/"); 
+  router.push("/");
 };
 </script>

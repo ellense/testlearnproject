@@ -20,11 +20,16 @@ export const useProductTableStore = defineStore("ProductTableStore", {
   }),
 
   getters: {
-    filteredTableData: (state) => {
+    searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) =>
-        item.name.toLowerCase().includes(searchValue)
-      );
+      return state.tableData.filter((item) => {
+        const nameMatch = item.name.toLowerCase().includes(searchValue);
+        const categoryMatch = item.category.toLowerCase().includes(searchValue);
+        const nameProviderMatch = item.nameProvider
+          .toLowerCase()
+          .includes(searchValue);
+        return nameMatch || categoryMatch || nameProviderMatch;
+      });
     },
   },
 
@@ -71,7 +76,7 @@ export const useProductTableStore = defineStore("ProductTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
+        // Добавляем две сущности при инициализации стора
         this.tableData.push({
           id: 1,
           name: "Футболка жен.",

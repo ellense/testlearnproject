@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 interface IInvoice {
   id: number;
-  number: number| null;
+  number: number | null;
   summa: number | null;
   date: Date;
   nameProvider: string;
@@ -10,19 +10,20 @@ interface IInvoice {
 
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
   state: () => ({
-    newId: 0,
-    newNumber: null,
-    newSum: null,
-    newDate: new Date(""),
-    ProviderName: "",
-    multipleSelection: [] as IInvoice[],
-    search: "",
-    tableData: [] as IInvoice[],
-    multipleTableRef: null as Ref | null,
+    newId: 0, // Идентификатор новой записи
+    newNumber: null, // Новый номер накладной
+    newSum: null, // Новая сумма по накладной
+    newDate: new Date(""), // Новая дата накладной
+    ProviderName: "", // Имя поставщика
+    multipleSelection: [] as IInvoice[], // Выбранные записи
+    search: "", // Поиск
+    tableData: [] as IInvoice[], // Данные таблицы накладной
+    multipleTableRef: null as Ref | null, // Ссылка на компонент таблицы
   }),
 
   getters: {
-    filteredTableData: (state) => {
+    // поиск данных в таблице
+    searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) => {
         const dateMatch = item.date
@@ -33,16 +34,18 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
           .toLowerCase()
           .includes(searchValue);
 
-        return  dateMatch || nameProviderMatch;
+        return dateMatch || nameProviderMatch;
       });
     },
   },
 
   actions: {
+    // Установка ссылки на компонент таблицы
     setMultipleTableRef(ref: Ref) {
       this.multipleTableRef = ref;
     },
 
+    // Выделение/снятие выделения с записей таблицы
     toggleSelection(rows?: IInvoice[]) {
       if (this.multipleTableRef) {
         if (rows) {
@@ -54,10 +57,22 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
         }
       }
     },
+
+    // Обработчик изменения выбранных записей
     handleSelectionChange(val: IInvoice[]) {
       this.multipleSelection = val;
     },
 
+    // Удаление выбранных записей из таблицы
+    deleteSelectedRows() {
+      const selectedRows = this.multipleSelection;
+      this.tableData = this.tableData.filter((row: IInvoice) => {
+        return !selectedRows.includes(row);
+      });
+      this.multipleSelection = [];
+    },
+
+    // Добавление новых записей в таблицу
     addRows() {
       this.tableData.push({
         id: this.tableData.length + 1,
@@ -72,18 +87,10 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
       this.ProviderName = "";
     },
 
-    deleteSelectedRows() {
-      const selectedRows = this.multipleSelection;
-
-      this.tableData = this.tableData.filter((row: IInvoice) => {
-        return !selectedRows.includes(row);
-      });
-
-      this.multipleSelection = [];
-    },
+    // Инициализация данных таблицы
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
+        // Добавление двух сущностей при инициализации хранилища
         this.tableData.push({
           id: 1,
           number: 347568679,
