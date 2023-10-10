@@ -1,21 +1,21 @@
 import { defineStore } from "pinia";
 
-interface IProvider {
+interface IProduct {
   id: number;
-  score: string;
   name: string;
-  nameEntity: string;
+  nameProvider: string;
+  category: string;
 }
 
-export const useProviderTableStore = defineStore("ProviderTableStore", {
+export const useProductTableStore = defineStore("ProductTableStore", {
   state: () => ({
     newId: 0,
-    newScore: "",
     newName: "",
-    EntityName: "",
-    multipleSelection: [] as IProvider[],
+    ProviderName: "",
+    newCategory: "",
+    multipleSelection: [] as IProduct[],
     search: "",
-    tableData: [] as IProvider[],
+    tableData: [] as IProduct[],
     multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
   }),
 
@@ -33,7 +33,7 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
       this.multipleTableRef = ref;
     },
 
-    toggleSelection(rows?: IProvider[]) {
+    toggleSelection(rows?: IProduct[]) {
       if (this.multipleTableRef) {
         if (rows) {
           rows.forEach((row) => {
@@ -44,26 +44,26 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
         }
       }
     },
-    handleSelectionChange(val: IProvider[]) {
+    handleSelectionChange(val: IProduct[]) {
       this.multipleSelection = val;
     },
 
     addRows() {
       this.tableData.push({
         id: this.tableData.length + 1,
-        score: this.newScore,
         name: this.newName,
-        nameEntity: this.EntityName,
+        nameProvider: this.ProviderName,
+        category: this.newCategory,
       });
-      this.newScore = "";
       this.newName = "";
-      this.EntityName = "";
+      this.ProviderName = "";
+      this.newCategory = "";
     },
 
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 
-      this.tableData = this.tableData.filter((row: IProvider) => {
+      this.tableData = this.tableData.filter((row: IProduct) => {
         return !selectedRows.includes(row);
       });
 
@@ -74,15 +74,15 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
         // Добавьте две сущности при инициализации стора
         this.tableData.push({
           id: 1,
-          score: "5475682-89",
-          name: "Mikki",
-          nameEntity: "Jerry",
+          name: "Футболка жен.",
+          nameProvider: "Mikki",
+          category: "Женская одежда",
         });
         this.tableData.push({
           id: 2,
-          score: "5475682-89",
-          name: "Minni",
-          nameEntity: "Tom",
+          name: "Набор тарелок",
+          nameProvider: "Minni",
+          category: "Посуда",
         });
       }
     },

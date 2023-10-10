@@ -24,7 +24,7 @@ a {
 }
 
 .scrollTable {
-  margin-right: 8px;
+  margin-right: 10px;
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
 }
@@ -33,5 +33,5 @@ a {
   display: flex;
   justify-content: flex-end;
   gap: 10px;
-  margin-right: 8px;
+  margin-right: 10px;
 }
