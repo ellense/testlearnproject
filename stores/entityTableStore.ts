@@ -63,7 +63,6 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
         this.tableData.push({ name: "Tom", id: 1 });
         this.tableData.push({ name: "Jerry", id: 2 });
       }

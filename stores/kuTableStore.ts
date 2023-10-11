@@ -4,12 +4,6 @@ interface IKu {
   name: string;
   id: number;
   kuNumber: string;
-  // percent: number;
-  // startDate: Date;
-  // endDate: Date;
-  // actualDate: Date;
-  // provider: string;
-  // typeGraphics: string;
 }
 
 export const useKuTableStore = defineStore("KuTableStore", {
@@ -19,7 +13,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
     multipleSelection: [] as IKu[],
     search: "",
     tableData: [] as IKu[],
-    multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
+    multipleTableRef: null as Ref | null, 
   }),
 
   getters: {
@@ -72,7 +66,6 @@ export const useKuTableStore = defineStore("KuTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
         this.tableData.push({ name: "Tom", id: 1, kuNumber: "КУ00001" });
         this.tableData.push({ name: "Jerry", id: 2, kuNumber: "КУ00002" });
       }

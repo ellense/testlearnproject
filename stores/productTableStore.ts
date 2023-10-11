@@ -16,7 +16,7 @@ export const useProductTableStore = defineStore("ProductTableStore", {
     multipleSelection: [] as IProduct[],
     search: "",
     tableData: [] as IProduct[],
-    multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
+    multipleTableRef: null as Ref | null,
   }),
 
   getters: {
@@ -76,7 +76,6 @@ export const useProductTableStore = defineStore("ProductTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавляем две сущности при инициализации стора
         this.tableData.push({
           id: 1,
           name: "Футболка жен.",

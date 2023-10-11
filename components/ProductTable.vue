@@ -108,12 +108,9 @@ const updateOptions = () => {
   }));
 };
 
-// Вызываем метод для обновления options при создании компонента
 updateOptions();
 </script>
 
 <style scoped>
-.el-table td {
-  height: 10px;
-}
+
 </style>

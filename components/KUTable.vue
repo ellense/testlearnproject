@@ -59,7 +59,6 @@ const store = useKuTableStore();
 const router = useRouter();
 
 const redirectToCreatePage = () => {
-  // Используйте router.push для перехода на другую страницу
   router.push("/addKu");
 };
 

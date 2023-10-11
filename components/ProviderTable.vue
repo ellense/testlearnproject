@@ -84,7 +84,6 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-//import { ElTable } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
@@ -113,7 +112,6 @@ const updateOptions = () => {
   }));
 };
 
-// Вызываем метод для обновления options при создании компонента
 updateOptions();
 </script>
 

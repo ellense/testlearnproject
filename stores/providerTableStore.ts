@@ -76,7 +76,6 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
         this.tableData.push({
           id: 1,
           score: "5475682-89",
