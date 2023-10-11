@@ -3,19 +3,19 @@ import { defineStore } from "pinia";
 interface IKu {
   id: number;
   kuNumber: string;
-  percent: number;
+  percent: number | null;
   provider: string;
 }
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newId: 0,
-    newPercent: 0,
+    newPercent: null,
     providerName: "",
     multipleSelection: [] as IKu[],
     search: "",
     tableData: [] as IKu[],
-    multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
+    multipleTableRef: null as Ref | null, 
     percent: 0,
     provider: "",
     kuNumber: "",
@@ -58,7 +58,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
         percent: this.newPercent,
         provider: this.providerName,
       });
-      this.newPercent = 0;
+      this.newPercent = null;
       this.providerName = "";
     },
 
