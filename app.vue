@@ -94,7 +94,6 @@ h1 {
 }
 .layout-container-demo .el-header {
   position: relative;
-
   color: var(--el-text-color-primary);
   border-bottom: 1px solid var(--el-border-color);
 }
@@ -120,4 +119,7 @@ h1 {
   margin-left: 30px;
 }
 
+h1 {
+  margin-left: 5px;
+}
 </style>

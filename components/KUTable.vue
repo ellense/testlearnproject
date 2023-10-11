@@ -19,6 +19,7 @@
       <el-table-column property="percent" label="percent" width="120" />
       <el-table-column property="provider" label="provider" width="120" />
       <el-table-column property="id" label="id" show-overflow-tooltip />
+      <el-table-column> </el-table-column>
     </el-table>
   </el-scrollbar>
   <div class="toolbarButton" style="margin-top: 20px">
@@ -45,7 +46,6 @@ storeEntity.initializeTableData();
 storeProvider.initializeTableData();
 
 const redirectToCreatePage = () => {
-  // Используйте router.push для перехода на другую страницу
   router.push("/addKu");
 };
 

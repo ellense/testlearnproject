@@ -5,11 +5,13 @@
       label="Счет"
       placeholder="Введите счет"
       style="width: 200px"
+      clearable
     ></el-input>
     <el-input
       v-model="storeProvider.newName"
       placeholder="Введите имя поставщика"
       style="width: 200px"
+      clearable
     ></el-input>
     <el-select
       v-model="storeProvider.EntityName"
@@ -23,40 +25,59 @@
         :value="item.EntityName"
       />
     </el-select>
-    <el-input
-      v-model="storeProvider.search"
-      placeholder="Поиск"
-      style="width: 200px"
-      :prefix-icon="Search"
-    ></el-input>
   </div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
-      :data="storeProvider.filteredTableData"
+      :data="storeProvider.searchTableData"
       style="width: 100%"
       @selection-change="storeProvider.handleSelectionChange"
       height="400"
     >
-      <el-table-column property="selection" type="selection" width="55" />
-      <el-table-column type="index" width="55" />
-      <el-table-column property="score" label="Счет" width="200" />
-      <el-table-column property="name" label="Наименование" width="300" />
+      <el-table-column
+        property="selection"
+        type="selection"
+        width="55"
+        show-overflow-tooltip
+      />
+      <el-table-column type="index" width="55" show-overflow-tooltip />
+      <el-table-column
+        property="score"
+        label="Счет"
+        width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="name"
+        label="Наименование"
+        width="300"
+        show-overflow-tooltip
+      />
       <el-table-column
         property="nameEntity"
         label="Юридическое лицо"
         show-overflow-tooltip
       />
+      <el-table-column>
+        <template #header>
+          <el-input
+            v-model="storeProvider.search"
+            placeholder="Поиск"
+            style="width: 200px"
+            :prefix-icon="Search"
+          />
+        </template>
+      </el-table-column>
     </el-table>
   </el-scrollbar>
 
   <div class="toolbarButton" style="margin-top: 20px">
-    <el-button @click="storeProvider.toggleSelection">Очистить все</el-button>
     <div v-if="storeProvider.newScore">
       <el-button @click="storeProvider.addRows">Добавить</el-button>
     </div>
     <div v-if="storeProvider.multipleSelection.length > 0">
       <el-button @click="storeProvider.deleteSelectedRows">Удалить</el-button>
+      <el-button @click="storeProvider.toggleSelection">Очистить все</el-button>
     </div>
   </div>
 </template>
@@ -79,7 +100,6 @@ const updateOptions = () => {
   }));
 };
 
-// Вызываем метод для обновления options при создании компонента
 updateOptions();
 </script>
 

@@ -16,7 +16,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
   }),
 
   getters: {
-    filteredTableData: (state) => {
+    searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) =>
         item.name.toLowerCase().includes(searchValue)
@@ -63,7 +63,6 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
         this.tableData.push({ name: "Tom", id: 1 });
         this.tableData.push({ name: "Jerry", id: 2 });
       }
