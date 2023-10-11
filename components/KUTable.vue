@@ -15,9 +15,10 @@
       height="400"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column property="name" label="Name" width="120" />
+      <el-table-column property="kuNumber" label="kuNumber" width="120" />
+      <el-table-column property="percent" label="percent" width="120" />
+      <el-table-column property="provider" label="provider" width="120" />
       <el-table-column property="id" label="id" show-overflow-tooltip />
-      <el-table-column property="kuNumber" label="kuNumber" />
     </el-table>
   </el-scrollbar>
   <div class="toolbarButton" style="margin-top: 20px">
@@ -28,30 +29,25 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useRouter } from "vue-router";
-
-const {
-  newName,
-  search,
-  filteredTableData,
-  addItem,
-  deleteSelectedRows,
-  toggleSelection,
-  handleSelectionChange,
-} = useKuTableStore();
-
+import { useEntityTableStore } from "~~/stores/entityTableStore";
+import { useProviderTableStore } from "~~/stores/providerTableStore";
 
 const store = useKuTableStore();
 const router = useRouter();
+
+const storeEntity = useEntityTableStore();
+const storeProvider = useProviderTableStore();
+
+storeEntity.initializeTableData();
+storeProvider.initializeTableData();
 
 const redirectToCreatePage = () => {
   // Используйте router.push для перехода на другую страницу
   router.push("/addKu");
 };
-
 
 store.initializeTableData();
 </script>

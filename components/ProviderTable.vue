@@ -63,7 +63,6 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
-//import { ElTable } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
@@ -71,19 +70,7 @@ import { useProviderTableStore } from "~~/stores/providerTableStore";
 const options = ref<{ EntityName: string; label: string }[]>([]);
 
 const storeEntity = useEntityTableStore();
-const {
-  newName,
-  search,
-  filteredTableData,
-  addRows,
-  deleteSelectedRows,
-  toggleSelection,
-  handleSelectionChange,
-  EntityName,
-} = useProviderTableStore();
 const storeProvider = useProviderTableStore();
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
 
 const updateOptions = () => {
   options.value = storeEntity.tableData.map((entity) => ({

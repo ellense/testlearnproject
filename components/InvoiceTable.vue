@@ -77,7 +77,6 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
-//import { ElTable } from "element-plus";
 import { Search } from "@element-plus/icons-vue";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
@@ -99,6 +98,7 @@ const {
   handleSelectionChange,
   ProviderName,
 } = useInvoiceTableStore();
+
 const storeInvoice = useInvoiceTableStore();
 storeProvider.initializeTableData();
 storeInvoice.initializeTableData();

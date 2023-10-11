@@ -1,32 +1,31 @@
 import { defineStore } from "pinia";
 
 interface IKu {
-  name: string;
   id: number;
   kuNumber: string;
-  // percent: number;
-  // startDate: Date;
-  // endDate: Date;
-  // actualDate: Date;
-  // provider: string;
-  // typeGraphics: string;
+  percent: number;
+  provider: string;
 }
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
-    newName: "",
     newId: 0,
+    newPercent: 0,
+    providerName: "",
     multipleSelection: [] as IKu[],
     search: "",
     tableData: [] as IKu[],
     multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
+    percent: 0,
+    provider: "",
+    kuNumber: "",
   }),
 
   getters: {
     filteredTableData: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) =>
-        item.name.toLowerCase().includes(searchValue)
+        item.provider.toLowerCase().includes(searchValue)
       );
     },
   },
@@ -52,13 +51,15 @@ export const useKuTableStore = defineStore("KuTableStore", {
     },
 
     addItem() {
-      const paddedId = String(this.tableData.length + 1).padStart(5, '0');
+      const paddedId = String(this.tableData.length + 1).padStart(5, "0");
       this.tableData.push({
-        name: this.newName,
         id: this.tableData.length + 1,
         kuNumber: `КУ${paddedId}`,
+        percent: this.newPercent,
+        provider: this.providerName,
       });
-      this.newName = "";
+      this.newPercent = 0;
+      this.providerName = "";
     },
 
     deleteSelectedRows() {
@@ -72,9 +73,19 @@ export const useKuTableStore = defineStore("KuTableStore", {
     },
     initializeTableData() {
       if (this.tableData.length === 0) {
-        // Добавьте две сущности при инициализации стора
-        this.tableData.push({ name: "Tom", id: 1, kuNumber: 'КУ00001' });
-        this.tableData.push({ name: "Jerry", id: 2,  kuNumber: 'КУ00002' });
+        // две сущности при инициализации стора
+        this.tableData.push({
+          id: 1,
+          kuNumber: "КУ00001",
+          percent: 10,
+          provider: "Mikki",
+        });
+        this.tableData.push({
+          id: 2,
+          kuNumber: "КУ00002",
+          percent: 15,
+          provider: "Mikki",
+        });
       }
     },
   },

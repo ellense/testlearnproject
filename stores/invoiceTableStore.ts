@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 
 interface IInvoice {
   id: number;
-  number: number| null;
+  number: number | null;
   summa: number | null;
   date: Date;
   nameProvider: string;
@@ -33,7 +33,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
           .toLowerCase()
           .includes(searchValue);
 
-        return  dateMatch || nameProviderMatch;
+        return dateMatch || nameProviderMatch;
       });
     },
   },

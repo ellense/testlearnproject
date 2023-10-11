@@ -36,16 +36,6 @@
 <script lang="ts" setup>
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 
-const {
-  newName,
-  search,
-  filteredTableData,
-  addItem,
-  deleteSelectedRows,
-  toggleSelection,
-  handleSelectionChange,
-} = useEntityTableStore();
-
 const store = useEntityTableStore();
 store.initializeTableData();
 </script>

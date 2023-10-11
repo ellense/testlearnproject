@@ -1,10 +1,8 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
     <h2>Коммерческие условия</h2>
-    <KUTable/>
+    <KUTable />
   </el-scrollbar>
 </template>
 
-<script lang="ts" setup>
-
-</script>
+<script lang="ts" setup></script>
