@@ -1,11 +1,11 @@
 import { defineStore } from "pinia";
-
 interface IProduct {
   id: number;
   name: string;
   nameProvider: string;
   category: string;
 }
+
 
 export const useProductTableStore = defineStore("ProductTableStore", {
   state: () => ({
@@ -60,10 +60,18 @@ export const useProductTableStore = defineStore("ProductTableStore", {
         nameProvider: this.ProviderName,
         category: this.newCategory,
       });
-      this.newName = "";
-      this.ProviderName = "";
-      this.newCategory = "";
+      // this.newName = "";
+      // this.ProviderName = "";
+      // this.newCategory = "";
     },
+    // addProduct(product: IProduct) {
+    //   this.tableData.push({
+    //     id: this.tableData.length + 1,
+    //     name: product.name,
+    //     nameProvider: product.nameProvider,
+    //     category: product.category,
+    //   });
+    // },
 
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;

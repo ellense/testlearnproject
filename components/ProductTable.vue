@@ -42,13 +42,14 @@
         <el-button @click="dialogFormVisible = false">Отмена</el-button>
         <el-button
           
-          @click="(dialogFormVisible = false), storeProduct.addRows"
+          @click="saveProduct()"
         >
           Добавить
         </el-button>
       </span>
     </template>
   </el-dialog>
+  
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
@@ -89,6 +90,8 @@
       </el-table-column>
     </el-table>
   </el-scrollbar>
+  
+  
 </template>
 
 <script lang="ts" setup>
@@ -96,6 +99,8 @@ import { reactive, ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
+
+
 
 const dialogFormVisible = ref(false);
 const formLabelWidth = "140px";
@@ -116,7 +121,7 @@ const {
 const storeProduct = useProductTableStore();
 storeProvider.initializeTableData();
 storeProduct.initializeTableData();
-
+;
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
     ProviderName: provider.name,
@@ -124,7 +129,43 @@ const updateOptions = () => {
   }));
 };
 
+
 updateOptions();
+
+
+const saveProduct = () => {
+  
+  dialogFormVisible.value = false;
+  storeProduct.addRows;
+};
+
+
+
+// const dialogVisible = ref(false);
+
+// const newProduct = ref({
+//   name: "",
+//   nameProvider: "",
+//   category: "",
+// });
+
+// const openDialog = () => {
+//   dialogVisible.value = true;
+// };
+
+// const saveProduct = () => {
+//   storeProduct.addProduct(newProduct.value);
+//   dialogVisible.value = false;
+// };
+
+// return {
+//   // ...
+//   dialogVisible,
+//   newProduct,
+//   openDialog,
+//   saveProduct,
+// };
+
 </script>
 
 <style scoped>

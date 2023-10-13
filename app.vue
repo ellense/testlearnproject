@@ -6,18 +6,18 @@
           <h1>РЕТРО-БОНУС</h1>
         </div>
         <el-dropdown>
-          <el-icon style="margin-right: 8px; margin-top: 1px" size="25"
-            ><User
-          /></el-icon>
-
+          <div class="dropdown">
+            <el-avatar :icon="UserFilled" size="small" />
+          <p>Иванов А.В.</p>
+        </div>
+          
           <template #dropdown>
             <el-dropdown-menu>
-              <el-dropdown-item>Открыть</el-dropdown-item>
-              <el-dropdown-item>Редактировать</el-dropdown-item>
               <el-dropdown-item>Выйти</el-dropdown-item>
             </el-dropdown-menu>
           </template>
         </el-dropdown>
+        
       </div>
     </el-header>
 
@@ -61,11 +61,19 @@
                 <span>Товары</span>
               </el-menu-item>
             </nuxt-link>
-          </el-menu>
           <el-divider />
-          <div>
-            <el-text size="small">История</el-text>
-          </div>
+          <nuxt-link to="/profile">
+              <el-menu-item index="7">
+                <el-icon><User /></el-icon>
+                <span>Профиль</span>
+              </el-menu-item>
+          </nuxt-link>
+
+          <!-- <el-button class="btnExit" type="primary" size="default" @click="">Выйти</el-button> -->
+                
+            
+        </el-menu>
+          
         </el-scrollbar>
       </el-aside>
       <el-main>
@@ -85,6 +93,7 @@ import {
   Memo,
   Box,
   ShoppingCartFull,
+  UserFilled,
 } from "@element-plus/icons-vue";
 </script>
 
@@ -121,5 +130,17 @@ h1 {
 
 h1 {
   margin-left: 5px;
+}
+.btnExit {
+  margin-left: 23px;
+  margin-top: 10px;
+}
+
+.dropdown {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  align-items: center;
+
 }
 </style>
