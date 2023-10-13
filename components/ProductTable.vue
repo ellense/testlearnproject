@@ -112,6 +112,9 @@ const ProviderName = ref<string>("");
 const newCategory = ref<string>("");
 
 
+//storeProvider.initializeTableData();
+//storeProduct.initializeTableData();
+
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
     ProviderName: provider.name,
