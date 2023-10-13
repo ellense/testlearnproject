@@ -18,6 +18,11 @@
           :value="item.providerName"
         />
       </el-select>
+      <el-select v-model="store.newType" placeholder="Выберите тип графика">
+      <el-option label="Месяц" value="Месяц"></el-option>
+      <el-option label="Квартал" value="Квартал"></el-option>
+      <el-option label="Полгода" value="Полгода"></el-option>
+    </el-select>
       <el-button @click="addItemAndNavigate()">Добавить элемент</el-button>
     </div>
   </el-scrollbar>

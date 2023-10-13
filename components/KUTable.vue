@@ -3,7 +3,7 @@
     <!-- Добавляем поле для поиска по имени -->
     <el-input
       v-model="store.search"
-      placeholder="Поиск"
+      placeholder="Поиск по поставщику"
       style="width: 200px"
     ></el-input>
   </div>
@@ -15,17 +15,19 @@
       height="400"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column property="kuNumber" label="kuNumber" width="120" />
-      <el-table-column property="percent" label="percent" width="120" />
-      <el-table-column property="provider" label="provider" width="120" />
-      <el-table-column property="id" label="id" show-overflow-tooltip />
+      <el-table-column property="id" label="" width="120" />
+      <el-table-column property="kuNumber" label="Номер ку" width="120" />
+      <el-table-column property="percent" label="Процент" width="120" />
+      <el-table-column property="provider" label="Поставщик" width="120" />
+      <el-table-column property="type" label="тип графика" width="120" />
       <el-table-column> </el-table-column>
     </el-table>
   </el-scrollbar>
-  <div class="toolbarButton" style="margin-top: 20px">
+  <div class="toolbarButton" style="margin-top: 20px; margin-right: 100px">
     <el-button @click="store.toggleSelection">Очистить все</el-button>
     <el-button @click="store.deleteSelectedRows">Удалить выбранные</el-button>
     <el-button @click="redirectToCreatePage">Добавить</el-button>
+    <el-button @click="">Создать график</el-button>
   </div>
 </template>
 

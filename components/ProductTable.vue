@@ -1,13 +1,11 @@
-
 <template>
   <!-- Form -->
   <el-button text @click="dialogFormVisible = true"> Добавить товар </el-button>
-
   <el-dialog v-model="dialogFormVisible" title="Новый товар">
     <el-form>
       <el-form-item label="Наименование:" :label-width="formLabelWidth">
         <el-input
-          v-model="storeProduct.newName"
+          v-model="newName"
           label="Наименование"
           placeholder="Введите наименование"
           style="width: 200px"
@@ -16,7 +14,7 @@
       </el-form-item>
       <el-form-item label="Поставщик:" :label-width="formLabelWidth">
         <el-select
-          v-model="storeProduct.ProviderName"
+          v-model="ProviderName"
           clearable
           placeholder="Выберите поставщика"
         >
@@ -30,7 +28,7 @@
       </el-form-item>
       <el-form-item label="Категория:" :label-width="formLabelWidth">
         <el-input
-          v-model="storeProduct.newCategory"
+          v-model="newCategory"
           placeholder="Введите категорию товара"
           style="width: 200px"
           clearable
@@ -40,12 +38,7 @@
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="dialogFormVisible = false">Отмена</el-button>
-        <el-button
-          
-          @click="saveProduct()"
-        >
-          Добавить
-        </el-button>
+        <el-button @click="save()"> Добавить </el-button>
       </span>
     </template>
   </el-dialog>
@@ -95,7 +88,7 @@
 </template>
 
 <script lang="ts" setup>
-import { reactive, ref } from "vue";
+import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
@@ -104,21 +97,14 @@ import { useProductTableStore } from "~~/stores/productTableStore";
 
 const dialogFormVisible = ref(false);
 const formLabelWidth = "140px";
-
 const options = ref<{ ProviderName: string; label: string }[]>([]);
+const newName = ref<string>("");
+const ProviderName = ref<string>("");
+const newCategory = ref<string>("");
 
 const storeProvider = useProviderTableStore();
-const {
-  newName,
-  search,
-  searchTableData,
-  addRows,
-  deleteSelectedRows,
-  toggleSelection,
-  handleSelectionChange,
-  ProviderName,
-} = useProductTableStore();
 const storeProduct = useProductTableStore();
+
 storeProvider.initializeTableData();
 storeProduct.initializeTableData();
 ;
@@ -129,6 +115,18 @@ const updateOptions = () => {
   }));
 };
 
+const save = () => {
+  storeProduct.addRows({
+    id: storeProduct.tableData.length + 1,
+    name: newName.value,
+    nameProvider: ProviderName.value,
+    category: newCategory.value,
+  });
+  dialogFormVisible.value = false;
+  newName.value = "";
+  ProviderName.value = "";
+  newCategory.value = "";
+};
 
 updateOptions();
 

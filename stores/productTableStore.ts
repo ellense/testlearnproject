@@ -9,10 +9,10 @@ interface IProduct {
 
 export const useProductTableStore = defineStore("ProductTableStore", {
   state: () => ({
-    newId: 0,
-    newName: "",
-    ProviderName: "",
-    newCategory: "",
+    // newId: 0,
+    // newName: "",
+    // ProviderName: "",
+    // newCategory: "",
     multipleSelection: [] as IProduct[],
     search: "",
     tableData: [] as IProduct[],
@@ -53,16 +53,8 @@ export const useProductTableStore = defineStore("ProductTableStore", {
       this.multipleSelection = val;
     },
 
-    addRows() {
-      this.tableData.push({
-        id: this.tableData.length + 1,
-        name: this.newName,
-        nameProvider: this.ProviderName,
-        category: this.newCategory,
-      });
-      // this.newName = "";
-      // this.ProviderName = "";
-      // this.newCategory = "";
+    addRows(row:{id: number; name:string; nameProvider: string; category: string}) {
+      this.tableData.push(row);
     },
     // addProduct(product: IProduct) {
     //   this.tableData.push({
