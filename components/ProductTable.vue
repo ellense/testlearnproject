@@ -1,31 +1,54 @@
+
 <template>
-  <div class="toolbarAdd">
-    <el-input
-      v-model="storeProduct.newName"
-      label="Наименование"
-      placeholder="Введите наименование"
-      style="width: 200px"
-      clearable
-    ></el-input>
-    <el-select
-      v-model="storeProduct.ProviderName"
-      clearable
-      placeholder="Выберите поставщика"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.ProviderName"
-        :label="item.label"
-        :value="item.ProviderName"
-      />
-    </el-select>
-    <el-input
-      v-model="storeProduct.newCategory"
-      placeholder="Введите категорию товара"
-      style="width: 200px"
-      clearable
-    ></el-input>
-  </div>
+  <!-- Form -->
+  <el-button text @click="dialogFormVisible = true"> Добавить товар </el-button>
+
+  <el-dialog v-model="dialogFormVisible" title="Новый товар">
+    <el-form>
+      <el-form-item label="Наименование:" :label-width="formLabelWidth">
+        <el-input
+          v-model="storeProduct.newName"
+          label="Наименование"
+          placeholder="Введите наименование"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="Поставщик:" :label-width="formLabelWidth">
+        <el-select
+          v-model="storeProduct.ProviderName"
+          clearable
+          placeholder="Выберите поставщика"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.ProviderName"
+            :label="item.label"
+            :value="item.ProviderName"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="Категория:" :label-width="formLabelWidth">
+        <el-input
+          v-model="storeProduct.newCategory"
+          placeholder="Введите категорию товара"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Отмена</el-button>
+        <el-button
+          
+          @click="(dialogFormVisible = false), storeProduct.addRows"
+        >
+          Добавить
+        </el-button>
+      </span>
+    </template>
+  </el-dialog>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
@@ -66,23 +89,16 @@
       </el-table-column>
     </el-table>
   </el-scrollbar>
-
-  <div class="toolbarButton" style="margin-top: 20px">
-    <div v-if="storeProduct.newName">
-      <el-button @click="storeProduct.addRows">Добавить</el-button>
-    </div>
-    <div v-if="storeProduct.multipleSelection.length > 0">
-      <el-button @click="storeProduct.deleteSelectedRows">Удалить</el-button>
-    </div>
-    <el-button @click="storeProduct.toggleSelection">Очистить все</el-button>
-  </div>
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { reactive, ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
+
+const dialogFormVisible = ref(false);
+const formLabelWidth = "140px";
 
 const options = ref<{ ProviderName: string; label: string }[]>([]);
 
@@ -112,5 +128,16 @@ updateOptions();
 </script>
 
 <style scoped>
-
+.el-button--text {
+  margin-right: 15px;
+}
+.el-select {
+  width: 300px;
+}
+.el-input {
+  width: 300px;
+}
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}
 </style>
