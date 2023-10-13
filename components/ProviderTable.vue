@@ -1,5 +1,5 @@
 <template>
-  <div class="toolbarAdd">
+  <!-- <div class="toolbarAdd">
     <el-input
       v-model="storeProvider.newScore"
       label="Счет"
@@ -27,10 +27,6 @@
     </el-select>
   </div>
 
-
-
-
-
   <div class="toolbarButton" style="margin-top: 20px">
     <div v-if="storeProvider.newScore">
       <el-button @click="storeProvider.addRows">Добавить</el-button>
@@ -39,7 +35,53 @@
       <el-button @click="storeProvider.deleteSelectedRows">Удалить</el-button>
       <el-button @click="storeProvider.toggleSelection">Очистить все</el-button>
     </div>
-  </div>
+  </div> -->
+
+
+  <el-button @click="dialogFormVisible = true"> Добавить поставщика </el-button>
+  <el-dialog v-model="dialogFormVisible" title="Новый поставщик" close-on-click-modal close-on-press-escape>
+    <el-form >
+      <el-form-item label="Счет:" :label-width="formLabelWidth">
+        <el-input
+          v-model="newScore"
+          placeholder="Введите счет"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="Поставщик:" :label-width="formLabelWidth">
+        <el-input
+          v-model="newName"
+          label="Наименование"
+          placeholder="Введите наименование"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="Юридическое лицо:" :label-width="formLabelWidth">
+        <el-select
+          v-model="EntityName"
+          clearable
+          placeholder="Выберите юр. лицо"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.EntityName"
+            :label="item.label"
+            :value="item.EntityName"
+          />
+        </el-select>
+      </el-form-item>
+      
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Отмена</el-button>
+        <el-button @click="save()"> Добавить </el-button>
+      </span>
+    </template>
+  </el-dialog>
+
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
@@ -85,17 +127,6 @@
     </el-table>
   </el-scrollbar>
 
-
-
-
-
-
-
-
-
-
-
-  
 </template>
 
 <script lang="ts" setup>
@@ -104,16 +135,39 @@ import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 
-const options = ref<{ EntityName: string; label: string }[]>([]);
+
 
 const storeEntity = useEntityTableStore();
 const storeProvider = useProviderTableStore();
+
+storeEntity.initializeTableData();
+storeProvider.initializeTableData();
+
+const dialogFormVisible = ref(false);
+const formLabelWidth = "200px";
+const options = ref<{ EntityName: string; label: string }[]>([]);
+const newName = ref<string>("");
+const newScore = ref<number|null>(null);
+const EntityName = ref<string>("");
 
 const updateOptions = () => {
   options.value = storeEntity.tableData.map((entity) => ({
     EntityName: entity.name,
     label: entity.name,
   }));
+};
+
+const save = () => {
+  storeProvider.addRows({
+    id: storeProvider.tableData.length + 1,
+    score: newScore.value,
+    name: newName.value,
+    nameEntity: EntityName.value,
+  });
+  dialogFormVisible.value = false;
+  newName.value = "";
+  EntityName.value = "";
+  newScore.value = null;
 };
 
 updateOptions();

@@ -1,8 +1,8 @@
 <template>
   <!-- Form -->
-  <el-button text @click="dialogFormVisible = true"> Добавить товар </el-button>
-  <el-dialog v-model="dialogFormVisible" title="Новый товар">
-    <el-form>
+  <el-button @click="dialogFormVisible = true"> Добавить товар </el-button>
+  <el-dialog v-model="dialogFormVisible" title="Новый товар" close-on-click-modal close-on-press-escape>
+    <el-form >
       <el-form-item label="Наименование:" :label-width="formLabelWidth">
         <el-input
           v-model="newName"
@@ -43,13 +43,13 @@
     </template>
   </el-dialog>
   
-  <el-scrollbar class="scrollTable" max-height="400px">
+  <el-scrollbar class="scrollTable" height="700">
     <el-table
       ref="multipleTableRef"
       :data="storeProduct.searchTableData"
       style="width: 100%"
       @selection-change="storeProduct.handleSelectionChange"
-      height="400"
+      height="700"
     >
       <el-table-column
         property="selection"
@@ -92,7 +92,16 @@ import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
+import { useEntityTableStore } from "~~/stores/entityTableStore";
 
+
+const storeProvider = useProviderTableStore();
+const storeProduct = useProductTableStore();
+const storeEntity = useEntityTableStore();
+
+storeEntity.initializeTableData();
+storeProvider.initializeTableData();
+storeProduct.initializeTableData();
 
 
 const dialogFormVisible = ref(false);
@@ -102,12 +111,7 @@ const newName = ref<string>("");
 const ProviderName = ref<string>("");
 const newCategory = ref<string>("");
 
-const storeProvider = useProviderTableStore();
-const storeProduct = useProductTableStore();
 
-storeProvider.initializeTableData();
-storeProduct.initializeTableData();
-;
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
     ProviderName: provider.name,
@@ -131,51 +135,16 @@ const save = () => {
 updateOptions();
 
 
-const saveProduct = () => {
-  
-  dialogFormVisible.value = false;
-  storeProduct.addRows;
-};
-
-
-
-// const dialogVisible = ref(false);
-
-// const newProduct = ref({
-//   name: "",
-//   nameProvider: "",
-//   category: "",
-// });
-
-// const openDialog = () => {
-//   dialogVisible.value = true;
-// };
-
-// const saveProduct = () => {
-//   storeProduct.addProduct(newProduct.value);
-//   dialogVisible.value = false;
-// };
-
-// return {
-//   // ...
-//   dialogVisible,
-//   newProduct,
-//   openDialog,
-//   saveProduct,
-// };
-
+storeEntity.initializeTableData();
+storeProvider.initializeTableData();
+storeProduct.initializeTableData();
 </script>
 
 <style scoped>
 .el-button--text {
   margin-right: 15px;
 }
-.el-select {
-  width: 300px;
-}
-.el-input {
-  width: 300px;
-}
+
 .dialog-footer button:first-child {
   margin-right: 10px;
 }

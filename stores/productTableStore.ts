@@ -56,15 +56,7 @@ export const useProductTableStore = defineStore("ProductTableStore", {
     addRows(row:{id: number; name:string; nameProvider: string; category: string}) {
       this.tableData.push(row);
     },
-    // addProduct(product: IProduct) {
-    //   this.tableData.push({
-    //     id: this.tableData.length + 1,
-    //     name: product.name,
-    //     nameProvider: product.nameProvider,
-    //     category: product.category,
-    //   });
-    // },
-
+    
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 

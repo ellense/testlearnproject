@@ -26,7 +26,7 @@ a {
 
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
-  margin-right: 10px;
+  margin: 10px 10px 0 0;
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
 }
@@ -37,4 +37,7 @@ a {
   justify-content: flex-end;
   gap: 10px;
   margin-right: 10px;
+}
+.vel-dialog__body{
+overflow: hidden;
 }

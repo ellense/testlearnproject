@@ -2,17 +2,17 @@ import { defineStore } from "pinia";
 
 interface IProvider {
   id: number;
-  score: string;
+  score: number|null;
   name: string;
   nameEntity: string;
 }
 
 export const useProviderTableStore = defineStore("ProviderTableStore", {
   state: () => ({
-    newId: 0,
-    newScore: "",
-    newName: "",
-    EntityName: "",
+    // newId: 0,
+    // newScore: "",
+    // newName: "",
+    // EntityName: "",
     multipleSelection: [] as IProvider[],
     search: "",
     tableData: [] as IProvider[],
@@ -24,11 +24,11 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) => {
         const nameMatch = item.name.toLowerCase().includes(searchValue);
-        const scoreMatch = item.score.toLowerCase().includes(searchValue);
+        // const scoreMatch = item.score.toLowerCase().includes(searchValue);
         const nameEntityMatch = item.nameEntity
           .toLowerCase()
           .includes(searchValue);
-        return nameMatch || scoreMatch || nameEntityMatch;
+        return nameMatch  || nameEntityMatch;
       });
     },
   },
@@ -53,16 +53,8 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
       this.multipleSelection = val;
     },
 
-    addRows() {
-      this.tableData.push({
-        id: this.tableData.length + 1,
-        score: this.newScore,
-        name: this.newName,
-        nameEntity: this.EntityName,
-      });
-      this.newScore = "";
-      this.newName = "";
-      this.EntityName = "";
+    addRows(row:{id: number; score:number|null; name: string; nameEntity: string}) {
+      this.tableData.push(row);
     },
 
     deleteSelectedRows() {
@@ -78,13 +70,13 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
       if (this.tableData.length === 0) {
         this.tableData.push({
           id: 1,
-          score: "5475682-89",
+          score: 4325,
           name: "Mikki",
           nameEntity: "Jerry",
         });
         this.tableData.push({
           id: 2,
-          score: "5475682-89",
+          score: 345345,
           name: "Minni",
           nameEntity: "Tom",
         });
