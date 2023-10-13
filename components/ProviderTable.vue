@@ -26,6 +26,20 @@
       />
     </el-select>
   </div>
+
+
+
+
+
+  <div class="toolbarButton" style="margin-top: 20px">
+    <div v-if="storeProvider.newScore">
+      <el-button @click="storeProvider.addRows">Добавить</el-button>
+    </div>
+    <div v-if="storeProvider.multipleSelection.length > 0">
+      <el-button @click="storeProvider.deleteSelectedRows">Удалить</el-button>
+      <el-button @click="storeProvider.toggleSelection">Очистить все</el-button>
+    </div>
+  </div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
@@ -71,15 +85,17 @@
     </el-table>
   </el-scrollbar>
 
-  <div class="toolbarButton" style="margin-top: 20px">
-    <div v-if="storeProvider.newScore">
-      <el-button @click="storeProvider.addRows">Добавить</el-button>
-    </div>
-    <div v-if="storeProvider.multipleSelection.length > 0">
-      <el-button @click="storeProvider.deleteSelectedRows">Удалить</el-button>
-      <el-button @click="storeProvider.toggleSelection">Очистить все</el-button>
-    </div>
-  </div>
+
+
+
+
+
+
+
+
+
+
+  
 </template>
 
 <script lang="ts" setup>
@@ -87,6 +103,13 @@ import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
+
+
+
+
+
+
+
 
 const options = ref<{ EntityName: string; label: string }[]>([]);
 
@@ -103,4 +126,7 @@ const updateOptions = () => {
 updateOptions();
 </script>
 
-<style scoped></style>
+<style scoped>
+.dialog-footer button:first-child {
+  margin-right: 10px;
+}</style>
