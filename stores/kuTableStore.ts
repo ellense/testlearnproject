@@ -5,12 +5,14 @@ interface IKu {
   kuNumber: string;
   percent: number | null;
   provider: string;
+  type: string;
 }
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newId: 0,
     newPercent: null,
+    newType: '',
     providerName: "",
     multipleSelection: [] as IKu[],
     search: "",
@@ -57,9 +59,11 @@ export const useKuTableStore = defineStore("KuTableStore", {
         kuNumber: `КУ${paddedId}`,
         percent: this.newPercent,
         provider: this.providerName,
+        type: this.newType,
       });
       this.newPercent = null;
       this.providerName = "";
+      this.newType = "";
     },
 
     deleteSelectedRows() {
@@ -79,12 +83,14 @@ export const useKuTableStore = defineStore("KuTableStore", {
           kuNumber: "КУ00001",
           percent: 10,
           provider: "Mikki",
+          type: "Месяц",
         });
         this.tableData.push({
           id: 2,
           kuNumber: "КУ00002",
           percent: 15,
           provider: "Mikki",
+          type: "Квартал",
         });
       }
     },
