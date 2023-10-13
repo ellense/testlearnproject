@@ -104,13 +104,6 @@ import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 
-
-
-
-
-
-
-
 const options = ref<{ EntityName: string; label: string }[]>([]);
 
 const storeEntity = useEntityTableStore();
