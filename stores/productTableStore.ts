@@ -74,21 +74,5 @@ export const useProductTableStore = defineStore("ProductTableStore", {
 
       this.multipleSelection = [];
     },
-    initializeTableData() {
-      if (this.tableData.length === 0) {
-        this.tableData.push({
-          id: 1,
-          name: "Футболка жен.",
-          nameProvider: "Mikki",
-          category: "Женская одежда",
-        });
-        this.tableData.push({
-          id: 2,
-          name: "Набор тарелок",
-          nameProvider: "Minni",
-          category: "Посуда",
-        });
-      }
-    },
   },
 });

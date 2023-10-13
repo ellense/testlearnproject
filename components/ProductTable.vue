@@ -105,9 +105,9 @@ const newCategory = ref<string>("");
 const storeProvider = useProviderTableStore();
 const storeProduct = useProductTableStore();
 
-storeProvider.initializeTableData();
-storeProduct.initializeTableData();
-;
+//storeProvider.initializeTableData();
+//storeProduct.initializeTableData();
+
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
     ProviderName: provider.name,
