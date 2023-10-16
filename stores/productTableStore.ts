@@ -9,10 +9,6 @@ interface IProduct {
 
 export const useProductTableStore = defineStore("ProductTableStore", {
   state: () => ({
-    // newId: 0,
-    // newName: "",
-    // ProviderName: "",
-    // newCategory: "",
     multipleSelection: [] as IProduct[],
     search: "",
     tableData: [] as IProduct[],

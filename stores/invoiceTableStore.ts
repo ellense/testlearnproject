@@ -4,7 +4,7 @@ interface IInvoice {
   id: number;
   number: number | null;
   summa: number | null;
-  date: Date;
+  date: Date | string;
   nameProvider: string;
 }
 
@@ -13,7 +13,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     newId: 0, // Идентификатор новой записи
     newNumber: null, // Новый номер накладной
     newSum: null, // Новая сумма по накладной
-    newDate: new Date(""), // Новая дата накладной
+    newDate: "", // Новая дата накладной
     ProviderName: "", // Имя поставщика
     multipleSelection: [] as IInvoice[], // Выбранные записи
     search: "", // Поиск
@@ -83,29 +83,8 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
       });
       this.newNumber = null;
       this.newSum = null;
-      this.newDate = new Date("");
+      this.newDate = "";
       this.ProviderName = "";
-    },
-
-    // Инициализация данных таблицы
-    initializeTableData() {
-      if (this.tableData.length === 0) {
-        // Добавление двух сущностей при инициализации хранилища
-        this.tableData.push({
-          id: 1,
-          number: 347568679,
-          summa: 43643626,
-          date: new Date("2023,9,21"),
-          nameProvider: "Minni",
-        });
-        this.tableData.push({
-          id: 2,
-          number: 78453234,
-          summa: 46533,
-          date: new Date("2021,8,18"),
-          nameProvider: "Minni",
-        });
-      }
     },
   },
 });

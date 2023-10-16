@@ -1,8 +1,14 @@
 <template>
   <!-- Form -->
+  <products-inicialize />
   <el-button @click="dialogFormVisible = true"> Добавить товар </el-button>
-  <el-dialog v-model="dialogFormVisible" title="Новый товар" close-on-click-modal close-on-press-escape>
-    <el-form >
+  <el-dialog
+    v-model="dialogFormVisible"
+    title="Новый товар"
+    close-on-click-modal
+    close-on-press-escape
+  >
+    <el-form>
       <el-form-item label="Наименование:" :label-width="formLabelWidth">
         <el-input
           v-model="newName"
@@ -42,7 +48,7 @@
       </span>
     </template>
   </el-dialog>
-  
+
   <el-scrollbar class="scrollTable" height="700">
     <el-table
       ref="multipleTableRef"
@@ -83,8 +89,6 @@
       </el-table-column>
     </el-table>
   </el-scrollbar>
-  
-  
 </template>
 
 <script lang="ts" setup>
@@ -94,15 +98,9 @@ import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 
-
 const storeProvider = useProviderTableStore();
 const storeProduct = useProductTableStore();
 const storeEntity = useEntityTableStore();
-
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
-storeProduct.initializeTableData();
-
 
 const dialogFormVisible = ref(false);
 const formLabelWidth = "140px";
@@ -110,10 +108,6 @@ const options = ref<{ ProviderName: string; label: string }[]>([]);
 const newName = ref<string>("");
 const ProviderName = ref<string>("");
 const newCategory = ref<string>("");
-
-
-//storeProvider.initializeTableData();
-//storeProduct.initializeTableData();
 
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
@@ -136,11 +130,6 @@ const save = () => {
 };
 
 updateOptions();
-
-
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
-storeProduct.initializeTableData();
 </script>
 
 <style scoped>

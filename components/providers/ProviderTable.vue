@@ -1,46 +1,12 @@
 <template>
-  <!-- <div class="toolbarAdd">
-    <el-input
-      v-model="storeProvider.newScore"
-      label="Счет"
-      placeholder="Введите счет"
-      style="width: 200px"
-      clearable
-    ></el-input>
-    <el-input
-      v-model="storeProvider.newName"
-      placeholder="Введите имя поставщика"
-      style="width: 200px"
-      clearable
-    ></el-input>
-    <el-select
-      v-model="storeProvider.EntityName"
-      clearable
-      placeholder="Выберите Юр.Лицо"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.EntityName"
-        :label="item.label"
-        :value="item.EntityName"
-      />
-    </el-select>
-  </div>
-
-  <div class="toolbarButton" style="margin-top: 20px">
-    <div v-if="storeProvider.newScore">
-      <el-button @click="storeProvider.addRows">Добавить</el-button>
-    </div>
-    <div v-if="storeProvider.multipleSelection.length > 0">
-      <el-button @click="storeProvider.deleteSelectedRows">Удалить</el-button>
-      <el-button @click="storeProvider.toggleSelection">Очистить все</el-button>
-    </div>
-  </div> -->
-
-
   <el-button @click="dialogFormVisible = true"> Добавить поставщика </el-button>
-  <el-dialog v-model="dialogFormVisible" title="Новый поставщик" close-on-click-modal close-on-press-escape>
-    <el-form >
+  <el-dialog
+    v-model="dialogFormVisible"
+    title="Новый поставщик"
+    close-on-click-modal
+    close-on-press-escape
+  >
+    <el-form>
       <el-form-item label="Счет:" :label-width="formLabelWidth">
         <el-input
           v-model="newScore"
@@ -72,7 +38,6 @@
           />
         </el-select>
       </el-form-item>
-      
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -126,7 +91,6 @@
       </el-table-column>
     </el-table>
   </el-scrollbar>
-
 </template>
 
 <script lang="ts" setup>
@@ -135,19 +99,14 @@ import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 
-
-
 const storeEntity = useEntityTableStore();
 const storeProvider = useProviderTableStore();
-
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
 
 const dialogFormVisible = ref(false);
 const formLabelWidth = "200px";
 const options = ref<{ EntityName: string; label: string }[]>([]);
 const newName = ref<string>("");
-const newScore = ref<number|null>(null);
+const newScore = ref<number | null>(null);
 const EntityName = ref<string>("");
 
 const updateOptions = () => {
@@ -176,4 +135,5 @@ updateOptions();
 <style scoped>
 .dialog-footer button:first-child {
   margin-right: 10px;
-}</style>
+}
+</style>

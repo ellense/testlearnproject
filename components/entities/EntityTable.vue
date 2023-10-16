@@ -1,4 +1,5 @@
 <template>
+  <entities-inicialize/>
   <div class="toolbarAdd">
     <el-input
       v-model="store.newName"
@@ -43,5 +44,5 @@ import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 
 const store = useEntityTableStore();
-store.initializeTableData();
+
 </script>

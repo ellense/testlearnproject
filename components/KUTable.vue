@@ -44,9 +44,6 @@ const router = useRouter();
 const storeEntity = useEntityTableStore();
 const storeProvider = useProviderTableStore();
 
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
-
 const redirectToCreatePage = () => {
   router.push("/addKu");
 };

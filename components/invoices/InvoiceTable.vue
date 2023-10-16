@@ -125,8 +125,6 @@ const {
 } = useInvoiceTableStore();
 
 const storeInvoice = useInvoiceTableStore();
-storeProvider.initializeTableData();
-storeInvoice.initializeTableData();
 
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
