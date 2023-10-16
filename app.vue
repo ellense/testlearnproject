@@ -37,6 +37,7 @@
                 <span>График расчетов</span>
               </el-menu-item>
             </nuxt-link>
+            <el-divider />
             <nuxt-link to="/entity">
               <el-menu-item index="3">
                 <el-icon><Suitcase /></el-icon>
@@ -68,10 +69,6 @@
                 <span>Профиль</span>
               </el-menu-item>
           </nuxt-link>
-
-          <!-- <el-button class="btnExit" type="primary" size="default" @click="">Выйти</el-button> -->
-                
-            
         </el-menu>
           
         </el-scrollbar>
@@ -111,6 +108,9 @@ h1 {
 }
 .layout-container-demo .el-menu {
   border-right: none;
+}
+.layout-container-demo .el-menu:first-child {
+margin-top: 24px;
 }
 .layout-container-demo .el-main {
   padding: 0 0 20px 30px;

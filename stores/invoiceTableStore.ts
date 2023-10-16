@@ -10,11 +10,6 @@ interface IInvoice {
 
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
   state: () => ({
-    newId: 0, // Идентификатор новой записи
-    newNumber: null, // Новый номер накладной
-    newSum: null, // Новая сумма по накладной
-    newDate: new Date(""), // Новая дата накладной
-    ProviderName: "", // Имя поставщика
     multipleSelection: [] as IInvoice[], // Выбранные записи
     search: "", // Поиск
     tableData: [] as IInvoice[], // Данные таблицы накладной
@@ -73,18 +68,14 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     },
 
     // Добавление новых записей в таблицу
-    addRows() {
-      this.tableData.push({
-        id: this.tableData.length + 1,
-        number: this.newNumber,
-        summa: this.newSum,
-        date: this.newDate,
-        nameProvider: this.ProviderName,
-      });
-      this.newNumber = null;
-      this.newSum = null;
-      this.newDate = new Date("");
-      this.ProviderName = "";
+    addRows(row: {
+      id: number;
+      number: number | null;
+      summa: number | null;
+      date: Date;
+      nameProvider: string;
+    }) {
+      this.tableData.push(row);
     },
 
     // Инициализация данных таблицы

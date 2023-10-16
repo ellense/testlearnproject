@@ -2,17 +2,13 @@ import { defineStore } from "pinia";
 
 interface IProvider {
   id: number;
-  score: number|null;
+  score: number | null;
   name: string;
   nameEntity: string;
 }
 
 export const useProviderTableStore = defineStore("ProviderTableStore", {
   state: () => ({
-    // newId: 0,
-    // newScore: "",
-    // newName: "",
-    // EntityName: "",
     multipleSelection: [] as IProvider[],
     search: "",
     tableData: [] as IProvider[],
@@ -24,11 +20,10 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter((item) => {
         const nameMatch = item.name.toLowerCase().includes(searchValue);
-        // const scoreMatch = item.score.toLowerCase().includes(searchValue);
         const nameEntityMatch = item.nameEntity
           .toLowerCase()
           .includes(searchValue);
-        return nameMatch  || nameEntityMatch;
+        return nameMatch || nameEntityMatch;
       });
     },
   },
@@ -53,7 +48,12 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
       this.multipleSelection = val;
     },
 
-    addRows(row:{id: number; score:number|null; name: string; nameEntity: string}) {
+    addRows(row: {
+      id: number;
+      score: number | null;
+      name: string;
+      nameEntity: string;
+    }) {
       this.tableData.push(row);
     },
 

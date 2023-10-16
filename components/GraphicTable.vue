@@ -47,9 +47,4 @@
       />
     </el-table>
   </el-scrollbar>
-  <div class="toolbarButton" style="margin-top: 20px">
-    <el-button>Очистить все</el-button>
-    <el-button>Удалить выбранные</el-button>
-    <el-button>Добавить</el-button>
-  </div>
 </template>

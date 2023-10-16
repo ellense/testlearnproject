@@ -17,12 +17,6 @@ a {
   height: 400px;
 }
 
-/* панель с инпутами для ввода */
-.toolbarAdd {
-  display: inline-flex;
-  margin-bottom: 10px;
-  gap: 20px;
-}
 
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
@@ -31,13 +25,13 @@ a {
   border-radius: 2px;
 }
 
-/* панель с кнопками внизу таблицы */
-.toolbarButton {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-right: 10px;
-}
-.vel-dialog__body{
+/* .vel-dialog__body{
 overflow: hidden;
+} */
+
+/* панель с кнопками сверху таблицы */
+.buttonBar {
+  display: flex;
+  justify-content:space-between;
+  margin-right: 10px;
 }

@@ -23,7 +23,7 @@
       <el-option label="Квартал" value="Квартал"></el-option>
       <el-option label="Полгода" value="Полгода"></el-option>
     </el-select>
-      <el-button @click="addItemAndNavigate()">Добавить элемент</el-button>
+      <el-button @click="addItemAndNavigate()">Добавить</el-button>
     </div>
   </el-scrollbar>
 </template>
@@ -39,11 +39,18 @@ const providerStore = useProviderTableStore();
 const store = useKuTableStore();
 const router = useRouter();
 const options = ref<{ providerName: string; label: string }[]>([]);
-
+const messageClose = () => {
+  ElMessage({
+    message: "Коммерческое условие успешно добавлено",
+    type: "success",
+  });
+};
 const addItemAndNavigate = () => {
   store.addItem();
   // После выполнения действия, перейдите на другую страницу
   router.push("/");
+  messageClose();
+
 };
 store.initializeTableData();
 

@@ -1,18 +1,16 @@
 import { defineStore } from "pinia";
 
 interface IEntity {
-  name: string;
   id: number;
+  name: string;
 }
 
 export const useEntityTableStore = defineStore("EntityTableStore", {
   state: () => ({
-    newName: "",
-    newId: 0,
     multipleSelection: [] as IEntity[],
     search: "",
     tableData: [] as IEntity[],
-    multipleTableRef: null as Ref | null, // Добавляем Ref для multipleTableRef
+    multipleTableRef: null as Ref | null,
   }),
 
   getters: {
@@ -44,14 +42,9 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
       this.multipleSelection = val;
     },
 
-    addItem() {
-      this.tableData.push({
-        name: this.newName,
-        id: this.tableData.length + 1,
-      });
-      this.newName = "";
+    addRows(row: { id: number; name: string }) {
+      this.tableData.push(row);
     },
-
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 

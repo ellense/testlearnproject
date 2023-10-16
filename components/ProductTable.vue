@@ -1,8 +1,26 @@
 <template>
-  <!-- Form -->
-  <el-button @click="dialogFormVisible = true"> Добавить товар </el-button>
-  <el-dialog v-model="dialogFormVisible" title="Новый товар" close-on-click-modal close-on-press-escape>
-    <el-form >
+  <div class="buttonBar">
+    <div class="buttonBar_left">
+      <el-button @click="dialogFormVisible = true"> Добавить </el-button>
+      <el-button @click="storeProduct.deleteSelectedRows()">Удалить</el-button>
+    </div>
+    <div class="buttonBar_search">
+      <el-input
+        v-model="storeProduct.search"
+        placeholder="Поиск"
+        style="width: 200px"
+        :prefix-icon="Search"
+      />
+    </div>
+  </div>
+
+  <el-dialog
+    v-model="dialogFormVisible"
+    title="Новый товар"
+    close-on-click-modal
+    close-on-press-escape
+  >
+    <el-form>
       <el-form-item label="Наименование:" :label-width="formLabelWidth">
         <el-input
           v-model="newName"
@@ -42,7 +60,7 @@
       </span>
     </template>
   </el-dialog>
-  
+
   <el-scrollbar class="scrollTable" height="700">
     <el-table
       ref="multipleTableRef"
@@ -71,20 +89,8 @@
         show-overflow-tooltip
       />
       <el-table-column property="category" label="Категория" />
-      <el-table-column>
-        <template #header>
-          <el-input
-            v-model="storeProduct.search"
-            placeholder="Поиск"
-            style="width: 200px"
-            :prefix-icon="Search"
-          />
-        </template>
-      </el-table-column>
     </el-table>
   </el-scrollbar>
-  
-  
 </template>
 
 <script lang="ts" setup>
@@ -94,15 +100,13 @@ import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 
-
 const storeProvider = useProviderTableStore();
 const storeProduct = useProductTableStore();
 const storeEntity = useEntityTableStore();
 
 storeEntity.initializeTableData();
 storeProvider.initializeTableData();
-storeProduct.initializeTableData();
-
+//storeProduct.initializeTableData();
 
 const dialogFormVisible = ref(false);
 const formLabelWidth = "140px";
@@ -110,18 +114,18 @@ const options = ref<{ ProviderName: string; label: string }[]>([]);
 const newName = ref<string>("");
 const ProviderName = ref<string>("");
 const newCategory = ref<string>("");
-
-
-//storeProvider.initializeTableData();
-//storeProduct.initializeTableData();
-
+const messageClose = () => {
+  ElMessage({
+    message: "Товар успешно добавлен",
+    type: "success",
+  });
+};
 const updateOptions = () => {
   options.value = storeProvider.tableData.map((provider) => ({
     ProviderName: provider.name,
     label: provider.name,
   }));
 };
-
 const save = () => {
   storeProduct.addRows({
     id: storeProduct.tableData.length + 1,
@@ -133,14 +137,10 @@ const save = () => {
   newName.value = "";
   ProviderName.value = "";
   newCategory.value = "";
+  messageClose();
 };
 
 updateOptions();
-
-
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
-storeProduct.initializeTableData();
 </script>
 
 <style scoped>

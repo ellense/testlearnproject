@@ -1,11 +1,17 @@
 <template>
-  <div class="toolbarAdd">
-    <!-- Добавляем поле для поиска по имени -->
-    <el-input
-      v-model="store.search"
-      placeholder="Поиск по поставщику"
-      style="width: 200px"
-    ></el-input>
+  <div class="buttonBar">
+    <div class="buttonBar_left">
+      <el-button @click="redirectToCreatePage">Добавить</el-button>
+      <el-button @click="">Создать график</el-button>
+      <el-button @click="store.deleteSelectedRows">Удалить</el-button>
+    </div>
+    <div class="buttonBar_search">
+      <el-input
+        v-model="store.search"
+        placeholder="Поиск по поставщику"
+        style="width: 200px"
+      />
+    </div>
   </div>
   <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
@@ -16,19 +22,14 @@
     >
       <el-table-column type="selection" width="55" />
       <el-table-column property="id" label="" width="120" />
-      <el-table-column property="kuNumber" label="Номер ку" width="120" />
+      <el-table-column property="kuNumber" label="Номер КУ" width="120" />
       <el-table-column property="percent" label="Процент" width="120" />
       <el-table-column property="provider" label="Поставщик" width="120" />
-      <el-table-column property="type" label="тип графика" width="120" />
+      <el-table-column property="type" label="Тип графика" width="120" />
       <el-table-column> </el-table-column>
     </el-table>
   </el-scrollbar>
-  <div class="toolbarButton" style="margin-top: 20px; margin-right: 100px">
-    <el-button @click="store.toggleSelection">Очистить все</el-button>
-    <el-button @click="store.deleteSelectedRows">Удалить выбранные</el-button>
-    <el-button @click="redirectToCreatePage">Добавить</el-button>
-    <el-button @click="">Создать график</el-button>
-  </div>
+  
 </template>
 
 <script lang="ts" setup>
