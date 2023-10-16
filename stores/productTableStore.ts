@@ -6,13 +6,8 @@ interface IProduct {
   category: string;
 }
 
-
 export const useProductTableStore = defineStore("ProductTableStore", {
   state: () => ({
-    // newId: 0,
-    // newName: "",
-    // ProviderName: "",
-    // newCategory: "",
     multipleSelection: [] as IProduct[],
     search: "",
     tableData: [] as IProduct[],
@@ -53,10 +48,15 @@ export const useProductTableStore = defineStore("ProductTableStore", {
       this.multipleSelection = val;
     },
 
-    addRows(row:{id: number; name:string; nameProvider: string; category: string}) {
+    addRows(row: {
+      id: number;
+      name: string;
+      nameProvider: string;
+      category: string;
+    }) {
       this.tableData.push(row);
     },
-    
+
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 

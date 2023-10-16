@@ -1,4 +1,8 @@
 <template>
+    <EntitiesInicialize/>
+    <ProvidersInicialize/>
+    <ProductsInicialize/>
+    <InvoicesInicialize/>
   <el-container class="layout-container-demo">
     <el-header style="text-align: right; font-size: 12px">
       <div class="toolbar">

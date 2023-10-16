@@ -125,9 +125,6 @@ import { useProviderTableStore } from "~~/stores/providerTableStore";
 const storeInvoice = useInvoiceTableStore();
 const storeProvider = useProviderTableStore();
 
-storeInvoice.initializeTableData();
-storeProvider.initializeTableData();
-
 const dialogFormVisible = ref(false);
 const formLabelWidth = "200px";
 const options = ref<{ ProviderName: string; label: string }[]>([]);
@@ -137,7 +134,7 @@ const newDate = ref(new Date());
 const ProviderName = ref<string>("");
 const messageClose = () => {
   ElMessage({
-    message: "Накладная успешно добавлена",
+    message: "Накладная №" + newNumber.value + " успешно добавлена",
     type: "success",
   });
 };
@@ -157,11 +154,11 @@ const save = () => {
     nameProvider: ProviderName.value,
   });
   dialogFormVisible.value = false;
+  messageClose();
   newNumber.value = null;
   newSum.value = null;
   newDate.value = new Date();
   ProviderName.value = "";
-  messageClose();
 };
 
 updateOptions();

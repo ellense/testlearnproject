@@ -19,10 +19,34 @@
         />
       </el-select>
       <el-select v-model="store.newType" placeholder="Выберите тип графика">
-      <el-option label="Месяц" value="Месяц"></el-option>
-      <el-option label="Квартал" value="Квартал"></el-option>
-      <el-option label="Полгода" value="Полгода"></el-option>
-    </el-select>
+        <el-option label="Месяц" value="Месяц"></el-option>
+        <el-option label="Квартал" value="Квартал"></el-option>
+        <el-option label="Полгода" value="Полгода"></el-option>
+      </el-select>
+      <!-- <el-date-picker
+          v-model="store.newDateStart"
+          placeholder="Выберите дату начала"
+          style="width: 180px"
+          format="YYYY/MM/DD"
+          value-format="YYYY/MM/DD"
+          clearable
+        ></el-date-picker>
+        <el-date-picker
+          v-model="store.newDateEnd"
+          placeholder="Выберите дату начала"
+          style="width: 180px"
+          format="YYYY/MM/DD"
+          value-format="YYYY/MM/DD"
+          clearable
+        ></el-date-picker>
+        <el-date-picker
+          v-model="store.newDateActual"
+          placeholder="Выберите дату начала"
+          style="width: 180px"
+          format="YYYY/MM/DD"
+          value-format="YYYY/MM/DD"
+          clearable
+        ></el-date-picker> -->
       <el-button @click="addItemAndNavigate()">Добавить</el-button>
     </div>
   </el-scrollbar>
@@ -50,9 +74,7 @@ const addItemAndNavigate = () => {
   // После выполнения действия, перейдите на другую страницу
   router.push("/");
   messageClose();
-
 };
-store.initializeTableData();
 
 const updateOptions = () => {
   options.value = providerStore.tableData.map((provider) => ({

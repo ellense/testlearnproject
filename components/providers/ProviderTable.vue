@@ -2,26 +2,33 @@
   <div class="buttonBar">
     <div class="buttonBar_left">
       <el-button @click="dialogFormVisible = true"> Добавить </el-button>
-      <el-button @click="storeProduct.deleteSelectedRows()">Удалить</el-button>
+      <el-button @click="storeProvider.deleteSelectedRows()">Удалить</el-button>
     </div>
     <div class="buttonBar_search">
       <el-input
-        v-model="storeProduct.search"
+        v-model="storeProvider.search"
         placeholder="Поиск"
         style="width: 200px"
         :prefix-icon="Search"
       />
     </div>
   </div>
-
   <el-dialog
     v-model="dialogFormVisible"
-    title="Новый товар"
+    title="Новый поставщик"
     close-on-click-modal
     close-on-press-escape
   >
     <el-form>
-      <el-form-item label="Наименование:" :label-width="formLabelWidth">
+      <el-form-item label="Счет:" :label-width="formLabelWidth">
+        <el-input
+          v-model="newScore"
+          placeholder="Введите счет"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item label="Поставщик:" :label-width="formLabelWidth">
         <el-input
           v-model="newName"
           label="Наименование"
@@ -30,27 +37,19 @@
           clearable
         />
       </el-form-item>
-      <el-form-item label="Поставщик:" :label-width="formLabelWidth">
+      <el-form-item label="Юридическое лицо:" :label-width="formLabelWidth">
         <el-select
-          v-model="ProviderName"
+          v-model="EntityName"
           clearable
-          placeholder="Выберите поставщика"
+          placeholder="Выберите юр. лицо"
         >
           <el-option
             v-for="item in options"
-            :key="item.ProviderName"
+            :key="item.EntityName"
             :label="item.label"
-            :value="item.ProviderName"
+            :value="item.EntityName"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="Категория:" :label-width="formLabelWidth">
-        <el-input
-          v-model="newCategory"
-          placeholder="Введите категорию товара"
-          style="width: 200px"
-          clearable
-        />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -61,13 +60,13 @@
     </template>
   </el-dialog>
 
-  <el-scrollbar class="scrollTable" height="700">
+  <el-scrollbar class="scrollTable" max-height="400px">
     <el-table
       ref="multipleTableRef"
-      :data="storeProduct.searchTableData"
+      :data="storeProvider.searchTableData"
       style="width: 100%"
-      @selection-change="storeProduct.handleSelectionChange"
-      height="700"
+      @selection-change="storeProvider.handleSelectionChange"
+      height="400"
     >
       <el-table-column
         property="selection"
@@ -77,18 +76,22 @@
       />
       <el-table-column type="index" width="55" show-overflow-tooltip />
       <el-table-column
+        property="score"
+        label="Счет"
+        width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
         property="name"
         label="Наименование"
         width="300"
         show-overflow-tooltip
       />
       <el-table-column
-        property="nameProvider"
-        label="Поставщик"
-        width="300"
+        property="nameEntity"
+        label="Юридическое лицо"
         show-overflow-tooltip
       />
-      <el-table-column property="category" label="Категория" />
     </el-table>
   </el-scrollbar>
 </template>
@@ -96,58 +99,50 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
-import { useProductTableStore } from "~~/stores/productTableStore";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
+import { useProviderTableStore } from "~~/stores/providerTableStore";
 
-const storeProvider = useProviderTableStore();
-const storeProduct = useProductTableStore();
 const storeEntity = useEntityTableStore();
-
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
-//storeProduct.initializeTableData();
+const storeProvider = useProviderTableStore();
 
 const dialogFormVisible = ref(false);
-const formLabelWidth = "140px";
-const options = ref<{ ProviderName: string; label: string }[]>([]);
+const formLabelWidth = "200px";
+const options = ref<{ EntityName: string; label: string }[]>([]);
 const newName = ref<string>("");
-const ProviderName = ref<string>("");
-const newCategory = ref<string>("");
+const newScore = ref<number | null>(null);
+const EntityName = ref<string>("");
+
 const messageClose = () => {
   ElMessage({
-    message: "Товар успешно добавлен",
+    message: "Поставщик '" + newName.value + "' успешно добавлен",
     type: "success",
   });
 };
 const updateOptions = () => {
-  options.value = storeProvider.tableData.map((provider) => ({
-    ProviderName: provider.name,
-    label: provider.name,
+  options.value = storeEntity.tableData.map((entity) => ({
+    EntityName: entity.name,
+    label: entity.name,
   }));
 };
+
 const save = () => {
-  storeProduct.addRows({
-    id: storeProduct.tableData.length + 1,
+  storeProvider.addRows({
+    id: storeProvider.tableData.length + 1,
+    score: newScore.value,
     name: newName.value,
-    nameProvider: ProviderName.value,
-    category: newCategory.value,
+    nameEntity: EntityName.value,
   });
   dialogFormVisible.value = false;
-  newName.value = "";
-  ProviderName.value = "";
-  newCategory.value = "";
   messageClose();
+  newName.value = "";
+  EntityName.value = "";
+  newScore.value = null;
 };
 
 updateOptions();
 </script>
 
 <style scoped>
-.el-button--text {
-  margin-right: 15px;
-}
-
 .dialog-footer button:first-child {
   margin-right: 10px;
 }

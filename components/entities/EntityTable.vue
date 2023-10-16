@@ -59,14 +59,12 @@ import { useEntityTableStore } from "~~/stores/entityTableStore";
 
 const storeEntity = useEntityTableStore();
 
-storeEntity.initializeTableData();
-
 const dialogFormVisible = ref(false);
 const formLabelWidth = "200px";
 const newName = ref<string>("");
 const messageClose = () => {
   ElMessage({
-    message: "Юридическое лицо успешно добавлено",
+    message: "Юридическое лицо '" + newName.value + "' успешно добавлено",
     type: "success",
   });
 };
@@ -76,7 +74,7 @@ const save = () => {
     name: newName.value,
   });
   dialogFormVisible.value = false;
-  newName.value = "";
   messageClose();
+  newName.value = "";
 };
 </script>

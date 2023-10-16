@@ -2,7 +2,7 @@
   <div class="buttonBar">
     <div class="buttonBar_left">
       <el-button @click="redirectToCreatePage">Добавить</el-button>
-      <el-button @click="">Создать график</el-button>
+      <el-button>Создать график</el-button>
       <el-button @click="store.deleteSelectedRows">Удалить</el-button>
     </div>
     <div class="buttonBar_search">
@@ -29,7 +29,6 @@
       <el-table-column> </el-table-column>
     </el-table>
   </el-scrollbar>
-  
 </template>
 
 <script lang="ts" setup>
@@ -41,12 +40,6 @@ import { useProviderTableStore } from "~~/stores/providerTableStore";
 
 const store = useKuTableStore();
 const router = useRouter();
-
-const storeEntity = useEntityTableStore();
-const storeProvider = useProviderTableStore();
-
-storeEntity.initializeTableData();
-storeProvider.initializeTableData();
 
 const redirectToCreatePage = () => {
   router.push("/addKu");

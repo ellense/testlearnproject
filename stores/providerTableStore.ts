@@ -66,21 +66,5 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
 
       this.multipleSelection = [];
     },
-    initializeTableData() {
-      if (this.tableData.length === 0) {
-        this.tableData.push({
-          id: 1,
-          score: 4325,
-          name: "Mikki",
-          nameEntity: "Jerry",
-        });
-        this.tableData.push({
-          id: 2,
-          score: 345345,
-          name: "Minni",
-          nameEntity: "Tom",
-        });
-      }
-    },
   },
 });

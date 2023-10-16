@@ -54,11 +54,5 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
 
       this.multipleSelection = [];
     },
-    initializeTableData() {
-      if (this.tableData.length === 0) {
-        this.tableData.push({ name: "Tom", id: 1 });
-        this.tableData.push({ name: "Jerry", id: 2 });
-      }
-    },
   },
 });
