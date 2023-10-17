@@ -1,6 +1,8 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
     <h2>Накладные</h2>
+    <InvoicesInvoiceButtons/>
+    <InvoicesInvoiceForm/>
     <InvoicesInvoiceTable/>
   </el-scrollbar>
 </template>

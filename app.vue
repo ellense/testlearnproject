@@ -4,10 +4,9 @@
     <ProductsInicialize/>
     <InvoicesInicialize/>
   <el-container class="layout-container-demo">
-    <el-header style="text-align: right; font-size: 12px">
-      <div class="toolbar">
+    <el-header >
         <div>
-          <h1>РЕТРО-БОНУС</h1>
+          <h1>Управление коммерческими условиями контрагентов</h1>
         </div>
         <el-dropdown>
           <div class="dropdown">
@@ -21,8 +20,6 @@
             </el-dropdown-menu>
           </template>
         </el-dropdown>
-        
-      </div>
     </el-header>
 
     <el-container>
@@ -119,7 +116,7 @@ margin-top: 24px;
 .layout-container-demo .el-main {
   padding: 0 0 20px 30px;
 }
-.layout-container-demo .toolbar {
+.layout-container-demo .el-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -145,6 +142,5 @@ h1 {
   gap: 8px;
   justify-content: center;
   align-items: center;
-
 }
 </style>

@@ -49,6 +49,7 @@
       ></el-date-picker>
       <el-button @click="addItemAndNavigate()">Добавить</el-button>
     </div>
+    
   </el-scrollbar>
 </template>
 
@@ -88,6 +89,7 @@ updateOptions();
 <style scoped>
   .toolbarAdd {
     display: flex;
+    
     gap: 10px;
   }
 
