@@ -6,6 +6,9 @@ interface IKu {
   percent: number | null;
   provider: string;
   type: string;
+  dateStart: Date | string;
+  dateEnd: Date | string;
+  dateActual: Date | string;
 }
 
 export const useKuTableStore = defineStore("KuTableStore", {
@@ -14,6 +17,9 @@ export const useKuTableStore = defineStore("KuTableStore", {
     newPercent: null,
     newType: '',
     providerName: "",
+    newDateStart: new Date(),
+    newDateEnd: new Date(),
+    newDateActual: new Date(),
     multipleSelection: [] as IKu[],
     search: "",
     tableData: [] as IKu[],
@@ -60,10 +66,16 @@ export const useKuTableStore = defineStore("KuTableStore", {
         percent: this.newPercent,
         provider: this.providerName,
         type: this.newType,
+        dateStart: this.newDateStart,
+        dateEnd: this.newDateEnd,
+        dateActual: this.newDateActual,
       });
       this.newPercent = null;
       this.providerName = "";
       this.newType = "";
+      this.newDateStart = new Date();
+      this.newDateEnd = new Date();
+      this.newDateActual = new Date();
     },
 
     deleteSelectedRows() {
@@ -84,6 +96,9 @@ export const useKuTableStore = defineStore("KuTableStore", {
           percent: 10,
           provider: "Mikki",
           type: "Месяц",
+          dateStart: "2023/9/21",
+          dateEnd: "2029/9/21",
+          dateActual: "2024/9/21",
         });
         this.tableData.push({
           id: 2,
@@ -91,6 +106,9 @@ export const useKuTableStore = defineStore("KuTableStore", {
           percent: 15,
           provider: "Mikki",
           type: "Квартал",
+          dateStart: "2023/10/15",
+          dateEnd: "2029/10/25",
+          dateActual: "2024/9/09",
         });
       }
     },

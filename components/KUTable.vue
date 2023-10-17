@@ -26,17 +26,17 @@
       <el-table-column property="percent" label="Процент" width="120" />
       <el-table-column property="provider" label="Поставщик" width="120" />
       <el-table-column property="type" label="Тип графика" width="120" />
-      <el-table-column> </el-table-column>
+      <el-table-column property="dateStart" label="Дата начала" width="120" />
+      <el-table-column property="dateEnd" label="Дата конца" width="120" />
+      <el-table-column property="dateActual" label="Дата актуальности" width="120" />
+   
     </el-table>
   </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useRouter } from "vue-router";
-import { useEntityTableStore } from "~~/stores/entityTableStore";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
 
 const store = useKuTableStore();
 const router = useRouter();
