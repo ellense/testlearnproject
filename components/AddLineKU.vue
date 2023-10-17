@@ -84,3 +84,11 @@ const updateOptions = () => {
 };
 updateOptions();
 </script>
+
+<style scoped>
+  .toolbarAdd {
+    display: flex;
+    gap: 10px;
+  }
+
+</style>
