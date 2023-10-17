@@ -25,24 +25,24 @@
       </el-select>
       <el-date-picker
         v-model="store.newDateStart"
-        placeholder="Выберите дату начала"
-        style="width: 180px"
+        placeholder="Выберите начальную дату"
+        style="width: 220px"
         format="YYYY/MM/DD"
         value-format="YYYY/MM/DD"
         clearable
       ></el-date-picker>
       <el-date-picker
         v-model="store.newDateEnd"
-        placeholder="Выберите дату начала"
-        style="width: 180px"
+        placeholder="Выберите конечную дату"
+        style="width: 220px"
         format="YYYY/MM/DD"
         value-format="YYYY/MM/DD"
         clearable
       ></el-date-picker>
       <el-date-picker
         v-model="store.newDateActual"
-        placeholder="Выберите дату начала"
-        style="width: 180px"
+        placeholder="Выберите дату актуальности"
+        style="width: 220px"
         format="YYYY/MM/DD"
         value-format="YYYY/MM/DD"
         clearable

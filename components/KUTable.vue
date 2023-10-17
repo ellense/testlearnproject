@@ -26,9 +26,9 @@
       <el-table-column property="percent" label="Процент" width="120" />
       <el-table-column property="provider" label="Поставщик" width="120" />
       <el-table-column property="type" label="Тип графика" width="120" />
-      <el-table-column property="dateStart" label="Дата начала" width="120" />
-      <el-table-column property="dateEnd" label="Дата конца" width="120" />
-      <el-table-column property="dateActual" label="Дата актуальности" width="120" />
+      <el-table-column property="dateStart" label="Начальная дата" width="140" />
+      <el-table-column property="dateEnd" label="Конечная дата" width="130" />
+      <el-table-column property="dateActual" label="Дата актуальности"  />
    
     </el-table>
   </el-scrollbar>
