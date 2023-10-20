@@ -10,10 +10,6 @@ interface IInvoice {
 
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
   state: () => ({
-    // newId: 0, // Идентификатор новой записи
-    // newNumber: null, // Новый номер накладной
-    // newSum: null, // Новая сумма по накладной
-    // newDate: "", // Новая дата накладной
     ProviderName: "", // Имя поставщика
     multipleSelection: [] as IInvoice[], // Выбранные записи
     search: "", // Поиск

@@ -27,29 +27,28 @@
         v-model="store.newDateStart"
         placeholder="Выберите начальную дату"
         style="width: 220px"
-        format="YYYY/MM/DD"
-        value-format="YYYY/MM/DD"
+        format="DD.MM.YYYY"
+        value-format="DD.MM.YYYY"
         clearable
       ></el-date-picker>
       <el-date-picker
         v-model="store.newDateEnd"
         placeholder="Выберите конечную дату"
         style="width: 220px"
-        format="YYYY/MM/DD"
-        value-format="YYYY/MM/DD"
+        format="DD.MM.YYYY"
+        value-format="DD.MM.YYYY"
         clearable
       ></el-date-picker>
       <el-date-picker
         v-model="store.newDateActual"
         placeholder="Выберите дату актуальности"
         style="width: 220px"
-        format="YYYY/MM/DD"
-        value-format="YYYY/MM/DD"
+        format="DD.MM.YYYY"
+        value-format="DD.MM.YYYY"
         clearable
       ></el-date-picker>
       <el-button @click="addItemAndNavigate()">Добавить</el-button>
     </div>
-    
   </el-scrollbar>
 </template>
 
@@ -87,10 +86,9 @@ updateOptions();
 </script>
 
 <style scoped>
-  .toolbarAdd {
-    display: flex;
-    
-    gap: 10px;
-  }
+.toolbarAdd {
+  display: flex;
 
+  gap: 10px;
+}
 </style>

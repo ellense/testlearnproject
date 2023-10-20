@@ -38,12 +38,12 @@
     </template>
   </el-dialog>
 
-  <el-scrollbar class="scrollTable" max-height="700px">
+  <el-scrollbar class="scrollTable">
     <el-table
       :data="storeEntity.searchTableData"
       style="width: 100%"
       @selection-change="storeEntity.handleSelectionChange"
-      height="700"
+      height="calc(100vh - 160px)"
     >
       <el-table-column type="selection" width="55" />
       <el-table-column type="index" width="55" show-overflow-tooltip />

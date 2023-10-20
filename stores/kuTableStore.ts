@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-
+import moment from 'moment';
 interface IKu {
   id: number;
   kuNumber: string;
@@ -11,11 +11,24 @@ interface IKu {
   dateActual: Date | string;
 }
 
+interface IGraphic {
+  id: number;
+  kuNumber: string;
+  provider: string;
+  type: string;
+  dateStart: Date | string;
+  dateEnd: Date | string;
+  dateCalc: Date | string;
+  percent: number | null;
+  base: number | null;
+  calculated: number | null;
+  approved: number | null;
+}
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newId: 0,
     newPercent: null,
-    newType: '',
+    newType: "",
     providerName: "",
     newDateStart: new Date(),
     newDateEnd: new Date(),
@@ -23,7 +36,8 @@ export const useKuTableStore = defineStore("KuTableStore", {
     multipleSelection: [] as IKu[],
     search: "",
     tableData: [] as IKu[],
-    multipleTableRef: null as Ref | null, 
+    tableDataGraphic: [] as IGraphic[],
+    multipleTableRef: null as Ref | null,
     percent: 0,
     provider: "",
     kuNumber: "",
@@ -32,9 +46,12 @@ export const useKuTableStore = defineStore("KuTableStore", {
   getters: {
     filteredTableData: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) =>
-        item.provider.toLowerCase().includes(searchValue)
-      );
+      return state.tableData.filter((item) =>{
+        const nameProviderMatch = item.provider.toLowerCase().includes(searchValue);
+        const kunumberMatch = item.kuNumber.toLowerCase().includes(searchValue);
+        const typeMatch = item.type.toLowerCase().includes(searchValue);
+        return typeMatch || kunumberMatch || nameProviderMatch;
+      });
     },
   },
 
@@ -78,6 +95,25 @@ export const useKuTableStore = defineStore("KuTableStore", {
       this.newDateActual = new Date();
     },
 
+   
+    addgraphic(row: {
+      id: number;
+      kuNumber: string;
+      provider: string;
+      type: string;
+      dateStart: Date | string;
+      dateEnd: Date | string;
+      dateCalc: Date | string;
+      percent: number | null;
+      base: number | null;
+      calculated: number | null;
+      approved: number | null;
+    }) {
+      this.tableDataGraphic.push(row);
+    },
+
+    
+
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 
@@ -87,6 +123,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
 
       this.multipleSelection = [];
     },
+
     initializeTableData() {
       if (this.tableData.length === 0) {
         // две сущности при инициализации стора
@@ -96,9 +133,9 @@ export const useKuTableStore = defineStore("KuTableStore", {
           percent: 10,
           provider: "Mikki",
           type: "Месяц",
-          dateStart: "2023/9/21",
-          dateEnd: "2029/9/21",
-          dateActual: "2024/9/21",
+          dateStart: "21.06.2023",
+          dateEnd: "21.06.2029",
+          dateActual: "21.04.2024",
         });
         this.tableData.push({
           id: 2,
@@ -106,9 +143,9 @@ export const useKuTableStore = defineStore("KuTableStore", {
           percent: 15,
           provider: "Mikki",
           type: "Квартал",
-          dateStart: "2023/10/15",
-          dateEnd: "2029/10/25",
-          dateActual: "2024/9/09",
+          dateStart: "15.09.2023",
+          dateEnd: "15.09.2027",
+          dateActual: "15.09.2024",
         });
       }
     },

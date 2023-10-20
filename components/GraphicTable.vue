@@ -1,10 +1,10 @@
 <template>
   <div class="toolbarAdd"></div>
-  <el-scrollbar class="scrollTable" max-height="400px">
-    <el-table style="width: 100%" height="400" border>
-      <el-table-column property="id" label="Koд КУ" show-overflow-tooltip />
+  <el-scrollbar class="scrollTable" style="border: none;">
+    <el-table :data="storeKU.tableDataGraphic" style="width: 100%" height="calc(100vh - 120px)" border>
+      <el-table-column property="kuNumber" label="Koд КУ" show-overflow-tooltip />
       <el-table-column
-        property="nameProvider"
+        property="provider"
         label="Поставщик"
         show-overflow-tooltip
       />
@@ -13,19 +13,22 @@
         label="Тип графика"
         show-overflow-tooltip
       />
-      <el-table-column
+      <el-table-column 
         property="dateStart"
+        type="date"
         label="Начальная дата"
         width="140"
         show-overflow-tooltip
       />
       <el-table-column
         property="dateEnd"
+        type="date"
         label="Конечная дата"
         show-overflow-tooltip
       />
       <el-table-column
         property="dateCalc"
+        type="date"
         label="Дата расчета"
         show-overflow-tooltip
       />
@@ -48,3 +51,9 @@
     </el-table>
   </el-scrollbar>
 </template>
+<script lang="ts" setup>
+import { useKuTableStore } from "~~/stores/kuTableStore";
+
+const storeKU = useKuTableStore();
+
+</script>

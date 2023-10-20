@@ -1,25 +1,25 @@
 <template>
-    <EntitiesInicialize/>
-    <ProvidersInicialize/>
-    <ProductsInicialize/>
-    <InvoicesInicialize/>
+  <EntitiesInicialize />
+  <ProvidersInicialize />
+  <ProductsInicialize />
+  <InvoicesInicialize />
   <el-container class="layout-container-demo">
-    <el-header >
-        <div>
-          <h1>Управление коммерческими условиями контрагентов</h1>
-        </div>
-        <el-dropdown>
-          <div class="dropdown">
-            <el-avatar :icon="UserFilled" size="small" />
+    <el-header>
+      <div>
+        <h1>Управление коммерческими условиями контрагентов</h1>
+      </div>
+      <el-dropdown>
+        <div class="dropdown">
+          <el-avatar :icon="UserFilled" size="small" />
           <p>Иванов А.В.</p>
         </div>
-          
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>Выйти</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
+
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item>Выйти</el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </el-header>
 
     <el-container>
@@ -63,15 +63,14 @@
                 <span>Товары</span>
               </el-menu-item>
             </nuxt-link>
-          <el-divider />
-          <nuxt-link to="/profile">
+            <el-divider />
+            <nuxt-link to="/profile">
               <el-menu-item index="7">
                 <el-icon><User /></el-icon>
                 <span>Профиль</span>
               </el-menu-item>
-          </nuxt-link>
-        </el-menu>
-          
+            </nuxt-link>
+          </el-menu>
         </el-scrollbar>
       </el-aside>
       <el-main>
@@ -111,7 +110,7 @@ h1 {
   border-right: none;
 }
 .layout-container-demo .el-menu:first-child {
-margin-top: 24px;
+  margin-top: 24px;
 }
 .layout-container-demo .el-main {
   padding: 0 0 20px 30px;

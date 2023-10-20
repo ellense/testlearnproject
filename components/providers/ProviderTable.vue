@@ -60,13 +60,13 @@
     </template>
   </el-dialog>
 
-  <el-scrollbar class="scrollTable" max-height="400px">
+  <el-scrollbar class="scrollTable">
     <el-table
       ref="multipleTableRef"
       :data="storeProvider.searchTableData"
       style="width: 100%"
       @selection-change="storeProvider.handleSelectionChange"
-      height="400"
+      height="calc(100vh - 160px)"
     >
       <el-table-column
         property="selection"

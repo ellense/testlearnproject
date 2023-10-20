@@ -61,13 +61,13 @@
     </template>
   </el-dialog>
 
-  <el-scrollbar class="scrollTable" height="700">
+  <el-scrollbar class="scrollTable">
     <el-table
       ref="multipleTableRef"
       :data="storeProduct.searchTableData"
       style="width: 100%"
       @selection-change="storeProduct.handleSelectionChange"
-      height="700"
+      height="calc(100vh - 160px)"
     >
       <el-table-column
         property="selection"
