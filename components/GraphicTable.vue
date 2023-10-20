@@ -34,7 +34,7 @@
       />
       <el-table-column property="base" label="База" show-overflow-tooltip />
       <el-table-column
-        property="precent"
+        property="percent"
         label="Процент"
         show-overflow-tooltip
       />

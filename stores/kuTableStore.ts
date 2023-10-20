@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import moment from 'moment';
 interface IKu {
   id: number;
   kuNumber: string;
@@ -46,7 +45,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
   getters: {
     filteredTableData: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) =>{
+      return state.tableData.filter((item: { provider: string; kuNumber: string; type: string; }) =>{
         const nameProviderMatch = item.provider.toLowerCase().includes(searchValue);
         const kunumberMatch = item.kuNumber.toLowerCase().includes(searchValue);
         const typeMatch = item.type.toLowerCase().includes(searchValue);
@@ -146,6 +145,26 @@ export const useKuTableStore = defineStore("KuTableStore", {
           dateStart: "15.09.2023",
           dateEnd: "15.09.2027",
           dateActual: "15.09.2024",
+        });
+        this.tableData.push({
+          id: 2,
+          kuNumber: "КУ00003",
+          percent: 8,
+          provider: "Minni",
+          type: "Полгода",
+          dateStart: "10.07.2023",
+          dateEnd: "10.07.2030",
+          dateActual: "10.07.2025",
+        });
+        this.tableData.push({
+          id: 2,
+          kuNumber: "КУ00004",
+          percent: 3,
+          provider: "Minni",
+          type: "Год",
+          dateStart: "05.11.2023",
+          dateEnd: "05.11.2030",
+          dateActual: "05.11.2026",
         });
       }
     },
