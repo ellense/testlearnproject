@@ -1,84 +1,93 @@
 
 <template>
   <div class="profile">
-    <el-card class="profile-card">
-      <div class="profile-avatar">
-        <el-avatar
-          :src="user.avatar"
-          :size="200"
-          fit="cover"
-          shape="circle"
-        ></el-avatar>
-      </div>
-      <div class="profile-info">
-        <el-form ref="form"  label-position="top">
-          <h2>{{ user.name }}</h2>
-          <p>{{ user.email }}</p>
-        </el-form>
-        <el-button type="primary" >
-          Редактировать
-        </el-button>
-      </div>
-    </el-card>
+    <div class="profile-avatar">
+      <el-avatar
+        :src="user.avatar"
+        :size="200"
+        fit="cover"
+        shape="circle"
+      ></el-avatar>
+    </div>
+    <div class="profile-info">
+      <el-form ref="form" label-position="top">
+        <h2>{{ user.name }}</h2>
+        <p>{{ user.email }}</p>
+      </el-form>
+      <el-button type="primary" @click="dialogFormVisible = true">
+        Редактировать
+      </el-button>
+    </div>
   </div>
+  <el-dialog
+    v-model="dialogFormVisible"
+    title="Редактирование профиля"
+    close-on-click-modal
+    close-on-press-escape
+  >
+    <el-form>
+
+      <el-form-item label="ФИО:" :label-width="formLabelWidth">
+        <el-input
+          v-model="newName"
+          label="ФИО"
+          placeholder="Введите ФИО"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      
+    </el-form>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">Отмена</el-button>
+        <el-button @click="save()"> Сохранить </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 
 <script setup>
-  const user = reactive({
-    name: 'Иванова Анна Владимировна',
-    email: 'john.doe@example.com',
-    avatar: "https://static.vecteezy.com/system/resources/previews/002/002/257/non_2x/beautiful-woman-avatar-character-icon-free-vector.jpg",
-    //avatar: "C:\Users\elena\testlearnproject\assets\images\woman.jpg",
-  });
+// import { ref } from 'vue';
+// const dialogFormVisible = ref(false);
+// const user = ref({
+//   name: 'Иванова Анна Владимировна',
+//   email: 'john.doe@example.com',
+//   avatar: "/img/woman.jpg", 
+// });
+import { ref } from 'vue';
+import { useProfileStore } from "~~/stores/profileStore";
 
-//   const toggleEditing = () => {
-//     isEditing.value = !isEditing.value;
-//   };
+const profileStore = useProfileStore();
 
-//   const editAvatar = () => {
-//     // Здесь вы можете добавить функциональность для редактирования аватара
-//   };
+const dialogFormVisible = ref(profileStore.dialogFormVisible);
+const user = ref(profileStore.user);
+const newName = ref(profileStore.newName);
 
-//   const saveChanges = () => {
-//     // Здесь вы можете сохранить изменения пользователя
-//     isEditing.value = false;
-//   };
-// import { useProfileStore } from "~~/stores/profileStore";
-// const store = useProfileStore();
-
-// store.initializeTableData();
+const save = () => {
+  if (newName.value) {
+    user.name = newName.value;
+  }
+  dialogFormVisible.value = false;
+  newName.value = "";
+};
 </script>
 
 <style scoped>
 .profile {
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   height: 100%;
 }
-
-.profile-card {
-  width: 400px;
-}
-
 .profile-avatar {
   text-align: center;
   margin: 20px 0;
   position: relative;
 }
 
-.edit-avatar {
-  position: absolute;
-  bottom: 0;
-  right: 0;
-}
-
 .profile-info {
-  text-align: center;
-}
-
-el-form-item {
-  margin-bottom: 20px;
+  text-align: start;
 }
 
 h2 {

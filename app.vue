@@ -4,13 +4,19 @@
   <ProductsInicialize />
   <InvoicesInicialize />
   <el-container class="layout-container-demo">
-    <el-header>
+    <el-header v-if="showHeader">
       <div>
         <h1>Управление коммерческими условиями контрагентов</h1>
       </div>
       <el-dropdown>
         <div class="dropdown">
-          <el-avatar :icon="UserFilled" size="small" />
+          <!-- <el-avatar :icon="UserFilled" size="small" /> -->
+          <el-avatar
+          :src="profileStore.user.avatar"
+          :size="30"
+          fit="cover"
+          shape="circle"
+        ></el-avatar>
           <p>Иванова А.В.</p>
         </div>
 
@@ -23,7 +29,7 @@
     </el-header>
 
     <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" v-if="showMenu">
         <el-scrollbar height="calc(100vh - 60px)">
           <el-menu style="font-size: 12px" active-color="#689EFF">
             <nuxt-link to="/">
@@ -92,6 +98,14 @@ import {
   ShoppingCartFull,
   UserFilled,
 } from "@element-plus/icons-vue";
+import { useRoute } from "vue-router";
+import { useProfileStore } from "~~/stores/profileStore";
+
+const profileStore = useProfileStore();
+
+const route = useRoute();
+const showHeader = route.name !== "login";
+const showMenu = route.name !== "login";
 </script>
 
 <style scoped>

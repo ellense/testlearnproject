@@ -53,14 +53,16 @@ const addGraphic = () => {
   const messageClose = () => {
     if (selectedRows.length == 1) {
       ElMessage({
-        message: "График успешно создан",
+        message: "График успешно создан.",
         type: "success",
       });
-    } else {
+    } else if (selectedRows.length > 1) {
       ElMessage({
-        message: "Графики успешно создан",
+        message: "Графики успешно создан.",
         type: "success",
       });
+    } else if (selectedRows.length == 0) {
+      ElMessage.error("Коммерческое условие не выбрано.");
     }
   };
 
@@ -77,6 +79,8 @@ const addGraphic = () => {
         return 6;
       } else if (selectedRow.type == "Год") {
         return 12;
+      } else {
+        return 1;
       }
     };
     const getLastDayOfMonth = (date: string | Date) => {
@@ -92,7 +96,7 @@ const addGraphic = () => {
     for (let i = 0; i < numMonths / numType() + 1; i++) {
       const nextMonthFirstDay = (i: number) => {
         return moment(dateStart)
-          .add(numType()+i, "month")
+          .add(numType() + i, "month")
           .startOf("month")
           .format("DD.MM.YYYY");
       };
@@ -168,112 +172,6 @@ const addGraphic = () => {
   });
   messageClose();
 };
-
-// const addGraphic = () => {
-//   const selectedRows = store.multipleSelection; // Получаем выделенные элементы
-//   const messageClose = () => {
-//     const message =
-//       selectedRows.length === 1
-//         ? "График успешно создан"
-//         : "Графики успешно создан";
-//     ElMessage({ message, type: "success" });
-//   };
-
-//   // Функция для определения количества месяцев в зависимости от типа
-//   const numType = (type: string) => {
-//     switch (type) {
-//       case "Месяц":
-//         return 1;
-//       case "Квартал":
-//         return 3;
-//       case "Полгода":
-//         return 6;
-//       case "Год":
-//         return 12;
-//       default:
-//         return 1;
-//     }
-//   };
-
-//   // Функция для определения последнего дня месяца
-//   const getLastDayOfMonth = (date: string | number | Date, type: string) => {
-//     const lastDay = new Date(date);
-//     lastDay.setMonth(lastDay.getMonth() + numType(type), 1);
-//     lastDay.setDate(lastDay.getDate() - 1);
-//     return lastDay;
-//   };
-
-//   // Функция для определения первого дня следующего месяца
-//   const nextMonthFirstDay = (date: moment.MomentInput, type: string) => {
-//     return moment(date)
-//       .add(numType(type), "month")
-//       .startOf("month")
-//       .format("DD.MM.YYYY");
-//   };
-
-//   // Обходим все выделенные строки
-//   selectedRows.forEach((selectedRow) => {
-//     const dateStart = moment(selectedRow.dateStart, "DD.MM.YYYY").toDate();
-//     const dateActual = moment(selectedRow.dateActual, "DD.MM.YYYY").toDate();
-//     const numMonths =
-//       (dateActual.getFullYear() - dateStart.getFullYear()) * 12 +
-//       (dateActual.getMonth() - dateStart.getMonth());
-
-//     // Обходим все месяцы в выбранном диапазоне
-//     for (let i = 0; i < numMonths / numType(selectedRow.type) + 1; i++) {
-//       const isStart = i === 0;
-//       const isEnd = i === numMonths;
-
-//       // Определяем дату окончания (последний день месяца или дата окончания)
-//       const dateEnd = isStart
-//         ? getLastDayOfMonth(dateStart, selectedRow.type).toLocaleDateString("rus")
-//         : isEnd
-//         ? selectedRow.dateActual
-//         : getLastDayOfMonth(dateStart, selectedRow.type).toLocaleDateString("rus");
-
-//       // Добавляем график в хранилище
-//       store.addgraphic({
-//         id: store.tableDataGraphic.length + 1,
-//         kuNumber: selectedRow.kuNumber,
-//         provider: selectedRow.provider,
-//         type: selectedRow.type,
-//         dateStart: isStart
-//           ? selectedRow.dateStart
-//           : dateStart.toLocaleDateString("rus"),
-//         dateEnd,
-//         dateCalc: nextMonthFirstDay(dateStart, selectedRow.type),
-//         percent: selectedRow.percent,
-//         base: isStart ? 65743 : null,
-//         calculated: null,
-//         approved: null,
-//       });
-
-//       // Если это последний месяц, добавляем пустую строку
-//       if (isEnd) {
-//         store.addgraphic({
-//           id: 0,
-//           kuNumber: "",
-//           provider: "",
-//           type: "",
-//           dateStart: "",
-//           dateEnd: "",
-//           dateCalc: "",
-//           percent: null,
-//           base: null,
-//           calculated: null,
-//           approved: null,
-//         });
-//       }
-
-//       // Переходим к следующему месяцу
-//       dateStart.setMonth(dateStart.getMonth() + numType(selectedRow.type));
-//       dateStart.setDate(1);
-//     }
-//   });
-
-//   // Закрываем сообщение
-//   messageClose();
-// };
 
 store.initializeTableData();
 </script>

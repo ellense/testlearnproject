@@ -74,13 +74,13 @@
     </template>
   </el-dialog>
 
-  <el-scrollbar class="scrollTable" max-height="700">
+  <el-scrollbar class="scrollTable">
     <el-table
       ref="multipleTableRef"
       :data="storeInvoice.searchTableData"
       style="width: 100%"
       @selection-change="storeInvoice.handleSelectionChange"
-      height="700"
+      height="calc(100vh - 160px)"
     >
       <el-table-column
         property="selection"
