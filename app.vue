@@ -11,7 +11,7 @@
       <el-dropdown>
         <div class="dropdown">
           <el-avatar :icon="UserFilled" size="small" />
-          <p>Иванов А.В.</p>
+          <p>Иванова А.В.</p>
         </div>
 
         <template #dropdown>

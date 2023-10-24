@@ -147,7 +147,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
           dateActual: "15.09.2024",
         });
         this.tableData.push({
-          id: 2,
+          id: 3,
           kuNumber: "КУ00003",
           percent: 8,
           provider: "Minni",
@@ -157,7 +157,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
           dateActual: "10.07.2025",
         });
         this.tableData.push({
-          id: 2,
+          id: 4,
           kuNumber: "КУ00004",
           percent: 3,
           provider: "Minni",
