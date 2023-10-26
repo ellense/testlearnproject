@@ -1,4 +1,5 @@
 <template>
+  <!-- <el-config-provider :locale="locale"> -->
   <EntitiesInicialize />
   <ProvidersInicialize />
   <ProductsInicialize />
@@ -10,7 +11,6 @@
       </div>
       <el-dropdown>
         <div class="dropdown">
-          <!-- <el-avatar :icon="UserFilled" size="small" /> -->
           <el-avatar
           :src="profileStore.user.avatar"
           :size="30"
@@ -85,6 +85,7 @@
       </el-main>
     </el-container>
   </el-container>
+<!-- </el-config-provider> -->
 </template>
 
 <script lang="ts" setup>
@@ -106,6 +107,11 @@ const profileStore = useProfileStore();
 const route = useRoute();
 const showHeader = route.name !== "login";
 const showMenu = route.name !== "login";
+// import { ref } from 'vue';
+// import { ElConfigProvider } from 'element-plus';
+// import ru from 'element-plus/dist/locale/ru.mjs';
+
+// const locale = ref(ru);
 </script>
 
 <style scoped>

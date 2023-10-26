@@ -20,7 +20,11 @@
           :value="item.providerName"
         />
       </el-select>
-      <el-select v-model="store.newType" placeholder="Выберите тип графика" clearable>
+      <el-select
+        v-model="store.newType"
+        placeholder="Выберите тип графика"
+        clearable
+      >
         <el-option label="Неделя" value="Неделя" :disabled="true"></el-option>
         <el-option label="Месяц" value="Месяц"></el-option>
         <el-option label="Квартал" value="Квартал"></el-option>
@@ -53,21 +57,29 @@
       ></el-date-picker>
       <el-button @click="addItemAndNavigate()">Добавить</el-button>
     </div>
+  
   </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
+
 import { ElInput } from "element-plus";
-import 'dayjs/locale/ru';
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
+require('dayjs/locale/ru');
+
+
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
+
 import { useRouter } from "vue-router";
 
 const providerStore = useProviderTableStore();
 const store = useKuTableStore();
 const router = useRouter();
 const options = ref<{ providerName: string; label: string }[]>([]);
+
 const messageClose = () => {
   ElMessage({
     message: "Коммерческое условие успешно добавлено",

@@ -40,8 +40,10 @@
 
 <script lang="ts" setup>
 import { useKuTableStore } from "~~/stores/kuTableStore";
+
 import { useRouter } from "vue-router";
-import moment from "moment";
+import dayjs from "dayjs";
+import "dayjs/locale/ru";
 const store = useKuTableStore();
 const router = useRouter();
 
@@ -50,9 +52,9 @@ const redirectToCreatePage = () => {
 };
 
 const addGraphic = () => {
-  const selectedRows = store.multipleSelection; // Получаем выделенные элементы
+  const selectedRows = store.multipleSelection;
   const messageClose = () => {
-    if (selectedRows.length == 1) {
+    if (selectedRows.length === 1) {
       ElMessage({
         message: "График успешно создан.",
         type: "success",
@@ -62,89 +64,80 @@ const addGraphic = () => {
         message: "Графики успешно создан.",
         type: "success",
       });
-    } else if (selectedRows.length == 0) {
+    } else if (selectedRows.length === 0) {
       ElMessage.error("Коммерческое условие не выбрано.");
     }
   };
 
   selectedRows.forEach((selectedRow) => {
-    const dateStart = moment(selectedRow.dateStart, "DD.MM.YYYY").toDate();
-    const dateActual = moment(selectedRow.dateActual, "DD.MM.YYYY").toDate();
-    const dateEnd = moment(selectedRow.dateEnd, "DD.MM.YYYY").toDate();
+    const dateStart = dayjs(selectedRow.dateStart, "DD.MM.YYYY");
+    const dateActual = dayjs(selectedRow.dateActual, "DD.MM.YYYY");
+    const dateEnd = dayjs(selectedRow.dateEnd, "DD.MM.YYYY");
+
     const numType = () => {
-      if (selectedRow.type == "Месяц") {
+      if (selectedRow.type === "Месяц") {
         return 1;
-      } else if (selectedRow.type == "Квартал") {
+      } else if (selectedRow.type === "Квартал") {
         return 3;
-      } else if (selectedRow.type == "Полгода") {
+      } else if (selectedRow.type === "Полгода") {
         return 6;
-      } else if (selectedRow.type == "Год") {
+      } else if (selectedRow.type === "Год") {
         return 12;
       } else {
         return 1;
       }
     };
-    const getLastDayOfMonth = (date: string | Date) => {
-      const lastDay = new Date(date); // Создаем копию исходной даты
-      lastDay.setMonth(lastDay.getMonth() + numType(), 1); // Устанавливаем день в 1 числа следующего месяца
-      lastDay.setDate(lastDay.getDate() - 1); // Вычитаем 1 день, чтобы получить последний день текущего месяца
+
+    const getLastDayOfMonth = (date: dayjs.Dayjs) => {
+      const lastDay = date.clone().add(numType(), "month").startOf("month").subtract(1, "day");
       return lastDay;
     };
+
     const numMonths =
-      (dateActual.getFullYear() - dateStart.getFullYear()) * 12 +
-      (dateActual.getMonth() - dateStart.getMonth());
+      (dateActual.year() - dateStart.year()) * 12 +
+      (dateActual.month() - dateStart.month());
 
     for (let i = 0; i < numMonths / numType() + 1; i++) {
       const nextMonthFirstDay = (i: number) => {
-        return moment(dateStart)
-          .add(numType() + i, "month")
-          .startOf("month")
-          .format("DD.MM.YYYY");
+        return dateStart.add(numType() + i, "month").startOf("month").format("DD.MM.YYYY");
       };
-      console.log(selectedRow.dateActual);
-      if (i == 0) {
-        //1 строка цикла
+
+      if (i === 0) {
         store.addgraphic({
           id: store.tableDataGraphic.length + 1,
           kuNumber: selectedRow.kuNumber,
           provider: selectedRow.provider,
           type: selectedRow.type,
           dateStart: selectedRow.dateStart,
-          dateEnd: getLastDayOfMonth(dateStart).toLocaleDateString("rus"),
+          dateEnd: getLastDayOfMonth(dateStart).format("DD.MM.YYYY"),
           dateCalc: nextMonthFirstDay(0),
           percent: selectedRow.percent,
           base: selectedRow.base,
           calculated: null,
           approved: null,
         });
-        console.log(selectedRow.dateActual);
       } else if (i > 0 && i < numMonths / numType()) {
-        //середина цикла
-        dateStart.setMonth(dateStart.getMonth() + numType());
-        dateStart.setDate(1);
+        dateStart.add(numType(), "month").startOf("month");
         store.addgraphic({
           id: store.tableDataGraphic.length + 1,
           kuNumber: selectedRow.kuNumber,
           provider: selectedRow.provider,
           type: selectedRow.type,
-          dateStart: dateStart.toLocaleDateString("rus"),
-          dateEnd: getLastDayOfMonth(dateStart).toLocaleDateString("rus"),
+          dateStart: dateStart.format("DD.MM.YYYY"),
+          dateEnd: getLastDayOfMonth(dateStart).format("DD.MM.YYYY"),
           dateCalc: nextMonthFirstDay(0),
           percent: selectedRow.percent,
           base: selectedRow.base,
           calculated: null,
           approved: null,
         });
-        console.log(selectedRow.dateActual);
-        console.log("i:", i, "numMonths:", numMonths);
-      } else if (i == numMonths / numType()) {
-        // последняя строка цикла
+      } else if (i === numMonths / numType()) {
         store.addgraphic({
           id: store.tableDataGraphic.length + 1,
           kuNumber: selectedRow.kuNumber,
           provider: selectedRow.provider,
           type: selectedRow.type,
-          dateStart: dateStart.toLocaleDateString("rus"),
+          dateStart: dateStart.format("DD.MM.YYYY"),
           dateEnd: selectedRow.dateActual,
           dateCalc: nextMonthFirstDay(1),
           percent: selectedRow.percent,
@@ -152,12 +145,10 @@ const addGraphic = () => {
           calculated: null,
           approved: null,
         });
-        console.log(selectedRow.dateActual);
       }
     }
 
     store.addgraphic({
-      //пустая строка для визуального разделения, потом можно разделение реализовать по-другому
       id: 0,
       kuNumber: "",
       provider: "",
