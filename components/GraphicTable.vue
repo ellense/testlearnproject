@@ -64,4 +64,6 @@
 import { useKuTableStore } from "~~/stores/kuTableStore";
 
 const storeKU = useKuTableStore();
+
+
 </script>

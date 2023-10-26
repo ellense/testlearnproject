@@ -1,21 +1,25 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
-      <el-icon><Document /></el-icon>
+      <div class="img">
+        <el-image :src="'/img/logo.png'" />
+      </div>
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="Вход" name="first">
-          <el-form ref="loginForm" :model="loginData" label-width="80px">
-            <el-form-item label="Email" prop="email">
+          <el-form ref="loginForm" :model="loginData">
+            <el-form-item prop="email">
               <el-input
                 v-model="loginData.email"
-                placeholder="Введите ваш Email"
+                placeholder="Введите email"
+                :prefix-icon="Message"
               />
             </el-form-item>
-            <el-form-item label="Пароль" prop="password">
+            <el-form-item prop="password">
               <el-input
                 v-model="loginData.password"
                 type="password"
-                placeholder="Введите ваш пароль"
+                placeholder="Введите пароль"
+                :prefix-icon="Lock"
               />
             </el-form-item>
             <el-form-item>
@@ -24,31 +28,35 @@
           </el-form>
         </el-tab-pane>
         <el-tab-pane label="Регистрация" name="second">
-          <el-form ref="loginForm" :model="loginData" label-width="120px">
-            <el-form-item label="ФИО" prop="name">
+          <el-form ref="loginForm" :model="loginData">
+            <el-form-item prop="name">
               <el-input
                 v-model="registData.name"
-                placeholder="Введите ваше ФИО"
+                placeholder="Введите ФИО"
+                :prefix-icon="User"
               />
             </el-form-item>
-            <el-form-item label="Email" prop="email">
+            <el-form-item prop="email">
               <el-input
                 v-model="registData.email"
-                placeholder="Введите ваш Email"
+                placeholder="Введите email"
+                :prefix-icon="Message"
               />
             </el-form-item>
-            <el-form-item label="Пароль" prop="password">
+            <el-form-item prop="password">
               <el-input
                 v-model="registData.password"
                 type="password"
                 placeholder="Придумайте пароль"
+                :prefix-icon="Lock"
               />
             </el-form-item>
-            <el-form-item label="Подтверждение" prop="password2">
+            <el-form-item prop="password2">
               <el-input
                 v-model="registData.password2"
                 type="password"
-                placeholder="Введите ваш пароль еще раз"
+                placeholder="Подтвердите пароль"
+                :prefix-icon="CircleCheck"
               />
             </el-form-item>
             <el-form-item>
@@ -63,6 +71,13 @@
 
 <script lang="ts" setup>
 import { ref } from "vue";
+import {
+  User,
+  Lock,
+  Message,
+  CircleCheck,
+  Document,
+} from "@element-plus/icons-vue";
 import type { TabsPaneContext } from "element-plus";
 
 const activeName = ref("first");
@@ -85,13 +100,21 @@ const registData = ref({
 <style scoped>
 .login-container {
   display: flex;
-  justify-content: center;
-  margin-top: 200px;
+  height: 100vh; /* Use 100vh to make sure it takes the full viewport height */
+  justify-content: center; /* Center horizontally */
+  align-items: center; /* Center vertically */
 }
 
 .login-card {
   width: 550px;
   padding: 20px;
+}
+
+.img {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 20px 0;
 }
 
 .demo-tabs > .el-tabs__content {
@@ -104,6 +127,7 @@ const registData = ref({
 .el-form {
   margin-top: 30px;
 }
+
 .el-form .el-button {
   width: 100%;
 }

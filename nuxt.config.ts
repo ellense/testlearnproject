@@ -7,6 +7,7 @@ export default defineNuxtConfig({
     head: {
       title: "Ретро-бонус",
     },
+  
   },
   css: ["~/assets/css/main.css"],
   modules: ["@pinia/nuxt", "@element-plus/nuxt"],

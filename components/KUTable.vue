@@ -21,7 +21,7 @@
       height="calc(100vh - 160px)"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column property="id" label="" width="120" />
+      <el-table-column property="id" label="" width="50" />
       <el-table-column property="kuNumber" label="Номер КУ" width="120" />
       <el-table-column property="percent" label="Процент" width="120" />
       <el-table-column property="provider" label="Поставщик" width="120" />
@@ -32,7 +32,8 @@
         width="140"
       />
       <el-table-column property="dateEnd" label="Конечная дата" width="130" />
-      <el-table-column property="dateActual" label="Дата актуальности" />
+      <el-table-column property="dateActual" label="Дата актуальности" width="160"/>
+      <el-table-column property="base" label="База" />
     </el-table>
   </el-scrollbar>
 </template>
@@ -112,7 +113,7 @@ const addGraphic = () => {
           dateEnd: getLastDayOfMonth(dateStart).toLocaleDateString("rus"),
           dateCalc: nextMonthFirstDay(0),
           percent: selectedRow.percent,
-          base: 65743,
+          base: selectedRow.base,
           calculated: null,
           approved: null,
         });
@@ -130,7 +131,7 @@ const addGraphic = () => {
           dateEnd: getLastDayOfMonth(dateStart).toLocaleDateString("rus"),
           dateCalc: nextMonthFirstDay(0),
           percent: selectedRow.percent,
-          base: null,
+          base: selectedRow.base,
           calculated: null,
           approved: null,
         });
@@ -147,7 +148,7 @@ const addGraphic = () => {
           dateEnd: selectedRow.dateActual,
           dateCalc: nextMonthFirstDay(1),
           percent: selectedRow.percent,
-          base: null,
+          base: selectedRow.base,
           calculated: null,
           approved: null,
         });

@@ -3,7 +3,9 @@
     <div class="toolbarAdd">
       <el-input
         v-model="store.newPercent"
+        type="number"
         placeholder="Введите процент"
+        clearable
         style="width: 200px"
       ></el-input>
       <el-select
@@ -18,8 +20,8 @@
           :value="item.providerName"
         />
       </el-select>
-      <el-select v-model="store.newType" placeholder="Выберите тип графика">
-        <el-option label="Неделя" value="Неделя"></el-option>
+      <el-select v-model="store.newType" placeholder="Выберите тип графика" clearable>
+        <el-option label="Неделя" value="Неделя" :disabled="true"></el-option>
         <el-option label="Месяц" value="Месяц"></el-option>
         <el-option label="Квартал" value="Квартал"></el-option>
         <el-option label="Полгода" value="Полгода"></el-option>
@@ -57,6 +59,7 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { ElInput } from "element-plus";
+import 'dayjs/locale/ru';
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 import { useRouter } from "vue-router";
