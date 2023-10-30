@@ -1,15 +1,16 @@
 <template>
-  <!-- <el-config-provider :locale="locale"> -->
+ 
+  <el-config-provider :locale="locale">
   <EntitiesInicialize />
   <ProvidersInicialize />
   <ProductsInicialize />
   <InvoicesInicialize />
   <el-container class="layout-container-demo">
-    <el-header v-if="showHeader">
+    <el-header >
       <div>
         <h1>Управление коммерческими условиями контрагентов</h1>
       </div>
-      <el-dropdown>
+      <el-dropdown v-if="showDropdownHeader">
         <div class="dropdown">
           <el-avatar
           :src="profileStore.user.avatar"
@@ -85,7 +86,7 @@
       </el-main>
     </el-container>
   </el-container>
-<!-- </el-config-provider> -->
+</el-config-provider>
 </template>
 
 <script lang="ts" setup>
@@ -105,23 +106,31 @@ import { useProfileStore } from "~~/stores/profileStore";
 const profileStore = useProfileStore();
 
 const route = useRoute();
-const showHeader = route.name !== "login";
+const showDropdownHeader = route.name !== "login";
 const showMenu = route.name !== "login";
-// import { ref } from 'vue';
-// import { ElConfigProvider } from 'element-plus';
-// import ru from 'element-plus/dist/locale/ru.mjs';
 
-// const locale = ref(ru);
+import { ElConfigProvider } from 'element-plus'
+import ru from 'element-plus/dist/locale/ru.mjs'
+
+const locale = ru;
+
+
+
 </script>
 
 <style scoped>
 h1 {
   color: #337ecc;
 }
+
 .layout-container-demo .el-header {
   position: relative;
   color: var(--el-text-color-primary);
   border-bottom: 1px solid var(--el-border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
 }
 .layout-container-demo .el-aside {
   color: var(--el-text-color-primary);
@@ -135,12 +144,12 @@ h1 {
 .layout-container-demo .el-main {
   padding: 0 0 20px 30px;
 }
-.layout-container-demo .el-header {
+/* .layout-container-demo .el-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 100%;
-}
+} */
 .el-menu-item {
   height: 40px;
 }

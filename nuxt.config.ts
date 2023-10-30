@@ -1,5 +1,17 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+
+
 export default defineNuxtConfig({
+  imports: {
+    presets: [
+      {
+        from: 'vue-i18n',
+        imports: ['useI18n']
+      }
+    ]
+  },
+
   devtools: {
     enabled: true,
   },
@@ -10,7 +22,11 @@ export default defineNuxtConfig({
   
   },
   css: ["~/assets/css/main.css"],
-  modules: ["@pinia/nuxt", "@element-plus/nuxt"],
+  modules: 
+   [ "@pinia/nuxt",
+   "@element-plus/nuxt",
+],
+   
   pinia: {
     autoImports: [
       // automatically imports `defineStore`

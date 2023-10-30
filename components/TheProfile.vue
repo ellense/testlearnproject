@@ -1,4 +1,3 @@
-
 <template>
   <div class="profile">
     <div class="profile-avatar">
@@ -26,7 +25,6 @@
     close-on-press-escape
   >
     <el-form>
-
       <el-form-item label="ФИО:" :label-width="formLabelWidth">
         <el-input
           v-model="newName"
@@ -36,7 +34,6 @@
           clearable
         />
       </el-form-item>
-      
     </el-form>
     <template #footer>
       <span class="dialog-footer">
@@ -48,14 +45,7 @@
 </template>
 
 <script setup>
-// import { ref } from 'vue';
-// const dialogFormVisible = ref(false);
-// const user = ref({
-//   name: 'Иванова Анна Владимировна',
-//   email: 'john.doe@example.com',
-//   avatar: "/img/woman.jpg", 
-// });
-import { ref } from 'vue';
+import { ref } from "vue";
 import { useProfileStore } from "~~/stores/profileStore";
 
 const profileStore = useProfileStore();
@@ -85,7 +75,6 @@ const save = () => {
   margin: 20px 0;
   position: relative;
 }
-
 .profile-info {
   text-align: start;
 }

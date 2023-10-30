@@ -1,12 +1,10 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
-      <div class="img">
-        <el-image :src="'/img/logo.png'" />
-      </div>
       <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
         <el-tab-pane label="Вход" name="first">
-          <el-form ref="loginForm" :model="loginData">
+          <el-form ref="loginForm" :model="loginData" :rules="rules"
+          >
             <el-form-item prop="email">
               <el-input
                 v-model="loginData.email"
@@ -98,6 +96,7 @@ const registData = ref({
 </script>
 
 <style scoped>
+
 .login-container {
   display: flex;
   height: 100vh; /* Use 100vh to make sure it takes the full viewport height */
@@ -107,13 +106,14 @@ const registData = ref({
 
 .login-card {
   width: 550px;
+  height: 370px;
   padding: 20px;
 }
 
 .img {
   display: flex;
   justify-content: center;
-  width: 100%;
+  width: 50px;
   margin: 20px 0;
 }
 
