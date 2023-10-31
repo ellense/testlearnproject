@@ -165,5 +165,4 @@ const addGraphic = () => {
   messageClose();
 };
 
-store.initializeTableData();
 </script>

@@ -11,6 +11,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     search: "",
     tableData: [] as IEntity[],
     multipleTableRef: null as Ref | null,
+    dialogFormVisible: false,
   }),
 
   getters: {

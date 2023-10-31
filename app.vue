@@ -1,10 +1,11 @@
 <template>
  
   <el-config-provider :locale="locale">
-  <EntitiesInicialize />
-  <ProvidersInicialize />
-  <ProductsInicialize />
-  <InvoicesInicialize />
+  <EntitiesLegalEntityInicialize />
+  <EntitiesProviderInicialize />
+  <EntitiesProductInicialize />
+  <EntitiesInvoiceInicialize />
+  <EntitiesKuInicialize/>
   <el-container class="layout-container-demo">
     <el-header >
       <div>
@@ -113,7 +114,6 @@ import { ElConfigProvider } from 'element-plus'
 import ru from 'element-plus/dist/locale/ru.mjs'
 
 const locale = ru;
-
 
 
 </script>

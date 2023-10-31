@@ -1,7 +1,7 @@
 <template>
     <el-scrollbar height="calc(100vh - 60px)">
       <h2>Профиль</h2>
-      <TheProfile/>
+      <FeaturesProfile/>
     </el-scrollbar>
 </template>
   
