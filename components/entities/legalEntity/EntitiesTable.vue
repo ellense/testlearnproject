@@ -17,5 +17,4 @@
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 
 const storeEntity = useEntityTableStore();
-
 </script>

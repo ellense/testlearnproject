@@ -1,4 +1,6 @@
 <template >
+    <EntitiesInvoiceButtons />
+    <EntitiesInvoiceForm />
     <EntitiesInvoiceInvoicesTable/>
  </template>
  

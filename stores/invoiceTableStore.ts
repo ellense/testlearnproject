@@ -15,6 +15,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     search: "", // Поиск
     tableData: [] as IInvoice[], // Данные таблицы накладной
     multipleTableRef: null as Ref | null, // Ссылка на компонент таблицы
+    dialogFormVisible: false,
   }),
 
   getters: {

@@ -1,7 +1,7 @@
 <template >
     <EntitiesLegalEntityButtons />
-    <EntitiesLegalEntityForm/>
-    <EntitiesLegalEntityEntitiesTable/>
+    <EntitiesLegalEntityForm />
+    <EntitiesLegalEntityEntitiesTable />
 </template>
 
 <script lang = "ts" setup>

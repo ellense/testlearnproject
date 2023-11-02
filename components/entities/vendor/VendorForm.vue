@@ -1,20 +1,6 @@
 <template>
-  <div class="buttonBar">
-    <div class="buttonBar_left">
-      <el-button @click="dialogFormVisible = true"> Добавить </el-button>
-      <el-button @click="storeProvider.deleteSelectedRows()">Удалить</el-button>
-    </div>
-    <div class="buttonBar_search">
-      <el-input
-        v-model="storeProvider.search"
-        placeholder="Поиск"
-        style="width: 200px"
-        :prefix-icon="Search"
-      />
-    </div>
-  </div>
   <el-dialog
-    v-model="dialogFormVisible"
+    v-model="storeProvider.dialogFormVisible"
     title="Новый поставщик"
     close-on-click-modal
     close-on-press-escape
@@ -54,58 +40,23 @@
     </el-form>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="dialogFormVisible = false">Отмена</el-button>
+        <el-button @click="storeProvider.dialogFormVisible = false"
+          >Отмена</el-button
+        >
         <el-button @click="save()"> Добавить </el-button>
       </span>
     </template>
   </el-dialog>
-
-  <el-scrollbar class="scrollTable">
-    <el-table
-      ref="multipleTableRef"
-      :data="storeProvider.searchTableData"
-      style="width: 100%"
-      @selection-change="storeProvider.handleSelectionChange"
-      height="calc(100vh - 160px)"
-    >
-      <el-table-column
-        property="selection"
-        type="selection"
-        width="55"
-        show-overflow-tooltip
-      />
-      <el-table-column type="index" width="55" show-overflow-tooltip />
-      <el-table-column
-        property="score"
-        label="Счет"
-        width="200"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="name"
-        label="Наименование"
-        width="300"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="nameEntity"
-        label="Юридическое лицо"
-        show-overflow-tooltip
-      />
-    </el-table>
-  </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
-import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
 
 const storeEntity = useEntityTableStore();
 const storeProvider = useProviderTableStore();
 
-const dialogFormVisible = ref(false);
 const formLabelWidth = "200px";
 const options = ref<{ EntityName: string; label: string }[]>([]);
 const newName = ref<string>("");
@@ -132,7 +83,7 @@ const save = () => {
     name: newName.value,
     nameEntity: EntityName.value,
   });
-  dialogFormVisible.value = false;
+  storeProvider.dialogFormVisible = false;
   messageClose();
   newName.value = "";
   EntityName.value = "";
@@ -142,8 +93,4 @@ const save = () => {
 updateOptions();
 </script>
 
-<style scoped>
-.dialog-footer button:first-child {
-  margin-right: 10px;
-}
-</style>
+<style scoped></style>

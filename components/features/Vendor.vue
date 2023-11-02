@@ -1,5 +1,7 @@
 <template >
-    <EntitiesProviderProvidersTable/>
+    <EntitiesVendorButtons />
+    <EntitiesVendorForm />
+    <EntitiesVendorVendorsTable/>
  </template>
  
  <script lang = "ts" setup>

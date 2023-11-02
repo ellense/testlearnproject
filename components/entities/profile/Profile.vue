@@ -1,8 +1,8 @@
 <template>
-  <div class="profile">
+  <div class="profile" :data="profileStore.data">
     <div class="profile-avatar">
       <el-avatar
-        :src="user.avatar"
+        :src="profileStore.data.avatar.value"
         :size="200"
         fit="cover"
         shape="circle"
@@ -61,6 +61,7 @@ const save = () => {
   dialogFormVisible.value = false;
   newName.value = "";
 };
+profileStore.initializeTableData();
 </script>
 
 <style scoped>

@@ -13,6 +13,7 @@ export const useProviderTableStore = defineStore("ProviderTableStore", {
     search: "",
     tableData: [] as IProvider[],
     multipleTableRef: null as Ref | null,
+    dialogFormVisible: false,
   }),
 
   getters: {

@@ -12,6 +12,7 @@ export const useProductTableStore = defineStore("ProductTableStore", {
     search: "",
     tableData: [] as IProduct[],
     multipleTableRef: null as Ref | null,
+    dialogFormVisible: false,
   }),
 
   getters: {

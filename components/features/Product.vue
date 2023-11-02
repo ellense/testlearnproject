@@ -1,4 +1,6 @@
 <template >
+    <EntitiesProductButtons />
+    <EntitiesProductForm />
     <EntitiesProductProductsTable/>
  </template>
  

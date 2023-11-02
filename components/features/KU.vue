@@ -1,5 +1,6 @@
 <template >
-    <EntitiesKUTable/>
+    <EntitiesKuButtons/>
+    <EntitiesKuTable/>
  </template>
  
  <script lang = "ts" setup>

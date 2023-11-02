@@ -2,7 +2,7 @@
  
   <el-config-provider :locale="locale">
   <EntitiesLegalEntityInicialize />
-  <EntitiesProviderInicialize />
+  <EntitiesVendorInicialize />
   <EntitiesProductInicialize />
   <EntitiesInvoiceInicialize />
   <EntitiesKuInicialize/>
@@ -59,7 +59,7 @@
                 <span>Накладные</span>
               </el-menu-item>
             </nuxt-link>
-            <nuxt-link to="/provider">
+            <nuxt-link to="/vendor">
               <el-menu-item index="5">
                 <el-icon><Box /></el-icon>
                 <span>Поставщики</span>
