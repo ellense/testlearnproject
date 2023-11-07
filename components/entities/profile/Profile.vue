@@ -1,17 +1,17 @@
-<template>
-  <div class="profile" :data="profileStore.data">
-    <div class="profile-avatar">
+<!-- <template>
+  <div class="profile">
+    <div class="profile-avatar" v-if="profile">
       <el-avatar
-        :src="profileStore.data.avatar.value"
+      :src="profile.avatar"
         :size="200"
         fit="cover"
         shape="circle"
       ></el-avatar>
     </div>
-    <div class="profile-info">
+    <div class="profile-info" v-if="profile">
       <el-form ref="form" label-position="top">
-        <h2>{{ user.name }}</h2>
-        <p>{{ user.email }}</p>
+        <h2>{{ profile.name }}</h2>
+        <p>{{ profile.email }}</p>
       </el-form>
       <el-button type="primary" @click="dialogFormVisible = true">
         Редактировать
@@ -42,27 +42,34 @@
       </span>
     </template>
   </el-dialog>
-</template>
+</template> -->
 
-<script lang = "ts" setup>
-import { ref } from "vue";
-import { useProfileStore } from "~~/stores/profileStore";
+<script setup>
+// import { ref, computed } from "vue";
+// import { useProfileStore } from "~~/stores/profileStore";
 
-const profileStore = useProfileStore();
+// const profileStore = useProfileStore();
 
-const dialogFormVisible = ref(profileStore.dialogFormVisible);
-const user = ref(profileStore.user);
-const newName = ref(profileStore.newName);
+// const dialogFormVisible = ref(profileStore.dialogFormVisible);
+// const newName = ref(profileStore.newName);
+// const profile = computed(() => profileStore.firstProfile);
 
-const save = () => {
-  if (newName.value) {
-    user.name = newName.value;
-  }
-  dialogFormVisible.value = false;
-  newName.value = "";
-};
-profileStore.initializeTableData();
+// const save = () => {
+//   if (newName.value) {
+//     // Обновляем имя профиля
+//     profileStore.data[0].name = newName.value;
+//   }
+//   dialogFormVisible.value = false;
+//   newName.value = "";
+// };
+// profileStore.initializeTableData();
+// if (profile) {
+//   console.log(profile); // Вывести данные первого профиля
+// } else {
+//   console.log("Профиль не найден");
+// }
 </script>
+
 
 <style scoped>
 .profile {
