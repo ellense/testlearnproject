@@ -1,16 +1,13 @@
-<!-- <template>
+<template>
   <div class="profile">
     <div class="profile-avatar" v-if="profile">
-      <el-avatar
-      :src="profile.avatar"
-        :size="200"
-        fit="cover"
-        shape="circle"
-      ></el-avatar>
+      <!-- аватарка -->
     </div>
     <div class="profile-info" v-if="profile">
       <el-form ref="form" label-position="top">
-        <h2>{{ profile.name }}</h2>
+        <h2>
+          {{ profile.last_name}} {{profile.first_name }} {{ profile.middle_name }} 
+        </h2>
         <p>{{ profile.email }}</p>
       </el-form>
       <el-button type="primary" @click="dialogFormVisible = true">
@@ -25,11 +22,38 @@
     close-on-press-escape
   >
     <el-form>
-      <el-form-item label="ФИО:" :label-width="formLabelWidth">
+      <el-form-item>
         <el-input
-          v-model="newName"
+          v-model="new_last_name"
           label="ФИО"
-          placeholder="Введите ФИО"
+          placeholder="Введите фамилию"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="new_first_name"
+          label="ФИО"
+          placeholder="Введите имя"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="new_middle_name"
+          label="ФИО"
+          placeholder="Введите отчество"
+          style="width: 200px"
+          clearable
+        />
+      </el-form-item>
+      <el-form-item>
+        <el-input
+          v-model="new_email"
+          label="ФИО"
+          placeholder="Введите email"
           style="width: 200px"
           clearable
         />
@@ -42,34 +66,59 @@
       </span>
     </template>
   </el-dialog>
-</template> -->
+</template>
 
 <script setup>
-// import { ref, computed } from "vue";
-// import { useProfileStore } from "~~/stores/profileStore";
+import { ref, computed } from "vue";
+import { useProfileStore } from "~~/stores/profileStore";
 
-// const profileStore = useProfileStore();
+const profileStore = useProfileStore();
 
-// const dialogFormVisible = ref(profileStore.dialogFormVisible);
-// const newName = ref(profileStore.newName);
-// const profile = computed(() => profileStore.firstProfile);
+const dialogFormVisible = ref(profileStore.dialogFormVisible);
+const newName = ref(profileStore.newName);
+const profile = computed(() => profileStore.firstProfile);
 
+const messageClose = () => {
+  ElMessage({
+    message: "Профиль успешно изменен",
+    type: "success",
+  });
+};
 // const save = () => {
-//   if (newName.value) {
+//   if (last_name.value) {
 //     // Обновляем имя профиля
-//     profileStore.data[0].name = newName.value;
+//     profileStore.data.last_name = new_last_name.value;
+//     profileStore.data.first_name = new_first_name.value;
+//     profileStore.data.middle_name = new_middle_name.value;
+//     profileStore.data.email = new_email.value;
 //   }
 //   dialogFormVisible.value = false;
-//   newName.value = "";
+//   new_last_name = "";
+//   new_first_name = "";
+//   new_middle_name = "";
+//   new_email = "";
 // };
-// profileStore.initializeTableData();
-// if (profile) {
-//   console.log(profile); // Вывести данные первого профиля
-// } else {
-//   console.log("Профиль не найден");
-// }
-</script>
+const save = () => {
+  profileStore.addRows({
+    id: storeEntity.tableData.id,
+    first_name: new_first_name.value,
+    middle_name: new_middle_name.value,
+    email: new_email.value
+  });
+  storeEntity.dialogFormVisible = false;
+  messageClose();
+  new_last_name = "";
+  new_first_name = "";
+  new_middle_name = "";
+  new_email = "";
+};
 
+if (profile) {
+  console.log(profile); // Вывести данные первого профиля
+} else {
+  console.log("Профиль не найден");
+}
+</script>
 
 <style scoped>
 .profile {

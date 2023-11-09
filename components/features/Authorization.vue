@@ -1,7 +1,7 @@
 <template>
   <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
     <el-tab-pane label="Вход" name="first">
-      <EntitieAuthorizationLogin />
+      <EntitiesAuthorizationLogin />
     </el-tab-pane>
     <el-tab-pane label="Регистрация" name="second">
       <EntitiesAuthorizationRegister />
