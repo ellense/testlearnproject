@@ -1,6 +1,6 @@
 <template >
     <EntitiesKuAddLine/>
-    <EntitiesInvoiceInvoicesTable/>
+    <!-- <EntitiesInvoiceInvoicesTable/> -->
  </template>
  
  <script lang = "ts" setup>

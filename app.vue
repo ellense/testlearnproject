@@ -76,6 +76,18 @@
                   <span>Профиль</span>
                 </el-menu-item>
               </nuxt-link>
+              <nuxt-link to="/test">
+                <el-menu-item index="8">
+                  <el-icon><User /></el-icon>
+                  <span>тест</span>
+                </el-menu-item>
+              </nuxt-link>
+              <nuxt-link to="/testLogin">
+                <el-menu-item index="9">
+                  <el-icon><User /></el-icon>
+                  <span>тест логин</span>
+                </el-menu-item>
+              </nuxt-link>
             </el-menu>
           </el-scrollbar>
         </el-aside>

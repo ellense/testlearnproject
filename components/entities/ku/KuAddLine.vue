@@ -51,9 +51,12 @@
             clearable
           ></el-date-picker>
         </el-col>
+        <!-- <el-col :span="5">
+          <el-button type="primary" @click="addItemInvoice()">Добавить накладные</el-button>
+        </el-col> -->
       </el-row>
 
-      <el-row >
+      <el-row>
         <el-col :span="5">
           <el-select
             v-model="store.newType"
@@ -83,6 +86,39 @@
           ></el-date-picker>
         </el-col>
       </el-row>
+      <el-table
+        ref="multipleTableRef"
+        :data="invoiceStore.searchTableData"
+        style="width: 100%"
+        @selection-change="invoiceStore.handleSelectionChange"
+        height="calc(100vh - 160px)"
+      >
+        <el-table-column type="index" width="55" show-overflow-tooltip />
+        <el-table-column
+          property="number"
+          label="Номер"
+          width="200"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          property="summa"
+          label="Сумма"
+          width="300"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          property="date"
+          type="date"
+          label="Дата"
+          width="300"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          property="nameProvider"
+          label="Поставщик"
+          show-overflow-tooltip
+        />
+      </el-table>
      </el-scrollbar>
 </template>
 
@@ -91,11 +127,12 @@ import { ref } from "vue";
 
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useProviderTableStore } from "~~/stores/providerTableStore";
-
+import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
 import { useRouter } from "vue-router";
 
 const providerStore = useProviderTableStore();
 const store = useKuTableStore();
+const invoiceStore = useInvoiceTableStore();
 const router = useRouter();
 const options = ref<{ providerName: string; label: string }[]>([]);
 
@@ -106,12 +143,7 @@ const messageClose = () => {
   });
 };
 
-const addItemAndNavigate = () => {
-  store.addItem();
-  // После выполнения действия, перейдите на другую страницу
-  router.push("/");
-  messageClose();
-};
+
 
 const updateOptions = () => {
   options.value = providerStore.tableData.map((provider) => ({
@@ -120,6 +152,40 @@ const updateOptions = () => {
   }));
 };
 updateOptions();
+
+
+
+
+
+
+
+
+
+// const addItemInvoice = () => {
+//   invoiceStore.clearSelectedInvoices();
+
+//   const selectedProviderName = store.providerName;
+//   const selectedInvoices = invoiceStore.tableData.filter(
+//     (invoice) => invoice.nameProvider === selectedProviderName
+//   );
+
+//   selectedInvoices.forEach((invoice) => {
+//     invoiceStore.addRows2({
+//       id: invoice.id,
+//       number: invoice.number,
+//       summa: invoice.summa,
+//       date: invoice.date,
+//       nameProvider: invoice.nameProvider,
+//     });
+//   });
+
+// };
+
+const addItemAndNavigate = () => {
+  store.addItem();
+  router.push("/");
+  messageClose();
+};
 </script>
 
 <style scoped>

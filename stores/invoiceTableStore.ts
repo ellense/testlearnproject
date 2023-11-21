@@ -16,6 +16,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     tableData: [] as IInvoice[], // Данные таблицы накладной
     multipleTableRef: null as Ref | null, // Ссылка на компонент таблицы
     dialogFormVisible: false,
+    selectedProviderInvoices: [] as IInvoice[],
   }),
 
   getters: {
@@ -78,6 +79,14 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
       nameProvider: string;
     }) {
       this.tableData.push(row);
+    },
+
+    clearSelectedInvoices() {
+      this.selectedProviderInvoices = [];
+      this.multipleSelection = [];
+    },
+    addRows2(row: IInvoice) {
+      this.selectedProviderInvoices.push(row);
     },
   },
 });

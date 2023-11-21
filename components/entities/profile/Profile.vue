@@ -10,12 +10,12 @@
         </h2>
         <p>{{ profile.email }}</p>
       </el-form>
-      <el-button type="primary" @click="dialogFormVisible = true">
+      <!-- <el-button type="primary" @click="dialogFormVisible = true">
         Редактировать
-      </el-button>
+      </el-button> -->
     </div>
   </div>
-  <el-dialog
+  <!-- <el-dialog
     v-model="dialogFormVisible"
     title="Редактирование профиля"
     close-on-click-modal
@@ -65,7 +65,7 @@
         <el-button @click="save()"> Сохранить </el-button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script setup>
@@ -75,7 +75,6 @@ import { useProfileStore } from "~~/stores/profileStore";
 const profileStore = useProfileStore();
 
 const dialogFormVisible = ref(profileStore.dialogFormVisible);
-const newName = ref(profileStore.newName);
 const profile = computed(() => profileStore.firstProfile);
 
 const messageClose = () => {
@@ -84,40 +83,23 @@ const messageClose = () => {
     type: "success",
   });
 };
+
 // const save = () => {
-//   if (last_name.value) {
-//     // Обновляем имя профиля
-//     profileStore.data.last_name = new_last_name.value;
-//     profileStore.data.first_name = new_first_name.value;
-//     profileStore.data.middle_name = new_middle_name.value;
-//     profileStore.data.email = new_email.value;
-//   }
-//   dialogFormVisible.value = false;
+//   profileStore.addRows({
+//     id: profileStore.data.id,
+//     last_name: new_last_name.value,
+//     first_name: new_first_name.value,
+//     middle_name: new_middle_name.value,
+//     email: new_email.value
+//   });
+//   profileStore.dialogFormVisible = false;
+//   messageClose();
 //   new_last_name = "";
 //   new_first_name = "";
 //   new_middle_name = "";
 //   new_email = "";
 // };
-const save = () => {
-  profileStore.addRows({
-    id: storeEntity.tableData.id,
-    first_name: new_first_name.value,
-    middle_name: new_middle_name.value,
-    email: new_email.value
-  });
-  storeEntity.dialogFormVisible = false;
-  messageClose();
-  new_last_name = "";
-  new_first_name = "";
-  new_middle_name = "";
-  new_email = "";
-};
 
-if (profile) {
-  console.log(profile); // Вывести данные первого профиля
-} else {
-  console.log("Профиль не найден");
-}
 </script>
 
 <style scoped>
