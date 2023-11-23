@@ -1,27 +1,31 @@
 <template>
   <el-form
     ref="ruleFormLoginRef"
-    :model="ruleFormLogin"
+    :model="form"
     :rules="rulesLogin"
     status-icon
+    @submit.native.prevent="login"
   >
-    <el-form-item prop="email">
+    <el-form-item>
       <el-input
-        v-model="ruleFormLogin.email"
-        placeholder="Введите email"
+        v-model="form.username"
+        placeholder="Введите логин"
         :prefix-icon="Message"
       />
     </el-form-item>
-    <el-form-item prop="password">
+    <el-form-item>
       <el-input
-        v-model="ruleFormLogin.password"
-        type="password"
-        placeholder="Введите пароль"
+        v-model="form.password"
+        placeholder="Введите логин"
         :prefix-icon="Lock"
       />
     </el-form-item>
+
     <el-form-item>
-      <el-button type="primary" @click="submitForm(ruleFormLoginRef)"
+      <el-button
+        type="success"
+        native-type="submit"
+        @click="submitForm(ruleFormLoginRef)"
         >Войти</el-button
       >
     </el-form-item>
@@ -33,25 +37,51 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { User, Lock, Message, CircleCheck } from "@element-plus/icons-vue";
+import { Lock, Message } from "@element-plus/icons-vue";
 import type { FormInstance, FormRules } from "element-plus";
+const router = useRouter();
 interface loginData {
-  email: string;
+  username: string;
   password: string;
 }
+const form = ref<loginData>({
+  username: "",
+  password: "",
+});
+const { $axiosPlugin } = useNuxtApp();
+
+const login = async () => {
+  await $axiosPlugin
+    .post("api/token/", {
+      username: form.value.username,
+      password: form.value.password,
+    })
+    .then((response) => {
+      console.log(response);
+      console.log("успешно");
+      localStorage.setItem("ваш_ключ_токена", response.data.access);
+      console.log(response.data.access);
+      router.push("/");
+    })
+    .catch((error) => {
+      console.error("Ошибка при запросе:", error.message);
+      console.error("Детали ошибки:", error);
+    });
+};
+
 const ruleFormLoginRef = ref<FormInstance>();
 const rulesLogin = ref<FormRules<loginData>>({
-  email: [
+  username: [
     {
       required: true,
-      message: "Пожалуйста, введите вашу почту",
+      message: "Пожалуйста, введите вашу почту или логин",
       trigger: "change",
     },
-    {
-      type: "email",
-      message: "Пожалуйста, введите вашу почту правильно",
-      trigger: "change",
-    },
+    // {
+    //   type: "email",
+    //   message: "Пожалуйста, введите вашу почту правильно",
+    //   trigger: "change",
+    // },
   ],
   password: [
     {
@@ -61,12 +91,6 @@ const rulesLogin = ref<FormRules<loginData>>({
     },
   ],
 });
-
-const ruleFormLogin = ref<loginData>({
-  email: "",
-  password: "",
-});
-
 const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
   await formEl.validate((valid, fields) => {

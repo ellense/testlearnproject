@@ -73,3 +73,10 @@ bun run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+# API_BASE_URL = "http://192.168.6.168:8001"
+# todos
+# http://192.168.6.168:8001/api/entitieslist/?format=json
+# https://jsonplaceholder.typicode.com/
+# http://192.168.6.168:8001/api/v1/auth/users/?format=json
+# http://192.168.6.168:8001/auth/token/login

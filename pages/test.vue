@@ -5,7 +5,6 @@
 </template>
 
 <script setup lang="ts">
-import axios from '~/plugins/axios';
 const {$axiosPlugin} = useNuxtApp();
  const products = ref([]);
  const token = localStorage.getItem('ваш_ключ_токена');

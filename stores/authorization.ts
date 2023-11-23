@@ -1,31 +1,3 @@
-// import { defineStore } from "pinia";
-// interface loginData {
-//   id: number;
-//   email: string;
-//   password: string;
-// }
-
-// interface registData {
-//   id: number;
-//   name: string;
-//   email: string;
-//   password: string;
-//   password2: string;
-// }
-// export const useAuthStore = defineStore("AuthStore", {
-//   state: () => ({
-//     loginData: [] as loginData[],
-//     registData: [] as registData[],
-//   }),
-//   getters: {
-  
-      
-   
-//   },
-//   actions: {
-
-//   },
-// });
 import { defineStore } from "pinia";
 
 interface loginData {
@@ -52,7 +24,6 @@ export const useAuthStore = defineStore("AuthStore", {
         this.refreshToken = "fake_refresh_token";
         this.currentUser = { email, id: 1, password};
       } else {
-        // Обработка ошибки аутентификации
         console.error("Ошибка аутентификации");
       }
     },

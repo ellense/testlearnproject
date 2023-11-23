@@ -26,15 +26,7 @@ export const useProfileStore = defineStore("ProfileStore", {
   },
 
   actions: {
-    // addNew(row: {
-    //   id: number;
-    //   last_name: string | null;
-    //   first_name: string | null;
-    //   middle_name: string | null;
-    //   email: string;
-    // }) {
-    //   this.data.push(row);
-    // },
+    
   },
 });
 
