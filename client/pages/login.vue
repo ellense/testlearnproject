@@ -1,7 +1,8 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
-      <FeaturesAuthorization />
+      <!-- <FeaturesAuthorization /> -->
+      <WidgetsTheAuth />
     </el-card>
   </div>
 </template>

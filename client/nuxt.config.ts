@@ -1,4 +1,5 @@
 export default defineNuxtConfig({
+  ssr: true,
   imports: {
     presets: [
       {
@@ -7,13 +8,23 @@ export default defineNuxtConfig({
       },
     ],
   },
-
   devtools: {
-    enabled: true,
+    enabled: false,
   },
   app: {
     head: {
-      title: "Ретро-бонус",
+      title: 'УКУК',
+      htmlAttrs: {
+        lang: 'ru',
+      },
+      meta: [
+        { charset: 'utf-8' },
+        {
+          name: 'Коммерческие условия',
+          content: 'width=device-width, initial-scale=1',
+        },
+      ],
+      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
     },
   },
   runtimeConfig: {
