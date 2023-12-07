@@ -1,5 +1,5 @@
 export interface IEntity {
-  entityid: number;
+  entityid: string;
   name: string;
 }
 export interface IInvoice {

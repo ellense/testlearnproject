@@ -1,9 +1,8 @@
 <template>
   <div>
     <h1>Список данных</h1>
-    <input v-model="search" placeholder="Поиск" />
     <ul>
-      <li v-for="item in filteredEntityList" :key="item.id">
+      <li v-for="item in entityList" :key="item.id">
         {{ item.name }}
       </li>
     </ul>
@@ -18,17 +17,15 @@ import { useEntityTableStore } from '@/stores/entityTableStore';
 const entityStore = useEntityTableStore();
 
 // Связываем данные из стора с компонентом
-const search = ref(entityStore.search);
-const filteredEntityList = ref(entityStore.searchEntityList);
-
-// Обновляем filteredEntityList при изменении поискового запроса
-watchEffect(() => {
-  entityStore.fetchEntitiesList({ /* Ваши параметры запроса */ });
-  filteredEntityList.value = entityStore.searchEntityList;
-});
+const entityList = ref(entityStore.getEntityList);
 
 // Опционально: Запускаем функцию для получения данных с сервера
-entityStore.fetchEntitiesList({  });
+entityStore.fetchEntitiesList({ /* Ваши параметры запроса */ });
+
+// Обновляем entityList при изменении в сторе
+watchEffect(() => {
+  entityList.value = entityStore.getEntityList;
+});
 </script>
 
 

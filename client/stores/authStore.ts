@@ -1,92 +1,107 @@
 import { defineStore } from "pinia";
-import message from 'element-plus/es/components/message'
+import message from "element-plus/es/components/message";
 import { AUTH } from "../composables/api";
-import type {
+import {
+  AuthApiData,
   AuthStore,
-  UserRole,
   TokenData,
+  UserRole,
 } from "~/utils/types/authTypes";
+
+let tokenPromiseResolve: () => void;
+const tokenReadyPromise = new Promise<void>((resolve) => {
+  tokenPromiseResolve = resolve;
+});
+
+function isCorrectRole(value: string): UserRole | undefined {
+  if (
+    value === "admin" ||
+    value === "managerLama" ||
+    value === "managerOutsourcing"
+  )
+    return value as UserRole;
+
+  return undefined;
+}
 
 export const useAuthStore = defineStore("authStore", {
   state: (): AuthStore => ({
     access: null,
     refresh: null,
     userRole: null,
-    authPromise: null,
+    authPromise: tokenReadyPromise,
     isAuth: false,
     initPage: false,
   }),
-
+  getters: {},
   actions: {
-    setInitPage(value: boolean) {
-      this.$state.initPage = value;
+    initAuth() {
+      this.getTokenFromLS()
+        .then((res) => {
+          if (res && this.getUserDataFromLS()) {
+            this.setAuth(true);
+          } else {
+            this.setAuth(false);
+            this.resetDataForLs();
+          }
+        })
+        .finally(() => {
+          tokenPromiseResolve();
+        });
     },
-
-    async initAuth() {
-      // Попытка получения токена из локального хранилища
-      const tokenFromLS = await this.getTokenFromLS();
-
-      // Если токен успешно получен, устанавливаем флаг авторизации
-      if (tokenFromLS) {
-        this.setAuth(true);
-        this.setInitPage(true);
-      } else {
-        this.setAuth(false);
-        this.setInitPage(true);
-      }
-    },
-
     setAuth(value: boolean) {
       this.$state.isAuth = value;
     },
-
-    async getTokenFromLS(): Promise<string | null> {
+    setInitPage(value: boolean) {
+      this.$state.initPage = value;
+    },
+    getUserDataFromLS(): boolean {
+      this.$state.userRole = localStorage.getItem("userRole") as UserRole;
+      return !!isCorrectRole(this.$state.userRole);
+    },
+    getTokenFromLS(): Promise<boolean> {
       const accessT = localStorage.getItem("accessToken");
+      const refreshT = localStorage.getItem("refreshToken");
 
-      if (accessT && accessT.length > 30) {
-        // Возвращаем токен, если он существует
-        return accessT;
+      if (accessT && refreshT && accessT.length > 30 && refreshT.length > 30) {
+        this.setTokenToStore({ access: accessT, refresh: refreshT });
+        return Promise.resolve(true);
+      } else {
+        return Promise.resolve(false);
+      }
+    },
+    resetDataForLs() {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("userRole");
+    },
+    async getTokenForApi(authData: AuthApiData): Promise<TokenData> {
+      let tokenResponse: TokenData | null;
+      try {
+        tokenResponse = (await AUTH.getToken(authData)) as TokenData | null;
+      } catch (e) {
+        return Promise.reject(e);
       }
 
-      // Если токен не существует, возвращаем null
-      return null;
+      if (tokenResponse) {
+        this.setTokenToStore(tokenResponse);
+        this.$state.userRole = tokenResponse.userRole || "admin";
+        localStorage.setItem("userRole", this.$state.userRole);
+        return tokenResponse;
+      } else {
+        return Promise.reject(tokenResponse);
+      }
     },
-
     setTokenToStore(tokenData: Omit<TokenData, "userRole">) {
       this.$state.access = tokenData.access;
       this.$state.refresh = tokenData.refresh;
     },
-
-    async login(authData: { username: string; password: string }): Promise<void> {
-      try {
-        const tokenResponse = await AUTH.getToken(authData);
-
-        if (tokenResponse) {
-          this.setTokenToStore(tokenResponse);
-          this.$state.userRole = tokenResponse.userRole || "admin";
-          localStorage.setItem("userRole", this.$state.userRole);
-          this.setAuth(true);
-        } else {
-          this.setAuth(false);
-        }
-      } catch (error) {
-        this.setAuth(false);
-        console.error(error);
-        throw error; // Пересылаем ошибку для обработки в компоненте
-      }
-    },
-
     logout() {
       this.$reset();
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-      localStorage.clear();
+      this.resetDataForLs();
       this.setAuth(false);
-      useRouter().push("/graphic")
+      useRouter().push("/graphic");
       message.success("Вы вышли из личного кабинета");
-      return Promise.resolve();
     },
   },
 });
-
-

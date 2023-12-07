@@ -43,39 +43,63 @@ import { type AuthApiData } from "~/utils/types/authTypes";
 import message from "element-plus/es/components/message";
 import { useRouter } from "vue-router";
 
-const authStore = useAuthStore();
-const router = useRouter();
 
 const form = reactive<AuthApiData>({
   username: "admin",
   password: "1234",
 });
 
-const login = async () => {
-  try {
-    if (!form.username || !form.password) {
-      message.warning(
-        `Не заполнен ${
-          !form.username && !form.password
-            ? "логин и пароль"
-            : !form.username
-            ? "логин"
-            : " пароль"
-        }`
-      );
-      return;
-    }
+// const login = async () => {
+//   try {
+//     if (!form.username || !form.password) {
+//       message.warning(
+//         `Не заполнен ${
+//           !form.username && !form.password
+//             ? "логин и пароль"
+//             : !form.username
+//             ? "логин"
+//             : " пароль"
+//         }`
+//       );
+//       return;
+//     }
 
-    await authStore.login(form); // Изменил вызов метода на более общий login
-    router.push("/");
-    message.success("Вы вошли в личный кабинет");
-    form.password = "";
-    form.username = "";
-  } catch (error) {
-    message.error("Ошибка входа. Пожалуйста, проверьте введенные данные.");
-    console.error(error);
+//     await authStore.login(form); // Изменил вызов метода на более общий login
+//     router.push("/");
+//     message.success("Вы вошли в личный кабинет");
+//     form.password = "";
+//     form.username = "";
+//   } catch (error) {
+//     message.error("Ошибка входа. Пожалуйста, проверьте введенные данные.");
+//     console.error(error);
+//   }
+// };
+const login = () => {
+  if (form.password && form.username) {
+    useAuthStore()
+      .getTokenForApi(form)
+      .then(() => {
+        useAuthStore().setAuth(true)
+        useRouter().push("/ku");
+        message.success('Вы вошли в личный кабинет')
+        form.password = ''
+        form.username = ''
+      })
+      .catch((e) => {
+        message.error(e.detail)
+      })
+  } else {
+    message.warning(
+      `Не заполнен ${
+        !form.username && !form.password
+          ? 'логин и пароль'
+          : !form.username
+          ? 'логин'
+          : ' пароль'
+      }`
+    )
   }
-};
+}
 </script>
 
 

@@ -54,7 +54,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
         console.error("Произошла ошибка", error);
       }
     },
-    addRows(row: { entityid: number; name: string }) {
+    addRows(row: { entityid: string; name: string }) {
       this.entityList.push(row);
     },
     deleteSelectedRows() {

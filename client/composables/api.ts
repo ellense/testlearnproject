@@ -30,7 +30,7 @@ export const INVOICE = {
 export const ENTITY = {
   getEntitiesList: (
     data: IEntity
-  ): Promise<{ entityid: number; name: string } | null> =>
+  ): Promise<{ entityid: string; name: string } | null> =>
     $Get("api/entitieslist/", { data, isBearer: false }),
 };
 export const VENDOR = {
