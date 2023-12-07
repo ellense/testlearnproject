@@ -2,7 +2,7 @@
   <el-aside width="200px">
     <el-scrollbar height="calc(100vh - 60px)">
       <el-menu style="font-size: 12px" active-color="#689EFF">
-        <nuxt-link to="/">
+        <nuxt-link to="/ku">
           <el-menu-item index="1">
             <el-icon><Document /></el-icon>
             <span>Ком.условие</span>
@@ -40,43 +40,32 @@
           </el-menu-item>
         </nuxt-link>
         <el-divider />
-        <nuxt-link to="/login">
-          <el-menu-item index="7">
-            <el-icon><User /></el-icon>
-            <span>Авторизация</span>
-          </el-menu-item>
-        </nuxt-link>
         <nuxt-link to="/test">
           <el-menu-item index="8">
             <el-icon><User /></el-icon>
             <span>тест</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/testLogin">
-          <el-menu-item index="9">
-            <el-icon><User /></el-icon>
-            <span>тест логин</span>
-          </el-menu-item>
-        </nuxt-link>
+
         <el-menu-item index="10">
-        <el-dropdown >
-          <div class="dropdown">
-            <div>
-              <h5>
-                {{ profile.last_name }}
-                {{ profile.first_name.charAt(0).toUpperCase() }}.{{
-                  profile.middle_name.charAt(0).toUpperCase()
-                }}.
-              </h5>
+          <el-dropdown>
+            <div class="dropdown">
+              <div v-if="firstProfile">
+                <h5>
+                  {{ firstProfile.last_name }}
+                  {{ firstProfile.first_name.charAt(0).toUpperCase() }}.{{
+                    firstProfile.middle_name.charAt(0).toUpperCase()
+                  }}.
+                </h5>
+              </div>
             </div>
-          </div>
-          <template #dropdown>
-            <el-dropdown-menu>
-              <el-dropdown-item>Выйти</el-dropdown-item>
-            </el-dropdown-menu>
-          </template>
-        </el-dropdown>
-      </el-menu-item>
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item>Выйти</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </el-menu-item>
       </el-menu>
     </el-scrollbar>
   </el-aside>
@@ -92,9 +81,9 @@ import {
   Box,
   ShoppingCartFull,
 } from "@element-plus/icons-vue";
+import { storeToRefs } from "pinia";
 import { useProfileStore } from "~~/stores/profileStore";
-const profileStore = useProfileStore();
-const profile = computed(() => profileStore.firstProfile);
+const { firstProfile } = storeToRefs(useProfileStore());
 </script>
 
 <style scoped>

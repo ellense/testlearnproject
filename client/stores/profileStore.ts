@@ -1,12 +1,5 @@
 import { defineStore } from "pinia";
-
-interface IProfile {
-  id: number;
-  last_name: string | null;
-  first_name: string | null;
-  middle_name: string | null;
-  email: string;
-}
+import type { IProfile } from "~/utils/types/directoryTypes";
 
 export const useProfileStore = defineStore("ProfileStore", {
   state: () => ({
@@ -19,14 +12,10 @@ export const useProfileStore = defineStore("ProfileStore", {
   }),
 
   getters: {
-    // Добавим геттер для получения первого профиля, если он существует
     firstProfile(): IProfile | undefined {
       return this.data.length > 0 ? this.data[0] : undefined;
     },
   },
 
-  actions: {
-    
-  },
+  actions: {},
 });
-

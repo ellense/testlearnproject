@@ -1,12 +1,5 @@
 import { defineStore } from "pinia";
-
-interface IInvoice {
-  id: number;
-  number: number | null;
-  summa: number | null;
-  date: Date | string;
-  nameProvider: string;
-}
+import type { IInvoice } from "~/utils/types/directoryTypes";
 
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
   state: () => ({

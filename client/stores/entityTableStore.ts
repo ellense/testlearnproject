@@ -1,26 +1,23 @@
 import { defineStore } from "pinia";
-
-interface IEntity {
-  id: number;
-  name: string;
-}
+import type { IEntity } from "~/utils/types/directoryTypes";
 
 export const useEntityTableStore = defineStore("EntityTableStore", {
   state: () => ({
     multipleSelection: [] as IEntity[],
     search: "",
-    tableData: [] as IEntity[],
+    entityList: [] as IEntity[],
     multipleTableRef: null as Ref | null,
     dialogFormVisible: false,
   }),
 
   getters: {
-    searchTableData: (state) => {
+    searchentityList: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) =>
+      return state.entityList.filter((item) =>
         item.name.toLowerCase().includes(searchValue)
       );
     },
+    getEntityList: (state) => state.entityList,
   },
 
   actions: {
@@ -42,14 +39,28 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     handleSelectionChange(val: IEntity[]) {
       this.multipleSelection = val;
     },
+    async fetchEntitiesList(data: IEntity) {
+      try {
+        // Вызываем вашу функцию для получения данных
+        const result = await ENTITY.getEntitiesList(data);
 
-    addRows(row: { id: number; name: string }) {
-      this.tableData.push(row);
+        // Если данные успешно получены, обновляем entityList в сторе
+        if (result) {
+          this.entityList = [result];
+        } else {
+          console.error("Ошибка получения данных");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+    },
+    addRows(row: { entityid: number; name: string }) {
+      this.entityList.push(row);
     },
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 
-      this.tableData = this.tableData.filter((row: IEntity) => {
+      this.entityList = this.entityList.filter((row: IEntity) => {
         return !selectedRows.includes(row);
       });
 

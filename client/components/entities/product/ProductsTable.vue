@@ -36,8 +36,4 @@ import { useProductTableStore } from "~~/stores/productTableStore";
 const storeProduct = useProductTableStore();
 </script>
 
-<style scoped>
-/* .el-button--text {
-  margin-right: 15px;
-} */
-</style>
+<style scoped></style>

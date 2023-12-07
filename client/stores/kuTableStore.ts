@@ -1,29 +1,6 @@
 import { defineStore } from "pinia";
-interface IKu {
-  id: number;
-  kuNumber: string;
-  percent: number | null;
-  provider: string;
-  type: string;
-  dateStart: Date | string;
-  dateEnd: Date | string;
-  dateActual: Date | string;
-  base: number | null;
-}
+import type { IKu, IGraphic } from "~/utils/types/directoryTypes";
 
-interface IGraphic {
-  id: number;
-  kuNumber: string;
-  provider: string;
-  type: string;
-  dateStart: Date | string;
-  dateEnd: Date | string;
-  dateCalc: Date | string;
-  percent: number | null;
-  base: number | null;
-  calculated: number | null;
-  approved: number | null;
-}
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newId: 0,
@@ -46,12 +23,18 @@ export const useKuTableStore = defineStore("KuTableStore", {
   getters: {
     filteredTableData: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item: { provider: string; kuNumber: string; type: string; }) => {
-        const nameProviderMatch = item.provider.toLowerCase().includes(searchValue);
-        const kunumberMatch = item.kuNumber.toLowerCase().includes(searchValue);
-        const typeMatch = item.type.toLowerCase().includes(searchValue);
-        return typeMatch || kunumberMatch || nameProviderMatch;
-      });
+      return state.tableData.filter(
+        (item: { provider: string; kuNumber: string; type: string }) => {
+          const nameProviderMatch = item.provider
+            .toLowerCase()
+            .includes(searchValue);
+          const kunumberMatch = item.kuNumber
+            .toLowerCase()
+            .includes(searchValue);
+          const typeMatch = item.type.toLowerCase().includes(searchValue);
+          return typeMatch || kunumberMatch || nameProviderMatch;
+        }
+      );
     },
   },
 
@@ -96,7 +79,6 @@ export const useKuTableStore = defineStore("KuTableStore", {
       this.newDateActual = new Date();
     },
 
-   
     addgraphic(row: {
       id: number;
       kuNumber: string;
@@ -112,8 +94,6 @@ export const useKuTableStore = defineStore("KuTableStore", {
     }) {
       this.tableDataGraphic.push(row);
     },
-
-    
 
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;

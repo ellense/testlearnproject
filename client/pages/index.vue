@@ -1,7 +1,13 @@
-<template>
-  <el-scrollbar height="calc(100vh - 60px)">
-    <h2>Коммерческие условия</h2>
-    <FeaturesKu/>
-  </el-scrollbar>
-</template>
+<template><div></div></template>
 
+<script setup lang="ts">
+
+definePageMeta({
+  title: 'Пустая',
+  useInMainMenu: false,
+  permission: ['all'],
+})
+
+</script>
+
+<style></style>

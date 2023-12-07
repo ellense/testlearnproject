@@ -1,11 +1,5 @@
 import { defineStore } from "pinia";
-
-interface IProvider {
-  id: number;
-  score: number | null;
-  name: string;
-  nameEntity: string;
-}
+import type { IProvider } from "~/utils/types/directoryTypes";
 
 export const useProviderTableStore = defineStore("ProviderTableStore", {
   state: () => ({

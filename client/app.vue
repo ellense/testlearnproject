@@ -1,11 +1,11 @@
 <template>
   <el-config-provider :locale="locale">
-    <EntitiesProfileInicialize />
+    <!-- <EntitiesProfileInicialize />
     <EntitiesLegalEntityInicialize />
     <EntitiesVendorInicialize />
     <EntitiesProductInicialize />
     <EntitiesInvoiceInicialize />
-    <EntitiesKuInicialize />
+    <EntitiesKuInicialize /> -->
     <NuxtLayout>
       
       <template #header><WidgetsTheHeader /></template>

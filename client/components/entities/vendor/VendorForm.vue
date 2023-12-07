@@ -70,7 +70,7 @@ const messageClose = () => {
   });
 };
 const updateOptions = () => {
-  options.value = storeEntity.tableData.map((entity) => ({
+  options.value = storeEntity.entityList.map((entity) => ({
     EntityName: entity.name,
     label: entity.name,
   }));

@@ -1,41 +1,35 @@
 <template>
-  <!-- <div v-for="product in products" :key="product.id">
-    <h2>{{ product.name }}</h2>
-  </div> -->
+  <div>
+    <h1>Список данных</h1>
+    <input v-model="search" placeholder="Поиск" />
+    <ul>
+      <li v-for="item in filteredEntityList" :key="item.id">
+        {{ item.name }}
+      </li>
+    </ul>
+  </div>
 </template>
 
-<script setup lang="ts">
-// const {$axiosPlugin} = useNuxtApp();
-//  const products = ref([]);
-//  const token = localStorage.getItem('ваш_ключ_токена');
+<script setup>
+import { ref, watchEffect } from 'vue';
+import { useEntityTableStore } from '@/stores/entityTableStore';
 
-// //  const config = { 
-// //   headers: { 
-// //     'Authorization': `Bearer ${token}`,  
-// //   }, 
-// // };
-//  await $axiosPlugin.get("api/entitieslist")
-//  .then(response => {
-//     products.value = response.data
-//  })
-//  .catch(error => {
-//     // Обработка ошибок
-//     if (error.response) {
-//       // Сервер вернул код ответа, отличный от 2xx
-//       console.error('Ошибка запроса. Код ответа:', error.response.status);
-//       console.error('Детали ошибки:', error.response.data);
-//       // Дополнительные действия, связанные с обработкой конкретного статуса, например, 404
-//       if (error.response.status === 404) {
-//         console.error('Ресурс не найден');
-//       }
-//     } else if (error.request) {
-//       // Запрос был отправлен, но не получен ответ
-//       console.error('Ошибка запроса. Запрос был отправлен, но не получен ответ.');
-//     } else {
-//       // Возникла ошибка при настройке запроса
-//       console.error('Ошибка запроса. Детали ошибки:', error.message);
-//     }
-//   });
+// Используйте стор
+const entityStore = useEntityTableStore();
+
+// Связываем данные из стора с компонентом
+const search = ref(entityStore.search);
+const filteredEntityList = ref(entityStore.searchEntityList);
+
+// Обновляем filteredEntityList при изменении поискового запроса
+watchEffect(() => {
+  entityStore.fetchEntitiesList({ /* Ваши параметры запроса */ });
+  filteredEntityList.value = entityStore.searchEntityList;
+});
+
+// Опционально: Запускаем функцию для получения данных с сервера
+entityStore.fetchEntitiesList({  });
 </script>
 
-<style scoped></style>
+
+

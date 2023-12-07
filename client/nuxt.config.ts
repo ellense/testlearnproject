@@ -1,5 +1,5 @@
-export default defineNuxtConfig({
-  ssr: true,
+export default {
+  ssr: false,
   imports: {
     presets: [
       {
@@ -13,32 +13,35 @@ export default defineNuxtConfig({
   },
   app: {
     head: {
-      title: 'УКУК',
+      title: "УКУК",
       htmlAttrs: {
-        lang: 'ru',
+        lang: "ru",
       },
       meta: [
-        { charset: 'utf-8' },
+        { charset: "utf-8" },
         {
-          name: 'Коммерческие условия',
-          content: 'width=device-width, initial-scale=1',
+          name: "Коммерческие условия",
+          content: "width=device-width, initial-scale=1",
         },
       ],
-      link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+      link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }],
     },
   },
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL || "no-url",
+      API: {
+        BASE_URL: process.env.VITE_BASE_URL || "",
+        REFRESH_URL: process.env.VITE_REFRESH_URL || "",
+        LOGIN_URL: process.env.VITE_LOGIN_URL || "",
+        ACCESS_KEY: process.env.VITE_ACCESS_KEY || "",
+        REFRESH_KEY: process.env.VITE_REFRESH_KEY || "",
+      },
     },
   },
   css: ["~/assets/css/main.css"],
   modules: ["@pinia/nuxt", "@element-plus/nuxt"],
 
   pinia: {
-    autoImports: [
-      "defineStore", 
-      ["defineStore", "definePiniaStore"],
-    ],
+    autoImports: ["defineStore", ["defineStore", "definePiniaStore"]],
   },
-});
+};

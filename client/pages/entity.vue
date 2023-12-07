@@ -5,4 +5,11 @@
   </el-scrollbar>
 </template>
 
-<script lang="ts" setup></script>
+<script setup lang="ts">
+definePageMeta({
+  title: 'Юр. лица',
+  useInMainMenu: true,
+  displayOrder: 3,
+  permission: ['all'],
+})
+</script>
