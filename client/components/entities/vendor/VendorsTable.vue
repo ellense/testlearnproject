@@ -13,11 +13,16 @@
         width="40"
         show-overflow-tooltip
       />
-      <el-table-column label="Номер" prop="vendorid" width="150" show-overflow-tooltip />
+      <el-table-column
+        label="Номер"
+        prop="vendorid"
+        width="150"
+        show-overflow-tooltip
+      />
       <el-table-column
         prop="name"
         label="Наименование"
-        width="300"
+        width="200"
         show-overflow-tooltip
       />
       <el-table-column
@@ -29,6 +34,18 @@
       <el-table-column
         prop="directorname"
         label="Директор"
+        width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="inn_kpp"
+        label="ИНН/КПП"
+        width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="urasticadress"
+        label="Адрес"
         show-overflow-tooltip
       />
     </el-table>
@@ -41,7 +58,15 @@ const vendorStore = useVendorTableStore();
 const VendorList = ref(vendorStore.getVendorList);
 onMounted(async () => {
   try {
-    await vendorStore.fetchVendorsList({ /* Ваши параметры запроса */ });
+    await vendorStore.fetchVendorsList({
+      vendorid: "",
+      name: "",
+      urasticname: "",
+      directorname: "",
+      urasticadress: "",
+      inn_kpp: "",
+      entityid: "",
+    });
     // Обновление entityList не требуется, так как watchEffect следит за изменениями в сторе
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);

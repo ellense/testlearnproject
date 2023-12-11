@@ -26,7 +26,12 @@ const entityList = ref(entityStore.getEntityList);
 
 onMounted(async () => {
   try {
-    await entityStore.fetchEntitiesList({ /* Ваши параметры запроса */ });
+    await entityStore.fetchEntitiesList({ 
+      entityid: '',
+      directorname: '',
+      urasticname: '',
+      name: '',
+      urasticaddress: '', });
     // Обновление entityList не требуется, так как watchEffect следит за изменениями в сторе
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
