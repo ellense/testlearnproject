@@ -2,33 +2,33 @@
   <el-scrollbar class="scrollTable">
     <el-table
       ref="multipleTableRef"
-      :data="storeProvider.searchTableData"
+      :data="VendorList"
       style="width: 100%"
-      @selection-change="storeProvider.handleSelectionChange"
+      @selection-change="vendorStore.handleSelectionChange"
       height="calc(100vh - 160px)"
     >
       <el-table-column
         property="selection"
         type="selection"
-        width="55"
+        width="40"
         show-overflow-tooltip
       />
-      <el-table-column type="index" width="55" show-overflow-tooltip />
+      <el-table-column label="Номер" prop="vendorid" width="150" show-overflow-tooltip />
       <el-table-column
-        property="score"
-        label="Счет"
-        width="200"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="name"
+        prop="name"
         label="Наименование"
         width="300"
         show-overflow-tooltip
       />
       <el-table-column
-        property="nameEntity"
-        label="Юридическое лицо"
+        prop="urasticname"
+        label="Полное наименование"
+        width="300"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="directorname"
+        label="Директор"
         show-overflow-tooltip
       />
     </el-table>
@@ -36,6 +36,15 @@
 </template>
 
 <script lang="ts" setup>
-import { useProviderTableStore } from "~~/stores/providerTableStore";
-const storeProvider = useProviderTableStore();
+import { useVendorTableStore } from "~~/stores/providerTableStore";
+const vendorStore = useVendorTableStore();
+const VendorList = ref(vendorStore.getVendorList);
+onMounted(async () => {
+  try {
+    await vendorStore.fetchVendorsList({ /* Ваши параметры запроса */ });
+    // Обновление entityList не требуется, так как watchEffect следит за изменениями в сторе
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
 </script>

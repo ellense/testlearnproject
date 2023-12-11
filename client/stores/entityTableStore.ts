@@ -41,22 +41,27 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     },
     async fetchEntitiesList(data: IEntity) {
       try {
-        // Вызываем вашу функцию для получения данных
         const result = await ENTITY.getEntitiesList(data);
-
-        // Если данные успешно получены, обновляем entityList в сторе
-        if (result) {
-          this.entityList = [result];
+  
+        if (Array.isArray(result)) {
+          // Если данные успешно получены и являются массивом, обновляем entityList в сторе
+          this.entityList = result;
         } else {
-          console.error("Ошибка получения данных");
+          // Если result не является массивом или равен null, обновляем entityList пустым массивом
+          this.entityList = [];
+          console.error("Данные не получены или не являются массивом");
         }
       } catch (error) {
         console.error("Произошла ошибка", error);
       }
     },
-    addRows(row: { entityid: string; name: string }) {
-      this.entityList.push(row);
-    },
+    // addRows(row: { entityid: string;
+    //   directorname: string;
+    //   urasticname: string;
+    //   name: string;
+    //   urasticaddress: string; }) {
+    //   this.entityList.push(row);
+    // },
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;
 

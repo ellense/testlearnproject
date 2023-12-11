@@ -52,10 +52,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/providerTableStore";
 
 const storeEntity = useEntityTableStore();
-const storeProvider = useProviderTableStore();
+const storeProvider = useVendorTableStore();
 
 const formLabelWidth = "200px";
 const options = ref<{ EntityName: string; label: string }[]>([]);

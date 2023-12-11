@@ -57,7 +57,7 @@
         <el-button @click="storeInvoice.dialogFormVisible = false"
           >Отмена</el-button
         >
-        <el-button @click="save()"> Добавить </el-button>
+        <!-- <el-button @click="save()"> Добавить </el-button> -->
       </span>
     </template>
   </el-dialog>
@@ -66,10 +66,10 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/providerTableStore";
 
 const storeInvoice = useInvoiceTableStore();
-const storeProvider = useProviderTableStore();
+const storeProvider = useVendorTableStore();
 
 const formLabelWidth = "200px";
 
@@ -87,30 +87,30 @@ const messageClose = () => {
   });
 };
 
-const updateOptions = () => {
-  options.value = storeProvider.tableData.map((provider) => ({
-    ProviderName: provider.name,
-    label: provider.name,
-  }));
-};
+// const updateOptions = () => {
+//   options.value = storeProvider.tableData.map((provider) => ({
+//     ProviderName: provider.name,
+//     label: provider.name,
+//   }));
+// };
 
-const save = () => {
-  storeInvoice.addRows({
-    id: storeProvider.tableData.length + 1,
-    number: newNumber.value,
-    summa: newSum.value,
-    date: newDate.value,
-    nameProvider: ProviderName.value,
-  });
-  storeInvoice.dialogFormVisible = false;
-  messageClose();
-  newNumber.value = null;
-  newSum.value = null;
-  newDate.value = new Date();
-  ProviderName.value = "";
-};
+// const save = () => {
+//   storeInvoice.addRows({
+//     id: storeProvider.tableData.length + 1,
+//     number: newNumber.value,
+//     summa: newSum.value,
+//     date: newDate.value,
+//     nameProvider: ProviderName.value,
+//   });
+//   storeInvoice.dialogFormVisible = false;
+//   messageClose();
+//   newNumber.value = null;
+//   newSum.value = null;
+//   newDate.value = new Date();
+//   ProviderName.value = "";
+// };
 
-updateOptions();
+// updateOptions();
 </script>
 
 

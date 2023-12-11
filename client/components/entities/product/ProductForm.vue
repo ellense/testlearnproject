@@ -51,10 +51,10 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/providerTableStore";
 import { useProductTableStore } from "~~/stores/productTableStore";
 
-const storeProvider = useProviderTableStore();
+const storeProvider = useVendorTableStore();
 const storeProduct = useProductTableStore();
 
 const formLabelWidth = "140px";
@@ -71,12 +71,12 @@ const messageClose = () => {
   });
 };
 
-const updateOptions = () => {
-  options.value = storeProvider.tableData.map((provider) => ({
-    ProviderName: provider.name,
-    label: provider.name,
-  }));
-};
+// const updateOptions = () => {
+//   options.value = storeProvider.tableData.map((provider) => ({
+//     ProviderName: provider.name,
+//     label: provider.name,
+//   }));
+// };
 
 const save = () => {
   storeProduct.addRows({
@@ -92,7 +92,7 @@ const save = () => {
   newCategory.value = "";
 };
 
-updateOptions();
+// updateOptions();
 </script>
 
 <style scoped></style>

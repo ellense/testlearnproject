@@ -124,11 +124,11 @@
 import { ref } from "vue";
 
 import { useKuTableStore } from "~~/stores/kuTableStore";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/providerTableStore";
 import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
 import { useRouter } from "vue-router";
 
-const providerStore = useProviderTableStore();
+const providerStore = useVendorTableStore();
 const store = useKuTableStore();
 const invoiceStore = useInvoiceTableStore();
 const router = useRouter();

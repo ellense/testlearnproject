@@ -1,6 +1,9 @@
 export interface IEntity {
   entityid: string;
+  directorname: string;
+  urasticname: string;
   name: string;
+  urasticaddress: string;
 }
 export interface IInvoice {
   id: number;
@@ -37,17 +40,20 @@ export interface IGraphic {
 }
 
 export interface IProduct {
-  id: number;
-  name: string;
-  nameProvider: string;
+  itemid: string;
+  classifier_id: string;
+  brand_id: string;
   category: string;
 }
 
-export interface IProvider {
-  id: number;
-  score: number | null;
+export interface IVendor {
+  vendorid: string;
   name: string;
-  nameEntity: string;
+  urasticname: string;
+  directorname: string;
+  urasticadress: string;
+  inn_kpp: string;
+  entityid: string;
 }
 
 export interface IProfile {

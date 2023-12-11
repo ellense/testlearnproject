@@ -3,7 +3,7 @@ import type {
   IEntity,
   IInvoice,
   IProduct,
-  IProvider,
+  IVendor,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -35,13 +35,16 @@ export const ENTITY = {
 };
 export const VENDOR = {
   getVendorsList: (
-    data: IProvider
+    data: IVendor
   ): Promise<{
-    id: number;
-    score: number | null;
+    vendorid: string;
     name: string;
-    nameEntity: string;
-  } | null> => $Get("api/vendorslist/", { data, isBearer: false }),
+    urasticname: string;
+    directorname: string;
+    urasticadress: string;
+    inn_kpp: string;
+    entityid: string;
+  } | null> => $Get("api/vendorlist", { data, isBearer: false }),
 };
 export const PRODUCT = {
   getProductsList: (

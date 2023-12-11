@@ -48,7 +48,7 @@
         </nuxt-link>
 
         <el-menu-item index="10">
-          <el-dropdown>
+          <!-- <el-dropdown>
             <div class="dropdown">
               <div v-if="firstProfile">
                 <h5>
@@ -64,7 +64,21 @@
                 <el-dropdown-item>Выйти</el-dropdown-item>
               </el-dropdown-menu>
             </template>
-          </el-dropdown>
+          </el-dropdown> -->
+          <el-popconfirm
+            :title="'Выйти из ЛК?'"
+            :confirm-button-text="'Да'"
+            :cancel-button-text="'Нет'"
+            :hide-icon="true"
+            width="180px"
+            @confirm="logOut()"
+          >
+            <template #reference>
+              <div class="main-menu__logout-button">
+                <span>Выход</span>
+              </div>
+            </template>
+          </el-popconfirm>
         </el-menu-item>
       </el-menu>
     </el-scrollbar>
@@ -82,8 +96,10 @@ import {
   ShoppingCartFull,
 } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
+import { useAuthStore } from "~/stores/authStore";
 import { useProfileStore } from "~~/stores/profileStore";
 const { firstProfile } = storeToRefs(useProfileStore());
+const logOut = () => useAuthStore().logout();
 </script>
 
 <style scoped>

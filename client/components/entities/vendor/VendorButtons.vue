@@ -19,6 +19,6 @@
 
 <script lang="ts" setup>
 import { Search } from "@element-plus/icons-vue";
-import { useProviderTableStore } from "~~/stores/providerTableStore";
-const storeProvider = useProviderTableStore();
+import { useVendorTableStore } from "~~/stores/providerTableStore";
+const storeProvider = useVendorTableStore();
 </script>
