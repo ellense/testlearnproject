@@ -1,6 +1,5 @@
-<template >
-    <EntitiesVendorButtons />
-    <EntitiesVendorForm />
+<template>
+    <EntitiesVendorBar/>
     <EntitiesVendorVendorsTable/>
  </template>
  

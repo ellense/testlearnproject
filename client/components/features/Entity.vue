@@ -1,6 +1,5 @@
 <template >
-    <EntitiesLegalEntityButtons />
-    <EntitiesLegalEntityForm />
+    <EntitiesLegalEntityEntitiesBar/>
     <EntitiesLegalEntityEntitiesTable />
 </template>
 
@@ -8,6 +7,6 @@
 
 </script>
 
-<style lang="">
+<style>
     
 </style>

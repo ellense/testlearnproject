@@ -1,18 +1,10 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
-      ref="multipleTableRef"
-      :data="VendorList"
+      :data="filteredEntityList"
       style="width: 100%"
-      @selection-change="vendorStore.handleSelectionChange"
-      height="calc(100vh - 160px)"
+      height="calc(100vh - 130px)"
     >
-      <el-table-column
-        property="selection"
-        type="selection"
-        width="40"
-        show-overflow-tooltip
-      />
       <el-table-column
         label="Номер"
         prop="vendorid"
@@ -53,9 +45,17 @@
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted, watch } from "vue";
 import { useVendorTableStore } from "~~/stores/providerTableStore";
 const vendorStore = useVendorTableStore();
-const VendorList = ref(vendorStore.getVendorList);
+const filteredEntityList = ref(vendorStore.searchVendorList);
+
+watch(
+  () => vendorStore.searchVendorList,
+  () => {
+    filteredEntityList.value = vendorStore.searchVendorList;
+  }
+);
 onMounted(async () => {
   try {
     await vendorStore.fetchVendorsList({
@@ -67,7 +67,6 @@ onMounted(async () => {
       inn_kpp: "",
       entityid: "",
     });
-    // Обновление entityList не требуется, так как watchEffect следит за изменениями в сторе
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

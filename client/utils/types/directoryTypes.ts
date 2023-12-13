@@ -43,7 +43,7 @@ export interface IProduct {
   itemid: string;
   classifier_id: string;
   brand_id: string;
-  category: string;
+  name: string;
 }
 
 export interface IVendor {

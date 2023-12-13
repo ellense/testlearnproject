@@ -1,5 +1,5 @@
 <template>
-  <el-dialog
+  <!-- <el-dialog
     v-model="storeProvider.dialogFormVisible"
     title="Новый поставщик"
     close-on-click-modal
@@ -46,51 +46,51 @@
         <el-button @click="save()"> Добавить </el-button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
-import { useEntityTableStore } from "~~/stores/entityTableStore";
-import { useVendorTableStore } from "~~/stores/providerTableStore";
+// import { ref } from "vue";
+// import { useEntityTableStore } from "~~/stores/entityTableStore";
+// import { useVendorTableStore } from "~~/stores/providerTableStore";
 
-const storeEntity = useEntityTableStore();
-const storeProvider = useVendorTableStore();
+// const storeEntity = useEntityTableStore();
+// const storeProvider = useVendorTableStore();
 
-const formLabelWidth = "200px";
-const options = ref<{ EntityName: string; label: string }[]>([]);
-const newName = ref<string>("");
-const newScore = ref<number | null>(null);
-const EntityName = ref<string>("");
+// const formLabelWidth = "200px";
+// const options = ref<{ EntityName: string; label: string }[]>([]);
+// const newName = ref<string>("");
+// const newScore = ref<number | null>(null);
+// const EntityName = ref<string>("");
 
-const messageClose = () => {
-  ElMessage({
-    message: "Поставщик '" + newName.value + "' успешно добавлен",
-    type: "success",
-  });
-};
-const updateOptions = () => {
-  options.value = storeEntity.entityList.map((entity) => ({
-    EntityName: entity.name,
-    label: entity.name,
-  }));
-};
+// const messageClose = () => {
+//   ElMessage({
+//     message: "Поставщик '" + newName.value + "' успешно добавлен",
+//     type: "success",
+//   });
+// };
+// const updateOptions = () => {
+//   options.value = storeEntity.entityList.map((entity) => ({
+//     EntityName: entity.name,
+//     label: entity.name,
+//   }));
+// };
 
-const save = () => {
-  storeProvider.addRows({
-    id: storeProvider.tableData.length + 1,
-    score: newScore.value,
-    name: newName.value,
-    nameEntity: EntityName.value,
-  });
-  storeProvider.dialogFormVisible = false;
-  messageClose();
-  newName.value = "";
-  EntityName.value = "";
-  newScore.value = null;
-};
+// const save = () => {
+//   storeProvider.addRows({
+//     id: storeProvider.tableData.length + 1,
+//     score: newScore.value,
+//     name: newName.value,
+//     nameEntity: EntityName.value,
+//   });
+//   storeProvider.dialogFormVisible = false;
+//   messageClose();
+//   newName.value = "";
+//   EntityName.value = "";
+//   newScore.value = null;
+// };
 
-updateOptions();
+// updateOptions();
 </script>
 
 <style scoped></style>

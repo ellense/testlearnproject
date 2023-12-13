@@ -1,5 +1,7 @@
 export default {
-  ssr: false,
+  experimental: {
+    appManifest: false,
+  },
   imports: {
     presets: [
       {
@@ -8,6 +10,7 @@ export default {
       },
     ],
   },
+  ssr: false,
   devtools: {
     enabled: false,
   },

@@ -30,7 +30,12 @@ export const INVOICE = {
 export const ENTITY = {
   getEntitiesList: (
     data: IEntity
-  ): Promise<{ entityid: string; name: string } | null> =>
+  ): Promise<{ 
+    entityid: string;
+    directorname: string;
+    urasticname: string;
+    name: string;
+    urasticaddress: string; } | null> =>
     $Get("api/entitieslist/", { data, isBearer: false }),
 };
 export const VENDOR = {
@@ -50,9 +55,9 @@ export const PRODUCT = {
   getProductsList: (
     data: IProduct
   ): Promise<{
-    id: number;
+    itemid: string;
+    classifier_id: string;
+    brand_id: string;
     name: string;
-    nameProvider: string;
-    category: string;
-  } | null> => $Get("api/productslist/", { data, isBearer: false }),
+  } | null> => $Get("api/productslist", { data, isBearer: false }),
 };

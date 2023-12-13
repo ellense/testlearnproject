@@ -1,6 +1,5 @@
-<template >
-    <EntitiesProductButtons />
-    <EntitiesProductForm />
+<template>
+    <EntitiesProductProductsBar/>
     <EntitiesProductProductsTable/>
  </template>
  
@@ -8,6 +7,6 @@
  
  </script>
  
- <style lang="">
+ <style>
      
  </style>

@@ -1,39 +1,51 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
-      ref="multipleTableRef"
-      :data="storeProduct.searchTableData"
+      :data="filteredProductList"
       style="width: 100%"
-      @selection-change="storeProduct.handleSelectionChange"
-      height="calc(100vh - 160px)"
+      height="calc(100vh - 130px)"
     >
+      <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
       <el-table-column
-        property="selection"
-        type="selection"
-        width="55"
-        show-overflow-tooltip
-      />
-      <el-table-column type="index" width="55" show-overflow-tooltip />
-      <el-table-column
-        property="name"
+        prop="name"
         label="Наименование"
-        width="300"
+        width="500"
         show-overflow-tooltip
       />
       <el-table-column
-        property="nameProvider"
-        label="Поставщик"
-        width="300"
+        prop="classifier_id"
+        label="Категория"
+        width="200"
         show-overflow-tooltip
       />
-      <el-table-column property="category" label="Категория" />
+      <el-table-column prop="brand_id" label="Бренд" />
     </el-table>
   </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
+import { ref, onMounted, watch } from "vue";
 import { useProductTableStore } from "~~/stores/productTableStore";
-const storeProduct = useProductTableStore();
+
+const productStore = useProductTableStore();
+const filteredProductList = ref(productStore.searchProductsList);
+
+watch(() => productStore.searchProductsList, () => {
+  filteredProductList.value = productStore.searchProductsList;
+});
+
+onMounted(async () => {
+  try {
+    await productStore.fetchProductsList({
+      itemid: "",
+      classifier_id: "",
+      brand_id: "",
+      name: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
 </script>
 
 <style scoped></style>

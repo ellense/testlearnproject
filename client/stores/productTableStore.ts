@@ -3,64 +3,37 @@ import type { IProduct } from "~/utils/types/directoryTypes";
 
 export const useProductTableStore = defineStore("ProductTableStore", {
   state: () => ({
-    multipleSelection: [] as IProduct[],
     search: "",
-    tableData: [] as IProduct[],
-    multipleTableRef: null as Ref | null,
-    dialogFormVisible: false,
+    productList: [] as IProduct[],
   }),
 
   getters: {
-    searchTableData: (state) => {
+    searchProductsList: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) => {
+      return state.productList.filter((item) => {
+        const itemidMatch = item.itemid.toLowerCase().includes(searchValue);
+        const classifier_idMatch = item.classifier_id.toLowerCase().includes(searchValue);
         const nameMatch = item.name.toLowerCase().includes(searchValue);
-        const categoryMatch = item.category.toLowerCase().includes(searchValue);
-        const nameProviderMatch = item.nameProvider
-          .toLowerCase()
-          .includes(searchValue);
-        return nameMatch || categoryMatch || nameProviderMatch;
+        const brand_id = item.brand_id.toLowerCase().includes(searchValue);
+        return itemidMatch || classifier_idMatch || nameMatch || brand_id;
       });
     },
   },
 
   actions: {
-    setMultipleTableRef(ref: Ref) {
-      this.multipleTableRef = ref;
-    },
-
-    toggleSelection(rows?: IProduct[]) {
-      if (this.multipleTableRef) {
-        if (rows) {
-          rows.forEach((row) => {
-            this.multipleTableRef.value.toggleRowSelection(row, undefined);
-          });
+    async fetchProductsList(data: IProduct) {
+      try {
+        const result = await PRODUCT.getProductsList(data);
+  
+        if (Array.isArray(result)) {
+          this.productList = result;
         } else {
-          this.multipleTableRef.value.clearSelection();
+          this.productList = [];
+          console.error("Данные не получены или не являются массивом");
         }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
       }
-    },
-    handleSelectionChange(val: IProduct[]) {
-      this.multipleSelection = val;
-    },
-
-    addRows(row: {
-      id: number;
-      name: string;
-      nameProvider: string;
-      category: string;
-    }) {
-      this.tableData.push(row);
-    },
-
-    deleteSelectedRows() {
-      const selectedRows = this.multipleSelection;
-
-      this.tableData = this.tableData.filter((row: IProduct) => {
-        return !selectedRows.includes(row);
-      });
-
-      this.multipleSelection = [];
-    },
+    },    
   },
 });

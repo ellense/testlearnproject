@@ -3,42 +3,25 @@ import type { IEntity } from "~/utils/types/directoryTypes";
 
 export const useEntityTableStore = defineStore("EntityTableStore", {
   state: () => ({
-    multipleSelection: [] as IEntity[],
     search: "",
     entityList: [] as IEntity[],
-    multipleTableRef: null as Ref | null,
-    dialogFormVisible: false,
   }),
 
   getters: {
-    searchentityList: (state) => {
+    searchEntityList: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.entityList.filter((item) =>
-        item.name.toLowerCase().includes(searchValue)
-      );
+      return state.entityList.filter((item) => {
+        const entityidMatch = item.entityid.toLowerCase().includes(searchValue);
+        const directornameMatch = item.directorname.toLowerCase().includes(searchValue);
+        const nameMatch = item.name.toLowerCase().includes(searchValue);
+        const urasticaddressMatch = item.urasticaddress.toLowerCase().includes(searchValue);
+        const urasticnameMatch = item.urasticname.toLowerCase().includes(searchValue);
+        return entityidMatch || directornameMatch || nameMatch || urasticaddressMatch || urasticnameMatch;
+      });
     },
-    getEntityList: (state) => state.entityList,
   },
 
   actions: {
-    setMultipleTableRef(ref: Ref) {
-      this.multipleTableRef = ref;
-    },
-
-    toggleSelection(evt: MouseEvent, rows?: IEntity[] | undefined) {
-      if (this.multipleTableRef) {
-        if (rows) {
-          rows.forEach((row) => {
-            this.multipleTableRef.value.toggleRowSelection(row, undefined);
-          });
-        } else {
-          this.multipleTableRef.value.clearSelection();
-        }
-      }
-    },
-    handleSelectionChange(val: IEntity[]) {
-      this.multipleSelection = val;
-    },
     async fetchEntitiesList(data: IEntity) {
       try {
         const result = await ENTITY.getEntitiesList(data);
@@ -54,22 +37,6 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
       } catch (error) {
         console.error("Произошла ошибка", error);
       }
-    },
-    // addRows(row: { entityid: string;
-    //   directorname: string;
-    //   urasticname: string;
-    //   name: string;
-    //   urasticaddress: string; }) {
-    //   this.entityList.push(row);
-    // },
-    deleteSelectedRows() {
-      const selectedRows = this.multipleSelection;
-
-      this.entityList = this.entityList.filter((row: IEntity) => {
-        return !selectedRows.includes(row);
-      });
-
-      this.multipleSelection = [];
-    },
+    },    
   },
 });
