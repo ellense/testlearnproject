@@ -15,7 +15,22 @@ import { ElConfigProvider } from "element-plus";
 import ru from "element-plus/dist/locale/ru.mjs";
 import { useAuthStore } from './stores/authStore';
 const locale = ru;
+import { onMounted } from 'vue';
+import { useVendorTableStore } from '~~/stores/providerTableStore';
 
+const vendorStore = useVendorTableStore();
+//инициализация vendor
+// onMounted(async () => {
+//   await vendorStore.fetchVendorsList({
+//       vendorid: "",
+//       name: "",
+//       urasticname: "",
+//       directorname: "",
+//       urasticadress: "",
+//       inn_kpp: "",
+//       entityid: "",
+//     });
+// });
 // Инициализация авторизации
 const auth = useAuthStore();
 // Если пользователь не авторизован, инициируем процесс авторизации

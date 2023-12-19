@@ -57,3 +57,10 @@ h1 {
   height: 40px;
   margin: 10px 10px 0 0;
 }
+
+.scrollTableFiltres {
+  margin: 10px 10px 0 0;
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+  height: 300px;
+}

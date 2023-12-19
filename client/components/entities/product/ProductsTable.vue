@@ -1,11 +1,18 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
+      v-loading="loading"
+      element-loading-text="Загрузка"
       :data="filteredProductList"
       style="width: 100%"
       height="calc(100vh - 130px)"
     >
-      <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
+      <el-table-column
+        prop="itemid"
+        label="ID"
+        width="100"
+        show-overflow-tooltip
+      />
       <el-table-column
         prop="name"
         label="Наименование"
@@ -30,9 +37,15 @@ import { useProductTableStore } from "~~/stores/productTableStore";
 const productStore = useProductTableStore();
 const filteredProductList = ref(productStore.searchProductsList);
 
-watch(() => productStore.searchProductsList, () => {
-  filteredProductList.value = productStore.searchProductsList;
-});
+let loading = ref(true);
+
+watch(
+  () => productStore.searchProductsList,
+  () => {
+    filteredProductList.value = productStore.searchProductsList;
+    loading.value = false;
+  }
+);
 
 onMounted(async () => {
   try {
@@ -43,6 +56,7 @@ onMounted(async () => {
       name: "",
     });
   } catch (error) {
+    loading.value = false;
     console.error("Ошибка при загрузке данных", error);
   }
 });

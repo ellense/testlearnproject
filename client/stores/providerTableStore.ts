@@ -1,10 +1,11 @@
 import { defineStore } from "pinia";
-import type { IVendor } from "~/utils/types/directoryTypes";
+import type { IVendor,IVendorNameId } from "~/utils/types/directoryTypes";
 
 export const useVendorTableStore = defineStore("VendorTableStore", {
   state: () => ({
     search: "",
     vendorList: [] as IVendor[],
+    vendorNameAndIdList: [] as IVendorNameId[],
   }),
 
   getters: {
@@ -20,9 +21,26 @@ export const useVendorTableStore = defineStore("VendorTableStore", {
         return vendoridMatch || directornameMatch || nameMatch || urasticaddressMatch || urasticnameMatch || inn_kppMatch;
       });
     },
+    getVendorsNameAndId: (state) => state.vendorNameAndIdList,
   },
 
   actions: {
+    async fetchVendorsNameAndId(data: IVendor) {
+      try {
+        const result = await VENDOR.getVendorsNameAndId(data);
+
+        if (Array.isArray(result)) {
+          this.vendorNameAndIdList = result;
+          // console.log(result)
+        } else {
+          this.vendorNameAndIdList = [];
+          console.error("Данные не получены или не являются массивом");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+    },
+  
     async fetchVendorsList(data: IVendor) {
       try {
         const result = await VENDOR.getVendorsList(data);

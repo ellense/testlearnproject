@@ -16,8 +16,7 @@ const tokenReadyPromise = new Promise<void>((resolve) => {
 function isCorrectRole(value: string): UserRole | undefined {
   if (
     value === "admin" ||
-    value === "managerLama" ||
-    value === "managerOutsourcing"
+    value === "manager"
   )
     return value as UserRole;
 
@@ -100,8 +99,9 @@ export const useAuthStore = defineStore("authStore", {
       this.$reset();
       this.resetDataForLs();
       this.setAuth(false);
-      useRouter().push("/graphic");
+      useRouter().push("/");
       message.success("Вы вышли из личного кабинета");
+      
     },
   },
 });

@@ -18,20 +18,21 @@ export const useKuTableStore = defineStore("KuTableStore", {
     percent: 0,
     provider: "",
     kuNumber: "",
+    dialogFormVisible: false,
   }),
 
   getters: {
     filteredTableData: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.tableData.filter(
-        (item: { provider: string; kuNumber: string; type: string }) => {
-          const nameProviderMatch = item.provider
+        (item: { vendor: string; ku_id: string; period: string }) => {
+          const nameProviderMatch = item.vendor
             .toLowerCase()
             .includes(searchValue);
-          const kunumberMatch = item.kuNumber
+          const kunumberMatch = item.ku_id
             .toLowerCase()
             .includes(searchValue);
-          const typeMatch = item.type.toLowerCase().includes(searchValue);
+          const typeMatch = item.period.toLowerCase().includes(searchValue);
           return typeMatch || kunumberMatch || nameProviderMatch;
         }
       );
@@ -59,17 +60,14 @@ export const useKuTableStore = defineStore("KuTableStore", {
     },
 
     addItem() {
-      const paddedId = String(this.tableData.length + 1).padStart(5, "0");
+      // const paddedId = String(this.tableData.length + 1).padStart(5, "0");
       this.tableData.push({
-        id: this.tableData.length + 1,
-        kuNumber: `КУ${paddedId}`,
-        percent: this.newPercent,
-        provider: this.providerName,
-        type: this.newType,
-        dateStart: this.newDateStart,
-        dateEnd: this.newDateEnd,
-        dateActual: this.newDateActual,
-        base: 56780,
+        ku_id: "56",
+        vendor: this.providerName,
+        period: this.newType,
+        date_start: this.newDateStart,
+        date_end: this.newDateEnd,
+        status: "Создано",
       });
       this.newPercent = null;
       this.providerName = "";
@@ -78,6 +76,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
       this.newDateEnd = new Date();
       this.newDateActual = new Date();
     },
+    
 
     addgraphic(row: {
       id: number;

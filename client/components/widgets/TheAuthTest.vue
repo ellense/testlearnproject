@@ -49,38 +49,13 @@ const form = reactive<AuthApiData>({
   password: "1234",
 });
 
-// const login = async () => {
-//   try {
-//     if (!form.username || !form.password) {
-//       message.warning(
-//         `Не заполнен ${
-//           !form.username && !form.password
-//             ? "логин и пароль"
-//             : !form.username
-//             ? "логин"
-//             : " пароль"
-//         }`
-//       );
-//       return;
-//     }
-
-//     await authStore.login(form); // Изменил вызов метода на более общий login
-//     router.push("/");
-//     message.success("Вы вошли в личный кабинет");
-//     form.password = "";
-//     form.username = "";
-//   } catch (error) {
-//     message.error("Ошибка входа. Пожалуйста, проверьте введенные данные.");
-//     console.error(error);
-//   }
-// };
 const login = () => {
   if (form.password && form.username) {
     useAuthStore()
       .getTokenForApi(form)
       .then(() => {
         useAuthStore().setAuth(true)
-        useRouter().push("/ku");
+        useRouter().push("ku");
         message.success('Вы вошли в личный кабинет')
         form.password = ''
         form.username = ''

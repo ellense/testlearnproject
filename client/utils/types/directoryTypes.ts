@@ -14,15 +14,12 @@ export interface IInvoice {
 }
 
 export interface IKu {
-  id: number;
-  kuNumber: string;
-  percent: number | null;
-  provider: string;
-  type: string;
-  dateStart: Date | string;
-  dateEnd: Date | string;
-  dateActual: Date | string;
-  base: number | null;
+  ku_id: string;
+  vendor: string;
+  period: string;
+  date_start: Date;
+  date_end: Date ;
+  status: string
 }
 
 export interface IGraphic {
@@ -56,10 +53,25 @@ export interface IVendor {
   entityid: string;
 }
 
+export interface IVendorNameId {
+  vendorid: string;
+  name: string;
+}
+
 export interface IProfile {
   id: number;
   last_name: string;
   first_name: string;
   middle_name: string;
   email: string;
+}
+
+export interface IProduser {
+  id: number;
+  name: string;
+}
+
+export interface IBrand {
+  id: number;
+  name: string;
 }

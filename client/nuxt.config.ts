@@ -34,10 +34,11 @@ export default {
     public: {
       API: {
         BASE_URL: process.env.VITE_BASE_URL || "",
-        REFRESH_URL: process.env.VITE_REFRESH_URL || "",
-        LOGIN_URL: process.env.VITE_LOGIN_URL || "",
-        ACCESS_KEY: process.env.VITE_ACCESS_KEY || "",
-        REFRESH_KEY: process.env.VITE_REFRESH_KEY || "",
+        REFRESH_URL: process.env.VITE_REFRESH_URL || '',
+        LOGIN_URL: process.env.VITE_LOGIN_URL || '',
+        ACCESS_KEY: process.env.VITE_ACCESS_KEY || '',
+        REFRESH_KEY: process.env.VITE_REFRESH_KEY || '',
+        TIMEOUT: process.env.VITE_TIMEOUT,
       },
     },
   },

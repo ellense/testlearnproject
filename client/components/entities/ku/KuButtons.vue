@@ -25,7 +25,7 @@ const store = useKuTableStore();
 const router = useRouter();
 
 const redirectToCreatePage = () => {
-  router.push("/kuAdd");
+  router.push("kuAdd");
 };
 
 const addGraphic = () => {

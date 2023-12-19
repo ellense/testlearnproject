@@ -1,6 +1,8 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
+      v-loading="loading"
+      element-loading-text = "Загрузка"
       :data="filteredEntityList"
       style="width: 100%"
       height="calc(100vh - 130px)"
@@ -50,11 +52,15 @@ import { useVendorTableStore } from "~~/stores/providerTableStore";
 const vendorStore = useVendorTableStore();
 const filteredEntityList = ref(vendorStore.searchVendorList);
 
+let loading = ref(true);
+
 watch(
   () => vendorStore.searchVendorList,
   () => {
     filteredEntityList.value = vendorStore.searchVendorList;
+    loading.value = false;
   }
+  
 );
 onMounted(async () => {
   try {
@@ -68,7 +74,13 @@ onMounted(async () => {
       entityid: "",
     });
   } catch (error) {
+    loading.value = false;
     console.error("Ошибка при загрузке данных", error);
   }
 });
 </script>
+<style scoped>
+.example-showcase .el-loading-mask {
+  z-index: 9;
+}
+</style>

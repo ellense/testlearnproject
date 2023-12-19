@@ -11,6 +11,7 @@
       <el-table-column prop="directorname" label="Директор"  width="400" show-overflow-tooltip />
       <el-table-column prop="urasticaddress" label="Адрес"  show-overflow-tooltip />
     </el-table>
+  
   </el-scrollbar>
 </template>
 

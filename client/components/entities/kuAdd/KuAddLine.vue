@@ -4,7 +4,6 @@
       <el-col :span="5">
         <el-input
           v-model="store.newPercent"
-          type="number"
           placeholder="Процент"
           clearable
           style="width: 214px"
@@ -21,7 +20,7 @@
         ></el-date-picker>
       </el-col>
       <el-col :span="5">
-        <el-button type="primary" @click="addItemAndNavigate()"
+        <el-button type="primary" @click="addItemAndSendToBackend()"
           >Добавить</el-button
         >
       </el-col>
@@ -53,9 +52,6 @@
           clearable
         ></el-date-picker>
       </el-col>
-      <!-- <el-col :span="5">
-          <el-button type="primary" @click="addItemInvoice()">Добавить накладные</el-button>
-        </el-col> -->
     </el-row>
 
     <el-row>
@@ -84,39 +80,12 @@
         ></el-date-picker>
       </el-col>
     </el-row>
-    <el-table
-      ref="multipleTableRef"
-      :data="invoiceStore.searchTableData"
-      style="width: 100%"
-      @selection-change="invoiceStore.handleSelectionChange"
-      height="calc(100vh - 160px)"
-    >
-      <el-table-column type="index" width="55" show-overflow-tooltip />
-      <el-table-column
-        property="number"
-        label="Номер"
-        width="200"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="summa"
-        label="Сумма"
-        width="300"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="date"
-        type="date"
-        label="Дата"
-        width="300"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="nameProvider"
-        label="Поставщик"
-        show-overflow-tooltip
-      />
-    </el-table>
+    <div>
+      <el-radio-group v-model="radio" @change="handleRadioChange">
+        <el-radio-button label="Все" />
+        <el-radio-button label="По фильтру" />
+      </el-radio-group>
+    </div>
   </el-scrollbar>
 </template>
 
@@ -127,13 +96,16 @@ import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useVendorTableStore } from "~~/stores/providerTableStore";
 import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
 import { useRouter } from "vue-router";
+import { formatter } from "element-plus";
+import dayjs from 'dayjs'
 
 const providerStore = useVendorTableStore();
 const store = useKuTableStore();
 const invoiceStore = useInvoiceTableStore();
 const router = useRouter();
 const options = ref<{ providerName: string; label: string }[]>([]);
-
+console.log("id name", providerStore.vendorNameAndIdList);
+console.log("list", providerStore.vendorList);
 const messageClose = () => {
   ElMessage({
     message: "Коммерческое условие успешно добавлено",
@@ -141,19 +113,67 @@ const messageClose = () => {
   });
 };
 
+const handleRadioChange = (value: any) => {
+  if (value === "По фильтру") {
+    store.dialogFormVisible = true;
+  } else {
+    store.dialogFormVisible = false;
+  }
+};
+
 const updateOptions = () => {
-  options.value = providerStore.tableData.map((provider) => ({
-    providerName: provider.name,
-    label: provider.name,
+  options.value = providerStore.vendorList.map((provider) => ({
+    providerName: provider.vendorid,
+    label: provider.vendorid,
   }));
 };
 updateOptions();
 
-const addItemAndNavigate = () => {
-  store.addItem();
-  router.push("/");
-  messageClose();
+// const addItemAndNavigate = () => {
+//   store.addItem();
+//   router.push("ku");
+//   messageClose();
+// };
+
+const addItemAndSendToBackend = async () => {
+  // Создаем объект с данными для нового элемента
+  const paddedId = String(store.tableData.length + 1).padStart(5, "0");
+  const newItem = {
+    ku_id: "56",
+    vendor: store.providerName,
+    period: store.newType,
+    date_start: dayjs(store.newDateStart, 'DD.MM.YYYY').format('YYYY-MM-DD'),
+    date_end: dayjs(store.newDateStart, 'DD.MM.YYYY').format('YYYY-MM-DD'),
+    status: "Создано",
+  };
+
+  try {
+    // Вызываем метод postKu для отправки на бэкенд
+    const response = await KU.postKu(newItem);
+
+    if (response) {
+      // Если ответ успешен, добавляем новые данные в таблицу
+      store.addItem();
+
+      // Обработка успешного ответа от бэкенда
+      console.log('Экземпляр успешно отправлен на бэкенд:', response);
+
+      // Опционально: вывод уведомления об успешном добавлении
+      messageClose();
+    } else {
+      // Обработка случая, когда ответ от бэкенда равен null
+      console.error('Не удалось отправить экземпляр на бэкенд');
+    }
+
+    // Перенаправляем пользователя
+    router.push("ku");
+  } catch (error) {
+    // Обработка ошибок, возникших при отправке на бэкенд
+    console.error('Ошибка при отправке экземпляра на бэкенд:', error);
+    
+  }
 };
+const radio = ref();
 </script>
 
 <style scoped>
