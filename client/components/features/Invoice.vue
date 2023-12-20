@@ -1,7 +1,6 @@
 <template >
-    <EntitiesInvoiceButtons />
-    <EntitiesInvoiceForm />
-    <EntitiesInvoiceInvoicesTable/>
+    <EntitiesInvoiceBar/>
+    <EntitiesInvoiceTable/>
  </template>
  
  <script lang = "ts" setup>

@@ -7,56 +7,48 @@
       height="calc(100vh - 120px)"
       border
     >
+      <el-table-column property="ku" label="Koд КУ" show-overflow-tooltip />
       <el-table-column
-        property="kuNumber"
-        label="Koд КУ"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        property="provider"
+        property="vendor"
         label="Поставщик"
         show-overflow-tooltip
       />
       <el-table-column
-        property="type"
+        property="period"
         label="Тип графика"
         show-overflow-tooltip
       />
       <el-table-column
-        property="dateStart"
+        property="date_start"
         type="date"
         label="Начальная дата"
         width="140"
         show-overflow-tooltip
       />
       <el-table-column
-        property="dateEnd"
+        property="date_end"
         type="date"
         label="Конечная дата"
         show-overflow-tooltip
       />
       <el-table-column
-        property="dateCalc"
+        property="date_calc"
         type="date"
         label="Дата расчета"
         show-overflow-tooltip
       />
-      <el-table-column property="base" label="База" show-overflow-tooltip />
+      <el-table-column property="sum_calc" label="База" show-overflow-tooltip />
       <el-table-column
         property="percent"
         label="Процент"
         show-overflow-tooltip
       />
       <el-table-column
-        property="calculated"
-        label="Рассчитано"
+        property="sum_bonus"
+        label="Расчитано"
         show-overflow-tooltip
       />
-      <el-table-column
-        property="approved"
-        label="Утверждено"
-        show-overflow-tooltip
-      />
+      
     </el-table>
   </el-scrollbar>
 </template>
@@ -64,6 +56,4 @@
 import { useKuTableStore } from "~~/stores/kuTableStore";
 
 const storeKU = useKuTableStore();
-
-
 </script>

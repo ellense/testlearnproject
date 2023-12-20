@@ -40,12 +40,12 @@
           </el-menu-item>
         </nuxt-link>
         <el-divider />
-        <nuxt-link to="/test">
+        <!-- <nuxt-link to="/test">
           <el-menu-item index="8">
             <el-icon><User /></el-icon>
             <span>тест</span>
           </el-menu-item>
-        </nuxt-link>
+        </nuxt-link> -->
 
         <el-menu-item index="10">
           <!-- <el-dropdown>

@@ -5,7 +5,7 @@
       :data="storeInvoice.searchTableData"
       style="width: 100%"
       @selection-change="storeInvoice.handleSelectionChange"
-      height="calc(100vh - 160px)"
+      height="calc(100vh - 130px)"
     >
       <el-table-column
         property="selection"

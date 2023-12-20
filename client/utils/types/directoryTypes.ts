@@ -14,26 +14,28 @@ export interface IInvoice {
 }
 
 export interface IKu {
-  ku_id: string;
+  ku_id: number | null;
   vendor: string;
   period: string;
-  date_start: Date;
-  date_end: Date ;
-  status: string
+  date_start: Date | string;
+  date_end: Date | string;
+  status: string;
+  date_actual: Date | string;
+  base: number | null;
+  percent: number | null;
 }
 
 export interface IGraphic {
-  id: number;
-  kuNumber: string;
-  provider: string;
-  type: string;
-  dateStart: Date | string;
-  dateEnd: Date | string;
-  dateCalc: Date | string;
+  graph_id: number | null;
+  ku: number | null;
+  vendor: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  date_calc: Date | string;
   percent: number | null;
-  base: number | null;
-  calculated: number | null;
-  approved: number | null;
+  sum_calc: number | null;
+  sum_bonus: number | null;
 }
 
 export interface IProduct {

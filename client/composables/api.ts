@@ -87,14 +87,45 @@ export const PRODUCT = {
 };
 
 export const KU = {
+  getKuList: (
+    data: IKu
+  ): Promise<{
+    ku_id: number | null;
+    vendor: string;
+    period: string;
+    date_start: Date | string;
+    date_end: Date | string;
+    status: string;
+    date_actual: Date | string;
+    base: number |  null;
+  percent: number | null;
+  } | null> => $Get("api/kulist", { data, isBearer: false }),
+
   postKu: (
     data: IKu
   ): Promise<{
-  ku_id: string;
-  vendor: string;
-  period: string;
-  date_start: Date;
-  date_end: Date;
-  status: string;
+    ku_id: number | null;
+    vendor: string;
+    period: string;
+    date_start: Date | string;
+    date_end: Date | string;
+    status: string;
+    date_actual: Date | string;
+    base: number |  null;
+    percent: number | null;
   } | null> => $Post("api/kulist", { data, isBearer: false }),
+
+  putKu: (
+    data: IKu
+  ): Promise<{
+    ku_id: number | null;
+    vendor: string;
+    period: string;
+    date_start: Date | string;
+    date_end: Date | string;
+    status: string;
+    date_actual: Date | string;
+    base: number |  null;
+    percent: number | null;
+  } | null> => $Put("api/kulist", { data, isBearer: false }),
 };

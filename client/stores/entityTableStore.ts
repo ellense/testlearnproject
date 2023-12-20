@@ -25,11 +25,9 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     async fetchEntitiesList(data: IEntity) {
       try {
         const result = await ENTITY.getEntitiesList(data);
-        const id = await ENTITY.getEntityNameById(data);
         if (Array.isArray(result)) {
           // Если данные успешно получены и являются массивом, обновляем entityList в сторе
           this.entityList = result;
-          console.log(id?.entityid)
         } else {
           // Если result не является массивом или равен null, обновляем entityList пустым массивом
           this.entityList = [];

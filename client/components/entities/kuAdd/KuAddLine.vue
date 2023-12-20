@@ -137,14 +137,18 @@ updateOptions();
 
 const addItemAndSendToBackend = async () => {
   // Создаем объект с данными для нового элемента
-  const paddedId = String(store.tableData.length + 1).padStart(5, "0");
+  //const paddedId = String(store.tableData.length + 1).padStart(5, "0");
+  //`КУ${paddedId}`
   const newItem = {
-    ku_id: "56",
+    ku_id: store.tableData.length + 20,
     vendor: store.providerName,
     period: store.newType,
     date_start: dayjs(store.newDateStart, 'DD.MM.YYYY').format('YYYY-MM-DD'),
-    date_end: dayjs(store.newDateStart, 'DD.MM.YYYY').format('YYYY-MM-DD'),
+    date_end: dayjs(store.newDateEnd, 'DD.MM.YYYY').format('YYYY-MM-DD'),
     status: "Создано",
+    date_actual: dayjs(store.newDateActual, 'DD.MM.YYYY').format('YYYY-MM-DD'),
+    base: 15000 + store.tableData.length * store.tableData.length,
+    percent: store.newPercent,
   };
 
   try {
@@ -152,12 +156,9 @@ const addItemAndSendToBackend = async () => {
     const response = await KU.postKu(newItem);
 
     if (response) {
-      // Если ответ успешен, добавляем новые данные в таблицу
-      store.addItem();
-
       // Обработка успешного ответа от бэкенда
       console.log('Экземпляр успешно отправлен на бэкенд:', response);
-
+      router.push("ku");
       // Опционально: вывод уведомления об успешном добавлении
       messageClose();
     } else {

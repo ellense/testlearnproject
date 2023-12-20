@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import { IProduser } from "~/utils/types/directoryTypes";
+import type { IProduser } from "~/utils/types/directoryTypes";
 const getProduser = () => {
   const data: IProduser[] = [];
   for (let i = 0; i < 50; i++) {

@@ -32,7 +32,7 @@
   
   <script setup lang="ts">
   import { Search } from "@element-plus/icons-vue";
-  import { IBrand } from '~/utils/types/directoryTypes'
+  import type { IBrand } from '~/utils/types/directoryTypes';
   const getProduser = () => {
     const data: IBrand[] = []
     for (let i = 0; i < 50; i++) {

@@ -3,7 +3,6 @@ import type { IKu, IGraphic } from "~/utils/types/directoryTypes";
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
-    newId: 0,
     newPercent: null,
     newType: "",
     providerName: "",
@@ -11,31 +10,22 @@ export const useKuTableStore = defineStore("KuTableStore", {
     newDateEnd: new Date(),
     newDateActual: new Date(),
     multipleSelection: [] as IKu[],
+    multipleTableRef: null as Ref | null,
     search: "",
     tableData: [] as IKu[],
     tableDataGraphic: [] as IGraphic[],
-    multipleTableRef: null as Ref | null,
-    percent: 0,
-    provider: "",
-    kuNumber: "",
     dialogFormVisible: false,
   }),
 
   getters: {
-    filteredTableData: (state) => {
+    searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter(
-        (item: { vendor: string; ku_id: string; period: string }) => {
-          const nameProviderMatch = item.vendor
-            .toLowerCase()
-            .includes(searchValue);
-          const kunumberMatch = item.ku_id
-            .toLowerCase()
-            .includes(searchValue);
-          const typeMatch = item.period.toLowerCase().includes(searchValue);
-          return typeMatch || kunumberMatch || nameProviderMatch;
-        }
-      );
+      return state.tableData.filter((item) => {
+        const vendorMatch = item.vendor.toLowerCase().includes(searchValue);
+        const periodMatch = item.period.toLowerCase().includes(searchValue);
+        const status = item.status.toLowerCase().includes(searchValue);
+        return vendorMatch || periodMatch || status;
+      });
     },
   },
 
@@ -58,38 +48,50 @@ export const useKuTableStore = defineStore("KuTableStore", {
     handleSelectionChange(val: IKu[]) {
       this.multipleSelection = val;
     },
-
-    addItem() {
-      // const paddedId = String(this.tableData.length + 1).padStart(5, "0");
-      this.tableData.push({
-        ku_id: "56",
-        vendor: this.providerName,
-        period: this.newType,
-        date_start: this.newDateStart,
-        date_end: this.newDateEnd,
-        status: "Создано",
-      });
-      this.newPercent = null;
-      this.providerName = "";
-      this.newType = "";
-      this.newDateStart = new Date();
-      this.newDateEnd = new Date();
-      this.newDateActual = new Date();
+    async fetchKuList(data: IKu) {
+      try {
+        const result = await KU.getKuList(data);
+        if (Array.isArray(result)) {
+          // Если данные успешно получены и являются массивом, обновляем entityList в сторе
+          this.tableData = result;
+        } else {
+          // Если result не является массивом или равен null, обновляем entityList пустым массивом
+          this.tableData = [];
+          console.error("Данные не получены или не являются массивом");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
     },
-    
+    // addItem() {
+    //   // const paddedId = String(this.tableData.length + 1).padStart(5, "0");
+    //   this.tableData.push({
+    //     ku_id: "56",
+    //     vendor: this.providerName,
+    //     period: this.newType,
+    //     date_start: this.newDateStart,
+    //     date_end: this.newDateEnd,
+    //     status: "Создано",
+    //   });
+    //   this.newPercent = null;
+    //   this.providerName = "";
+    //   this.newType = "";
+    //   this.newDateStart = new Date();
+    //   this.newDateEnd = new Date();
+    //   this.newDateActual = new Date();
+    // },
 
     addgraphic(row: {
-      id: number;
-      kuNumber: string;
-      provider: string;
-      type: string;
-      dateStart: Date | string;
-      dateEnd: Date | string;
-      dateCalc: Date | string;
+      graph_id: number | null;
+      ku: number | null;
+      vendor: string;
+      period: string;
+      date_start: Date | string;
+      date_end: Date | string;
+      date_calc: Date | string;
       percent: number | null;
-      base: number | null;
-      calculated: number | null;
-      approved: number | null;
+      sum_calc: number | null;
+      sum_bonus: number | null;
     }) {
       this.tableDataGraphic.push(row);
     },
