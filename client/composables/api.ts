@@ -80,8 +80,8 @@ export const PRODUCT = {
     data: IProduct
   ): Promise<{
     itemid: string;
-    classifier_id: string;
-    brand_id: string;
+    classifier_name: string;
+    brand_name: string;
     name: string;
   } | null> => $Get("api/productslist", { data, isBearer: false }),
 };
@@ -96,7 +96,6 @@ export const KU = {
     date_start: Date | string;
     date_end: Date | string;
     status: string;
-    date_actual: Date | string;
     base: number |  null;
   percent: number | null;
   } | null> => $Get("api/kulist", { data, isBearer: false }),
@@ -110,7 +109,6 @@ export const KU = {
     date_start: Date | string;
     date_end: Date | string;
     status: string;
-    date_actual: Date | string;
     base: number |  null;
     percent: number | null;
   } | null> => $Post("api/kulist", { data, isBearer: false }),
@@ -124,7 +122,6 @@ export const KU = {
     date_start: Date | string;
     date_end: Date | string;
     status: string;
-    date_actual: Date | string;
     base: number |  null;
     percent: number | null;
   } | null> => $Put("api/kulist", { data, isBearer: false }),

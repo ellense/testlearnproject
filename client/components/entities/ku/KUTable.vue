@@ -43,12 +43,6 @@
         width="160"
         show-overflow-tooltip
       />
-      <el-table-column
-        property="date_actual"
-        label="Дата актуальности"
-        width="160"
-        show-overflow-tooltip
-      />
       <el-table-column property="base" label="База" />
       <el-table-column property="status" label="Статус" />
     </el-table>
@@ -79,7 +73,6 @@ onMounted(async () => {
       date_start: new Date(),
       date_end: new Date(),
       status: "",
-      date_actual: new Date(),
       base: null,
       percent: null,
     });

@@ -50,7 +50,14 @@ const addGraphic = () => {
 
   selectedRows.forEach((selectedRow) => {
     const dateStart = dayjs(selectedRow.date_start).toDate();
-    const dateActual = dayjs(selectedRow.date_actual).toDate();
+    const dateEnd = dayjs(selectedRow.date_end).toDate();
+    let dateActual;
+
+if (dayjs(dateEnd).diff(dateStart, 'years') > 2) {
+  dateActual = dayjs(dateStart).add(2, 'years').toDate();
+} else {
+  dateActual = dayjs(dateEnd).toDate();
+}
     const numType = () => {
       if (selectedRow.period === "Месяц") {
         return 1;
@@ -92,7 +99,7 @@ const addGraphic = () => {
       const dateCalc1 = nextMonthFirstDay(0);
 
 const sumBonus1 =
-selectedRow.date_actual &&
+dateActual &&
 selectedRow.percent !== null &&
 selectedRow.base !== null &&
 dayjs(dateCalc1).isBefore(dayjs(), "day")
@@ -118,7 +125,7 @@ dayjs(dateCalc1).isBefore(dayjs(), "day")
       const dateCalc2 = nextMonthFirstDay(i);
 
       const sumBonus2 =
-      selectedRow.date_actual &&
+      dateActual &&
       selectedRow.percent !== null &&
       selectedRow.base !== null &&
       dayjs(dateCalc2).isBefore(dayjs(), "day")

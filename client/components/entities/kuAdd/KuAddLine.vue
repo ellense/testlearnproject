@@ -1,85 +1,109 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
-    <el-row>
-      <el-col :span="5">
-        <el-input
-          v-model="store.newPercent"
-          placeholder="Процент"
-          clearable
-          style="width: 214px"
-        ></el-input>
-      </el-col>
-      <el-col :span="5">
-        <el-date-picker
-          v-model="store.newDateStart"
-          placeholder="Начальная дата"
-          style="width: 214px"
-          format="DD.MM.YYYY"
-          value-format="DD.MM.YYYY"
-          clearable
-        ></el-date-picker>
-      </el-col>
-      <el-col :span="5">
-        <el-button type="primary" @click="addItemAndSendToBackend()"
-          >Добавить</el-button
-        >
-      </el-col>
-    </el-row>
+    <form label-width="120px">
+      <el-row>
+        <el-col :span="5">
+          <el-form-item label="Юридическое лицо">
+            <!-- <div class="custom-label">Юридическое лицо</div> -->
+            <el-select
+              v-model="store.providerName"
+              clearable
+              style="width: 214px"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.providerName"
+                :label="item.label"
+                :value="item.providerName"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-    <el-row>
-      <el-col :span="5">
-        <el-select
-          v-model="store.providerName"
-          clearable
-          placeholder="Поставщик"
-          style="width: 214px"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.providerName"
-            :label="item.label"
-            :value="item.providerName"
-          />
-        </el-select>
-      </el-col>
-      <el-col :span="5">
-        <el-date-picker
-          v-model="store.newDateEnd"
-          placeholder="Конечная дата"
-          style="width: 214px"
-          format="DD.MM.YYYY"
-          value-format="DD.MM.YYYY"
-          clearable
-        ></el-date-picker>
-      </el-col>
-    </el-row>
+        <el-col :span="5">
+          <el-form-item label="Период">
+            <!-- <div class="custom-label">Период</div> -->
+            <el-select
+              v-model="store.newType"
+              clearable
+              filterable
+              style="width: 214px"
+            >
+              <el-option
+                label="Неделя"
+                value="Неделя"
+                :disabled="true"
+              ></el-option>
+              <el-option label="Месяц" value="Месяц"></el-option>
+              <el-option label="Квартал" value="Квартал"></el-option>
+              <el-option label="Полгода" value="Полгода"></el-option>
+              <el-option label="Год" value="Год"></el-option>
+            </el-select>
+          </el-form-item>
+        </el-col>
 
-    <el-row>
-      <el-col :span="5">
-        <el-select
-          v-model="store.newType"
-          placeholder="Тип графика"
-          clearable
-          style="width: 214px"
-        >
-          <el-option label="Неделя" value="Неделя" :disabled="true"></el-option>
-          <el-option label="Месяц" value="Месяц"></el-option>
-          <el-option label="Квартал" value="Квартал"></el-option>
-          <el-option label="Полгода" value="Полгода"></el-option>
-          <el-option label="Год" value="Год"></el-option>
-        </el-select>
-      </el-col>
-      <el-col :span="5">
-        <el-date-picker
-          v-model="store.newDateActual"
-          placeholder="Дата актуальности"
-          style="width: 214px"
-          format="DD.MM.YYYY"
-          value-format="DD.MM.YYYY"
-          clearable
-        ></el-date-picker>
-      </el-col>
-    </el-row>
+        <el-col :span="5">
+          <el-form-item label="Начальная дата">
+            <!-- <div class="custom-label">Начальная дата</div> -->
+            <el-date-picker
+              v-model="store.newDateStart"
+              style="width: 214px"
+              format="DD.MM.YYYY"
+              value-format="DD.MM.YYYY"
+              clearable
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-button type="primary" @click="addItemAndSendToBackend()"
+            >Создать</el-button
+          >
+        </el-col>
+      </el-row>
+
+      <el-row>
+        <el-col :span="5">
+          <el-form-item label="Поставщик">
+            <!-- <div class="custom-label">Поставщик</div> -->
+            <el-select
+              v-model="store.providerName"
+              clearable
+              style="width: 214px"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.providerName"
+                :label="item.label"
+                :value="item.providerName"
+              />
+            </el-select>
+          </el-form-item>
+        </el-col>
+        <el-col :span="5">
+          <el-form-item label="Процент">
+            <!-- <div class="custom-label">Процент</div> -->
+            <el-input
+              v-model="store.newPercent"
+              clearable
+              style="width: 214px"
+            ></el-input>
+          </el-form-item>
+        </el-col>
+
+        <el-col :span="5">
+          <el-form-item label="Конечная дата">
+            <!-- <div class="custom-label">Конечная дата</div> -->
+            <el-date-picker
+              v-model="store.newDateEnd"
+              style="width: 214px"
+              format="DD.MM.YYYY"
+              value-format="DD.MM.YYYY"
+              clearable
+            ></el-date-picker>
+          </el-form-item>
+        </el-col>
+      </el-row>
+    </form>
     <div>
       <el-radio-group v-model="radio" @change="handleRadioChange">
         <el-radio-button label="Все" />
@@ -97,7 +121,7 @@ import { useVendorTableStore } from "~~/stores/providerTableStore";
 import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
 import { useRouter } from "vue-router";
 import { formatter } from "element-plus";
-import dayjs from 'dayjs'
+import dayjs from "dayjs";
 
 const providerStore = useVendorTableStore();
 const store = useKuTableStore();
@@ -143,10 +167,10 @@ const addItemAndSendToBackend = async () => {
     ku_id: store.tableData.length + 20,
     vendor: store.providerName,
     period: store.newType,
-    date_start: dayjs(store.newDateStart, 'DD.MM.YYYY').format('YYYY-MM-DD'),
-    date_end: dayjs(store.newDateEnd, 'DD.MM.YYYY').format('YYYY-MM-DD'),
+    date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
+    date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
     status: "Создано",
-    date_actual: dayjs(store.newDateActual, 'DD.MM.YYYY').format('YYYY-MM-DD'),
+    date_actual: dayjs(store.newDateActual, "DD.MM.YYYY").format("YYYY-MM-DD"),
     base: 15000 + store.tableData.length * store.tableData.length,
     percent: store.newPercent,
   };
@@ -157,21 +181,20 @@ const addItemAndSendToBackend = async () => {
 
     if (response) {
       // Обработка успешного ответа от бэкенда
-      console.log('Экземпляр успешно отправлен на бэкенд:', response);
+      console.log("Экземпляр успешно отправлен на бэкенд:", response);
       router.push("ku");
       // Опционально: вывод уведомления об успешном добавлении
       messageClose();
     } else {
       // Обработка случая, когда ответ от бэкенда равен null
-      console.error('Не удалось отправить экземпляр на бэкенд');
+      console.error("Не удалось отправить экземпляр на бэкенд");
     }
 
     // Перенаправляем пользователя
     router.push("ku");
   } catch (error) {
     // Обработка ошибок, возникших при отправке на бэкенд
-    console.error('Ошибка при отправке экземпляра на бэкенд:', error);
-    
+    console.error("Ошибка при отправке экземпляра на бэкенд:", error);
   }
 };
 const radio = ref();
@@ -191,4 +214,9 @@ const radio = ref();
   border-radius: 4px;
   min-height: 36px;
 }
+.custom-label {
+  display: block;
+    margin-bottom: 4px; /* Регулируйте отступ меток от инпутов по вашему усмотрению */
+}
+
 </style>

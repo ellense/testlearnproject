@@ -20,7 +20,6 @@ export interface IKu {
   date_start: Date | string;
   date_end: Date | string;
   status: string;
-  date_actual: Date | string;
   base: number | null;
   percent: number | null;
 }
@@ -40,8 +39,8 @@ export interface IGraphic {
 
 export interface IProduct {
   itemid: string;
-  classifier_id: string;
-  brand_id: string;
+  classifier_name: string;
+  brand_name: string;
   name: string;
 }
 

@@ -15,7 +15,13 @@
       />
       <el-table-column
         property="period"
-        label="Тип графика"
+        label="Период"
+        show-overflow-tooltip
+      />
+      <el-table-column property="sum_calc" label="База" show-overflow-tooltip />
+      <el-table-column
+        property="percent"
+        label="Процент"
         show-overflow-tooltip
       />
       <el-table-column
@@ -35,12 +41,6 @@
         property="date_calc"
         type="date"
         label="Дата расчета"
-        show-overflow-tooltip
-      />
-      <el-table-column property="sum_calc" label="База" show-overflow-tooltip />
-      <el-table-column
-        property="percent"
-        label="Процент"
         show-overflow-tooltip
       />
       <el-table-column

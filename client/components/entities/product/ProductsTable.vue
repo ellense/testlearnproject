@@ -20,12 +20,12 @@
         show-overflow-tooltip
       />
       <el-table-column
-        prop="classifier_id"
+        prop="classifier_name"
         label="Категория"
-        width="200"
+        width="400"
         show-overflow-tooltip
       />
-      <el-table-column prop="brand_id" label="Бренд" />
+      <el-table-column prop="brand_name" label="Бренд" />
     </el-table>
   </el-scrollbar>
 </template>
@@ -51,8 +51,8 @@ onMounted(async () => {
   try {
     await productStore.fetchProductsList({
       itemid: "",
-      classifier_id: "",
-      brand_id: "",
+      classifier_name: "",
+      brand_name: "",
       name: "",
     });
   } catch (error) {
