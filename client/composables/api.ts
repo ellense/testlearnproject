@@ -31,11 +31,12 @@ export const INVOICE = {
   getInvoicesList: (
     data: IInvoice
   ): Promise<{
-    id: number;
-    number: number | null;
-    summa: number | null;
+    invoice_id: number | null;
+    entity_id: string;
+    vendor_id: string;
+    invoice_name: string;
+    invoice_number: string;
     date: Date | string;
-    nameProvider: string;
   } | null> => $Get("api/invoiceslist/", { data, isBearer: false }),
 };
 export const ENTITY = {

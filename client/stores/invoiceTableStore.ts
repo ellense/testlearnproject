@@ -3,83 +3,37 @@ import type { IInvoice } from "~/utils/types/directoryTypes";
 
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
   state: () => ({
-    ProviderName: "", // Имя поставщика
-    multipleSelection: [] as IInvoice[], // Выбранные записи
     search: "", // Поиск
-    tableData: [] as IInvoice[], // Данные таблицы накладной
-    multipleTableRef: null as Ref | null, // Ссылка на компонент таблицы
-    dialogFormVisible: false,
-    selectedProviderInvoices: [] as IInvoice[],
+    invoiceList: [] as IInvoice[], // Данные таблицы накладной
   }),
 
   getters: {
-    // поиск данных в таблице
-    searchTableData: (state) => {
+    searchInvoicesList: (state) => {
       const searchValue = state.search.toLowerCase();
-      return state.tableData.filter((item) => {
-        const dateMatch = item.date
-          .toString()
-          .toLowerCase()
-          .includes(searchValue);
-        const nameProviderMatch = item.nameProvider
-          .toLowerCase()
-          .includes(searchValue);
-
-        return dateMatch || nameProviderMatch;
+      return state.invoiceList.filter((item) => {
+        const entity_idMatch = item.entity_id && item.entity_id.toLowerCase().includes(searchValue);
+        const vendor_idMatch = item.vendor_id && item.vendor_id.toLowerCase().includes(searchValue);
+        const invoice_nameMatch = item.invoice_name && item.invoice_name.toLowerCase().includes(searchValue);
+        const invoice_numberMatch = item.invoice_number && item.invoice_number.toLowerCase().includes(searchValue);
+        return entity_idMatch || vendor_idMatch || invoice_nameMatch || invoice_numberMatch;
       });
     },
   },
 
   actions: {
-    // Установка ссылки на компонент таблицы
-    setMultipleTableRef(ref: Ref) {
-      this.multipleTableRef = ref;
-    },
-
-    // Выделение/снятие выделения с записей таблицы
-    toggleSelection(rows?: IInvoice[]) {
-      if (this.multipleTableRef) {
-        if (rows) {
-          rows.forEach((row) => {
-            this.multipleTableRef.value.toggleRowSelection(row, undefined);
-          });
+    async fetchInvoicesList(data: IInvoice) {
+      try {
+        const result = await INVOICE.getInvoicesList(data);
+  
+        if (Array.isArray(result)) {
+          this.invoiceList = result;
         } else {
-          this.multipleTableRef.value.clearSelection();
+          this.invoiceList = [];
+          console.error("Данные не получены или не являются массивом");
         }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
       }
-    },
-
-    // Обработчик изменения выбранных записей
-    handleSelectionChange(val: IInvoice[]) {
-      this.multipleSelection = val;
-    },
-
-    // Удаление выбранных записей из таблицы
-    deleteSelectedRows() {
-      const selectedRows = this.multipleSelection;
-      this.tableData = this.tableData.filter((row: IInvoice) => {
-        return !selectedRows.includes(row);
-      });
-      this.multipleSelection = [];
-    },
-
-    // Добавление новых записей в таблицу
-    addRows(row: {
-      id: number;
-      number: number | null;
-      summa: number | null;
-      date: Date | string;
-      nameProvider: string;
-    }) {
-      this.tableData.push(row);
-    },
-
-    clearSelectedInvoices() {
-      this.selectedProviderInvoices = [];
-      this.multipleSelection = [];
-    },
-    addRows2(row: IInvoice) {
-      this.selectedProviderInvoices.push(row);
-    },
+    },    
   },
 });
