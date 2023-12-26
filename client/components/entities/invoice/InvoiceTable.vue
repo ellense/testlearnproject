@@ -33,7 +33,7 @@
         show-overflow-tooltip
       />
       <el-table-column
-        property="date"
+        property="invoice_date"
         type="date"
         label="Дата"
         show-overflow-tooltip
@@ -66,7 +66,7 @@ onMounted(async () => {
       vendor_id: "",
       invoice_number: "",
       invoice_name: "",
-      date: new Date(),
+      invoice_date: new Date(),
     });
   } catch (error) {
     loading.value = false;

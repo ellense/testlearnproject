@@ -1,12 +1,17 @@
 <template><div></div></template>
 
 <script setup lang="ts">
-
+import initStartPage from '~/utils/init/initStartPage'
+// definePageMeta({
+//   title: 'Пустая',
+//   useInMainMenu: false,
+//   permission: ['all'],
+// })
 definePageMeta({
   title: 'Пустая',
   useInMainMenu: false,
-  permission: ['all'],
 })
+initStartPage.init()
 
 </script>
 

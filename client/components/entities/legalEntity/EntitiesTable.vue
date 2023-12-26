@@ -5,11 +5,11 @@
       height="calc(100vh - 130px)"
       :data="filteredEntityList"
     >
-      <el-table-column prop="entityid" label="ID" width="70" show-overflow-tooltip />
-      <el-table-column prop="name" label="Наименование"  width="250" show-overflow-tooltip />
-      <el-table-column prop="urasticname" label="Полное наименование" width="400" show-overflow-tooltip />
-      <el-table-column prop="directorname" label="Директор"  width="400" show-overflow-tooltip />
-      <el-table-column prop="urasticaddress" label="Адрес"  show-overflow-tooltip />
+      <el-table-column prop="entityid" label="ID" width="70" show-overflow-tooltip sortable />
+      <el-table-column prop="name" label="Наименование"  width="250" show-overflow-tooltip sortable/>
+      <el-table-column prop="urasticname" label="Полное наименование" width="400" show-overflow-tooltip sortable/>
+      <el-table-column prop="directorname" label="Директор"  width="400" show-overflow-tooltip sortable/>
+      <el-table-column prop="urasticaddress" label="Адрес"  show-overflow-tooltip/>
     </el-table>
   
   </el-scrollbar>

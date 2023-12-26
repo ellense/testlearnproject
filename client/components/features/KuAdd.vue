@@ -1,5 +1,6 @@
 <template >
     <EntitiesKuAddLine/>
+    
     <EntitiesKuAddFiltres/>
  </template>
  

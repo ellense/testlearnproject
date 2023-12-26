@@ -1,10 +1,11 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
-    <form label-width="120px">
+    <form label-width="120px"
+    label-position="top">
       <el-row>
         <el-col :span="5">
-          <el-form-item label="Юридическое лицо">
-            <!-- <div class="custom-label">Юридическое лицо</div> -->
+          <div class="custom-label">Юридическое лицо</div>
+          <el-form-item>
             <el-select
               v-model="store.providerName"
               clearable
@@ -21,8 +22,8 @@
         </el-col>
 
         <el-col :span="5">
-          <el-form-item label="Период">
-            <!-- <div class="custom-label">Период</div> -->
+          <div class="custom-label">Период</div>
+          <el-form-item>
             <el-select
               v-model="store.newType"
               clearable
@@ -43,8 +44,8 @@
         </el-col>
 
         <el-col :span="5">
-          <el-form-item label="Начальная дата">
-            <!-- <div class="custom-label">Начальная дата</div> -->
+          <div class="custom-label">Начальная дата</div>
+          <el-form-item>
             <el-date-picker
               v-model="store.newDateStart"
               style="width: 214px"
@@ -54,17 +55,17 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-        <el-col :span="5">
+        <!-- <el-col :span="5">
           <el-button type="primary" @click="addItemAndSendToBackend()"
             >Создать</el-button
           >
-        </el-col>
+        </el-col> -->
       </el-row>
 
       <el-row>
         <el-col :span="5">
-          <el-form-item label="Поставщик">
-            <!-- <div class="custom-label">Поставщик</div> -->
+          <div class="custom-label">Поставщик</div>
+          <el-form-item>
             <el-select
               v-model="store.providerName"
               clearable
@@ -80,9 +81,10 @@
           </el-form-item>
         </el-col>
         <el-col :span="5">
-          <el-form-item label="Процент">
-            <!-- <div class="custom-label">Процент</div> -->
+          <div class="custom-label">Процент</div>
+          <el-form-item>
             <el-input
+            placeholder="Выбрать"
               v-model="store.newPercent"
               clearable
               style="width: 214px"
@@ -91,8 +93,8 @@
         </el-col>
 
         <el-col :span="5">
-          <el-form-item label="Конечная дата">
-            <!-- <div class="custom-label">Конечная дата</div> -->
+          <div class="custom-label">Конечная дата</div>
+          <el-form-item>
             <el-date-picker
               v-model="store.newDateEnd"
               style="width: 214px"
@@ -104,12 +106,21 @@
         </el-col>
       </el-row>
     </form>
-    <div>
+    <h3>Условия по товарам</h3>
+    <!-- <div>
       <el-radio-group v-model="radio" @change="handleRadioChange">
         <el-radio-button label="Все" />
         <el-radio-button label="По фильтру" />
       </el-radio-group>
+    </div> -->
+    <EntitiesKuAddRequirement/>
+    <div class="button_bottom">
+      <el-button type="primary" @click="addItemAndSendToBackend()"
+            >Создать</el-button
+          >
     </div>
+    
+
   </el-scrollbar>
 </template>
 
@@ -216,7 +227,15 @@ const radio = ref();
 }
 .custom-label {
   display: block;
-    margin-bottom: 4px; /* Регулируйте отступ меток от инпутов по вашему усмотрению */
+  margin-bottom: 4px;
+  font-size: 14px; 
 }
-
+.el-row{
+  margin-bottom: 0;
+}
+.button_bottom{
+margin: 20px 50px 0 0;
+display: flex;
+justify-content: flex-end;
+}
 </style>

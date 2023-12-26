@@ -36,8 +36,8 @@ export const INVOICE = {
     vendor_id: string;
     invoice_name: string;
     invoice_number: string;
-    date: Date | string;
-  } | null> => $Get("api/invoiceslist/", { data, isBearer: false }),
+    invoice_date: Date | string;
+  } | null> => $Get("api/venddoclist", { data, isBearer: false }),
 };
 export const ENTITY = {
   getEntitiesList: (
@@ -67,6 +67,8 @@ export const VENDOR = {
     urasticadress: string;
     inn_kpp: string;
     entityid: string;
+    page: number; // Добавлен параметр для номера страницы
+    page_size: number; // Добавлен параметр для размера страницы
   } | null> => $Get("api/vendorlist", { data, isBearer: false }),
   getVendorsNameAndId: (
     data: IVendorNameId

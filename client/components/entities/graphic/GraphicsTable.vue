@@ -7,10 +7,11 @@
       height="calc(100vh - 120px)"
       border
     >
-      <el-table-column property="ku" label="Koд КУ" show-overflow-tooltip />
+      <el-table-column property="ku" label="Koд КУ" sortable show-overflow-tooltip />
       <el-table-column
         property="vendor"
         label="Поставщик"
+        sortable
         show-overflow-tooltip
       />
       <el-table-column
@@ -28,19 +29,22 @@
         property="date_start"
         type="date"
         label="Начальная дата"
-        width="140"
+        
+        sortable
         show-overflow-tooltip
       />
       <el-table-column
         property="date_end"
         type="date"
         label="Конечная дата"
+        sortable
         show-overflow-tooltip
       />
       <el-table-column
         property="date_calc"
         type="date"
         label="Дата расчета"
+        sortable
         show-overflow-tooltip
       />
       <el-table-column

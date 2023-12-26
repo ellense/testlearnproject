@@ -11,7 +11,7 @@ export interface IInvoice {
   vendor_id: string;
   invoice_name: string;
   invoice_number: string;
-  date: Date | string;
+  invoice_date: Date | string;
 }
 
 export interface IKu {
@@ -53,6 +53,8 @@ export interface IVendor {
   urasticadress: string;
   inn_kpp: string;
   entityid: string;
+  page: number; 
+  page_size: number;
 }
 
 export interface IVendorNameId {

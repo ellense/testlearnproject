@@ -11,6 +11,7 @@
         property="ku_id"
         label="Номер КУ"
         width="120"
+        sortable
         show-overflow-tooltip
       />
 
@@ -18,6 +19,7 @@
         property="vendor"
         label="Поставщик"
         width="200"
+        sortable
         show-overflow-tooltip
       />
       <el-table-column
@@ -28,17 +30,19 @@
       />
       <el-table-column
         property="period"
-        label="Тип графика"
+        label="Период"
         width="200"
         show-overflow-tooltip
       />
       <el-table-column
         property="date_start"
+        sortable
         label="Начальная дата"
         width="160"
       />
       <el-table-column
         property="date_end"
+        sortable
         label="Конечная дата"
         width="160"
         show-overflow-tooltip

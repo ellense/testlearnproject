@@ -6,6 +6,9 @@ export const useVendorTableStore = defineStore("VendorTableStore", {
     search: "",
     vendorList: [] as IVendor[],
     vendorNameAndIdList: [] as IVendorNameId[],
+    currentPage: 1,
+    pageSize: 500,
+    totalItems: 0,
   }),
 
   getters: {
@@ -47,6 +50,7 @@ export const useVendorTableStore = defineStore("VendorTableStore", {
 
         if (Array.isArray(result)) {
           this.vendorList = result;
+          this.totalItems = result.length; 
         } else {
           this.vendorList = [];
           console.error("Данные не получены или не являются массивом");
@@ -54,6 +58,9 @@ export const useVendorTableStore = defineStore("VendorTableStore", {
       } catch (error) {
         console.error("Произошла ошибка", error);
       }
+    },
+    setPage(page: number) {
+      this.currentPage = page;
     },
   },
 });

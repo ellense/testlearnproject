@@ -1,40 +1,36 @@
 <template>
     <el-scrollbar class="scrollTable">
       <el-table
-        ref="multipleTableRef"
-        :data="storeInvoice.searchTableData"
         style="width: 100%"
-        @selection-change="storeInvoice.handleSelectionChange"
-        height="calc(100vh - 400px)"
+        height="calc(100vh - 700px)"
       >
-        <el-table-column
-          property="selection"
-          type="selection"
-          width="55"
-          show-overflow-tooltip
-        />
         <el-table-column type="index" width="55" show-overflow-tooltip />
         <el-table-column
           property="number"
-          label="Номер"
+          label="Тип номенклатуры"
           width="200"
           show-overflow-tooltip
         />
         <el-table-column
-          property="summa"
+          property="Товар"
           label="Сумма"
           width="300"
           show-overflow-tooltip
         />
         <el-table-column
-          property="date"
+          property="Категория"
           type="date"
           label="Дата"
           width="300"
           show-overflow-tooltip
         />
         <el-table-column
-          property="nameProvider"
+          property="Производитель"
+          label="Поставщик"
+          show-overflow-tooltip
+        />
+        <el-table-column
+          property="Торговая марка"
           label="Поставщик"
           show-overflow-tooltip
         />
@@ -42,8 +38,8 @@
     </el-scrollbar>
   </template>
   <script lang="ts" setup>
-  import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
-  const storeInvoice = useInvoiceTableStore();
+  // import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
+  // const storeInvoice = useInvoiceTableStore();
   </script>
   
   
