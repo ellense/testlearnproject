@@ -12,11 +12,23 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
       const searchValue = state.search.toLowerCase();
       return state.entityList.filter((item) => {
         const entityidMatch = item.entityid.toLowerCase().includes(searchValue);
-        const directornameMatch = item.directorname.toLowerCase().includes(searchValue);
+        const directornameMatch = item.directorname
+          .toLowerCase()
+          .includes(searchValue);
         const nameMatch = item.name.toLowerCase().includes(searchValue);
-        const urasticaddressMatch = item.urasticaddress.toLowerCase().includes(searchValue);
-        const urasticnameMatch = item.urasticname.toLowerCase().includes(searchValue);
-        return entityidMatch || directornameMatch || nameMatch || urasticaddressMatch || urasticnameMatch;
+        const urasticaddressMatch = item.urasticaddress
+          .toLowerCase()
+          .includes(searchValue);
+        const urasticnameMatch = item.urasticname
+          .toLowerCase()
+          .includes(searchValue);
+        return (
+          entityidMatch ||
+          directornameMatch ||
+          nameMatch ||
+          urasticaddressMatch ||
+          urasticnameMatch
+        );
       });
     },
   },
@@ -36,6 +48,6 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
       } catch (error) {
         console.error("Произошла ошибка", error);
       }
-    },    
+    },
   },
 });

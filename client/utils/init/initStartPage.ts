@@ -1,14 +1,14 @@
-import { startPage } from '~/utils/init/startPage'
+import { startPage } from "~/utils/init/startPage";
 const initPage = (() => {
   return {
     init: () => {
-      const getStartPage: string | undefined = startPage()
+      const getStartPage: string | undefined = startPage();
 
       if (getStartPage) {
-        useRouter().push(getStartPage)
+        useRouter().push(getStartPage);
       }
     },
-  }
-})()
+  };
+})();
 
-export default initPage
+export default initPage;

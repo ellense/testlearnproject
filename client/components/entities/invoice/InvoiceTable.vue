@@ -1,13 +1,18 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
-    v-loading="loading"
+      v-loading="loading"
       element-loading-text="Загрузка"
       :data="filteredInvoicesList"
       style="width: 100%"
       height="calc(100vh - 130px)"
     >
-      <el-table-column prop="invoice_id" label="ID" width="100" show-overflow-tooltip />
+      <el-table-column
+        prop="invoice_id"
+        label="ID"
+        width="100"
+        show-overflow-tooltip
+      />
       <el-table-column
         property="invoice_number"
         label="Номер"
@@ -74,5 +79,3 @@ onMounted(async () => {
   }
 });
 </script>
-
-

@@ -1,21 +1,21 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
-    <form label-width="120px"
-    label-position="top">
+    <form label-width="120px" label-position="top">
       <el-row>
         <el-col :span="5">
           <div class="custom-label">Юридическое лицо</div>
           <el-form-item>
             <el-select
-              v-model="store.providerName"
+              v-model="store.vendorName"
               clearable
+              filterable
               style="width: 214px"
             >
               <el-option
                 v-for="item in options"
-                :key="item.providerName"
+                :key="item.vendorName"
                 :label="item.label"
-                :value="item.providerName"
+                :value="item.vendorName"
               />
             </el-select>
           </el-form-item>
@@ -24,12 +24,7 @@
         <el-col :span="5">
           <div class="custom-label">Период</div>
           <el-form-item>
-            <el-select
-              v-model="store.newType"
-              clearable
-              filterable
-              style="width: 214px"
-            >
+            <el-select v-model="store.newType" clearable style="width: 214px">
               <el-option
                 label="Неделя"
                 value="Неделя"
@@ -55,11 +50,6 @@
             ></el-date-picker>
           </el-form-item>
         </el-col>
-        <!-- <el-col :span="5">
-          <el-button type="primary" @click="addItemAndSendToBackend()"
-            >Создать</el-button
-          >
-        </el-col> -->
       </el-row>
 
       <el-row>
@@ -67,15 +57,16 @@
           <div class="custom-label">Поставщик</div>
           <el-form-item>
             <el-select
-              v-model="store.providerName"
+              v-model="store.vendorName"
               clearable
+              filterable
               style="width: 214px"
             >
               <el-option
                 v-for="item in options"
-                :key="item.providerName"
+                :key="item.vendorName"
                 :label="item.label"
-                :value="item.providerName"
+                :value="item.vendorName"
               />
             </el-select>
           </el-form-item>
@@ -84,7 +75,7 @@
           <div class="custom-label">Процент</div>
           <el-form-item>
             <el-input
-            placeholder="Выбрать"
+              placeholder="Введите"
               v-model="store.newPercent"
               clearable
               style="width: 214px"
@@ -107,20 +98,17 @@
       </el-row>
     </form>
     <h3>Условия по товарам</h3>
-    <!-- <div>
-      <el-radio-group v-model="radio" @change="handleRadioChange">
-        <el-radio-button label="Все" />
-        <el-radio-button label="По фильтру" />
-      </el-radio-group>
-    </div> -->
-    <EntitiesKuAddRequirement/>
-    <div class="button_bottom">
-      <el-button type="primary" @click="addItemAndSendToBackend()"
-            >Создать</el-button
-          >
+    <div>
+      <el-button text bg @click="">+ Все</el-button>
+      <el-button text bg @click="dialogOpen()">+ Условие по товарам</el-button>
     </div>
-    
-
+    <EntitiesKuAddRequirement />
+    <div class="button_bottom">
+      <el-button @click="addClose()">Назад</el-button>
+      <el-button type="primary" @click="addItemAndSendToBackend()"
+        >Создать</el-button
+      >
+    </div>
   </el-scrollbar>
 </template>
 
@@ -128,19 +116,15 @@
 import { ref } from "vue";
 
 import { useKuTableStore } from "~~/stores/kuTableStore";
-import { useVendorTableStore } from "~~/stores/providerTableStore";
-import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
+import { useVendorTableStore } from "~~/stores/vendorTableStore";
 import { useRouter } from "vue-router";
-import { formatter } from "element-plus";
 import dayjs from "dayjs";
 
-const providerStore = useVendorTableStore();
+const vendorStore = useVendorTableStore();
 const store = useKuTableStore();
-const invoiceStore = useInvoiceTableStore();
 const router = useRouter();
-const options = ref<{ providerName: string; label: string }[]>([]);
-console.log("id name", providerStore.vendorNameAndIdList);
-console.log("list", providerStore.vendorList);
+const options = ref<{ vendorName: string; label: string }[]>([]);
+console.log("list", vendorStore.vendorList);
 const messageClose = () => {
   ElMessage({
     message: "Коммерческое условие успешно добавлено",
@@ -148,35 +132,26 @@ const messageClose = () => {
   });
 };
 
-const handleRadioChange = (value: any) => {
-  if (value === "По фильтру") {
-    store.dialogFormVisible = true;
-  } else {
-    store.dialogFormVisible = false;
-  }
+const dialogOpen = () => {
+  store.dialogFormVisible = true;
 };
 
 const updateOptions = () => {
-  options.value = providerStore.vendorList.map((provider) => ({
-    providerName: provider.vendorid,
-    label: provider.vendorid,
+  options.value = vendorStore.vendorList.map((vendor) => ({
+    vendorName: vendor.vendorid,
+    label: vendor.vendorid,
   }));
 };
 updateOptions();
 
-// const addItemAndNavigate = () => {
-//   store.addItem();
-//   router.push("ku");
-//   messageClose();
-// };
+const addClose = () => {
+  router.push("ku");
+};
 
 const addItemAndSendToBackend = async () => {
-  // Создаем объект с данными для нового элемента
-  //const paddedId = String(store.tableData.length + 1).padStart(5, "0");
-  //`КУ${paddedId}`
   const newItem = {
     ku_id: store.tableData.length + 20,
-    vendor: store.providerName,
+    vendor: store.vendorName,
     period: store.newType,
     date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
     date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
@@ -187,55 +162,33 @@ const addItemAndSendToBackend = async () => {
   };
 
   try {
-    // Вызываем метод postKu для отправки на бэкенд
     const response = await KU.postKu(newItem);
 
     if (response) {
-      // Обработка успешного ответа от бэкенда
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
       router.push("ku");
-      // Опционально: вывод уведомления об успешном добавлении
       messageClose();
     } else {
-      // Обработка случая, когда ответ от бэкенда равен null
       console.error("Не удалось отправить экземпляр на бэкенд");
     }
 
-    // Перенаправляем пользователя
     router.push("ku");
   } catch (error) {
-    // Обработка ошибок, возникших при отправке на бэкенд
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
   }
 };
-const radio = ref();
 </script>
 
 <style scoped>
-.el-row {
-  margin-bottom: 20px;
-}
-.el-row:last-child {
-  margin-bottom: 0;
-}
-.el-col {
-  border-radius: 4px;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
 .custom-label {
   display: block;
   margin-bottom: 4px;
-  font-size: 14px; 
+  font-size: 14px;
 }
-.el-row{
-  margin-bottom: 0;
-}
-.button_bottom{
-margin: 20px 50px 0 0;
-display: flex;
-justify-content: flex-end;
+
+.button_bottom {
+  margin: 20px 10px 0 0;
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

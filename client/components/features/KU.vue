@@ -1,12 +1,8 @@
-<template >
-    <EntitiesKuButtons/>
-    <EntitiesKuTable/>
- </template>
- 
- <script lang = "ts" setup>
- 
- </script>
- 
- <style lang="">
-     
- </style>
+<template>
+  <EntitiesKuButtons />
+  <EntitiesKuTable />
+</template>
+
+<script lang="ts" setup></script>
+
+<style lang=""></style>

@@ -16,7 +16,7 @@ import ru from "element-plus/dist/locale/ru.mjs";
 import { useAuthStore } from './stores/authStore';
 const locale = ru;
 import { onMounted } from 'vue';
-import { useVendorTableStore } from '~~/stores/providerTableStore';
+import { useVendorTableStore } from '~~/stores/vendorTableStore';
 
 const vendorStore = useVendorTableStore();
 //инициализация vendor

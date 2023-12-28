@@ -5,7 +5,7 @@ import type {
   IProduct,
   IVendor,
   IVendorNameId,
-  IKu
+  IKu,IVendorListApi
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -19,8 +19,8 @@ const isBearer = true;
 // };
 export const AUTH = {
   getToken: (data: {
-    username: string
-    password: string
+    username: string;
+    password: string;
   }): Promise<{ access: string; refresh: string } | null> =>
     $Authorization({ data, isBearer: false }),
   getUserData: (data: GetUserData): Promise<GetUserData> =>
@@ -42,41 +42,30 @@ export const INVOICE = {
 export const ENTITY = {
   getEntitiesList: (
     data: IEntity
-  ): Promise<{ 
+  ): Promise<{
     entityid: string;
     directorname: string;
     urasticname: string;
     name: string;
-    urasticaddress: string; } | null> =>
-    $Get("api/entitieslist/", { data, isBearer: false }),
-    getEntityNameById: (
-      data: IEntity
-    ): Promise<{
-      entityid: string;
-    } | null> =>
-      $Get("api/entitieslist/", { data, isBearer: false }),
+    urasticaddress: string;
+  } | null> => $Get("api/entitieslist/", { data, isBearer: false }),
+  getEntityNameById: (
+    data: IEntity
+  ): Promise<{
+    entityid: string;
+  } | null> => $Get("api/entitieslist/", { data, isBearer: false }),
 };
 export const VENDOR = {
   getVendorsList: (
     data: IVendor
-  ): Promise<{
-    vendorid: string;
-    name: string;
-    urasticname: string;
-    directorname: string;
-    urasticadress: string;
-    inn_kpp: string;
-    entityid: string;
-    page: number; // Добавлен параметр для номера страницы
-    page_size: number; // Добавлен параметр для размера страницы
-  } | null> => $Get("api/vendorlist", { data, isBearer: false }),
+  ): Promise<IVendorListApi> => $Get("api/vendorlist/", { data, isBearer: false }),
   getVendorsNameAndId: (
     data: IVendorNameId
   ): Promise<{
     vendorid: string;
     name: string;
-  } | null> => $Get("api/vendorlist/?fields=name,vendorid", { data, isBearer: false }),
-  
+  } | null> =>
+    $Get("api/vendorlist/?fields=name,vendorid", { data, isBearer: false }),
 };
 export const PRODUCT = {
   getProductsList: (
@@ -99,8 +88,8 @@ export const KU = {
     date_start: Date | string;
     date_end: Date | string;
     status: string;
-    base: number |  null;
-  percent: number | null;
+    base: number | null;
+    percent: number | null;
   } | null> => $Get("api/kulist", { data, isBearer: false }),
 
   postKu: (
@@ -112,7 +101,7 @@ export const KU = {
     date_start: Date | string;
     date_end: Date | string;
     status: string;
-    base: number |  null;
+    base: number | null;
     percent: number | null;
   } | null> => $Post("api/kulist", { data, isBearer: false }),
 
@@ -125,7 +114,20 @@ export const KU = {
     date_start: Date | string;
     date_end: Date | string;
     status: string;
-    base: number |  null;
+    base: number | null;
     percent: number | null;
   } | null> => $Put("api/kulist", { data, isBearer: false }),
+
+  deleteKu: (
+    data: IKu
+  ): Promise<{
+    ku_id: number | null;
+    vendor: string;
+    period: string;
+    date_start: Date | string;
+    date_end: Date | string;
+    status: string;
+    base: number | null;
+    percent: number | null;
+  } | null> => $Delete("api/kulist", { data, isBearer: false }),
 };

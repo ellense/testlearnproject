@@ -1,11 +1,7 @@
-<template >
-   <EntitiesGraphicGraphicsTable/>
+<template>
+  <EntitiesGraphicGraphicsTable />
 </template>
 
-<script lang = "ts" setup>
+<script lang="ts" setup></script>
 
-</script>
-
-<style lang="">
-    
-</style>
+<style lang=""></style>

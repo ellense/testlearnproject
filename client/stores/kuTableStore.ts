@@ -5,7 +5,7 @@ export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newPercent: null,
     newType: "",
-    providerName: "",
+    vendorName: "",
     newDateStart: new Date(),
     newDateEnd: new Date(),
     newDateActual: new Date(),
@@ -15,13 +15,19 @@ export const useKuTableStore = defineStore("KuTableStore", {
     tableData: [] as IKu[],
     tableDataGraphic: [] as IGraphic[],
     dialogFormVisible: false,
+    vendorFilter: "",
+    kuFilter: null as number | null,
   }),
 
   getters: {
     searchTableData: (state) => {
       const searchValue = state.search.toLowerCase();
+      const vendorFilterValue = state.vendorFilter.toLowerCase();
+      const kuFilterValue = state.kuFilter;
       return state.tableData.filter((item) => {
-        const vendorMatch = item.vendor.toLowerCase().includes(searchValue);
+        const vendorMatch = item.vendor
+          .toLowerCase()
+          .includes(vendorFilterValue);
         const periodMatch = item.period.toLowerCase().includes(searchValue);
         const status = item.status.toLowerCase().includes(searchValue);
         return vendorMatch || periodMatch || status;
@@ -32,6 +38,12 @@ export const useKuTableStore = defineStore("KuTableStore", {
   actions: {
     setMultipleTableRef(ref: Ref) {
       this.multipleTableRef = ref;
+    },
+    setVendorFilter(value: string) {
+      this.$state.vendorFilter = value;
+    },
+    setKuFilter(value: number | null) {
+      this.$state.kuFilter = value;
     },
 
     toggleSelection(evt: MouseEvent, rows?: IKu[] | undefined) {
@@ -63,23 +75,6 @@ export const useKuTableStore = defineStore("KuTableStore", {
         console.error("Произошла ошибка", error);
       }
     },
-    // addItem() {
-    //   // const paddedId = String(this.tableData.length + 1).padStart(5, "0");
-    //   this.tableData.push({
-    //     ku_id: "56",
-    //     vendor: this.providerName,
-    //     period: this.newType,
-    //     date_start: this.newDateStart,
-    //     date_end: this.newDateEnd,
-    //     status: "Создано",
-    //   });
-    //   this.newPercent = null;
-    //   this.providerName = "";
-    //   this.newType = "";
-    //   this.newDateStart = new Date();
-    //   this.newDateEnd = new Date();
-    //   this.newDateActual = new Date();
-    // },
 
     addgraphic(row: {
       graph_id: number | null;

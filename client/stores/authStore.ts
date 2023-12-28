@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import message from "element-plus/es/components/message";
 import { AUTH } from "../composables/api";
-import {
+import type {
   AuthApiData,
   AuthStore,
   TokenData,
@@ -14,11 +14,7 @@ const tokenReadyPromise = new Promise<void>((resolve) => {
 });
 
 function isCorrectRole(value: string): UserRole | undefined {
-  if (
-    value === "admin" ||
-    value === "manager"
-  )
-    return value as UserRole;
+  if (value === "admin" || value === "manager") return value as UserRole;
 
   return undefined;
 }
@@ -101,7 +97,6 @@ export const useAuthStore = defineStore("authStore", {
       this.setAuth(false);
       useRouter().push("/");
       message.success("Вы вышли из личного кабинета");
-      
     },
   },
 });

@@ -53,8 +53,32 @@ export interface IVendor {
   urasticadress: string;
   inn_kpp: string;
   entityid: string;
-  page: number; 
-  page_size: number;
+  page: number | null;
+  page_size: number | null;
+}
+
+export interface IVendorList extends IVendor {
+  vendors_list: IVendorList[] | null
+  countPage: number | null
+  filterVendor: number | null
+}
+ export interface IVendorTableStore {
+  search:string
+  vendorList:  IVendor[],
+  vendors_list: IVendorList[],
+  countPage: number | null;
+  filterVendor: number | null;
+ }
+
+export interface IPagination {
+  count: number
+  next: string | null
+  previous: string | null
+  results: []
+}
+
+export interface IVendorListApi extends Omit<IPagination, 'results'> {
+  results: IVendorList[]
 }
 
 export interface IVendorNameId {

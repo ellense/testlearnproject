@@ -1,37 +1,37 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
-    <div class="auth-container__form">
-      <el-form :model="form" @submit.prevent.stop="login">
-        <el-form-item>
-          <el-input
-            v-model="form.username"
-            placeholder="Введите логин"
-            :prefix-icon="Message"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-input
-            v-model="form.password"
-            placeholder="Введите пароль"
-            :prefix-icon="Lock"
-          />
-        </el-form-item>
-        <el-form-item>
-          <el-button
-            native-type="submit"
-            type="primary"
-            :full-width="true"
-            :scopes="'all'"
-            :for-all="true"
-            style="width: 100%"
-          >
-            Войти
-          </el-button>
-        </el-form-item>
-      </el-form>
-    </div>
-  </el-card>
+      <div class="auth-container__form">
+        <el-form :model="form" @submit.prevent.stop="login">
+          <el-form-item>
+            <el-input
+              v-model="form.username"
+              placeholder="Введите логин"
+              :prefix-icon="Message"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-input
+              v-model="form.password"
+              placeholder="Введите пароль"
+              :prefix-icon="Lock"
+            />
+          </el-form-item>
+          <el-form-item>
+            <el-button
+              native-type="submit"
+              type="primary"
+              :full-width="true"
+              :scopes="'all'"
+              :for-all="true"
+              style="width: 100%"
+            >
+              Войти
+            </el-button>
+          </el-form-item>
+        </el-form>
+      </div>
+    </el-card>
   </div>
 </template>
 
@@ -41,8 +41,10 @@ import { Lock, Message } from "@element-plus/icons-vue";
 import { useAuthStore } from "~/stores/authStore";
 import { type AuthApiData } from "~/utils/types/authTypes";
 import message from "element-plus/es/components/message";
+
 import { useRouter } from "vue-router";
 
+const router = useRouter();
 
 const form = reactive<AuthApiData>({
   username: "admin",
@@ -54,29 +56,29 @@ const login = () => {
     useAuthStore()
       .getTokenForApi(form)
       .then(() => {
-        useAuthStore().setAuth(true)
-        useRouter().push("ku");
-        message.success('Вы вошли в личный кабинет')
-        form.password = ''
-        form.username = ''
+        useAuthStore().setAuth(true);
+        router.push("ku");
+        message.success("Вы вошли в личный кабинет");
+        form.password = "";
+        form.username = "";
       })
       .catch((e) => {
-        message.error(e.detail)
-      })
+        message.error("Ошибка при авторизации");
+        console.error("Ошибка при авторизации:", e);
+      });
   } else {
     message.warning(
       `Не заполнен ${
         !form.username && !form.password
-          ? 'логин и пароль'
+          ? "логин и пароль"
           : !form.username
-          ? 'логин'
-          : ' пароль'
+          ? "логин"
+          : " пароль"
       }`
-    )
+    );
   }
-}
+};
 </script>
-
 
 <style scoped>
 .el-form {

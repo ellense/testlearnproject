@@ -11,11 +11,22 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     searchInvoicesList: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.invoiceList.filter((item) => {
-        const entity_idMatch = item.entity_id && item.entity_id.toLowerCase().includes(searchValue);
-        const vendor_idMatch = item.vendor_id && item.vendor_id.toLowerCase().includes(searchValue);
-        const invoice_nameMatch = item.invoice_name && item.invoice_name.toLowerCase().includes(searchValue);
-        const invoice_numberMatch = item.invoice_number && item.invoice_number.toLowerCase().includes(searchValue);
-        return entity_idMatch || vendor_idMatch || invoice_nameMatch || invoice_numberMatch;
+        const entity_idMatch =
+          item.entity_id && item.entity_id.toLowerCase().includes(searchValue);
+        const vendor_idMatch =
+          item.vendor_id && item.vendor_id.toLowerCase().includes(searchValue);
+        const invoice_nameMatch =
+          item.invoice_name &&
+          item.invoice_name.toLowerCase().includes(searchValue);
+        const invoice_numberMatch =
+          item.invoice_number &&
+          item.invoice_number.toLowerCase().includes(searchValue);
+        return (
+          entity_idMatch ||
+          vendor_idMatch ||
+          invoice_nameMatch ||
+          invoice_numberMatch
+        );
       });
     },
   },
@@ -24,7 +35,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
     async fetchInvoicesList(data: IInvoice) {
       try {
         const result = await INVOICE.getInvoicesList(data);
-  
+
         if (Array.isArray(result)) {
           this.invoiceList = result;
         } else {
@@ -34,6 +45,6 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
       } catch (error) {
         console.error("Произошла ошибка", error);
       }
-    },    
+    },
   },
 });

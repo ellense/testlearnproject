@@ -3,8 +3,7 @@
     <div class="buttonBar_left">
       <el-button @click="redirectToCreatePage">Добавить</el-button>
       <el-button @click="addGraphic()">Создать график</el-button>
-      <!-- <el-button @click="store.deleteSelectedRows">Удалить</el-button> -->
-      <el-button @click="" disabled>Удалить</el-button>
+      <el-button @click="deleteKu()">Удалить</el-button>
     </div>
     <div class="buttonBar_search">
       <el-input
@@ -29,20 +28,17 @@ const redirectToCreatePage = () => {
   router.push("kuAdd");
 };
 
+const deleteKu = () => {
+  ElMessage.success("Коммерческое условвие успешно удалено");
+};
+
 const addGraphic = () => {
   const selectedRows = store.multipleSelection;
   const messageClose = () => {
-    console.log("Data in tableDataGraphic:", store.tableDataGraphic);
     if (selectedRows.length === 1) {
-      ElMessage({
-        message: "График успешно создан.",
-        type: "success",
-      });
+      ElMessage.success("График успешно создан.");
     } else if (selectedRows.length > 1) {
-      ElMessage({
-        message: "Графики успешно созданы.",
-        type: "success",
-      });
+      ElMessage.success("Графики успешно созданы.");
     } else if (selectedRows.length === 0) {
       ElMessage.error("Коммерческое условие не выбрано.");
     }
@@ -53,11 +49,11 @@ const addGraphic = () => {
     const dateEnd = dayjs(selectedRow.date_end).toDate();
     let dateActual;
 
-if (dayjs(dateEnd).diff(dateStart, 'years') > 2) {
-  dateActual = dayjs(dateStart).add(2, 'years').toDate();
-} else {
-  dateActual = dayjs(dateEnd).toDate();
-}
+    if (dayjs(dateEnd).diff(dateStart, "years") > 2) {
+      dateActual = dayjs(dateStart).add(2, "years").toDate();
+    } else {
+      dateActual = dayjs(dateEnd).toDate();
+    }
     const numType = () => {
       if (selectedRow.period === "Месяц") {
         return 1;
@@ -85,10 +81,6 @@ if (dayjs(dateEnd).diff(dateStart, 'years') > 2) {
       (dateActual.getFullYear() - dateStart.getFullYear()) * 12 +
       (dateActual.getMonth() - dateStart.getMonth());
 
-    console.log("numType:", numType);
-    console.log("dateStart", dateStart);
-    console.log("getLastDayOfMonth:", getLastDayOfMonth);
-    console.log("numMonths:", numMonths);
     for (let i = 0; i < numMonths / numType() + 1; i++) {
       const nextMonthFirstDay = (i: number) => {
         return dayjs(dateStart)
@@ -98,13 +90,13 @@ if (dayjs(dateEnd).diff(dateStart, 'years') > 2) {
       };
       const dateCalc1 = nextMonthFirstDay(0);
 
-const sumBonus1 =
-dateActual &&
-selectedRow.percent !== null &&
-selectedRow.base !== null &&
-dayjs(dateCalc1).isBefore(dayjs(), "day")
-  ? (selectedRow.percent * selectedRow.base)/100
-  : null;
+      const sumBonus1 =
+        dateActual &&
+        selectedRow.percent !== null &&
+        selectedRow.base !== null &&
+        dayjs(dateCalc1).isBefore(dayjs(), "day")
+          ? (selectedRow.percent * selectedRow.base) / 100
+          : null;
       if (i === 0) {
         store.addgraphic({
           graph_id: store.tableDataGraphic.length + 1,
@@ -119,37 +111,37 @@ dayjs(dateCalc1).isBefore(dayjs(), "day")
           sum_bonus: sumBonus1,
         });
       } else if (i > 0 && i < numMonths / numType()) {
-    let updatedDateStart = dayjs(dateStart)
-      .add(numType() * i, "month") // используйте умножение, а не сложение
-      .startOf("month");
-      const dateCalc2 = nextMonthFirstDay(i);
+        let updatedDateStart = dayjs(dateStart)
+          .add(numType() * i, "month")
+          .startOf("month");
+        const dateCalc2 = nextMonthFirstDay(i);
 
-      const sumBonus2 =
-      dateActual &&
-      selectedRow.percent !== null &&
-      selectedRow.base !== null &&
-      dayjs(dateCalc2).isBefore(dayjs(), "day")
-        ? (selectedRow.percent * selectedRow.base)/100
-        : null;
+        const sumBonus2 =
+          dateActual &&
+          selectedRow.percent !== null &&
+          selectedRow.base !== null &&
+          dayjs(dateCalc2).isBefore(dayjs(), "day")
+            ? (selectedRow.percent * selectedRow.base) / 100
+            : null;
 
-    store.addgraphic({
-      graph_id: store.tableDataGraphic.length + 1,
-      ku: selectedRow.ku_id,
-      vendor: selectedRow.vendor,
-      period: selectedRow.period,
-      date_start: dayjs(updatedDateStart).format("DD.MM.YYYY"),
-      date_end: getLastDayOfMonth(dayjs(updatedDateStart)).format(
-        "DD.MM.YYYY"
-      ),
-      date_calc: dateCalc2,
-      percent: selectedRow.percent,
-      sum_calc: selectedRow.base,
-      sum_bonus: sumBonus2,
-    });
-  } else if (i === numMonths / numType()) {
-    let updatedDateStart2 = dayjs(dateStart)
-      .add(numType() * i, "month") // используйте умножение, а не сложение
-      .startOf("month");
+        store.addgraphic({
+          graph_id: store.tableDataGraphic.length + 1,
+          ku: selectedRow.ku_id,
+          vendor: selectedRow.vendor,
+          period: selectedRow.period,
+          date_start: dayjs(updatedDateStart).format("DD.MM.YYYY"),
+          date_end: getLastDayOfMonth(dayjs(updatedDateStart)).format(
+            "DD.MM.YYYY"
+          ),
+          date_calc: dateCalc2,
+          percent: selectedRow.percent,
+          sum_calc: selectedRow.base,
+          sum_bonus: sumBonus2,
+        });
+      } else if (i === numMonths / numType()) {
+        let updatedDateStart2 = dayjs(dateStart)
+          .add(numType() * i, "month")
+          .startOf("month");
         store.addgraphic({
           graph_id: store.tableDataGraphic.length + 1,
           ku: selectedRow.ku_id,
@@ -164,19 +156,6 @@ dayjs(dateCalc1).isBefore(dayjs(), "day")
         });
       }
     }
-
-    store.addgraphic({
-      graph_id: null,
-      ku: null,
-      vendor: "",
-      period: "",
-      date_start: "",
-      date_end: "",
-      date_calc: "",
-      percent: null,
-      sum_calc: null,
-      sum_bonus: null,
-    });
   });
   messageClose();
 };

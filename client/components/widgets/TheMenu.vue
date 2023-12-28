@@ -1,17 +1,17 @@
 <template>
-  <el-aside width="200px">
+  <el-aside width="250px">
     <el-scrollbar height="calc(100vh - 60px)">
       <el-menu style="font-size: 12px" active-color="#689EFF">
         <nuxt-link to="/ku">
           <el-menu-item index="1">
             <el-icon><Document /></el-icon>
-            <span>Ком.условие</span>
+            <span>Коммерческие условия</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/graphic">
           <el-menu-item index="2">
             <el-icon><Calendar /></el-icon>
-            <span>График расчетов</span>
+            <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
         <el-divider />
@@ -40,12 +40,6 @@
           </el-menu-item>
         </nuxt-link>
         <el-divider />
-        <!-- <nuxt-link to="/test">
-          <el-menu-item index="8">
-            <el-icon><User /></el-icon>
-            <span>тест</span>
-          </el-menu-item>
-        </nuxt-link> -->
 
         <el-menu-item index="10">
           <!-- <el-dropdown>
@@ -70,7 +64,7 @@
             :confirm-button-text="'Да'"
             :cancel-button-text="'Нет'"
             :hide-icon="true"
-            width="180px"
+            width="200px"
             @confirm="logOut()"
           >
             <template #reference>
@@ -117,5 +111,8 @@ const logOut = () => useAuthStore().logout();
 }
 .el-text {
   margin-left: 30px;
+}
+.main-menu__logout-button {
+  width: 100%;
 }
 </style>

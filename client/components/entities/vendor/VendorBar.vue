@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import { useVendorTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/vendorTableStore";
 const vendorStore = useVendorTableStore();
 </script>
 

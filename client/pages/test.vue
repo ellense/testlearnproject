@@ -13,7 +13,7 @@
 import { ref, onMounted } from 'vue';
 import { useEntityTableStore } from '@/stores/entityTableStore';
 import { useProductTableStore } from "~~/stores/productTableStore";
-import { useVendorTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/vendorTableStore";
 const productStore = useVendorTableStore();
 const productList = ref(productStore.getVendorsNameAndId);
 // const entityStore = useEntityTableStore();
@@ -47,7 +47,7 @@ onMounted(async () => {
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import { useVendorTableStore } from "~~/stores/providerTableStore";
+import { useVendorTableStore } from "~~/stores/vendorTableStore";
 
 const productStore = useVendorTableStore();
 const productList = ref(productStore.getVendorsNameAndId);

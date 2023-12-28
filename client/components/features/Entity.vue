@@ -1,12 +1,8 @@
-<template >
-    <EntitiesLegalEntityEntitiesBar/>
-    <EntitiesLegalEntityEntitiesTable />
+<template>
+  <EntitiesLegalEntityEntitiesBar />
+  <EntitiesLegalEntityEntitiesTable />
 </template>
 
-<script lang = "ts" setup>
+<script lang="ts" setup></script>
 
-</script>
-
-<style>
-    
-</style>
+<style></style>
