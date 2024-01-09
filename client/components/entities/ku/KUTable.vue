@@ -10,8 +10,10 @@
       <el-table-column
         property="ku_id"
         label="Номер КУ"
-        width="120"
+        width="150"
         sortable
+        :filter-method="handleKuFilter"
+        :filters="kuFilterOptions"
         show-overflow-tooltip
       />
 
@@ -61,12 +63,12 @@ const store = useKuTableStore();
 
 const filteredKuList = ref(store.searchTableData);
 
-watch(
-  () => store.searchTableData,
-  () => {
-    filteredKuList.value = store.searchTableData;
-  }
-);
+// watch(
+//   () => store.searchTableData,
+//   () => {
+//     filteredKuList.value = store.searchTableData;
+//   }
+// );
 
 onMounted(async () => {
   try {
@@ -83,5 +85,17 @@ onMounted(async () => {
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
+});
+
+const handleKuFilter = (value: number | null) => {
+  store.setKuFilter(value);
+};
+const kuFilterOptions = ref<Array<{ text: string; value: string; }>>([]);
+
+// Заполняем массив уникальными значениями номеров КУ
+watchEffect(() => {
+  filteredKuList.value = store.searchTableData;
+  kuFilterOptions.value = Array.from(new Set(store.tableData.map(item => item.ku_id)))
+    .map(value => ({ text: String(value), value: String(value) }));
 });
 </script>

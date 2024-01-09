@@ -5,7 +5,9 @@ import type {
   IProduct,
   IVendor,
   IVendorNameId,
-  IKu,IVendorListApi
+  IKu,
+  IVendorListApi,
+  IGraphic,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -56,9 +58,8 @@ export const ENTITY = {
   } | null> => $Get("api/entitieslist/", { data, isBearer: false }),
 };
 export const VENDOR = {
-  getVendorsList: (
-    data: IVendor
-  ): Promise<IVendorListApi> => $Get("api/vendorlist/", { data, isBearer: false }),
+  getVendorsList: (data: IVendor): Promise<IVendorListApi> =>
+    $Get("api/vendorlist/", { data, isBearer: false }),
   getVendorsNameAndId: (
     data: IVendorNameId
   ): Promise<{
@@ -130,4 +131,11 @@ export const KU = {
     base: number | null;
     percent: number | null;
   } | null> => $Delete("api/kulist", { data, isBearer: false }),
+};
+export const GRAPHIC = {
+  getGraphic: (data: IGraphic): Promise<IGraphic> =>
+    $Get("api/kugraph", { data, isBearer: false }),
+
+  postGraphic: (data: IKu): Promise<IGraphic> =>
+    $Post("api/kugraph", { data, isBearer: false }),
 };

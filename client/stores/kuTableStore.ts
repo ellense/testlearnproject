@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+
 import type { IKu, IGraphic } from "~/utils/types/directoryTypes";
 
 export const useKuTableStore = defineStore("KuTableStore", {
@@ -24,24 +25,33 @@ export const useKuTableStore = defineStore("KuTableStore", {
       const searchValue = state.search.toLowerCase();
       const vendorFilterValue = state.vendorFilter.toLowerCase();
       const kuFilterValue = state.kuFilter;
+  
       return state.tableData.filter((item) => {
-        const vendorMatch = item.vendor
-          .toLowerCase()
-          .includes(vendorFilterValue);
+        const vendorMatch = item.vendor.toLowerCase().includes(vendorFilterValue);
         const periodMatch = item.period.toLowerCase().includes(searchValue);
         const status = item.status.toLowerCase().includes(searchValue);
-        return vendorMatch || periodMatch || status;
+  
+        // Сравнение с учетом null
+        const kuMatch = kuFilterValue !== null ? item.ku_id === kuFilterValue : true;
+  
+        return vendorMatch || periodMatch || status || kuMatch;
       });
+  
     },
+    
+    
   },
+  
 
   actions: {
     setMultipleTableRef(ref: Ref) {
       this.multipleTableRef = ref;
     },
+
     setVendorFilter(value: string) {
       this.$state.vendorFilter = value;
     },
+
     setKuFilter(value: number | null) {
       this.$state.kuFilter = value;
     },
@@ -57,9 +67,11 @@ export const useKuTableStore = defineStore("KuTableStore", {
         }
       }
     },
+
     handleSelectionChange(val: IKu[]) {
       this.multipleSelection = val;
     },
+
     async fetchKuList(data: IKu) {
       try {
         const result = await KU.getKuList(data);
@@ -69,6 +81,22 @@ export const useKuTableStore = defineStore("KuTableStore", {
         } else {
           // Если result не является массивом или равен null, обновляем entityList пустым массивом
           this.tableData = [];
+          console.error("Данные не получены или не являются массивом");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+    },
+
+    async fetchGraphicList(data: IGraphic) {
+      try {
+        const result = await GRAPHIC.getGraphic(data);
+        if (Array.isArray(result)) {
+          // Если данные успешно получены и являются массивом, обновляем entityList в сторе
+          this.tableDataGraphic = result;
+        } else {
+          // Если result не является массивом или равен null, обновляем entityList пустым массивом
+          this.tableDataGraphic = [];
           console.error("Данные не получены или не являются массивом");
         }
       } catch (error) {
@@ -90,6 +118,36 @@ export const useKuTableStore = defineStore("KuTableStore", {
     }) {
       this.tableDataGraphic.push(row);
     },
+
+    // const addItemAndSendToBackend = async () => {
+    //   const newItem = {
+    //     ku_id: store.tableData.length + 20,
+    //     vendor: store.vendorName,
+    //     period: store.newType,
+    //     date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
+    //     date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
+    //     status: "Создано",
+    //     date_actual: dayjs(store.newDateActual, "DD.MM.YYYY").format("YYYY-MM-DD"),
+    //     base: 15000 + store.tableData.length * store.tableData.length,
+    //     percent: store.newPercent,
+    //   };
+    
+    //   try {
+    //     const response = await KU.postKu(newItem);
+    
+    //     if (response) {
+    //       console.log("Экземпляр успешно отправлен на бэкенд:", response);
+    //       router.push("ku");
+    //       messageClose();
+    //     } else {
+    //       console.error("Не удалось отправить экземпляр на бэкенд");
+    //     }
+    
+    //     router.push("ku");
+    //   } catch (error) {
+    //     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+    //   }
+    // };
 
     deleteSelectedRows() {
       const selectedRows = this.multipleSelection;

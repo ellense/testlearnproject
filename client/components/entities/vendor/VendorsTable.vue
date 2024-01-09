@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table v-loading="loading" element-loading-text="Загрузка" :data="filteredEntityList" style="width: 100%"
-      height="calc(100vh - 180px)">
+      height="calc(100vh - 180px)" >
       <el-table-column label="Номер" prop="vendorid" width="150" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="200" show-overflow-tooltip sortable />
       <el-table-column prop="urasticname" label="Полное наименование" width="300" show-overflow-tooltip sortable />

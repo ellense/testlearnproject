@@ -11,14 +11,12 @@
         property="ku"
         label="Koд КУ"
         sortable
-        :filter-method="handleKuFilter"
         show-overflow-tooltip
       />
       <el-table-column
         property="vendor"
         label="Поставщик"
         sortable
-        :filter-method="handleVendorFilter"
         show-overflow-tooltip
       />
       <el-table-column property="period" label="Период" show-overflow-tooltip />
@@ -62,24 +60,36 @@ import { ref, onMounted } from "vue";
 import { useKuTableStore } from "~~/stores/kuTableStore";
 
 const storeKU = useKuTableStore();
-const handleVendorFilter = (value: string) => {
-  storeKU.setVendorFilter(value);
-};
+// const handleVendorFilter = (value: string) => {
+//   storeKU.setVendorFilter(value);
+// };
 
-const searchTableData = ref(storeKU.searchTableData);
+// const searchTableData = ref(storeKU.searchTableData);
 
-onMounted(() => {
-  watchEffect(() => {
-    searchTableData.value = storeKU.searchTableData;
-  });
+// onMounted(() => {
+//   watchEffect(() => {
+//     searchTableData.value = storeKU.searchTableData;
+//   });
+// });
+
+// const handleKuFilter = (value: number | null) => {
+//   storeKU.setKuFilter(value);
+// };
+onMounted(async () => {
+  try {
+    await storeKU.fetchKuList({
+      ku_id: null,
+      vendor: "",
+      period: "",
+      date_start: new Date(),
+      date_end: new Date(),
+      status: "",
+      base: null,
+      percent: null,
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
 });
-const handleKuFilter = (value: number | null) => {
-  storeKU.setKuFilter(value);
-};
 
-onMounted(() => {
-  watchEffect(() => {
-    searchTableData.value = storeKU.searchTableData;
-  });
-});
 </script>
