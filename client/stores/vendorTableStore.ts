@@ -26,9 +26,9 @@ export const useVendorTableStore = defineStore("VendorTableStore", {
 
 
   getters: {
-    getProductsList: (state) => state.vendors_list,
+    getVendorList: (state) => state.vendors_list,
     getCountPage: (state) => state.countPage,
-    getUseFilterProduct: (state) => state.filterVendor !== null,
+    getUseFilterVendor: (state) => state.filterVendor !== null,
     //поиск
     // searchVendorList: (state) => {
     //   const searchValue = state.search.toLowerCase();

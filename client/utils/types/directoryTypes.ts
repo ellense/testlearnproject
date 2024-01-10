@@ -15,6 +15,7 @@ export interface IInvoice {
 }
 
 export interface IKu {
+  // error: IKu;
   ku_id: number | null;
   vendor: string;
   period: string;
@@ -62,13 +63,13 @@ export interface IVendorList extends IVendor {
   countPage: number | null
   filterVendor: number | null
 }
- export interface IVendorTableStore {
-  search:string
-  vendorList:  IVendor[],
+export interface IVendorTableStore {
+  search: string
+  vendorList: IVendor[],
   vendors_list: IVendorList[],
   countPage: number | null;
   filterVendor: number | null;
- }
+}
 
 export interface IPagination {
   count: number
@@ -102,4 +103,12 @@ export interface IProduser {
 export interface IBrand {
   id: number;
   name: string;
+}
+
+export interface IRequirement {
+  number: string;
+  product: string;
+  category: string;
+  producer: string;
+  brand: string;
 }

@@ -11,7 +11,7 @@
     </el-table>
 
   </el-scrollbar>
-  <div> 1<el-pagination background layout="prev, pager, next" :total="total" :hide-on-single-page="isSinglePage"
+  <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" :hide-on-single-page="isSinglePage"
       style="margin-top: 4px" @current-change="handleCurrentChange" />
      </div>
 </template>
@@ -23,15 +23,15 @@ import { useVendorTableStore } from "~~/stores/vendorTableStore";
 const vendorStore = useVendorTableStore();
 const filteredEntityList = ref(vendorStore.vendorList);
 let loading = ref(true);
-// const filteredEntityList = computed(() => vendorStore.getProductsList);
-const { getProductsList, getCountPage, countPage, getUseFilterProduct } = storeToRefs(
+// const filteredEntityList = computed(() => vendorStore.getVendorList);
+const { getVendorList, getCountPage, countPage, getUseFilterVendor } = storeToRefs(
   useVendorTableStore()
 )
 const total = ref<number>(0)
 const isSinglePage = ref<boolean>(true)
 
 const handleCurrentChange = (val: number) => {
-  if (!getUseFilterProduct.value) {
+  if (!getUseFilterVendor.value) {
     // Вызываем метод для запроса данных с учетом новой страницы
     vendorStore.getPage(val)
     console.log("val ",val)
@@ -65,10 +65,10 @@ watch(countPage, (value) => {
   total.value = value || 0
   console.log("total ", value)
 })
-watch(getProductsList, (value) => {
+watch(getVendorList, (value) => {
   filteredEntityList.value = value
 })
-// watch(() => vendorStore.getProductsList, (value) => {
+// watch(() => vendorStore.getVendorList, (value) => {
 //   filteredEntityList.value = value;
 // }, { immediate: true });
 
@@ -76,5 +76,10 @@ watch(getProductsList, (value) => {
 <style scoped>
 .example-showcase .el-loading-mask {
   z-index: 9;
+}
+.pagination{
+  padding: 10px;
+  display: flex;
+  justify-content: center;
 }
 </style>

@@ -82,55 +82,19 @@ export const PRODUCT = {
 export const KU = {
   getKuList: (
     data: IKu
-  ): Promise<{
-    ku_id: number | null;
-    vendor: string;
-    period: string;
-    date_start: Date | string;
-    date_end: Date | string;
-    status: string;
-    base: number | null;
-    percent: number | null;
-  } | null> => $Get("api/kulist", { data, isBearer: false }),
+  ): Promise<IKu> => $Get("api/kulist", { data, isBearer: false }),
 
   postKu: (
     data: IKu
-  ): Promise<{
-    ku_id: number | null;
-    vendor: string;
-    period: string;
-    date_start: Date | string;
-    date_end: Date | string;
-    status: string;
-    base: number | null;
-    percent: number | null;
-  } | null> => $Post("api/kulist", { data, isBearer: false }),
+  ): Promise<IKu> => $Post("api/kulist", { data, isBearer: false }),
 
   putKu: (
     data: IKu
-  ): Promise<{
-    ku_id: number | null;
-    vendor: string;
-    period: string;
-    date_start: Date | string;
-    date_end: Date | string;
-    status: string;
-    base: number | null;
-    percent: number | null;
-  } | null> => $Put("api/kulist", { data, isBearer: false }),
+  ): Promise<IKu> => $Put("api/kulist", { data, isBearer: false }),
 
   deleteKu: (
     data: IKu
-  ): Promise<{
-    ku_id: number | null;
-    vendor: string;
-    period: string;
-    date_start: Date | string;
-    date_end: Date | string;
-    status: string;
-    base: number | null;
-    percent: number | null;
-  } | null> => $Delete("api/kulist", { data, isBearer: false }),
+  ): Promise<IKu> => $Delete("api/kulist", { data, isBearer: false }),
 };
 export const GRAPHIC = {
   getGraphic: (data: IGraphic): Promise<IGraphic> =>

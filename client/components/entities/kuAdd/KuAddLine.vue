@@ -47,6 +47,7 @@
               format="DD.MM.YYYY"
               value-format="DD.MM.YYYY"
               clearable
+              placeholder="Выбрать"
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -92,6 +93,7 @@
               format="DD.MM.YYYY"
               value-format="DD.MM.YYYY"
               clearable
+              placeholder="Выбрать"
             ></el-date-picker>
           </el-form-item>
         </el-col>
@@ -99,8 +101,16 @@
     </form>
     <h3>Условия по товарам</h3>
     <div>
-      <el-button text bg @click="">+ Все</el-button>
-      <el-button text bg @click="dialogOpen()">+ Условие по товарам</el-button>
+      <el-button text bg @click="onAddItem()" :disabled="isAddAllDisabled"
+        >+ Все</el-button
+      >
+      <el-button
+        text
+        bg
+        @click="dialogOpen()"
+        :disabled="isAddConditionDisabled"
+        >+ Условие по товарам</el-button
+      >
     </div>
     <EntitiesKuAddRequirement />
     <div class="button_bottom">
@@ -115,16 +125,32 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
+import dayjs from "dayjs";
+import { useRouter } from "vue-router";
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useVendorTableStore } from "~~/stores/vendorTableStore";
-import { useRouter } from "vue-router";
-import dayjs from "dayjs";
 
 const vendorStore = useVendorTableStore();
 const store = useKuTableStore();
 const router = useRouter();
 const options = ref<{ vendorName: string; label: string }[]>([]);
 console.log("list", vendorStore.vendorList);
+
+const isAddAllDisabled = ref(store.isAddAllDisabled);
+const isAddConditionDisabled = ref(store.isAddConditionDisabled);
+
+const onAddItem = () => {//добавление условия "все"
+  store.tableDataRequirement.push({
+    number: "Все",
+    product: "",
+    category: "",
+    producer: "",
+    brand: "",
+  });
+  isAddAllDisabled.value = true;
+  isAddConditionDisabled.value = true;
+};
+
 const messageClose = () => {
   ElMessage({
     message: "Коммерческое условие успешно добавлено",
@@ -159,6 +185,7 @@ const addItemAndSendToBackend = async () => {
     date_actual: dayjs(store.newDateActual, "DD.MM.YYYY").format("YYYY-MM-DD"),
     base: 15000 + store.tableData.length * store.tableData.length,
     percent: store.newPercent,
+    error: undefined,
   };
 
   try {

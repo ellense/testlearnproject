@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import type { IKu, IGraphic } from "~/utils/types/directoryTypes";
+import type { IKu, IGraphic,IRequirement } from "~/utils/types/directoryTypes";
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
@@ -15,7 +15,10 @@ export const useKuTableStore = defineStore("KuTableStore", {
     search: "",
     tableData: [] as IKu[],
     tableDataGraphic: [] as IGraphic[],
+    tableDataRequirement: [] as IRequirement[],
     dialogFormVisible: false,
+    isAddAllDisabled: false,
+    isAddConditionDisabled: false,
     vendorFilter: "",
     kuFilter: null as number | null,
   }),
@@ -25,23 +28,22 @@ export const useKuTableStore = defineStore("KuTableStore", {
       const searchValue = state.search.toLowerCase();
       const vendorFilterValue = state.vendorFilter.toLowerCase();
       const kuFilterValue = state.kuFilter;
-  
+
       return state.tableData.filter((item) => {
-        const vendorMatch = item.vendor.toLowerCase().includes(vendorFilterValue);
+        const vendorMatch = item.vendor
+          .toLowerCase()
+          .includes(vendorFilterValue);
         const periodMatch = item.period.toLowerCase().includes(searchValue);
         const status = item.status.toLowerCase().includes(searchValue);
-  
+
         // Сравнение с учетом null
-        const kuMatch = kuFilterValue !== null ? item.ku_id === kuFilterValue : true;
-  
+        const kuMatch =
+          kuFilterValue !== null ? item.ku_id === kuFilterValue : true;
+
         return vendorMatch || periodMatch || status || kuMatch;
       });
-  
     },
-    
-    
   },
-  
 
   actions: {
     setMultipleTableRef(ref: Ref) {
@@ -119,44 +121,43 @@ export const useKuTableStore = defineStore("KuTableStore", {
       this.tableDataGraphic.push(row);
     },
 
-    // const addItemAndSendToBackend = async () => {
-    //   const newItem = {
-    //     ku_id: store.tableData.length + 20,
-    //     vendor: store.vendorName,
-    //     period: store.newType,
-    //     date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
-    //     date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
-    //     status: "Создано",
-    //     date_actual: dayjs(store.newDateActual, "DD.MM.YYYY").format("YYYY-MM-DD"),
-    //     base: 15000 + store.tableData.length * store.tableData.length,
-    //     percent: store.newPercent,
-    //   };
-    
+    // async deleteSelectedRows() {
+    //   // const selectedRows = this.multipleSelection;
+
+    //   // this.tableData = this.tableData.filter((row: IKu) => {
+    //   //   return !selectedRows.includes(row);
+    //   // });
+
+    //   // this.multipleSelection = [];
+    //   const selectedRows = this.multipleSelection;
+
     //   try {
-    //     const response = await KU.postKu(newItem);
-    
-    //     if (response) {
-    //       console.log("Экземпляр успешно отправлен на бэкенд:", response);
-    //       router.push("ku");
-    //       messageClose();
-    //     } else {
-    //       console.error("Не удалось отправить экземпляр на бэкенд");
+    //     // Предполагая, что ваш API требует одиночный ku_id для удаления
+    //     for (const row of selectedRows) {
+    //       const result = await KU.deleteKu({
+    //         ku_id: row.ku_id,
+    //         vendor: "",
+    //         period: "",
+    //         date_start: "",
+    //         date_end: "",
+    //         status: "",
+    //         base: null,
+    //         percent: null
+    //       });
+    //       if (!result) {
+    //         console.error("Не удалось удалить строку с ku_id:", row.ku_id);
+    //         return; // Прерываем выполнение, чтобы избежать обновления данных, если что-то пошло не так
+    //       }
     //     }
-    
-    //     router.push("ku");
+
+    //     // Если удаление прошло успешно, обновите данные таблицы в хранилище
+    //     this.tableData = this.tableData.filter(
+    //       (row: IKu) => !selectedRows.includes(row)
+    //     );
+    //     this.multipleSelection = [];
     //   } catch (error) {
-    //     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+    //     console.error("Ошибка при удалении строк:", error);
     //   }
-    // };
-
-    deleteSelectedRows() {
-      const selectedRows = this.multipleSelection;
-
-      this.tableData = this.tableData.filter((row: IKu) => {
-        return !selectedRows.includes(row);
-      });
-
-      this.multipleSelection = [];
-    },
+    // },
   },
 });

@@ -1,8 +1,7 @@
 <template>
-  <EntitiesKuButtons />
-  <EntitiesKuTable />
-</template>
-
-<script lang="ts" setup></script>
-
-<style lang=""></style>
+    <EntitiesKuBody/>
+  </template>
+  
+  <script lang="ts" setup></script>
+  
+  <style lang=""></style>
