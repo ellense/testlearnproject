@@ -97,26 +97,26 @@ export const useVendorTableStore = defineStore("VendorTableStore", {
     //     console.error("Произошла ошибка при получении данных", error);
     //   }
     // },
-    async getPage(page: number) {
-      try {
-        console.log('Fetching data for page:', page);
-        const result = await VENDOR.getVendorsList({
-          vendorid: "",
-          name: "",
-          urasticname: "",
-          directorname: "",
-          urasticadress: "",
-          inn_kpp: "",
-          entityid: "",
-          page: page,
-          page_size: null,
-        });
-        this.setProductData(result);
-        console.log("page2 ", page)
-      } catch (error) {
-        console.error("Произошла ошибка при получении данных", error);
-      }
-    },
+    // async getPage(page: number) {
+    //   try {
+    //     console.log('Fetching data for page:', page);
+    //     const result = await VENDOR.getVendorsList({
+    //       vendorid: "",
+    //       name: "",
+    //       urasticname: "",
+    //       directorname: "",
+    //       urasticadress: "",
+    //       inn_kpp: "",
+    //       entityid: "",
+    //       page: page,
+    //       page_size: null,
+    //     });
+    //     this.setProductData(result);
+    //     console.log("page2 ", page)
+    //   } catch (error) {
+    //     console.error("Произошла ошибка при получении данных", error);
+    //   }
+    // },
 
     // setProductData(vendor_list: IVendorListApi) {
     //   console.log('setProductData called with:', vendor_list);

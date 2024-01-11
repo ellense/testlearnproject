@@ -112,3 +112,18 @@ export interface IRequirement {
   producer: string;
   brand: string;
 }
+
+export interface Pagination {
+  count: number
+  next: string | null
+  previous: string | null
+}
+
+export interface VendorStore {
+  vacancies: IVendor[] | null
+  pagination: Pagination | null
+  countRowTable: number
+}
+export interface GetAllVacanciesReturnData extends Pagination {
+  results: IVendor[]
+}
