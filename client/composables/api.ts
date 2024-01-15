@@ -8,6 +8,8 @@ import type {
   IKu,
   IVendorListApi,
   IGraphic,
+  GetAllVendorsReturnData,
+  GetAllVendors,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -57,16 +59,20 @@ export const ENTITY = {
     entityid: string;
   } | null> => $Get("api/entitieslist/", { data, isBearer: false }),
 };
+// export const VENDOR = {
+//   getVendorsList: (data: IVendor): Promise<IVendorListApi> =>
+//     $Get("api/vendorlist/", { data, isBearer: false }),
+//   getVendorsNameAndId: (
+//     data: IVendorNameId
+//   ): Promise<{
+//     vendorid: string;
+//     name: string;
+//   } | null> =>
+//     $Get("api/vendorlist/?fields=name,vendorid", { data, isBearer: false }),
+// };
 export const VENDOR = {
-  getVendorsList: (data: IVendor): Promise<IVendorListApi> =>
-    $Get("api/vendorlist/", { data, isBearer: false }),
-  getVendorsNameAndId: (
-    data: IVendorNameId
-  ): Promise<{
-    vendorid: string;
-    name: string;
-  } | null> =>
-    $Get("api/vendorlist/?fields=name,vendorid", { data, isBearer: false }),
+  getVendorsList: (params?: GetAllVendors): Promise<GetAllVendorsReturnData> =>
+    $Get("api/vendorlist/", { params, isBearer: false }),
 };
 export const PRODUCT = {
   getProductsList: (

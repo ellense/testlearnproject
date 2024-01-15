@@ -1,6 +1,7 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table v-loading="loading" element-loading-text="Загрузка" :data="filteredEntityList" style="width: 100%"
+    <!-- v-loading="loading" element-loading-text="Загрузка" :data="filteredEntityList" -->
+    <el-table :data="tableData" style="width: 100%"
       height="calc(100vh - 180px)" >
       <el-table-column label="Номер" prop="vendorid" width="150" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="200" show-overflow-tooltip sortable />
@@ -11,11 +12,8 @@
     </el-table>
 
   </el-scrollbar>
-  <!-- <div class="pagination"><el-pagination background layout="prev, pager, next" :total="total" :hide-on-single-page="isSinglePage"
-      style="margin-top: 4px" @current-change="handleCurrentChange" />
-     </div> -->
      <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-          <!-- Элемент пагинации из библиотеки Element UI -->
+       1
           <el-pagination
             layout="prev, pager, next"
             :page-count="Math.ceil(pagination.count / countRowTable)"
@@ -27,78 +25,36 @@
 <script lang="ts" setup>
 import { storeToRefs } from 'pinia'
 import { ref, onMounted, watch } from "vue";
-import { useVendorTableStore } from "~~/stores/vendorTableStore";
+// let loading = ref(true);
 import type { IVendor } from "~/utils/types/directoryTypes";
-const { getVacancies, pagination, countRowTable } = storeToRefs(useVendorTableStore());
-const vendorStore = useVendorTableStore();
-const filteredEntityList = ref(vendorStore.vendorList);
-let loading = ref(true);
-// const filteredEntityList = computed(() => vendorStore.getVendorList);
-const { getVendorList, getCountPage, countPage, getUseFilterVendor } = storeToRefs(
-  useVendorTableStore()
-)
-// const total = ref<number>(0)
-// const isSinglePage = ref<boolean>(true)
 
-// const handleCurrentChange = (val: number) => {
-//   if (!getUseFilterVendor.value) {
-//     // Вызываем метод для запроса данных с учетом новой страницы
-//     vendorStore.getPage(val)
-//     console.log("val ",val)
-//   }
-// }
+import { useVendorStore } from "~~/stores/vendorStore";
+const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
+  const tableData = ref<IVendor[]>(getVendors.value);
 
-onMounted(async () => {
-  try {
-    // Загружаем данные для первой страницы при инициализации компонента
-    await vendorStore.fetchVendorsList({
-      vendorid: "",
-      name: "",
-      urasticname: "",
-      directorname: "",
-      urasticadress: "",
-      inn_kpp: "",
-      entityid: "",
-      page: 1,
-      page_size: 100,
-    }).then(() => loading.value = false)
-
-  }
-  catch (error) {
-    loading.value = false;
-    console.error("Ошибка при загрузке данных", error);
-  }
+  // Наблюдение за изменениями данных вакансий и обновление реактивных данных
+  watch(getVendors, (value) => {
+  console.log('Table Data:', value);
+  tableData.value = value || [];
 });
-  // Функция для прокрутки страницы вверх
+
+  
   const scrollToTop = () => {
     window.scrollTo(0, 0);
   };
 
   // Обработчик изменения страницы пагинации
   const paginationChange = (value: any) => {
-    // Вызов метода хранилища для загрузки вакансий с учетом новой страницы
-    useVacanciesStore().getVacanciesFromAPIWithFilter(value);
-    // Прокрутка страницы вверх
-    scrollToTop();
-  };
-   // Реактивное значение для данных таблицы
-   const tableData = ref<IVendor[]>(getVacancies.value);
+    console.log(1)
+  debugger; // добавьте эту строку
+  // Вызов метода хранилища для загрузки вакансий с учетом новой страницы
+  useVendorStore().fetchVendorsList(value);
+  // Прокрутка страницы вверх
+  scrollToTop();
+};
 
-// Наблюдение за изменениями данных вакансий и обновление реактивных данных
-watch(getVacancies, (value) => {
-  tableData.value = value || [];
-});
-// Следим за изменениями в данных пагинации и в данных таблицы
-// watch(countPage, (value) => {
-//   total.value = value || 0
-//   console.log("total ", value)
-// })
-// watch(getVendorList, (value) => {
-//   filteredEntityList.value = value
-// })
-// watch(() => vendorStore.getVendorList, (value) => {
-//   filteredEntityList.value = value;
-// }, { immediate: true });
+
+
 
 </script>
 <style scoped>

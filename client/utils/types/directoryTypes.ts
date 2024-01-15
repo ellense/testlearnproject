@@ -46,17 +46,6 @@ export interface IProduct {
   name: string;
 }
 
-export interface IVendor {
-  vendorid: string;
-  name: string;
-  urasticname: string;
-  directorname: string;
-  urasticadress: string;
-  inn_kpp: string;
-  entityid: string;
-  page: number | null;
-  page_size: number | null;
-}
 
 export interface IVendorList extends IVendor {
   vendors_list: IVendorList[] | null
@@ -113,17 +102,35 @@ export interface IRequirement {
   brand: string;
 }
 
+export interface IVendor {
+  vendorid: string;
+  name: string;
+  urasticname: string;
+  directorname: string;
+  urasticadress: string;
+  inn_kpp: string;
+  entityid: string;
+  // page: number | undefined;
+  // page_size: number | null;
+}
 export interface Pagination {
   count: number
   next: string | null
   previous: string | null
 }
-
+export interface GetAllVendors {
+  page_size?: number;
+  page?: number
+}
 export interface VendorStore {
-  vacancies: IVendor[] | null
+  vendors: IVendor[] | null
   pagination: Pagination | null
   countRowTable: number
 }
-export interface GetAllVacanciesReturnData extends Pagination {
+export interface GetAllVendorsReturnData extends Pagination {
   results: IVendor[]
+}
+
+export type WithoutNullableKeys<Type> = {
+  [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>
 }
