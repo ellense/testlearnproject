@@ -6,16 +6,16 @@
           <div class="custom-label">Юридическое лицо</div>
           <el-form-item>
             <el-select
-              v-model="store.vendorName"
+              v-model="store.entityName"
               clearable
               filterable
               style="width: 214px"
             >
               <el-option
                 v-for="item in options"
-                :key="item.vendorName"
+                :key="item.label"
                 :label="item.label"
-                :value="item.vendorName"
+                :value="item.value"
               />
             </el-select>
           </el-form-item>
@@ -64,10 +64,10 @@
               style="width: 214px"
             >
               <el-option
-                v-for="item in options"
-                :key="item.vendorName"
+                v-for="item in options2"
+                :key="item.label"
                 :label="item.label"
-                :value="item.vendorName"
+                :value="item.value"
               />
             </el-select>
           </el-form-item>
@@ -128,18 +128,68 @@ import { ref } from "vue";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { useKuTableStore } from "~~/stores/kuTableStore";
-import { useVendorTableStore } from "~~/stores/vendorTableStore";
+import { useEntityTableStore } from "~~/stores/entityTableStore";
+import {
+  IEntityIdAndName,
+  IVendorIdAndName,
+} from "~/utils/types/directoryTypes";
 
-const vendorStore = useVendorTableStore();
+const entityStore = useEntityTableStore();
 const store = useKuTableStore();
 const router = useRouter();
-const options = ref<{ vendorName: string; label: string }[]>([]);
-console.log("list", vendorStore.vendorList);
+
+const options = ref<Array<{ label: string; value: string }>>([]);
+
+watch(
+  () => store.dataEntity,
+  (dataEntity: IEntityIdAndName[]) => {
+    options.value = dataEntity.map((item) => ({
+      label: item.name,
+      value: item.entityid,
+    }));
+  }
+);
+
+onMounted(async () => {
+  try {
+    await store.fetchKuEntity({
+      entityid: "",
+      name: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
+
+const options2 = ref<Array<{ label: string; value: string }>>([]);
+
+watch(
+  () => store.dataVendor,
+  (dataVendor: IVendorIdAndName[]) => {
+    options2.value = dataVendor.map((item) => ({
+      label: item.name,
+      value: item.vendorid,
+    }));
+  }
+);
+
+onMounted(async () => {
+  try {
+    await store.fetchKuVendor({
+      vendorid: "",
+      name: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
+
 
 const isAddAllDisabled = ref(store.isAddAllDisabled);
 const isAddConditionDisabled = ref(store.isAddConditionDisabled);
 
-const onAddItem = () => {//добавление условия "все"
+const onAddItem = () => {
+  //добавление условия "все"
   store.tableDataRequirement.push({
     number: "Все",
     product: "",
@@ -147,8 +197,8 @@ const onAddItem = () => {//добавление условия "все"
     producer: "",
     brand: "",
   });
-  isAddAllDisabled.value = true;
-  isAddConditionDisabled.value = true;
+  // isAddAllDisabled.value = true;
+  // isAddConditionDisabled.value = true;
 };
 
 const messageClose = () => {
@@ -162,13 +212,6 @@ const dialogOpen = () => {
   store.dialogFormVisible = true;
 };
 
-const updateOptions = () => {
-  options.value = vendorStore.vendorList.map((vendor) => ({
-    vendorName: vendor.vendorid,
-    label: vendor.vendorid,
-  }));
-};
-updateOptions();
 
 const addClose = () => {
   router.push("ku");
@@ -176,7 +219,7 @@ const addClose = () => {
 
 const addItemAndSendToBackend = async () => {
   const newItem = {
-    ku_id: store.tableData.length + 20,
+    ku_id: "100",
     vendor: store.vendorName,
     period: store.newType,
     date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),

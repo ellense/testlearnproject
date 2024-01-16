@@ -78,7 +78,7 @@ const storeKU = useKuTableStore();
 onMounted(async () => {
   try {
     await storeKU.fetchKuList({
-      ku_id: null,
+      ku_id: "",
       vendor: "",
       period: "",
       date_start: new Date(),

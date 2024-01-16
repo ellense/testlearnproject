@@ -1,11 +1,12 @@
 import { defineStore } from "pinia";
 
-import type { IKu, IGraphic,IRequirement } from "~/utils/types/directoryTypes";
+import type { IKu, IGraphic,IRequirement, IBrand, IVendorNameId,IEntityIdAndName, IVendorIdAndName } from "~/utils/types/directoryTypes";
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
     newPercent: null,
     newType: "",
+    entityName: "", 
     vendorName: "",
     newDateStart: new Date(),
     newDateEnd: new Date(),
@@ -15,7 +16,10 @@ export const useKuTableStore = defineStore("KuTableStore", {
     search: "",
     tableData: [] as IKu[],
     tableDataGraphic: [] as IGraphic[],
+    dataBrand:[] as IBrand[],
     tableDataRequirement: [] as IRequirement[],
+    dataEntity: [] as IEntityIdAndName[],
+    dataVendor: [] as IVendorIdAndName[],
     dialogFormVisible: false,
     isAddAllDisabled: false,
     isAddConditionDisabled: false,
@@ -37,12 +41,14 @@ export const useKuTableStore = defineStore("KuTableStore", {
         const status = item.status.toLowerCase().includes(searchValue);
 
         // Сравнение с учетом null
-        const kuMatch =
-          kuFilterValue !== null ? item.ku_id === kuFilterValue : true;
+        // const kuMatch =
+        //   kuFilterValue !== null ? item.ku_id === kuFilterValue : true;
 
-        return vendorMatch || periodMatch || status || kuMatch;
+        return vendorMatch || periodMatch || status
       });
     },
+    getBrands: (state) => state.dataBrand,
+    getEntity: (state) => state.dataEntity,
   },
 
   actions: {
@@ -94,10 +100,8 @@ export const useKuTableStore = defineStore("KuTableStore", {
       try {
         const result = await GRAPHIC.getGraphic(data);
         if (Array.isArray(result)) {
-          // Если данные успешно получены и являются массивом, обновляем entityList в сторе
           this.tableDataGraphic = result;
         } else {
-          // Если result не является массивом или равен null, обновляем entityList пустым массивом
           this.tableDataGraphic = [];
           console.error("Данные не получены или не являются массивом");
         }
@@ -106,9 +110,52 @@ export const useKuTableStore = defineStore("KuTableStore", {
       }
     },
 
+    async fetchBrandList(data: IBrand) {
+      try {
+        const result = await BRAND.getBrand(data);
+        if (Array.isArray(result)) {
+          console.log('dataBrand',result);
+          this.dataBrand = result;
+        } else {
+          this.dataBrand = [];
+          console.error("Данные не получены или не являются массивом");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+    },
+
+    async fetchKuEntity(data: IEntityIdAndName) {
+      try {
+        const result = await ENTITY.getEntityNameById(data);
+        if (Array.isArray(result)) {
+          this.dataEntity = result;
+          console.log('dataEntity',result);
+        } else {
+          this.dataEntity = [];
+          console.error("Данные не получены или не являются массивом");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+    },
+    async fetchKuVendor(data: IVendorIdAndName) {
+      try {
+        const result = await VENDOR.getVendorsIdAndName();
+        if (Array.isArray(result)) {
+          this.dataVendor = result;
+          console.log('dataVendor',result);
+        } else {
+          this.dataVendor = [];
+          console.error("Данные не получены или не являются массивом");
+        }
+      } catch (error) {
+        console.error("Произошла ошибка", error);
+      }
+    },
     addgraphic(row: {
       graph_id: number | null;
-      ku: number | null;
+      ku: string;
       vendor: string;
       period: string;
       date_start: Date | string;

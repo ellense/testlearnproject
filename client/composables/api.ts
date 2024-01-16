@@ -4,12 +4,16 @@ import type {
   IInvoice,
   IProduct,
   IVendor,
-  IVendorNameId,
   IKu,
   IVendorListApi,
   IGraphic,
   GetAllVendorsReturnData,
   GetAllVendors,
+  IBrand,
+  IVendorNameId,
+  IEntityIdAndName,
+  IVendorIdAndName,
+  EntityId
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -54,10 +58,8 @@ export const ENTITY = {
     urasticaddress: string;
   } | null> => $Get("api/entitieslist/", { data, isBearer: false }),
   getEntityNameById: (
-    data: IEntity
-  ): Promise<{
-    entityid: string;
-  } | null> => $Get("api/entitieslist/", { data, isBearer: false }),
+    data: IEntityIdAndName
+  ): Promise<IEntityIdAndName> => $Get("api/entitieslist/", { data, isBearer: false }),
 };
 // export const VENDOR = {
 //   getVendorsList: (data: IVendor): Promise<IVendorListApi> =>
@@ -71,6 +73,10 @@ export const ENTITY = {
 //     $Get("api/vendorlist/?fields=name,vendorid", { data, isBearer: false }),
 // };
 export const VENDOR = {
+  getVendorsIdAndName: (params?: EntityId): Promise<IVendorIdAndName> =>
+    $Get("api/vendorlist/", { params, isBearer: false }),
+    getVendorsIdAndName2: (data: IVendorIdAndName): Promise<IVendorIdAndName> =>
+    $Get("api/vendorlist/?entityid=lir", { data, isBearer: false }),
   getVendorsList: (params?: GetAllVendors): Promise<GetAllVendorsReturnData> =>
     $Get("api/vendorlist/", { params, isBearer: false }),
 };
@@ -109,3 +115,8 @@ export const GRAPHIC = {
   postGraphic: (data: IKu): Promise<IGraphic> =>
     $Post("api/kugraph", { data, isBearer: false }),
 };
+
+export const BRAND = {
+  getBrand: (data: IBrand): Promise<IBrand> =>
+    $Get("api/brandlist", { data, isBearer: false }),
+}

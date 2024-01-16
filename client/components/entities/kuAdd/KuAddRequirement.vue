@@ -37,8 +37,7 @@
           link
           type="primary"
           size="small"
-          @click.prevent="deleteRow(scope.$index)"
-          @click="deleteVisible()"
+          @click.prevent="deleteRow(scope.$index),deleteVisible()"
         >
           Удалить
         </el-button>
@@ -62,8 +61,10 @@ const deleteRow = (index: number) => {//удаление условий
   
 }
 const deleteVisible = () => {
-  store.isAddAllDisabled = false;
-  console.log("открыто", store.isAddAllDisabled )
+  isAddAllDisabled.value = false;
+  isAddConditionDisabled.value = false;
+  console.log("открыто", store.isAddAllDisabled,isAddAllDisabled.value, isAddConditionDisabled.value  )
 }
+
 
 </script>

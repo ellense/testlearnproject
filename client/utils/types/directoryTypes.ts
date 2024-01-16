@@ -5,6 +5,15 @@ export interface IEntity {
   name: string;
   urasticaddress: string;
 }
+export interface IEntityIdAndName {
+  entityid: string;
+  name: string;
+}
+
+export interface EntityId {
+  entityid: string;
+}
+
 export interface IInvoice {
   invoice_id: number | null;
   entity_id: string;
@@ -16,7 +25,7 @@ export interface IInvoice {
 
 export interface IKu {
   // error: IKu;
-  ku_id: number | null;
+  ku_id: string;
   vendor: string;
   period: string;
   date_start: Date | string;
@@ -28,7 +37,7 @@ export interface IKu {
 
 export interface IGraphic {
   graph_id: number | null;
-  ku: number | null;
+  ku: string;
   vendor: string;
   period: string;
   date_start: Date | string;
@@ -90,9 +99,10 @@ export interface IProduser {
 }
 
 export interface IBrand {
-  id: number;
-  name: string;
+  brand_name: string;
 }
+
+
 
 export interface IRequirement {
   number: string;
@@ -112,6 +122,10 @@ export interface IVendor {
   entityid: string;
   // page: number | undefined;
   // page_size: number | null;
+}
+export interface IVendorIdAndName {
+  vendorid: string;
+  name: string;
 }
 export interface Pagination {
   count: number
@@ -134,3 +148,4 @@ export interface GetAllVendorsReturnData extends Pagination {
 export type WithoutNullableKeys<Type> = {
   [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>
 }
+
