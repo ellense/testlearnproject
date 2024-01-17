@@ -1,7 +1,7 @@
 <template>
   <div class="buttonBar">
     <div class="buttonBar_left">
-      <el-button @click="redirectToCreatePage">Добавить</el-button>
+      <el-button @click="redirectToCreatePage">Создать</el-button>
       <el-button @click="addGraphic()">Создать график</el-button>
       <el-button @click="deleteKu()">Удалить</el-button>
     </div>

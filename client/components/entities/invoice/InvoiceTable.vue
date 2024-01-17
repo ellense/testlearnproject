@@ -1,11 +1,9 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
-      v-loading="loading"
-      element-loading-text="Загрузка"
-      :data="filteredInvoicesList"
+      :data="tableData"
       style="width: 100%"
-      height="calc(100vh - 130px)"
+      height="calc(100vh - 185px)"
     >
       <el-table-column
         prop="invoice_id"
@@ -45,37 +43,43 @@
       />
     </el-table>
   </el-scrollbar>
+  <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
+    <el-pagination layout="prev, pager, next" :page-count="Math.ceil(pagination.count / countRowTable)"
+      @current-change="paginationChange" />
+  </div>
 </template>
 <script lang="ts" setup>
+import { storeToRefs } from 'pinia'
 import { ref, onMounted, watch } from "vue";
+import type { IInvoice } from "~/utils/types/directoryTypes";
+
 import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
-const storeInvoice = useInvoiceTableStore();
+const { getInvoices, pagination, countRowTable } = storeToRefs(useInvoiceTableStore());
+const tableData = ref<IInvoice[]>(getInvoices.value);
 
-const filteredInvoicesList = ref(storeInvoice.searchInvoicesList);
+// watch(pagination, (value) => {
+//   console.log('Pagination Data:', value);
+// });
+// Наблюдение за изменениями данных вакансий и обновление реактивных данных
+watch(getInvoices, (value) => {
+  console.log('Table Data:', value);
+  tableData.value = value || [];
+});
 
-let loading = ref(true);
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
 
-watch(
-  () => storeInvoice.searchInvoicesList,
-  () => {
-    filteredInvoicesList.value = storeInvoice.searchInvoicesList;
-    loading.value = false;
-  }
-);
+const paginationChange = (page: number) => {
+  useInvoiceTableStore().fetchInvoicesList(page);
+  scrollToTop();
+};
 
 onMounted(async () => {
   try {
-    await storeInvoice.fetchInvoicesList({
-      invoice_id: null,
-      entity_id: "",
-      vendor_id: "",
-      invoice_number: "",
-      invoice_name: "",
-      invoice_date: new Date(),
-    });
+    await useInvoiceTableStore().fetchInvoicesList();
   } catch (error) {
-    loading.value = false;
-    console.error("Ошибка при загрузке данных", error);
+    console.error('Ошибка при загрузке данных', error);
   }
 });
 </script>

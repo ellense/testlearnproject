@@ -1,49 +1,33 @@
 import { defineStore } from "pinia";
-import type { IInvoice } from "~/utils/types/directoryTypes";
+import type { GetAllInvoicesReturnData, IInvoice, InvoiceStore, WithoutNullableKeys } from "~/utils/types/directoryTypes";
 
 export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
-  state: () => ({
-    search: "", // Поиск
-    invoiceList: [] as IInvoice[], // Данные таблицы накладной
+  state: ():InvoiceStore => ({
+    invoice: [],
+    pagination: null,
+    countRowTable: 50,
   }),
 
   getters: {
-    searchInvoicesList: (state) => {
-      const searchValue = state.search.toLowerCase();
-      return state.invoiceList.filter((item) => {
-        const entity_idMatch =
-          item.entity_id && item.entity_id.toLowerCase().includes(searchValue);
-        const vendor_idMatch =
-          item.vendor_id && item.vendor_id.toLowerCase().includes(searchValue);
-        const invoice_nameMatch =
-          item.invoice_name &&
-          item.invoice_name.toLowerCase().includes(searchValue);
-        const invoice_numberMatch =
-          item.invoice_number &&
-          item.invoice_number.toLowerCase().includes(searchValue);
-        return (
-          entity_idMatch ||
-          vendor_idMatch ||
-          invoice_nameMatch ||
-          invoice_numberMatch
-        );
-      });
-    },
+    getInvoices: (state) => state.invoice,
   },
 
   actions: {
-    async fetchInvoicesList(data: IInvoice) {
+    async fetchInvoicesList(page?: number) {
       try {
-        const result = await INVOICE.getInvoicesList(data);
-
-        if (Array.isArray(result)) {
-          this.invoiceList = result;
-        } else {
-          this.invoiceList = [];
-          console.error("Данные не получены или не являются массивом");
-        }
+        const invoices = await INVOICE.getInvoicesList({
+          page_size: this.$state.countRowTable,
+          page, 
+        }) as GetAllInvoicesReturnData; // Явно указываем тип данных
+    
+        this.$state.invoice = invoices.results;
+        this.$state.pagination = {
+          count: invoices.count,
+          previous: invoices.previous,
+          next: invoices.next,
+        };
       } catch (error) {
-        console.error("Произошла ошибка", error);
+        return Promise.reject(error);
       }
     },
   },

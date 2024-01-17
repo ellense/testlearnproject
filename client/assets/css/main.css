@@ -68,3 +68,8 @@ h1 {
   margin: 10px;
 
 }
+.pagination{
+  padding: 15px;
+  display: flex;
+  justify-content: center;
+}

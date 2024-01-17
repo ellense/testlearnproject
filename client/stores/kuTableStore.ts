@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 
-import type { IKu, IGraphic,IRequirement, IBrand, IVendorNameId,IEntityIdAndName, IVendorIdAndName } from "~/utils/types/directoryTypes";
+import type { IKu, IGraphic,IRequirement, IBrand,IEntityIdAndName,IVendorApiResponse, IVendorIdAndName } from "~/utils/types/directoryTypes";
 
 export const useKuTableStore = defineStore("KuTableStore", {
   state: () => ({
@@ -139,20 +139,55 @@ export const useKuTableStore = defineStore("KuTableStore", {
         console.error("Произошла ошибка", error);
       }
     },
-    async fetchKuVendor(data: IVendorIdAndName) {
+    // Обновленный метод в вашем сторе
+    async fetchKuVendor(data: { vendorid: string; name: string; entityid: string }) {
       try {
-        const result = await VENDOR.getVendorsIdAndName();
-        if (Array.isArray(result)) {
-          this.dataVendor = result;
-          console.log('dataVendor',result);
-        } else {
-          this.dataVendor = [];
-          console.error("Данные не получены или не являются массивом");
+        let allResults: IVendorNameId[] = [];
+        let nextPage: string | null = "api/vendorlist/";
+    
+        while (nextPage) {
+          const partialResult: { results: IVendorIdAndName[] } = await VENDOR.getVendorsIdAndName(data);
+          console.log('Partial API Response:', partialResult);
+    
+          if ('results' in partialResult && Array.isArray(partialResult.results)) {
+            allResults = [...allResults, ...partialResult.results];
+          } else {
+            console.error("Данные не получены или не являются массивом");
+            break;
+          }
+    
+          // Имитация получения следующей страницы
+          nextPage = partialResult.results.length > 0 ? `api/vendorlist/?page=${allResults.length / 10 + 1}` : null;
         }
+    
+        // Преобразование в ожидаемую структуру IVendorApiResponse
+        const result: IVendorApiResponse = {
+          count: allResults.length,
+          next: nextPage,
+          previous: null, // Установите значение в null, так как мы не знаем предыдущую страницу
+          results: allResults,
+        };
+    
+        this.dataVendor = allResults;
+        console.log('dataVendor', this.dataVendor);
       } catch (error) {
         console.error("Произошла ошибка", error);
       }
     },
+    // async fetchKuVendor(data: IVendorIdAndName) {
+    //   try {
+    //     const result = await VENDOR.getVendorsIdAndName();
+    //     if (Array.isArray(result)) {
+    //       this.dataVendor = result;
+    //       console.log('dataVendor',result);
+    //     } else {
+    //       this.dataVendor = [];
+    //       console.error("Данные не получены или не являются массивом");
+    //     }
+    //   } catch (error) {
+    //     console.error("Произошла ошибка", error);
+    //   }
+    // },
     addgraphic(row: {
       graph_id: number | null;
       ku: string;

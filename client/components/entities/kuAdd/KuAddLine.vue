@@ -57,7 +57,7 @@
         <el-col :span="5">
           <div class="custom-label">Поставщик</div>
           <el-form-item>
-            <el-select
+            <!-- <el-select
               v-model="store.vendorName"
               clearable
               filterable
@@ -69,7 +69,7 @@
                 :label="item.label"
                 :value="item.value"
               />
-            </el-select>
+            </el-select> -->
           </el-form-item>
         </el-col>
         <el-col :span="5">
@@ -129,8 +129,8 @@ import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { useKuTableStore } from "~~/stores/kuTableStore";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
-import {
-  IEntityIdAndName,
+import type{
+   IEntityIdAndName,
   IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 
@@ -163,26 +163,54 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(
-  () => store.dataVendor,
-  (dataVendor: IVendorIdAndName[]) => {
-    options2.value = dataVendor.map((item) => ({
-      label: item.name,
-      value: item.vendorid,
-    }));
-  }
-);
 
-onMounted(async () => {
-  try {
-    await store.fetchKuVendor({
-      vendorid: "",
-      name: "",
-    });
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
-  }
-});
+// onMounted(() => {
+//   updateVendorList(store.entityName);
+// });
+
+// watch(
+//   () => store.entityName,
+//   (newEntityName) => {
+//     updateVendorList(newEntityName);
+//   }
+// );
+
+// const updateVendorList = async (selectedEntityName: string) => {
+//   try {
+//     await store.fetchKuVendor({
+//       vendorid: "",
+//       name: "",
+//       entityid: selectedEntityName,
+//     });
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// };
+
+
+
+
+
+// watch(
+//   () => store.dataVendor,
+//   (dataVendor: IVendorIdAndName[]) => {
+//     options2.value = dataVendor.map((item) => ({
+//       label: item.name,
+//       value: item.vendorid,
+//     }));
+//   }
+// );
+
+// onMounted(async () => {
+//   try {
+//     await store.fetchKuVendor({
+//       vendorid: "",
+//       name: "",
+//     });
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// });
 
 
 const isAddAllDisabled = ref(store.isAddAllDisabled);

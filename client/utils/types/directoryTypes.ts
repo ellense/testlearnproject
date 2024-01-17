@@ -1,3 +1,4 @@
+// юр.лица
 export interface IEntity {
   entityid: string;
   directorname: string;
@@ -9,11 +10,11 @@ export interface IEntityIdAndName {
   entityid: string;
   name: string;
 }
-
 export interface EntityId {
   entityid: string;
 }
 
+//накладные
 export interface IInvoice {
   invoice_id: number | null;
   entity_id: string;
@@ -23,6 +24,21 @@ export interface IInvoice {
   invoice_date: Date | string;
 }
 
+export interface GetAllInvoices {
+  page_size?: number
+  page?: number
+}
+export interface InvoiceStore {
+  invoice: IInvoice[] 
+  pagination: Pagination | null
+  countRowTable: number
+}
+export interface GetAllInvoicesReturnData extends Pagination {
+  results: IInvoice[]
+}
+
+
+// КУ
 export interface IKu {
   // error: IKu;
   ku_id: string;
@@ -35,6 +51,8 @@ export interface IKu {
   percent: number | null;
 }
 
+
+// График
 export interface IGraphic {
   graph_id: number | null;
   ku: string;
@@ -48,6 +66,7 @@ export interface IGraphic {
   sum_bonus: number | null;
 }
 
+// Товары
 export interface IProduct {
   itemid: string;
   classifier_name: string;
@@ -56,35 +75,32 @@ export interface IProduct {
 }
 
 
-export interface IVendorList extends IVendor {
-  vendors_list: IVendorList[] | null
-  countPage: number | null
-  filterVendor: number | null
-}
-export interface IVendorTableStore {
-  search: string
-  vendorList: IVendor[],
-  vendors_list: IVendorList[],
-  countPage: number | null;
-  filterVendor: number | null;
-}
+// export interface IVendorList extends IVendor {
+//   vendors_list: IVendorList[] | null
+//   countPage: number | null
+//   filterVendor: number | null
+// }
+// export interface IVendorTableStore {
+//   search: string
+//   vendorList: IVendor[],
+//   vendors_list: IVendorList[],
+//   countPage: number | null;
+//   filterVendor: number | null;
+// }
 
-export interface IPagination {
-  count: number
-  next: string | null
-  previous: string | null
-  results: []
-}
+// export interface IPagination {
+//   count: number
+//   next: string | null
+//   previous: string | null
+//   results: []
+// }
 
-export interface IVendorListApi extends Omit<IPagination, 'results'> {
-  results: IVendorList[]
-}
+// export interface IVendorListApi extends Omit<IPagination, 'results'> {
+//   results: IVendorList[]
+// }
 
-export interface IVendorNameId {
-  vendorid: string;
-  name: string;
-}
 
+// Профиль
 export interface IProfile {
   id: number;
   last_name: string;
@@ -93,17 +109,7 @@ export interface IProfile {
   email: string;
 }
 
-export interface IProduser {
-  id: number;
-  name: string;
-}
-
-export interface IBrand {
-  brand_name: string;
-}
-
-
-
+//Условия
 export interface IRequirement {
   number: string;
   product: string;
@@ -112,6 +118,18 @@ export interface IRequirement {
   brand: string;
 }
 
+// Производитель
+export interface IProduser {
+  id: number;
+  name: string;
+}
+
+//Бренд
+export interface IBrand {
+  brand_name: string;
+}
+
+//поставщик
 export interface IVendor {
   vendorid: string;
   name: string;
@@ -120,20 +138,19 @@ export interface IVendor {
   urasticadress: string;
   inn_kpp: string;
   entityid: string;
-  // page: number | undefined;
-  // page_size: number | null;
 }
 export interface IVendorIdAndName {
   vendorid: string;
   name: string;
 }
-export interface Pagination {
-  count: number
-  next: string | null
-  previous: string | null
+export interface IVendorApiResponse {
+  count: number;
+  next: string | null;
+  previous: string | null;
+  results: IVendorIdAndName[];
 }
 export interface GetAllVendors {
-  page_size?: number;
+  page_size?: number
   page?: number
 }
 export interface VendorStore {
@@ -145,6 +162,13 @@ export interface GetAllVendorsReturnData extends Pagination {
   results: IVendor[]
 }
 
+
+//общие
+export interface Pagination {
+  count: number
+  next: string | null
+  previous: string | null
+}
 export type WithoutNullableKeys<Type> = {
   [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>
 }
