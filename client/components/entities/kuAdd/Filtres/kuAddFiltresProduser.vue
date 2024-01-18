@@ -16,35 +16,48 @@
         show-overflow-tooltip
       />
       <el-table-column
-        prop="id"
-        label="Id"
-        width="100"
-        show-overflow-tooltip
-      />
-      <el-table-column
-        prop="name"
+        prop="producer_name"
         label="Наименование"
         show-overflow-tooltip
       />
     </el-table>
   </el-scrollbar>
+  <div
+    v-if="pagination?.count && pagination.count > countRowTable"
+    class="pagination"
+  >
+    <el-pagination
+      layout="prev, pager, next"
+      :page-count="Math.ceil(pagination.count / countRowTable)"
+      @current-change="paginationChange"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import type { IProduser } from '~/utils/types/directoryTypes';
-const getProduser = () => {
-  const data: IProduser[] = []
-  for (let i = 0; i < 50; i++) {
-    data.push({
-      id: i,
-      name: `Производитель-${i}`,
-    })
-  }
-  return data
-}
+import type { IProducer } from '~/utils/types/directoryTypes';
+import { storeToRefs } from "pinia";
+import { useKuStore } from "~~/stores/kuStore";
+const { getProducers, pagination, countRowTable } = storeToRefs(useKuStore());
 
-const tableData = ref<IProduser[]>(getProduser())
+const tableData = ref<IProducer[]>(getProducers.value)
+
+  watch(getProducers, (value) => {
+  tableData.value = value || [];
+});
+
+const paginationChange = (page: number) => {
+  useKuStore().fetchProduserList(page);
+};
+
+onMounted(async () => {
+  try {
+    await useKuStore().fetchProduserList();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
 </script>
 
 <style scoped></style>

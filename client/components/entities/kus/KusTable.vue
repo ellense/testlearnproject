@@ -20,8 +20,8 @@
 <script lang="ts" setup>
 import { ref, onMounted, watch } from "vue";
 
-import { useKuTableStore } from "~~/stores/kuTableStore";
-const store = useKuTableStore();
+import { useKuStore } from "~~/stores/kuStore";
+const store = useKuStore();
 // watch(
 //   () => store.searchTableData,
 //   () => {

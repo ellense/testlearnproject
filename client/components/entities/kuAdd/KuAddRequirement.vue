@@ -49,8 +49,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-import { useKuTableStore } from "~~/stores/kuTableStore";
-const store = useKuTableStore();
+import { useKuStore } from "~~/stores/kuStore";
+const store = useKuStore();
 const kuRequirementList = ref(store.tableDataRequirement);
 const isAddAllDisabled = ref(store.isAddAllDisabled);
 const isAddConditionDisabled = ref(store.isAddConditionDisabled);

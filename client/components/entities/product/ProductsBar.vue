@@ -12,9 +12,9 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import { useProductTableStore } from "~~/stores/productTableStore";
+import { useProductStore } from "~~/stores/productStore";
 
-const productStore = useProductTableStore();
+const productStore = useProductStore();
 </script>
 
 <style scoped></style>

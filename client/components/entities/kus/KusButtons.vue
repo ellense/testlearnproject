@@ -16,12 +16,12 @@
 </template>
 
 <script setup lang="ts">
-import { useKuTableStore } from "~~/stores/kuTableStore";
+import { useKuStore } from "~~/stores/kuStore";
 import type { IKu} from "~/utils/types/directoryTypes";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
-const store = useKuTableStore();
+const store = useKuStore();
 const router = useRouter();
 
 const redirectToCreatePage = () => {

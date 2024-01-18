@@ -12,9 +12,9 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
+import { useInvoiceStore } from "~~/stores/invoiceStore";
 
-const invoiceStore = useInvoiceTableStore();
+const invoiceStore = useInvoiceStore();
 </script>
 
 <style scoped></style>

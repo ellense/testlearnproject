@@ -57,9 +57,9 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted } from "vue";
-import { useKuTableStore } from "~~/stores/kuTableStore";
+import { useKuStore } from "~~/stores/kuStore";
 
-const storeKU = useKuTableStore();
+const storeKU = useKuStore();
 // const handleVendorFilter = (value: string) => {
 //   storeKU.setVendorFilter(value);
 // };

@@ -1,11 +1,9 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table
-      v-loading="loading"
-      element-loading-text="Загрузка"
-      :data="filteredProductList"
+      :data="tableData"
       style="width: 100%"
-      height="calc(100vh - 130px)"
+      height="calc(100vh - 185px)"
     >
       <el-table-column
         prop="itemid"
@@ -28,35 +26,47 @@
       <el-table-column prop="brand_name" label="Бренд" />
     </el-table>
   </el-scrollbar>
+  <div
+    v-if="pagination?.count && pagination.count > countRowTable"
+    class="pagination"
+  >
+    <el-pagination
+      layout="prev, pager, next"
+      :page-count="Math.ceil(pagination.count / countRowTable)"
+      @current-change="paginationChange"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import { useProductTableStore } from "~~/stores/productTableStore";
+import type { IProduct } from "~/utils/types/directoryTypes";
 
-const productStore = useProductTableStore();
-const filteredProductList = ref(productStore.searchProductsList);
-
-let loading = ref(true);
-
-watch(
-  () => productStore.searchProductsList,
-  () => {
-    filteredProductList.value = productStore.searchProductsList;
-    loading.value = false;
-  }
+import { useProductStore } from "~~/stores/productStore";
+const { getProducts, pagination, countRowTable } = storeToRefs(
+  useProductStore()
 );
+const tableData = ref<IProduct[]>(getProducts.value);
+
+watch(getProducts, (value) => {
+  console.log("Table Data:", value);
+  tableData.value = value || [];
+});
+
+const scrollToTop = () => {
+  window.scrollTo(0, 0);
+};
+
+const paginationChange = (page: number) => {
+  useProductStore().fetchProductsList(page);
+  scrollToTop();
+};
 
 onMounted(async () => {
   try {
-    await productStore.fetchProductsList({
-      itemid: "",
-      classifier_name: "",
-      brand_name: "",
-      name: "",
-    });
+    await useProductStore().fetchProductsList();
   } catch (error) {
-    loading.value = false;
     console.error("Ошибка при загрузке данных", error);
   }
 });

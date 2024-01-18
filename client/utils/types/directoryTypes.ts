@@ -50,6 +50,34 @@ export interface IKu {
   base: number | null;
   percent: number | null;
 }
+export interface IKuStore {
+  newPercent: null,
+    newType: "",
+    entityName: "", 
+    vendorName: "",
+    newDateStart: Date,
+    newDateEnd: Date,
+    newDateActual: Date,
+    multipleSelection: IKu[],
+    multipleTableRef: Ref | null,
+    search: string,
+    tableData: IKu[],
+    tableDataGraphic:  IGraphic[],
+    brand: IBrand[],
+    producer: IProducer[],
+    product: IProduct[],
+    tableDataRequirement: IRequirement[],
+    dataEntity: IEntityIdAndName[],
+    dataVendor: IVendorIdAndName[],
+    dialogFormVisible: boolean,
+    isAddAllDisabled: boolean,
+    isAddConditionDisabled: boolean,
+    vendorFilter: string,
+    kuFilter: number | null,
+    pagination: Pagination | null, 
+    countRowTable: number,
+    vendors: IVendorIdAndName[],
+}
 
 
 // График
@@ -73,31 +101,18 @@ export interface IProduct {
   brand_name: string;
   name: string;
 }
-
-
-// export interface IVendorList extends IVendor {
-//   vendors_list: IVendorList[] | null
-//   countPage: number | null
-//   filterVendor: number | null
-// }
-// export interface IVendorTableStore {
-//   search: string
-//   vendorList: IVendor[],
-//   vendors_list: IVendorList[],
-//   countPage: number | null;
-//   filterVendor: number | null;
-// }
-
-// export interface IPagination {
-//   count: number
-//   next: string | null
-//   previous: string | null
-//   results: []
-// }
-
-// export interface IVendorListApi extends Omit<IPagination, 'results'> {
-//   results: IVendorList[]
-// }
+export interface GetAllProducts {
+  page_size?: number
+  page?: number
+}
+export interface ProductStore {
+  product: IProduct[] 
+  pagination: Pagination | null
+  countRowTable: number
+}
+export interface GetAllProductsReturnData extends Pagination {
+  results: IProduct[]
+}
 
 
 // Профиль
@@ -109,6 +124,7 @@ export interface IProfile {
   email: string;
 }
 
+
 //Условия
 export interface IRequirement {
   number: string;
@@ -118,36 +134,50 @@ export interface IRequirement {
   brand: string;
 }
 
+
 // Производитель
-export interface IProduser {
-  id: number;
-  name: string;
+export interface IProducer {
+  producer_name: string;
 }
+export interface GetAllProduser {
+  page_size?: number
+  page?: number
+}
+export interface GetAllProdusersReturnData extends Pagination {
+  results: IProducer[]
+}
+
 
 //Бренд
 export interface IBrand {
   brand_name: string;
 }
+export interface GetAllBrands {
+  page_size?: number
+  page?: number
+}
+export interface GetAllBrandsReturnData extends Pagination {
+  results: IBrand[]
+}
 
 //поставщик
 export interface IVendor {
-  vendorid: string;
-  name: string;
-  urasticname: string;
-  directorname: string;
-  urasticadress: string;
-  inn_kpp: string;
-  entityid: string;
+  vendorid: string
+  name: string
+  urasticname: string
+  directorname: string
+  urasticadress: string
+  inn_kpp: string
+  entityid: string
 }
 export interface IVendorIdAndName {
-  vendorid: string;
-  name: string;
+  vendorid: string
+  name: string
 }
-export interface IVendorApiResponse {
-  count: number;
-  next: string | null;
-  previous: string | null;
-  results: IVendorIdAndName[];
+export interface VendorStore {
+  vendors: IVendor[] | null
+  pagination: Pagination | null
+  countRowTable: number
 }
 export interface GetAllVendors {
   page_size?: number
@@ -160,6 +190,14 @@ export interface VendorStore {
 }
 export interface GetAllVendorsReturnData extends Pagination {
   results: IVendor[]
+}
+export interface GetAllVendorsForEntity {
+  entityid?: string
+  page_size?: number
+  page?: number
+}
+export interface GetAllVendorsForEntityReturnData extends Pagination {
+  results: IVendorIdAndName[]
 }
 
 

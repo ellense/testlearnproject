@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import type { GetAllInvoicesReturnData, IInvoice, InvoiceStore, WithoutNullableKeys } from "~/utils/types/directoryTypes";
+import type { InvoiceStore } from "~/utils/types/directoryTypes";
 
-export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
+export const useInvoiceStore = defineStore("InvoiceStore", {
   state: ():InvoiceStore => ({
     invoice: [],
     pagination: null,
@@ -18,7 +18,7 @@ export const useInvoiceTableStore = defineStore("InvoiceTableStore", {
         const invoices = await INVOICE.getInvoicesList({
           page_size: this.$state.countRowTable,
           page, 
-        }) as GetAllInvoicesReturnData; // Явно указываем тип данных
+        });
     
         this.$state.invoice = invoices.results;
         this.$state.pagination = {

@@ -16,35 +16,79 @@
           show-overflow-tooltip
         />
         <el-table-column
-          prop="id"
-          label="Id"
-          width="100"
-          show-overflow-tooltip
-        />
-        <el-table-column
-          prop="name"
-          label="Наименование"
-          show-overflow-tooltip
-        />
+        prop="itemid"
+        label="ID"
+        width="100"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="name"
+        label="Наименование"
+        width="100"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        prop="classifier_name"
+        label="Категория"
+        width="100"
+        show-overflow-tooltip
+      />
       </el-table>
+      <el-table-column prop="brand_name" label="Бренд" />
     </el-scrollbar>
+    <div
+    v-if="pagination?.count && pagination.count > countRowTable"
+    class="pagination"
+  >
+    <el-pagination
+      layout="prev, pager, next"
+      :page-count="Math.ceil(pagination.count / countRowTable)"
+      @current-change="paginationChange"
+    />
+  </div>
   </template>
   
   <script setup lang="ts">
-  import { Search } from "@element-plus/icons-vue";
-  import type { IBrand } from '~/utils/types/directoryTypes';
-  const getProduser = () => {
-    const data: IBrand[] = []
-    for (let i = 0; i < 50; i++) {
-      data.push({
-        id: i,
-        name: `Товар-${i}`,
-      })
-    }
-    return data
-  }
+  // import { Search } from "@element-plus/icons-vue";
+  // import type { IBrand } from '~/utils/types/directoryTypes';
+  // const getProduser = () => {
+  //   const data: IBrand[] = []
+  //   for (let i = 0; i < 50; i++) {
+  //     data.push({
+  //       id: i,
+  //       name: `Товар-${i}`,
+  //     })
+  //   }
+  //   return data
+  // }
   
-  const tableData = ref<IBrand[]>(getProduser())
+  // const tableData = ref<IBrand[]>(getProduser())
+import { Search } from "@element-plus/icons-vue";
+import { storeToRefs } from "pinia";
+import { ref, onMounted, watch } from "vue";
+import type { IProduct } from "~/utils/types/directoryTypes";
+
+import { useKuStore } from "~~/stores/kuStore";
+const { getProduct, pagination, countRowTable } = storeToRefs(
+  useKuStore()
+);
+const tableData = ref<IProduct[]>(getProduct.value);
+
+watch(getProduct, (value) => {
+  tableData.value = value || [];
+});
+
+const paginationChange = (page: number) => {
+  useKuStore().fetchProductKuList(page);
+};
+
+onMounted(async () => {
+  try {
+    await useKuStore().fetchProductKuList();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
   </script>
   
   <style scoped></style>

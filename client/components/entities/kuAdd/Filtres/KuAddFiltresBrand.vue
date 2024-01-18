@@ -3,7 +3,12 @@
     <el-input placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
   </div>
   <el-scrollbar class="scrollTableFiltres">
-    <el-table v-if="tableData.length > 0" style="width: 100%" height="300" :data="tableData">
+    <el-table
+      v-if="tableData.length > 0"
+      style="width: 100%"
+      height="300"
+      :data="tableData"
+    >
       <el-table-column
         property="selection"
         type="selection"
@@ -15,39 +20,51 @@
         label="Наименование"
         show-overflow-tooltip
       >
-        <template v-slot="{ row }">
-          {{ row.brand_name }}
-        </template>
       </el-table-column>
     </el-table>
-    <div v-else>
-      Нет данных для отображения.
-    </div>
   </el-scrollbar>
+  <div
+    v-if="pagination?.count && pagination.count > countRowTable"
+    class="pagination"
+  >
+    <el-pagination
+      layout="prev, pager, next"
+      :page-count="Math.ceil(pagination.count / countRowTable)"
+      @current-change="paginationChange"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
-import { useKuTableStore } from "~~/stores/kuTableStore";
-const { getBrands } = storeToRefs(useKuTableStore());
+import { useKuStore } from "~~/stores/kuStore";
+const { getBrands, pagination, countRowTable } = storeToRefs(useKuStore());
 import type { IBrand } from "~/utils/types/directoryTypes";
-const tableData = ref<IBrand[]>([]);
-watch(
-  () => getBrands.value,
-  (value) => {
-    tableData.value = value || [];
-    console.log('ccccccccccc', tableData)
-  }
-);
+const tableData = ref<IBrand[]>(getBrands.value);
+
+watch(getBrands, (value) => {
+  tableData.value = value || [];
+});
+
+const paginationChange = (page: number) => {
+  useKuStore().fetchBrandList(page);
+};
+
 onMounted(async () => {
   try {
-    await useKuTableStore().fetchBrandList({
-      brand_name: "",
-    });
+    await useKuStore().fetchBrandList();
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
 });
 </script>
+<style scoped>
+.el-tabs__content{
+  padding-bottom: 0;
+}
+.el-dialog__body{
+  padding: 0;
+}
+</style>

@@ -16,7 +16,7 @@ export const useVendorStore = defineStore("VendorStore", {
       try {
         const vendors = await VENDOR.getVendorsList({
           page_size: this.$state.countRowTable,
-          page, 
+          page,
         });
         this.$state.vendors = vendors.results;
         this.$state.pagination = {
@@ -28,5 +28,6 @@ export const useVendorStore = defineStore("VendorStore", {
         return Promise.reject(error);
       }
     },
+    
   },
 });

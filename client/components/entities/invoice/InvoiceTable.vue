@@ -53,14 +53,10 @@ import { storeToRefs } from 'pinia'
 import { ref, onMounted, watch } from "vue";
 import type { IInvoice } from "~/utils/types/directoryTypes";
 
-import { useInvoiceTableStore } from "~~/stores/invoiceTableStore";
-const { getInvoices, pagination, countRowTable } = storeToRefs(useInvoiceTableStore());
+import { useInvoiceStore } from "~~/stores/invoiceStore";
+const { getInvoices, pagination, countRowTable } = storeToRefs(useInvoiceStore());
 const tableData = ref<IInvoice[]>(getInvoices.value);
 
-// watch(pagination, (value) => {
-//   console.log('Pagination Data:', value);
-// });
-// Наблюдение за изменениями данных вакансий и обновление реактивных данных
 watch(getInvoices, (value) => {
   console.log('Table Data:', value);
   tableData.value = value || [];
@@ -71,13 +67,13 @@ const scrollToTop = () => {
 };
 
 const paginationChange = (page: number) => {
-  useInvoiceTableStore().fetchInvoicesList(page);
+  useInvoiceStore().fetchInvoicesList(page);
   scrollToTop();
 };
 
 onMounted(async () => {
   try {
-    await useInvoiceTableStore().fetchInvoicesList();
+    await useInvoiceStore().fetchInvoicesList();
   } catch (error) {
     console.error('Ошибка при загрузке данных', error);
   }

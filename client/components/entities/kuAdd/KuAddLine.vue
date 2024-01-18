@@ -13,8 +13,8 @@
             >
               <el-option
                 v-for="item in options"
-                :key="item.label"
-                :label="item.label"
+                :key="item.value"
+                :label="item.value"
                 :value="item.value"
               />
             </el-select>
@@ -57,19 +57,19 @@
         <el-col :span="5">
           <div class="custom-label">Поставщик</div>
           <el-form-item>
-            <!-- <el-select
+            <el-select
               v-model="store.vendorName"
               clearable
               filterable
               style="width: 214px"
             >
               <el-option
-                v-for="item in options2"
-                :key="item.label"
-                :label="item.label"
-                :value="item.value"
+                v-for="vendor in store.vendors"
+                :key="vendor.vendorid"
+                :label="vendor.name"
+                :value="vendor.vendorid"
               />
-            </el-select> -->
+            </el-select>
           </el-form-item>
         </el-col>
         <el-col :span="5">
@@ -127,15 +127,15 @@ import { ref } from "vue";
 
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
-import { useKuTableStore } from "~~/stores/kuTableStore";
+import { useKuStore } from "~~/stores/kuStore";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
-import type{
-   IEntityIdAndName,
+import type {
+  IEntityIdAndName,
   IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 
 const entityStore = useEntityTableStore();
-const store = useKuTableStore();
+const store = useKuStore();
 const router = useRouter();
 
 const options = ref<Array<{ label: string; value: string }>>([]);
@@ -163,33 +163,25 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
+onMounted(() => {
+  updateVendorList(store.entityName);
+});
 
-// onMounted(() => {
-//   updateVendorList(store.entityName);
-// });
+watch(
+  () => store.entityName,
+  (newEntityName) => {
+    updateVendorList(newEntityName);
+  }
+);
 
-// watch(
-//   () => store.entityName,
-//   (newEntityName) => {
-//     updateVendorList(newEntityName);
-//   }
-// );
-
-// const updateVendorList = async (selectedEntityName: string) => {
-//   try {
-//     await store.fetchKuVendor({
-//       vendorid: "",
-//       name: "",
-//       entityid: selectedEntityName,
-//     });
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// };
-
-
-
-
+const updateVendorList = async (selectedEntityName: string,page: number) => {
+  try {
+    await store.fetchVendorsListForEntity({
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+};
 
 // watch(
 //   () => store.dataVendor,
@@ -211,7 +203,6 @@ const options2 = ref<Array<{ label: string; value: string }>>([]);
 //     console.error("Ошибка при загрузке данных", error);
 //   }
 // });
-
 
 const isAddAllDisabled = ref(store.isAddAllDisabled);
 const isAddConditionDisabled = ref(store.isAddConditionDisabled);
@@ -239,7 +230,6 @@ const messageClose = () => {
 const dialogOpen = () => {
   store.dialogFormVisible = true;
 };
-
 
 const addClose = () => {
   router.push("ku");

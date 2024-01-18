@@ -32,9 +32,9 @@
 </template>
 <script setup lang="ts">
 import { ref } from "vue";
-import { useKuTableStore } from "~~/stores/kuTableStore";
+import { useKuStore } from "~~/stores/kuStore";
 
-const kuStore = useKuTableStore();
+const kuStore = useKuStore();
 import { useEntityTableStore } from "@/stores/entityTableStore";
 
 const entityStore = useEntityTableStore();
