@@ -2,7 +2,8 @@ import type { AuthApiData, GetUserData } from "~/utils/types/authTypes";
 import type {
   IEntity,
   IEntityIdAndName,
-  IKu,
+  IKuList,
+  IKuPost,
   IGraphic,
   GetAllInvoices,
   GetAllInvoicesReturnData,
@@ -14,8 +15,8 @@ import type {
   GetAllVendorsForEntityReturnData,
   GetAllBrandsReturnData,
   GetAllBrands,
-  GetAllProduser,
-  GetAllProdusersReturnData,
+  GetAllProducer,
+  GetAllProducersReturnData,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -56,7 +57,7 @@ export const VENDOR = {
   getVendorsForEntity: (
     params?: GetAllVendorsForEntity
   ): Promise<GetAllVendorsForEntityReturnData> =>
-    $Get("api/vendorlist/", { params, isBearer: false }),
+    $Get("api/vendorfilter/", { params, isBearer: false }),
 };
 
 export const PRODUCT = {
@@ -67,13 +68,11 @@ export const PRODUCT = {
 };
 
 export const KU = {
-  getKuList: (data: IKu): Promise<IKu> =>
+  getKuList: (data: IKuList): Promise<IKuList> =>
     $Get("api/kulist", { data, isBearer: false }),
-  postKu: (data: IKu): Promise<IKu> =>
+  postKu: (data: IKuPost): Promise<IKuPost> =>
     $Post("api/kulist", { data, isBearer: false }),
-  putKu: (data: IKu): Promise<IKu> =>
-    $Put("api/kulist", { data, isBearer: false }),
-  deleteKu: (data: IKu): Promise<IKu> =>
+  deleteKu: (data: IKuList): Promise<IKuList> =>
     $Delete("api/kulist", { data, isBearer: false }),
 };
 
@@ -85,7 +84,7 @@ export const GRAPHIC = {
 };
 
 export const PRODUCER = {
-  getProducer: (params?: GetAllProduser): Promise<GetAllProdusersReturnData> =>
+  getProducer: (params?: GetAllProducer): Promise<GetAllProducersReturnData> =>
     $Get("api/brandlist", { params, isBearer: false }),
 };
 

@@ -1,6 +1,4 @@
 <template>
-  <!-- <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)"> -->
   <el-scrollbar class="scrollTable" ref="scrollTableRef">
     <el-table :data="tableData" style="width: 100%" :height="tableHeight">
       <el-table-column label="Номер" prop="vendorid" width="150" show-overflow-tooltip sortable />
@@ -26,11 +24,6 @@ import type { IVendor } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
-
-
-
-
-
 const scrollTableRef = ref<HTMLElement | null>(null);
 const tableHeight = ref(0);
 

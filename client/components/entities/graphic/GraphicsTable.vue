@@ -60,24 +60,11 @@ import { ref, onMounted } from "vue";
 import { useKuStore } from "~~/stores/kuStore";
 
 const storeKU = useKuStore();
-// const handleVendorFilter = (value: string) => {
-//   storeKU.setVendorFilter(value);
-// };
 
-// const searchTableData = ref(storeKU.searchTableData);
-
-// onMounted(() => {
-//   watchEffect(() => {
-//     searchTableData.value = storeKU.searchTableData;
-//   });
-// });
-
-// const handleKuFilter = (value: number | null) => {
-//   storeKU.setKuFilter(value);
-// };
 onMounted(async () => {
   try {
     await storeKU.fetchKuList({
+      entityid: "",
       ku_id: "",
       vendor: "",
       period: "",
@@ -91,5 +78,4 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных", error);
   }
 });
-
 </script>

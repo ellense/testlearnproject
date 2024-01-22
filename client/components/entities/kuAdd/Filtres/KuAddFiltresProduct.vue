@@ -33,8 +33,9 @@
         width="100"
         show-overflow-tooltip
       />
-      </el-table>
       <el-table-column prop="brand_name" label="Бренд" />
+      </el-table>
+      
     </el-scrollbar>
     <div
     v-if="pagination?.count && pagination.count > countRowTable"
@@ -49,20 +50,6 @@
   </template>
   
   <script setup lang="ts">
-  // import { Search } from "@element-plus/icons-vue";
-  // import type { IBrand } from '~/utils/types/directoryTypes';
-  // const getProduser = () => {
-  //   const data: IBrand[] = []
-  //   for (let i = 0; i < 50; i++) {
-  //     data.push({
-  //       id: i,
-  //       name: `Товар-${i}`,
-  //     })
-  //   }
-  //   return data
-  // }
-  
-  // const tableData = ref<IBrand[]>(getProduser())
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";

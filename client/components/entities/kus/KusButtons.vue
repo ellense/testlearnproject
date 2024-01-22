@@ -17,7 +17,7 @@
 
 <script setup lang="ts">
 import { useKuStore } from "~~/stores/kuStore";
-import type { IKu} from "~/utils/types/directoryTypes";
+import type { IKuList} from "~/utils/types/directoryTypes";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
@@ -28,7 +28,7 @@ const redirectToCreatePage = () => {
   router.push("kuAdd");
 };
 //удаление ку
-const selectedRows = ref<IKu[]>([]);
+const selectedRows = ref<IKuList[]>([]);
 
 // const deleteSelectedRows = async () => {
 //   console.log("внутри deleteSelectedRows");
@@ -90,7 +90,7 @@ const deleteKu = () => {
 //   }
 // };
   console.log("Пытаюсь удалить");
-  deleteSelectedRows();
+  // deleteSelectedRows();
   ElMessage.success("Коммерческое условие успешно удалено");
 };
 

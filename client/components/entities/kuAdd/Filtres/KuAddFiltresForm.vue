@@ -8,8 +8,7 @@
   >
     <el-tabs type="border-card">
       <el-tab-pane label="Производитель">
-        <EntitiesKuAddFiltresProduser/>
-        
+        <EntitiesKuAddFiltresProducer/>
       </el-tab-pane>
       <el-tab-pane label="Торговая марка">
         <EntitiesKuAddFiltresBrand/>

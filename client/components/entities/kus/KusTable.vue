@@ -1,16 +1,63 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="filteredKuList" style="width: 100%" @selection-change="store.handleSelectionChange"
-      height="calc(100vh - 160px)" @row-dblclick="rowDblclick">
+    <el-table
+      :data="filteredKuList"
+      style="width: 100%"
+      @selection-change="store.handleSelectionChange"
+      height="calc(100vh - 160px)"
+      @row-dblclick="rowDblclick"
+    >
       <el-table-column type="selection" width="55" />
-      <el-table-column property="ku_id" label="Номер КУ" width="150" sortable :filter-method="handleKuFilter"
-        :filters="kuFilterOptions" show-overflow-tooltip />
-
-      <el-table-column property="vendor" label="Поставщик" width="200" sortable show-overflow-tooltip />
-      <el-table-column property="percent" label="Процент" width="120" show-overflow-tooltip />
-      <el-table-column property="period" label="Период" width="200" show-overflow-tooltip />
-      <el-table-column property="date_start" sortable label="Начальная дата" width="160" />
-      <el-table-column property="date_end" sortable label="Конечная дата" width="160" show-overflow-tooltip />
+      <el-table-column
+        property="ku_id"
+        label="Номер КУ"
+        width="150"
+        sortable
+        :filters="kuFilterOptions"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="entityid"
+        label="Юр.лцо"
+        width="200"
+        sortable
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="vendor"
+        label="Поставщик"
+        width="200"
+        sortable
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="percent"
+        label="Процент"
+        width="120"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="period"
+        label="Период"
+        width="200"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="date_start"
+        type="date"
+        sortable
+        label="Начальная дата"
+        width="160"
+        show-overflow-tooltip
+      />
+      <el-table-column
+        property="date_end"
+        type="date"
+        sortable
+        label="Конечная дата"
+        width="160"
+        show-overflow-tooltip
+      />
       <el-table-column property="base" label="База" />
       <el-table-column property="status" label="Статус" />
     </el-table>
@@ -22,24 +69,19 @@ import { ref, onMounted, watch } from "vue";
 
 import { useKuStore } from "~~/stores/kuStore";
 const store = useKuStore();
-// watch(
-//   () => store.searchTableData,
-//   () => {
-//     filteredKuList.value = store.searchTableData;
-//   }
-// );
+
 onMounted(async () => {
   try {
     await store.fetchKuList({
+      entityid: "",
       ku_id: "",
       vendor: "",
       period: "",
       date_start: new Date(),
       date_end: new Date(),
       status: "",
-      base: null,
+      base: 100,
       percent: null,
-     
     });
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
@@ -48,10 +90,6 @@ onMounted(async () => {
 
 //фильтры
 const filteredKuList = ref(store.searchTableData);
-
-const handleKuFilter = (value: number | null) => {
-  store.setKuFilter(value);
-};
 
 const kuFilterOptions = ref<Array<{ text: string; value: string }>>([]);
 
@@ -67,6 +105,4 @@ const rowDblclick = (kuId: number) => {
   console.log("success");
   useRouter().push({ path: `/ku/${kuId}` });
 };
-
-
 </script>

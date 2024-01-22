@@ -9,19 +9,31 @@
               v-model="store.entityName"
               clearable
               filterable
-              style="width: 214px"
+              style="width: 300px"
+              @change="onEntityChange"
             >
               <el-option
                 v-for="item in options"
                 :key="item.value"
-                :label="item.value"
+                :label="item.label"
                 :value="item.value"
-              />
+              >
+                <span style="float: left">{{ item.label }}</span>
+                <span
+                  style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  "
+                  >{{ item.value }}</span
+                >
+              </el-option>
             </el-select>
           </el-form-item>
         </el-col>
 
-        <el-col :span="5">
+        <el-col :span="4">
           <div class="custom-label">Период</div>
           <el-form-item>
             <el-select v-model="store.newType" clearable style="width: 214px">
@@ -46,7 +58,7 @@
               style="width: 214px"
               format="DD.MM.YYYY"
               value-format="DD.MM.YYYY"
-              clearable
+              el-rowrable
               placeholder="Выбрать"
             ></el-date-picker>
           </el-form-item>
@@ -61,18 +73,29 @@
               v-model="store.vendorName"
               clearable
               filterable
-              style="width: 214px"
+              style="width: 300px"
             >
               <el-option
-                v-for="vendor in store.vendors"
-                :key="vendor.vendorid"
-                :label="vendor.name"
-                :value="vendor.vendorid"
-              />
+                v-for="item in options2"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+                <span style="float: left">{{ item.label }}</span>
+                <span
+                  style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  "
+                  >{{ item.value }}</span
+                >
+              </el-option>
             </el-select>
           </el-form-item>
         </el-col>
-        <el-col :span="5">
+        <el-col :span="4">
           <div class="custom-label">Процент</div>
           <el-form-item>
             <el-input
@@ -99,7 +122,7 @@
         </el-col>
       </el-row>
     </form>
-    <h3>Условия по товарам</h3>
+    <h3>Фильтрация по товарам</h3>
     <div>
       <el-button text bg @click="onAddItem()" :disabled="isAddAllDisabled"
         >+ Все</el-button
@@ -163,67 +186,43 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
-onMounted(() => {
-  updateVendorList(store.entityName);
-});
-
 watch(
-  () => store.entityName,
-  (newEntityName) => {
-    updateVendorList(newEntityName);
+  () => store.dataVendor,
+  (dataVendor: IVendorIdAndName[]) => {
+    options2.value = dataVendor.map((item) => ({
+      label: item.name,
+      value: item.vendorid,
+    }));
   }
 );
 
-const updateVendorList = async (selectedEntityName: string,page: number) => {
+onMounted(async () => {
   try {
-    await store.fetchVendorsListForEntity({
-    });
+    await store.fetchVendorsListForEntity();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
+
+const onEntityChange = async () => {
+  try {
+    await store.fetchVendorsListForEntity(undefined, store.entityName);
+    console.log("fetchVendorsListForEntity:", store.entityName);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
 };
 
-// watch(
-//   () => store.dataVendor,
-//   (dataVendor: IVendorIdAndName[]) => {
-//     options2.value = dataVendor.map((item) => ({
-//       label: item.name,
-//       value: item.vendorid,
-//     }));
-//   }
-// );
-
-// onMounted(async () => {
-//   try {
-//     await store.fetchKuVendor({
-//       vendorid: "",
-//       name: "",
-//     });
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
-
 const isAddAllDisabled = ref(store.isAddAllDisabled);
 const isAddConditionDisabled = ref(store.isAddConditionDisabled);
 
 const onAddItem = () => {
-  //добавление условия "все"
   store.tableDataRequirement.push({
     number: "Все",
     product: "",
     category: "",
     producer: "",
     brand: "",
-  });
-  // isAddAllDisabled.value = true;
-  // isAddConditionDisabled.value = true;
-};
-
-const messageClose = () => {
-  ElMessage({
-    message: "Коммерческое условие успешно добавлено",
-    type: "success",
   });
 };
 
@@ -237,31 +236,27 @@ const addClose = () => {
 
 const addItemAndSendToBackend = async () => {
   const newItem = {
-    ku_id: "100",
+    entityid: store.entityName,
     vendor: store.vendorName,
     period: store.newType,
     date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
     date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
     status: "Создано",
-    date_actual: dayjs(store.newDateActual, "DD.MM.YYYY").format("YYYY-MM-DD"),
-    base: 15000 + store.tableData.length * store.tableData.length,
     percent: store.newPercent,
-    error: undefined,
   };
 
   try {
     const response = await KU.postKu(newItem);
-
     if (response) {
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
       router.push("ku");
-      messageClose();
+      ElMessage.success("Коммерческое условие успешно создано.");
     } else {
       console.error("Не удалось отправить экземпляр на бэкенд");
+      ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
     }
-
-    router.push("ku");
   } catch (error) {
+    console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
   }
 };

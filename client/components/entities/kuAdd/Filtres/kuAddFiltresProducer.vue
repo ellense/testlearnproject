@@ -8,7 +8,7 @@
     </div>
   <el-scrollbar class="scrollTableFiltres">
     
-    <el-table style="width: 100%" height="300" :data="tableData">
+    <el-table v-if="tableData.length > 0" style="width: 100%" height="300" :data="tableData">
       <el-table-column
         property="selection"
         type="selection"
@@ -35,10 +35,11 @@
 </template>
 
 <script setup lang="ts">
+import { ref, watch, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
-import type { IProducer } from '~/utils/types/directoryTypes';
 import { storeToRefs } from "pinia";
 import { useKuStore } from "~~/stores/kuStore";
+import type { IProducer } from '~/utils/types/directoryTypes';
 const { getProducers, pagination, countRowTable } = storeToRefs(useKuStore());
 
 const tableData = ref<IProducer[]>(getProducers.value)
@@ -48,12 +49,12 @@ const tableData = ref<IProducer[]>(getProducers.value)
 });
 
 const paginationChange = (page: number) => {
-  useKuStore().fetchProduserList(page);
+  useKuStore().fetchProducerList(page);
 };
 
 onMounted(async () => {
   try {
-    await useKuStore().fetchProduserList();
+    await useKuStore().fetchProducerList();
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

@@ -40,8 +40,9 @@ import { ref, watch, onMounted } from "vue";
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { useKuStore } from "~~/stores/kuStore";
-const { getBrands, pagination, countRowTable } = storeToRefs(useKuStore());
 import type { IBrand } from "~/utils/types/directoryTypes";
+const { getBrands, pagination, countRowTable } = storeToRefs(useKuStore());
+
 const tableData = ref<IBrand[]>(getBrands.value);
 
 watch(getBrands, (value) => {
@@ -61,10 +62,10 @@ onMounted(async () => {
 });
 </script>
 <style scoped>
-.el-tabs__content{
+.el-tabs__content {
   padding-bottom: 0;
 }
-.el-dialog__body{
+.el-dialog__body {
   padding: 0;
 }
 </style>
