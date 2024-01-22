@@ -78,9 +78,8 @@ const deleteKu = () => {
 //   for (const row of selectedRows) {
 //     console.log("Удаление row:", row);
 //     try {
-//       const result = await KU.deleteKu(row);
-//       if (result && result.error) {
-//         console.error("Ошибка при удалении строки:", result.error);
+//       const result = await KU.deleteKu(row.ku_id);
+//       if (result) {
 //       } else {
 //         console.log("Строка успешно удалена:", row);
 //       }

@@ -73,7 +73,7 @@ export const KU = {
   postKu: (data: IKuPost): Promise<IKuPost> =>
     $Post("api/kulist", { data, isBearer: false }),
   deleteKu: (data: IKuList): Promise<IKuList> =>
-    $Delete("api/kulist", { data, isBearer: false }),
+    $Delete("api/kudetail/", { data, isBearer: false }),
 };
 
 export const GRAPHIC = {

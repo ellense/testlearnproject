@@ -18,7 +18,7 @@
       />
       <el-table-column
         property="entityid"
-        label="Юр.лцо"
+        label="Юр.лицо"
         width="200"
         sortable
         show-overflow-tooltip
