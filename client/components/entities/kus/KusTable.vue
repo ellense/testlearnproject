@@ -13,7 +13,6 @@
         label="Номер КУ"
         width="150"
         sortable
-        :filters="kuFilterOptions"
         show-overflow-tooltip
       />
       <el-table-column
@@ -91,13 +90,8 @@ onMounted(async () => {
 //фильтры
 const filteredKuList = ref(store.searchTableData);
 
-const kuFilterOptions = ref<Array<{ text: string; value: string }>>([]);
-
 watchEffect(() => {
   filteredKuList.value = store.searchTableData;
-  kuFilterOptions.value = Array.from(
-    new Set(store.tableData.map((item) => item.ku_id))
-  ).map((value) => ({ text: String(value), value: String(value) }));
 });
 
 //открывание ку

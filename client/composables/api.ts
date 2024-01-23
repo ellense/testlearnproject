@@ -4,6 +4,7 @@ import type {
   IEntityIdAndName,
   IKuList,
   IKuPost,
+  IKuId,
   IGraphic,
   GetAllInvoices,
   GetAllInvoicesReturnData,
@@ -72,8 +73,8 @@ export const KU = {
     $Get("api/kulist", { data, isBearer: false }),
   postKu: (data: IKuPost): Promise<IKuPost> =>
     $Post("api/kulist", { data, isBearer: false }),
-  deleteKu: (data: IKuList): Promise<IKuList> =>
-    $Delete("api/kudetail/", { data, isBearer: false }),
+  deleteKu: (data: IKuId) =>
+    $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
 };
 
 export const GRAPHIC = {

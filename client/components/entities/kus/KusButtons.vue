@@ -17,7 +17,6 @@
 
 <script setup lang="ts">
 import { useKuStore } from "~~/stores/kuStore";
-import type { IKuList} from "~/utils/types/directoryTypes";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
@@ -27,70 +26,28 @@ const router = useRouter();
 const redirectToCreatePage = () => {
   router.push("kuAdd");
 };
-//удаление ку
-const selectedRows = ref<IKuList[]>([]);
 
-// const deleteSelectedRows = async () => {
-//   console.log("внутри deleteSelectedRows");
-//   for (const row of selectedRows.value) {
-//     console.log("Удаление row:", row);
-//     try {
-//       const result = await KU.deleteKu(row);
-//       if (result && result.error) {
-//         console.error("Ошибка при удалении строки:", result.error);
-//       } else {
-//         console.log("Строка успешно удалена:", row);
-//       }
-//     } catch (error) {
-//       console.error("Ошибка при удалении строки:", error);
-//     }
-//   }
-// };
-// const selectedRows = ref([]);
-// const deleteSelectedRows = async () => {
-//   for (const row of selectedRows.value) {
-//     try {
-//       const result = await KU.deleteKu({
-//         ku_id: row.ku_id,
-//         vendor: "",
-//         period: "",
-//         date_start: "",
-//         date_end: "",
-//         status: "",
-//         base: null,
-//         percent: null,
-//       });
-//       if (!result) {
-//         console.error("Не удалось удалить строку с ku_id:", row.ku_id);
-//         return; // прерываем выполнение, если что-то пошло не так
-//       }
-//       console.log("успешно удалено");
-//     } catch (error) {
-//       console.error("Ошибка при удалении строки:", error);
-//     }
-//   }
-// };
-const deleteKu = () => {
-  const selectedRows = store.multipleSelection;
+// Функция удаления выбранных строк
+const deleteKu = async () => {
+  const selectedRows = store.multipleSelection.map((row) => row.ku_id);
 
-// const deleteSelectedRows = async () => {
-//   console.log("внутри deleteSelectedRows");
-//   for (const row of selectedRows) {
-//     console.log("Удаление row:", row);
-//     try {
-//       const result = await KU.deleteKu(row.ku_id);
-//       if (result) {
-//       } else {
-//         console.log("Строка успешно удалена:", row);
-//       }
-//     } catch (error) {
-//       console.error("Ошибка при удалении строки:", error);
-//     }
-//   }
-// };
-  console.log("Пытаюсь удалить");
-  // deleteSelectedRows();
-  ElMessage.success("Коммерческое условие успешно удалено");
+  try {
+    for (const ku_id of selectedRows) {
+      const results = await KU.deleteKu({ ku_id });
+      console.log("успешно удалилось", results);
+    }
+    if (selectedRows.length == 1)
+      ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
+    else ElMessage.success(`Успешно удалено: ${selectedRows.join(", ")}`);
+  } catch (error) {
+    console.error("Ошибка при удалении строк:", error);
+    ElMessage.error("Ошибка при удалении коммерческого условия");
+  } finally {
+    store.tableData = store.tableData.filter(
+      (row) => !selectedRows.includes(row.ku_id)
+    );
+    store.multipleSelection = [];
+  }
 };
 
 const addGraphic = () => {

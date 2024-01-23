@@ -5,6 +5,7 @@ import type {
   IGraphic,
   IEntityIdAndName,
   IKuStore,
+  IKuId,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -215,43 +216,24 @@ export const useKuStore = defineStore("KuStore", {
       this.tableDataGraphic.push(row);
     },
 
-    // async deleteSelectedRows() {
-    //   // const selectedRows = this.multipleSelection;
+    //проверить вообще используется ли она?
+    async deleteSelectedRows() {
+      const selectedRows = this.multipleSelection.map((row) => row.ku_id);
 
-    //   // this.tableData = this.tableData.filter((row: IKuList) => {
-    //   //   return !selectedRows.includes(row);
-    //   // });
+      try {
+        // Используйте ваш API-метод deleteKu с каждым идентификатором
+        for (const ku_id of selectedRows) {
+          await KU.deleteKu({ ku_id });
 
-    //   // this.multipleSelection = [];
-    //   const selectedRows = this.multipleSelection;
+          // Обновите данные таблицы в хранилище после успешного удаления каждого элемента
+          this.tableData = this.tableData.filter((row) => row.ku_id !== ku_id);
+        }
 
-    //   try {
-    //     // Предполагая, что ваш API требует одиночный ku_id для удаления
-    //     for (const row of selectedRows) {
-    //       const result = await KU.deleteKu({
-    //         ku_id: row.ku_id,
-    //         vendor: "",
-    //         period: "",
-    //         date_start: "",
-    //         date_end: "",
-    //         status: "",
-    //         base: null,
-    //         percent: null
-    //       });
-    //       if (!result) {
-    //         console.error("Не удалось удалить строку с ku_id:", row.ku_id);
-    //         return; // Прерываем выполнение, чтобы избежать обновления данных, если что-то пошло не так
-    //       }
-    //     }
-
-    //     // Если удаление прошло успешно, обновите данные таблицы в хранилище
-    //     this.tableData = this.tableData.filter(
-    //       (row: IKuList) => !selectedRows.includes(row)
-    //     );
-    //     this.multipleSelection = [];
-    //   } catch (error) {
-    //     console.error("Ошибка при удалении строк:", error);
-    //   }
-    // },
+        // Очистите выделение после удаления всех элементов
+        this.multipleSelection = [];
+      } catch (error) {
+        console.error("Ошибка при удалении строк:", error);
+      }
+    },
   },
 });

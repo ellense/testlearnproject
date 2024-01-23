@@ -17,8 +17,10 @@ export interface EntityId {
 //накладные
 export interface IInvoice {
   invoice_id: number | null;
-  entity_id: string;
-  vendor_id: string;
+  entity: string;
+  entity_name: string;
+  vendor: string;
+  vendor_name: string;
   invoice_name: string;
   invoice_number: string;
   invoice_date: Date | string;
@@ -48,6 +50,9 @@ export interface IKuList {
   status: string;
   base: number | null;
   percent: number | null;
+}
+export interface IKuId {
+  ku_id: string;
 }
 export interface IKuPost {
   entityid: string;
