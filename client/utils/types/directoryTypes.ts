@@ -1,25 +1,69 @@
 // юр.лица
 export interface IEntity {
-  entityid: string;
+  entity_id: string;
   directorname: string;
   urasticname: string;
   name: string;
   urasticaddress: string;
 }
 export interface IEntityIdAndName {
-  entityid: string;
+  entity_id: string;
   name: string;
 }
 export interface EntityId {
-  entityid: string;
+  entity_id: string;
 }
+
+
+//поставщик
+export interface IVendor {
+  vendor_id: string
+  name: string
+  urasticname: string
+  directorname: string
+  urasticadress: string
+  inn_kpp: string
+  entity_id: string
+  entity_name: string
+}
+export interface VendorStore {
+  dataVendor: IVendor[]
+  pagination: Pagination | null
+  countRowTable: number
+  entityName: string
+  dataEntity: IEntityIdAndName[];
+  search: string
+}
+export interface GetAllVendors {
+  page_size?: number
+  page?: number
+}
+export interface GetAllVendorsReturnData extends Pagination {
+  results: IVendor[]
+}
+export interface IVendorIdAndName {
+  vendor_id: string
+  name: string;
+}
+export interface GetAllVendorsForEntity {
+  entity_id?: string;
+  page_size?: number;
+  page?: number;
+}
+export interface GetAllVendorsForEntityReturnData extends Pagination {
+  results: IVendorIdAndName[];
+}
+export interface GetAllVendorsForEntityInVendorReturnData extends Pagination {
+  results: IVendor[];
+}
+
 
 //накладные
 export interface IInvoice {
   invoice_id: number | null;
-  entity: string;
+  entity_id: string;
   entity_name: string;
-  vendor: string;
+  vendor_id: string;
   vendor_name: string;
   invoice_name: string;
   invoice_number: string;
@@ -41,12 +85,13 @@ export interface GetAllInvoicesReturnData extends Pagination {
 
 // КУ
 export interface IKuList {
-  entityid: string;
   ku_id: string;
-  vendor: string;
+  entity_id: string;
+  vendor_id: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
+  graphic: string | null 
   status: string;
   base: number | null;
   percent: number | null;
@@ -55,8 +100,8 @@ export interface IKuId {
   ku_id: string;
 }
 export interface IKuPost {
-  entityid: string;
-  vendor: string;
+  entity_id: string;
+  vendor_id: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
@@ -96,7 +141,7 @@ export interface IKuStore {
 export interface IGraphic {
   graph_id: number | null;
   ku: string;
-  vendor: string;
+  vendor_id: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
@@ -168,40 +213,7 @@ export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
 }
 
-//поставщик
-export interface IVendor {
-  vendorid: string;
-  name: string;
-  urasticname: string;
-  directorname: string;
-  urasticadress: string;
-  inn_kpp: string;
-  entityid: string;
-}
-export interface VendorStore {
-  vendors: IVendor[] | null;
-  pagination: Pagination | null;
-  countRowTable: number;
-}
-export interface GetAllVendors {
-  page_size?: number;
-  page?: number;
-}
-export interface GetAllVendorsReturnData extends Pagination {
-  results: IVendor[];
-}
-export interface IVendorIdAndName {
-  vendorid: string;
-  name: string;
-}
-export interface GetAllVendorsForEntity {
-  entityid?: string;
-  page_size?: number;
-  page?: number;
-}
-export interface GetAllVendorsForEntityReturnData extends Pagination {
-  results: IVendorIdAndName[];
-}
+
 
 //общие
 export interface Pagination {

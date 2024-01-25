@@ -1,14 +1,15 @@
 <template>
-  <el-scrollbar class="scrollTable" ref="scrollTableRef">
-    <el-table :data="tableData" style="width: 100%" :height="tableHeight">
-      <el-table-column label="Номер" prop="vendorid" width="150" show-overflow-tooltip sortable />
+  <el-scrollbar class="scrollTable">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)">
+      <el-table-column label="Номер" prop="vendor_id" width="150" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="200" show-overflow-tooltip sortable />
       <el-table-column prop="urasticname" label="Полное наименование" width="300" show-overflow-tooltip sortable />
+      <el-table-column prop="entity_id" label="Юр.лицо" width="120" show-overflow-tooltip sortable />
+      <el-table-column prop="entity_name" label="Наименование" width="200" show-overflow-tooltip sortable />
       <el-table-column prop="directorname" label="Директор" width="200" show-overflow-tooltip sortable />
       <el-table-column prop="inn_kpp" label="ИНН/КПП" width="200" show-overflow-tooltip />
       <el-table-column prop="urasticadress" label="Адрес" show-overflow-tooltip sortable />
     </el-table>
-
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
     <el-pagination layout="prev, pager, next" :page-count="Math.ceil(pagination.count / countRowTable)"
@@ -24,46 +25,16 @@ import type { IVendor } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
-const scrollTableRef = ref<HTMLElement | null>(null);
-const tableHeight = ref(0);
 
 onMounted(() => {
-  const handleResize = () => {
-    tableHeight.value = window.innerHeight - 185;
-  };
-
-  handleResize();
-  window.addEventListener("resize", handleResize);
-
-  onUnmounted(() => {
-    window.removeEventListener("resize", handleResize);
-  });
-
   watch(getVendors, (value) => {
     console.log('Table Data:', value);
     tableData.value = value || [];
   });
 });
 
-// Функция для прокрутки вверх
-const scrollToTop = () => {
-  const scrollTable = scrollTableRef.value;
-  if (scrollTable) {
-    // Попробуем использовать метод scrollTo
-    scrollTable.scrollTo(0, 0);
-  }
-};
-
-
-
-
-
-// const scrollToTop = () => {
-//   window.scrollTo(0, 0);
-// };
 const paginationChange = (page: number) => {
   useVendorStore().fetchVendorsList(page);
-  scrollToTop();
 };
 
 onMounted(async () => {

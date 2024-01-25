@@ -30,9 +30,19 @@
     v-if="pagination?.count && pagination.count > countRowTable"
     class="pagination"
   >
-    <el-pagination
+    <!-- <el-pagination
       layout="prev, pager, next"
       :page-count="Math.ceil(pagination.count / countRowTable)"
+      @current-change="paginationChange"
+    /> -->
+    <el-pagination
+      v-model:current-page="currentPage"
+      v-model:page-size="pageSize"
+      :page-sizes="[50, 100, 500]"
+      :page-count="Math.ceil(pagination.count / countRowTable)"
+      layout="sizes, prev, pager, next"
+      :total="1000"
+      @size-change="handleSizeChange"
       @current-change="paginationChange"
     />
   </div>
@@ -44,6 +54,16 @@ import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
 
 import { useProductStore } from "~~/stores/productStore";
+
+
+const currentPage = ref(5)
+const pageSize = ref(100)
+const handleSizeChange = (val: number) => {
+  console.log(`${val} элементов в странице'`)
+}
+
+
+
 const { getProducts, pagination, countRowTable } = storeToRefs(
   useProductStore()
 );

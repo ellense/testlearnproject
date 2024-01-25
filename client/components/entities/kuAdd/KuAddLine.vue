@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
-    <form label-width="120px" label-position="top">
+    <form>
       <el-row>
         <el-col :span="5">
           <div class="custom-label">Юридическое лицо</div>
@@ -168,7 +168,7 @@ watch(
   (dataEntity: IEntityIdAndName[]) => {
     options.value = dataEntity.map((item) => ({
       label: item.name,
-      value: item.entityid,
+      value: item.entity_id,
     }));
   }
 );
@@ -176,7 +176,7 @@ watch(
 onMounted(async () => {
   try {
     await store.fetchKuEntity({
-      entityid: "",
+      entity_id: "",
       name: "",
     });
   } catch (error) {
@@ -191,7 +191,7 @@ watch(
   (dataVendor: IVendorIdAndName[]) => {
     options2.value = dataVendor.map((item) => ({
       label: item.name,
-      value: item.vendorid,
+      value: item.vendor_id,
     }));
   }
 );
@@ -236,8 +236,8 @@ const addClose = () => {
 
 const addItemAndSendToBackend = async () => {
   const newItem = {
-    entityid: store.entityName,
-    vendor: store.vendorName,
+    entity_id: store.entityName,
+    vendor_id: store.vendorName,
     period: store.newType,
     date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
     date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
@@ -263,11 +263,7 @@ const addItemAndSendToBackend = async () => {
 </script>
 
 <style scoped>
-.custom-label {
-  display: block;
-  margin-bottom: 4px;
-  font-size: 14px;
-}
+
 
 .button_bottom {
   margin: 20px 10px 0 0;

@@ -19,8 +19,8 @@
         sortable
         show-overflow-tooltip
       />
-      <el-table-column property="period" label="Период" show-overflow-tooltip />
-      <el-table-column property="sum_calc" label="База" show-overflow-tooltip />
+      <el-table-column property="period" label="Период расчета" show-overflow-tooltip />
+      <el-table-column property="sum_calc" label="База расчета" show-overflow-tooltip />
       <el-table-column
         property="percent"
         label="Процент"
@@ -61,21 +61,21 @@ import { useKuStore } from "~~/stores/kuStore";
 
 const storeKU = useKuStore();
 
-onMounted(async () => {
-  try {
-    await storeKU.fetchKuList({
-      entityid: "",
-      ku_id: "",
-      vendor: "",
-      period: "",
-      date_start: new Date(),
-      date_end: new Date(),
-      status: "",
-      base: null,
-      percent: null,
-    });
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     await storeKU.fetchKuList({
+//       entityid: "",
+//       ku_id: "",
+//       vendor: "",
+//       period: "",
+//       date_start: new Date(),
+//       date_end: new Date(),
+//       status: "",
+//       base: null,
+//       percent: null,
+//     });
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// });
 </script>

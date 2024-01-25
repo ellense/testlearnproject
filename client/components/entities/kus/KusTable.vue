@@ -16,14 +16,14 @@
         show-overflow-tooltip
       />
       <el-table-column
-        property="entityid"
+        property="entity_id"
         label="Юр.лицо"
         width="200"
         sortable
         show-overflow-tooltip
       />
       <el-table-column
-        property="vendor"
+        property="vendor_id"
         label="Поставщик"
         width="200"
         sortable
@@ -38,7 +38,7 @@
       <el-table-column
         property="period"
         label="Период"
-        width="200"
+        width="120"
         show-overflow-tooltip
       />
       <el-table-column
@@ -57,7 +57,7 @@
         width="160"
         show-overflow-tooltip
       />
-      <el-table-column property="base" label="База" />
+      <el-table-column property="graphic" label="График расчета"/>
       <el-table-column property="status" label="Статус" />
     </el-table>
   </el-scrollbar>
@@ -72,12 +72,13 @@ const store = useKuStore();
 onMounted(async () => {
   try {
     await store.fetchKuList({
-      entityid: "",
+      entity_id: "",
       ku_id: "",
-      vendor: "",
+      vendor_id: "",
       period: "",
       date_start: new Date(),
       date_end: new Date(),
+      graphic: null,
       status: "",
       base: 100,
       percent: null,

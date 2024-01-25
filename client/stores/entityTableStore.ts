@@ -11,7 +11,7 @@ export const useEntityTableStore = defineStore("EntityTableStore", {
     searchEntityList: (state) => {
       const searchValue = state.search.toLowerCase();
       return state.entityList.filter((item) => {
-        const entityidMatch = item.entityid.toLowerCase().includes(searchValue);
+        const entityidMatch = item.entity_id.toLowerCase().includes(searchValue);
         const directornameMatch = item.directorname
           .toLowerCase()
           .includes(searchValue);

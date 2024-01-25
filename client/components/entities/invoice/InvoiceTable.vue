@@ -26,7 +26,7 @@
         show-overflow-tooltip
       />
       <el-table-column
-        property="entity"
+        property="entity_id"
         label="Юр. лицо"
         width="130"
         sortable
@@ -40,7 +40,7 @@
         show-overflow-tooltip
       />
       <el-table-column
-        property="vendor"
+        property="vendor_id"
         label="Поставщик"
         width="150"
         sortable

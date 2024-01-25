@@ -44,7 +44,7 @@ export const useKuStore = defineStore("KuStore", {
       const vendorFilterValue = state.vendorFilter.toLowerCase();
 
       return state.tableData.filter((item) => {
-        const vendorMatch = item.vendor
+        const vendorMatch = item.vendor_id
           .toLowerCase()
           .includes(vendorFilterValue);
         const periodMatch = item.period.toLowerCase().includes(searchValue);
@@ -182,7 +182,7 @@ export const useKuStore = defineStore("KuStore", {
         const vendors = await VENDOR.getVendorsForEntity({
           page_size: this.$state.countRowTable,
           page,
-          entityid: this.$state.entityName,
+          entity_id: this.$state.entityName,
         });
         this.$state.dataVendor = vendors.results;
         console.log("Data vendors for entity:", this.$state.dataVendor);
@@ -201,20 +201,20 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
 
-    addgraphic(row: {
-      graph_id: number | null;
-      ku: string;
-      vendor: string;
-      period: string;
-      date_start: Date | string;
-      date_end: Date | string;
-      date_calc: Date | string;
-      percent: number | null;
-      sum_calc: number | null;
-      sum_bonus: number | null;
-    }) {
-      this.tableDataGraphic.push(row);
-    },
+    // addgraphic(row: {
+    //   graph_id: number | null;
+    //   ku: string;
+    //   vendor: string;
+    //   period: string;
+    //   date_start: Date | string;
+    //   date_end: Date | string;
+    //   date_calc: Date | string;
+    //   percent: number | null;
+    //   sum_calc: number | null;
+    //   sum_bonus: number | null;
+    // }) {
+    //   this.tableDataGraphic.push(row);
+    // },
 
     //проверить вообще используется ли она?
     async deleteSelectedRows() {

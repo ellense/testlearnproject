@@ -50,12 +50,21 @@ h1 {
   justify-content: center;
   align-items: center;
 }
+
 .directoryBar{
   display: flex;
   justify-content: space-between;
   align-items: center;
   height: 40px;
   margin: 10px 10px 0 0;
+}
+
+.directoryBar_filter{
+  display: flex;
+  align-items: center;
+  height: 40px;
+  margin: 10px 10px 0 0;
+  gap: 20px;
 }
 
 .scrollTableFiltres {
@@ -72,4 +81,11 @@ h1 {
   padding: 15px;
   display: flex;
   justify-content: center;
+}
+ 
+/* название фильтров или элементов формы */
+.custom-label { 
+  display: block;
+  margin-bottom: 4px;
+  font-size: 14px;
 }

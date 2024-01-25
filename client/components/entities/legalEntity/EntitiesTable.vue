@@ -6,7 +6,7 @@
       :data="filteredEntityList"
     >
       <el-table-column
-        prop="entityid"
+        prop="entity_id"
         label="ID"
         width="70"
         show-overflow-tooltip
@@ -60,7 +60,7 @@ watch(
 onMounted(async () => {
   try {
     await entityStore.fetchEntitiesList({
-      entityid: "",
+      entity_id: "",
       directorname: "",
       urasticname: "",
       name: "",
