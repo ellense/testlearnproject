@@ -86,3 +86,9 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 # http://192.168.6.168:8001/api/v1/auth/users/?format=json
 # http://192.168.6.168:8001/auth/token/login
 <!-- python manage.py migrate -->
+
+вставить в .env
+VITE_BASE_URL = "http://127.0.0.1:8000"
+VITE_REFRESH_URL: "api/token/refresh/"
+VITE_LOGIN_URL: "api/token/"
+VITE_ACCESS_KEY: "accessToken"

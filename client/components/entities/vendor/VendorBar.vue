@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
 import store from "element-plus/es/components/table/src/store";
-import { IEntityIdAndName } from "~/utils/types/directoryTypes";
+import type { IEntityIdAndName } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
 const vendorStore = useVendorStore();
 

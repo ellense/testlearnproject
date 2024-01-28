@@ -159,13 +159,13 @@ export interface IProduct {
   name: string;
 }
 export interface GetAllProducts {
-  page_size?: number;
+  page_size?: number ;
   page?: number;
 }
 export interface ProductStore {
   product: IProduct[];
   pagination: Pagination | null;
-  countRowTable: number;
+  countRowTable: number ;
 }
 export interface GetAllProductsReturnData extends Pagination {
   results: IProduct[];
