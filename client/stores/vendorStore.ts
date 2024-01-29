@@ -5,7 +5,7 @@ export const useVendorStore = defineStore("VendorStore", {
   state: (): VendorStore => ({
     dataVendor: [], // Массив поставщиков
     pagination: null, // Пагинация результатов запроса
-    countRowTable: 50, // Количество строк в таблице
+    countRowTable: 100, // Количество строк в таблице
     entityName: "",
     dataEntity: [],
     search: "",
@@ -15,6 +15,9 @@ export const useVendorStore = defineStore("VendorStore", {
   },
 
   actions: {
+    setCountRowTable(count: number) {
+      this.$state.countRowTable = count;
+    },
     async fetchVendorsList(page?: number) {
       try {
         const vendors = await VENDOR.getVendorsList({
@@ -37,7 +40,6 @@ export const useVendorStore = defineStore("VendorStore", {
         const result = await ENTITY.getEntityNameById(data);
         if (Array.isArray(result)) {
           this.dataEntity = result;
-          console.log("dataEntity", result);
         } else {
           this.dataEntity = [];
           console.error("Данные не получены или не являются массивом");
@@ -47,7 +49,7 @@ export const useVendorStore = defineStore("VendorStore", {
       }
     },
 
-    async fetchVendorsListForEntity(page?: number, entityid?: string) {
+    async fetchVendorsListForEntity(page?: number) {
       try {
         const vendors = await VENDOR.getVendorsForEntityInVendor({
           page_size: this.$state.countRowTable,
@@ -55,18 +57,13 @@ export const useVendorStore = defineStore("VendorStore", {
           entity_id: this.$state.entityName,
         });
         this.$state.dataVendor = vendors.results;
-        console.log("данные о поставщиках по фильтру юр. лиц:", this.$state.dataVendor);
-        console.log("vendors:", vendors);
         this.$state.pagination = {
           count: vendors.count,
           previous: vendors.previous,
           next: vendors.next,
         };
       } catch (error) {
-        console.error(
-          "Произошла ошибка при получении данных о поставщиках по фильтру юр. лиц",
-          error
-        );
+        console.error("Ошибка при получении данных по фильтру", error);
         return Promise.reject(error);
       }
     },

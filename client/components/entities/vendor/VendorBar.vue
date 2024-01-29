@@ -1,40 +1,21 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-    <h2>Поставщики</h2>
-    <el-select
-      v-model="vendorStore.entityName"
-      clearable
-      filterable
-      placeholder="Фильтр по юридическому лицу"
-      style="width: 300px"
-      @change="onEntityChange"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      >
-        <span style="float: left">{{ item.label }}</span>
-        <span
-          style="
-            margin-left: 10px;
-            float: right;
-            color: var(--el-text-color-secondary);
-            font-size: 13px;
-          "
-          >{{ item.value }}</span
-        >
-      </el-option>
-    </el-select>
-  </div>
-    <el-input
-      v-model="vendorStore.search"
-      placeholder="Поиск"
-      style="max-width: 400px"
-      :prefix-icon="Search"
-    />
+      <h2>Поставщики</h2>
+      <el-select v-model="vendorStore.entityName" clearable filterable placeholder="Фильтр по юридическому лицу"
+        style="width: 300px" @change="onEntityChange">
+        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+          <span style="float: left">{{ item.label }}</span>
+          <span style="
+              margin-left: 10px;
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            ">{{ item.value }}</span>
+        </el-option>
+      </el-select>
+    </div>
+    <el-input v-model="vendorStore.search" placeholder="Поиск" style="max-width: 400px" :prefix-icon="Search" />
   </div>
 </template>
 
@@ -70,11 +51,8 @@ onMounted(async () => {
 
 const onEntityChange = async () => {
   try {
-    await vendorStore.fetchVendorsListForEntity(
-      undefined,
-      vendorStore.entityName
-    );
-    console.log("fetchVendorsListForEntity:", vendorStore.entityName);
+    vendorStore.pagination = null;
+    await vendorStore.fetchVendorsListForEntity(undefined);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

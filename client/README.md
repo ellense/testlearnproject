@@ -88,7 +88,12 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 <!-- python manage.py migrate -->
 
 вставить в .env
-VITE_BASE_URL = "http://127.0.0.1:8000"
+VITE_BASE_URL='http://127.0.0.1:8001'
 VITE_REFRESH_URL: "api/token/refresh/"
 VITE_LOGIN_URL: "api/token/"
 VITE_ACCESS_KEY: "accessToken"
+VITE_REFRESH_KEY: "refreshToken"
+VITE_TIMEOUT: 1500
+# http://127.0.0.1:8001 на работе со своего
+# http://192.168.6.168:8001 на работе с вероникиного
+# http://127.0.0.1:8000 дома

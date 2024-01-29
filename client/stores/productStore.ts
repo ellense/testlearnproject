@@ -24,14 +24,12 @@ export const useProductStore = defineStore("ProductStore", {
           page,
         }
         );
-        console.log("products", products);
         this.$state.product = products.results;
         this.$state.pagination = {
           count: products.count,
           previous: products.previous,
           next: products.next,
         };
-        console.log("this.$state.product", this.$state.product);
       } catch (error) {
         return Promise.reject(error);
       }

@@ -1,14 +1,14 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)">
-      <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
+      <el-table-column prop="itemid" label="Номер" width="100" show-overflow-tooltip />
       <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
       <el-table-column prop="classifier_name" label="Категория" width="400" show-overflow-tooltip />
       <el-table-column prop="brand_name" label="Бренд" />
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 500, 1000]"
+    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>
@@ -30,7 +30,6 @@ const tableData = ref<IProduct[]>(getProducts.value);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useProductStore().setCountRowTable(val);
-  console.log(`${val} элементов в странице`);
   try {
     await useProductStore().fetchProductsList();
   } catch (error) {
@@ -39,7 +38,6 @@ const handleSizeChange = async (val: number) => {
 };
 
 watch(getProducts, (value) => {
-  console.log("Table Data:", value);
   tableData.value = value || [];
 });
 

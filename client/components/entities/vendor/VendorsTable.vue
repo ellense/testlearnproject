@@ -12,8 +12,9 @@
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-    <el-pagination layout="prev, pager, next" :page-count="Math.ceil(pagination.count / countRowTable)"
-      @current-change="paginationChange" />
+      <pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
+      @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>
 </template>
 
@@ -21,21 +22,41 @@
 import { storeToRefs } from 'pinia'
 import { ref, onMounted, watch } from "vue";
 import type { IVendor } from "~/utils/types/directoryTypes";
-
 import { useVendorStore } from "~~/stores/vendorStore";
+
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
+const pageSize = ref(countRowTable);
+
+
+const paginationChange = (page: number) => {
+  if (useVendorStore().entityName) {
+    useVendorStore().fetchVendorsListForEntity(page);
+  } else {
+    useVendorStore().fetchVendorsList(page);
+  }
+};
+
+const handleSizeChange = async (val: number) => {
+  pageSize.value = val;
+  useVendorStore().setCountRowTable(val);
+  try {
+    if (useVendorStore().entityName) {
+      await useVendorStore().fetchVendorsListForEntity();
+    } else {
+      await useVendorStore().fetchVendorsList();
+    }
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+};
 
 onMounted(() => {
   watch(getVendors, (value) => {
-    console.log('Table Data:', value);
     tableData.value = value || [];
   });
 });
 
-const paginationChange = (page: number) => {
-  useVendorStore().fetchVendorsList(page);
-};
 
 onMounted(async () => {
   try {

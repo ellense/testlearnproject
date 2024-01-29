@@ -85,7 +85,6 @@ const { getInvoices, pagination, countRowTable } = storeToRefs(
 const tableData = ref<IInvoice[]>(getInvoices.value);
 
 watch(getInvoices, (value) => {
-  console.log("Table Data:", value);
   tableData.value = value || [];
 });
 

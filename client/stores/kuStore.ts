@@ -167,7 +167,6 @@ export const useKuStore = defineStore("KuStore", {
         const result = await ENTITY.getEntityNameById(data);
         if (Array.isArray(result)) {
           this.dataEntity = result;
-          console.log("dataEntity", result);
         } else {
           this.dataEntity = [];
           console.error("Данные не получены или не являются массивом");
@@ -185,8 +184,6 @@ export const useKuStore = defineStore("KuStore", {
           entity_id: this.$state.entityName,
         });
         this.$state.dataVendor = vendors.results;
-        console.log("Data vendors for entity:", this.$state.dataVendor);
-        console.log("vendors:", vendors);
         this.$state.pagination = {
           count: vendors.count,
           previous: vendors.previous,
@@ -201,20 +198,20 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
 
-    // addgraphic(row: {
-    //   graph_id: number | null;
-    //   ku: string;
-    //   vendor: string;
-    //   period: string;
-    //   date_start: Date | string;
-    //   date_end: Date | string;
-    //   date_calc: Date | string;
-    //   percent: number | null;
-    //   sum_calc: number | null;
-    //   sum_bonus: number | null;
-    // }) {
-    //   this.tableDataGraphic.push(row);
-    // },
+    addgraphic(row: {
+      graph_id: number | null;
+      ku: string;
+      vendor_id: string;
+      period: string;
+      date_start: Date | string;
+      date_end: Date | string;
+      date_calc: Date | string;
+      percent: number | null;
+      sum_calc: number | null;
+      sum_bonus: number | null;
+    }) {
+      this.tableDataGraphic.push(row);
+    },
 
     //проверить вообще используется ли она?
     async deleteSelectedRows() {

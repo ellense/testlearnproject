@@ -119,7 +119,7 @@ const addGraphic = () => {
         store.addgraphic({
           graph_id: store.tableDataGraphic.length + 1,
           ku: selectedRow.ku_id,
-          vendor: selectedRow.vendor,
+          vendor_id: selectedRow.vendor_id,
           period: selectedRow.period,
           date_start: dayjs(selectedRow.date_start).format("DD.MM.YYYY"),
           date_end: getLastDayOfMonth(dayjs(dateStart)).format("DD.MM.YYYY"),
@@ -145,7 +145,7 @@ const addGraphic = () => {
         store.addgraphic({
           graph_id: store.tableDataGraphic.length + 1,
           ku: selectedRow.ku_id,
-          vendor: selectedRow.vendor,
+          vendor_id: selectedRow.vendor_id,
           period: selectedRow.period,
           date_start: dayjs(updatedDateStart).format("DD.MM.YYYY"),
           date_end: getLastDayOfMonth(dayjs(updatedDateStart)).format(
@@ -163,7 +163,7 @@ const addGraphic = () => {
         store.addgraphic({
           graph_id: store.tableDataGraphic.length + 1,
           ku: selectedRow.ku_id,
-          vendor: selectedRow.vendor,
+          vendor_id: selectedRow.vendor_id,
           period: selectedRow.period,
           date_start: dayjs(updatedDateStart2).format("DD.MM.YYYY"),
           date_end: dayjs(dateActual).format("DD.MM.YYYY"),
