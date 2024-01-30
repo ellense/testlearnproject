@@ -18,6 +18,7 @@ import type {
   GetAllBrands,
   GetAllProducer,
   GetAllProducersReturnData,
+  GetAllVendorsForEntityInVendor,
   GetAllVendorsForEntityInVendorReturnData,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
@@ -61,7 +62,7 @@ export const VENDOR = {
   ): Promise<GetAllVendorsForEntityReturnData> =>
     $Get("api/vendorfilter/", { params, isBearer: false }),
     getVendorsForEntityInVendor: (
-      params?: GetAllVendorsForEntity
+      params?: GetAllVendorsForEntityInVendor
     ): Promise<GetAllVendorsForEntityInVendorReturnData> =>
       $Get("api/vendorlist/", { params, isBearer: false }),
 };

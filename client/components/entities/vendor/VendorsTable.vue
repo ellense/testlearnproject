@@ -11,8 +11,9 @@
       <el-table-column prop="urasticadress" label="Адрес" show-overflow-tooltip sortable />
     </el-table>
   </el-scrollbar>
-  <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-      <pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+  <!-- v-if="pagination?.count && pagination.count > countRowTable"  -->
+  <div v-if="pagination?.count" class="pagination">
+      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>
@@ -27,6 +28,7 @@ import { useVendorStore } from "~~/stores/vendorStore";
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
 const pageSize = ref(countRowTable);
+
 
 
 const paginationChange = (page: number) => {
@@ -56,7 +58,6 @@ onMounted(() => {
     tableData.value = value || [];
   });
 });
-
 
 onMounted(async () => {
   try {

@@ -137,7 +137,7 @@
     </div>
     <EntitiesKuAddRequirement />
     <div class="button_bottom">
-      <el-button @click="addClose()">Назад</el-button>
+      <el-button @click="addClose()">Отменить</el-button>
       <el-button type="primary" @click="addItemAndSendToBackend()"
         >Создать</el-button
       >

@@ -30,9 +30,10 @@ export interface VendorStore {
   dataVendor: IVendor[]
   pagination: Pagination | null
   countRowTable: number
-  entityName: string
+  entityName: string[]
   dataEntity: IEntityIdAndName[];
   search: string
+  filteredDataVendor: IVendor[],
 }
 export interface GetAllVendors {
   page_size?: number
@@ -47,6 +48,11 @@ export interface IVendorIdAndName {
 }
 export interface GetAllVendorsForEntity {
   entity_id?: string;
+  page_size?: number;
+  page?: number;
+}
+export interface GetAllVendorsForEntityInVendor {
+  entity_id?: string[];
   page_size?: number;
   page?: number;
 }

@@ -2,8 +2,8 @@
   <div class="directoryBar">
     <div class="directoryBar_filter">
       <h2>Поставщики</h2>
-      <el-select v-model="vendorStore.entityName" clearable filterable placeholder="Фильтр по юридическому лицу"
-        style="width: 300px" @change="onEntityChange">
+      <!-- multiple collapse-tags collapse-tags-tooltip -->
+      <el-select v-model="vendorStore.entityName" clearable filterable placeholder="Фильтр по юридическому лицу"  style="width: 300px" @change="onEntityChange">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
           <span style="float: left">{{ item.label }}</span>
           <span style="
@@ -21,7 +21,6 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import store from "element-plus/es/components/table/src/store";
 import type { IEntityIdAndName } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
 const vendorStore = useVendorStore();
@@ -49,6 +48,7 @@ onMounted(async () => {
   }
 });
 
+
 const onEntityChange = async () => {
   try {
     vendorStore.pagination = null;
@@ -57,6 +57,16 @@ const onEntityChange = async () => {
     console.error("Ошибка при загрузке данных", error);
   }
 };
+
+// const handleSearch = async () => {
+//   try {
+//     vendorStore.pagination = null;
+//     await vendorStore.fetchVendorsListWithSearch(undefined);
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// };
+
 </script>
 
 <style scoped></style>

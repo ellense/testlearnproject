@@ -6,15 +6,18 @@ export const useVendorStore = defineStore("VendorStore", {
     dataVendor: [], // Массив поставщиков
     pagination: null, // Пагинация результатов запроса
     countRowTable: 100, // Количество строк в таблице
-    entityName: "",
+    entityName: [],
     dataEntity: [],
     search: "",
+    filteredDataVendor: [],
   }),
   getters: {
     getVendors: (state) => state.dataVendor as WithoutNullableKeys<IVendor[]>,
   },
 
   actions: {
+    
+
     setCountRowTable(count: number) {
       this.$state.countRowTable = count;
     },
@@ -49,7 +52,7 @@ export const useVendorStore = defineStore("VendorStore", {
       }
     },
 
-    async fetchVendorsListForEntity(page?: number) {
+    async fetchVendorsListForEntity(page?: number, entityid?: string) {
       try {
         const vendors = await VENDOR.getVendorsForEntityInVendor({
           page_size: this.$state.countRowTable,
@@ -57,13 +60,18 @@ export const useVendorStore = defineStore("VendorStore", {
           entity_id: this.$state.entityName,
         });
         this.$state.dataVendor = vendors.results;
+        console.log("данные о поставщиках по фильтру юр. лиц:", this.$state.dataVendor);
+        console.log("vendors:", vendors);
         this.$state.pagination = {
           count: vendors.count,
           previous: vendors.previous,
           next: vendors.next,
         };
       } catch (error) {
-        console.error("Ошибка при получении данных по фильтру", error);
+        console.error(
+          "Произошла ошибка при получении данных о поставщиках по фильтру юр. лиц",
+          error
+        );
         return Promise.reject(error);
       }
     },

@@ -5,7 +5,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
   state: ():InvoiceStore => ({
     invoice: [],
     pagination: null,
-    countRowTable: 50,
+    countRowTable: 100,
   }),
 
   getters: {
@@ -13,6 +13,10 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
   },
 
   actions: {
+    setCountRowTable(count: number) {
+      this.$state.countRowTable = count;
+    },
+    
     async fetchInvoicesList(page?: number) {
       try {
         const invoices = await INVOICE.getInvoicesList({

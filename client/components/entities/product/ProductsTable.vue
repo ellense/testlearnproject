@@ -20,10 +20,10 @@ import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
 import { useProductStore } from "~~/stores/productStore";
 
-const { getProducts, pagination } = storeToRefs(
+const { getProducts, pagination, countRowTable } = storeToRefs(
   useProductStore()
 );
-const { countRowTable } = useProductStore();
+
 const pageSize = ref(countRowTable);
 const tableData = ref<IProduct[]>(getProducts.value);
 
