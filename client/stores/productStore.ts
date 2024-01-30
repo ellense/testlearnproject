@@ -6,9 +6,21 @@ export const useProductStore = defineStore("ProductStore", {
     product: [],
     pagination: null,
     countRowTable: 100,
+    // search: "",
+    // productList: [] as IProduct[],
   }),
 
   getters: {
+    // searchProductsList: (state) => {
+    //   const searchValue = state.search.toLowerCase();
+    //   return state.productList.filter((item) => {
+    //     const itemidMatch = item.itemid.toLowerCase().includes(searchValue);
+    //     const classifier_idMatch = item.classifier_id.toLowerCase().includes(searchValue);
+    //     const nameMatch = item.name.toLowerCase().includes(searchValue);
+    //     const brand_id = item.brand_id.toLowerCase().includes(searchValue);
+    //     return itemidMatch || classifier_idMatch || nameMatch || brand_id;
+    //   });
+    // },
     getProducts: (state) => state.product,
   },
 

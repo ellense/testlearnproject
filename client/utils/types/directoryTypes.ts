@@ -27,13 +27,15 @@ export interface IVendor {
   entity_name: string
 }
 export interface VendorStore {
-  dataVendor: IVendor[]
+  dataVendor: IVendor[] | null
   pagination: Pagination | null
   countRowTable: number
   entityName: string[]
   dataEntity: IEntityIdAndName[];
   search: string
   filteredDataVendor: IVendor[],
+  juristicPersons: string[]
+  filterValue: GetAllVendorsForEntityInVendor
 }
 export interface GetAllVendors {
   page_size?: number
@@ -52,9 +54,9 @@ export interface GetAllVendorsForEntity {
   page?: number;
 }
 export interface GetAllVendorsForEntityInVendor {
-  entity_id?: string[];
-  page_size?: number;
-  page?: number;
+  entity_id?: string[]
+  page_size?: number
+  page?: number
 }
 export interface GetAllVendorsForEntityReturnData extends Pagination {
   results: IVendorIdAndName[];
@@ -218,6 +220,7 @@ export interface GetAllBrands {
 export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
 }
+
 
 
 

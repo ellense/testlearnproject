@@ -20,6 +20,7 @@ import type {
   GetAllProducersReturnData,
   GetAllVendorsForEntityInVendor,
   GetAllVendorsForEntityInVendorReturnData,
+  EntityId,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -50,7 +51,7 @@ export const INVOICE = {
 export const ENTITY = {
   getEntitiesList: (data: IEntity): Promise<IEntity> =>
     $Get("api/entitieslist/", { data, isBearer: false }),
-  getEntityNameById: (data: IEntityIdAndName): Promise<IEntityIdAndName> =>
+  getEntityById: (data: IEntityIdAndName): Promise<IEntityIdAndName[]> =>
     $Get("api/entitieslist/", { data, isBearer: false }),
 };
 
@@ -61,10 +62,12 @@ export const VENDOR = {
     params?: GetAllVendorsForEntity
   ): Promise<GetAllVendorsForEntityReturnData> =>
     $Get("api/vendorfilter/", { params, isBearer: false }),
-    getVendorsForEntityInVendor: (
-      params?: GetAllVendorsForEntityInVendor
-    ): Promise<GetAllVendorsForEntityInVendorReturnData> =>
-      $Get("api/vendorlist/", { params, isBearer: false }),
+  getVendorsForEntityInVendor: (
+    params?: GetAllVendorsForEntityInVendor
+  ): Promise<GetAllVendorsForEntityInVendorReturnData> =>
+    $Get("api/vendorlist/", { params, isBearer: false }),
+  getEntityById: (): Promise<EntityId[]> =>
+    $Get("api/entitieslist/", { isBearer: false }),
 };
 
 export const PRODUCT = {

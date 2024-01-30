@@ -13,14 +13,14 @@
   </el-scrollbar>
   <!-- v-if="pagination?.count && pagination.count > countRowTable"  -->
   <div v-if="pagination?.count" class="pagination">
-      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IVendor } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
@@ -29,13 +29,12 @@ const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
 const pageSize = ref(countRowTable);
 
-
-
 const paginationChange = (page: number) => {
-  if (useVendorStore().entityName) {
-    useVendorStore().fetchVendorsListForEntity(page);
-  } else {
-    useVendorStore().fetchVendorsList(page);
+  try {
+    useVendorStore().setFilterValue('page', page);
+    useVendorStore().getVendorFromAPIWithFilter(page);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
   }
 };
 
@@ -43,11 +42,7 @@ const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useVendorStore().setCountRowTable(val);
   try {
-    if (useVendorStore().entityName) {
-      await useVendorStore().fetchVendorsListForEntity();
-    } else {
-      await useVendorStore().fetchVendorsList();
-    }
+    await useVendorStore().getVendorFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
@@ -56,16 +51,81 @@ const handleSizeChange = async (val: number) => {
 onMounted(() => {
   watch(getVendors, (value) => {
     tableData.value = value || [];
+    console.log('Updated tableData:', tableData.value);
   });
 });
 
 onMounted(async () => {
   try {
-    await useVendorStore().fetchVendorsList();
+    await useVendorStore().getVendorFromAPIWithFilter();
   } catch (error) {
-    console.error('Ошибка при загрузке данных', error);
+    console.error("Ошибка при загрузке данных", error);
   }
 });
+// import { storeToRefs } from "pinia";
+// import { ref, onMounted, watch } from "vue";
+// import type { IVendor } from "~/utils/types/directoryTypes";
+// import { useVendorStore } from "~~/stores/vendorStore";
+
+// const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
+// const tableData = ref<IVendor[]>(getVendors.value);
+// const pageSize = ref(countRowTable);
+
+// const paginationChange = (page: number) => {
+//   useVendorStore().getVendorFromAPIWithFilter(page);
+// };
+
+// const handleSizeChange = async (val: number) => {
+//   pageSize.value = val;
+//   useVendorStore().setCountRowTable(val);
+//   try {
+//     await useVendorStore().getVendorFromAPIWithFilter();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// };
+
+// onMounted(() => {
+//   watch(getVendors, (value) => {
+//     tableData.value = value || [];
+//   });
+// });
+// onMounted(async () => {
+//   try {
+//     await useVendorStore().getVendorFromAPIWithFilter();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// });
+
+
+// // const paginationChange = (page: number) => {
+// //   if (useVendorStore().entityName) {
+// //     useVendorStore().fetchVendorsListForEntity(page);
+// //   } else {
+// //     useVendorStore().fetchVendorsList(page);
+// //   }
+// // };
+// // const handleSizeChange = async (val: number) => {
+// //   pageSize.value = val;
+// //   useVendorStore().setCountRowTable(val);
+// //   try {
+// //     if (useVendorStore().entityName) {
+// //       await useVendorStore().fetchVendorsListForEntity();
+// //     } else {
+// //       await useVendorStore().fetchVendorsList();
+// //     }
+// //   } catch (error) {
+// //     console.error("Ошибка при загрузке данных", error);
+// //   }
+// // };
+// // onMounted(async () => {
+// //   try {
+// //     await useVendorStore().fetchVendorsList();
+// //   } catch (error) {
+// //     console.error('Ошибка при загрузке данных', error);
+// //   }
+// // });
 </script>
 <style scoped>
 .example-showcase .el-loading-mask {
