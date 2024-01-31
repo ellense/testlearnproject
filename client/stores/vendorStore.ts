@@ -36,6 +36,14 @@ export const useVendorStore = defineStore("VendorStore", {
     },
 
     //для фильтра
+    // getJuristicPersonsFromApi() {
+    //   VENDOR.getEntityById()
+    //     .then((dataEntity) => this.setJuristicPersons(dataEntity))
+    //     .catch((e) => console.log(e))
+    // },
+    // setJuristicPersons(data: IEntityIdAndName[]) {
+    //   this.$state.dataEntity = data;
+    // },
     getJuristicPersonsFromApi() {
       VENDOR.getEntityById()
         .then((juristicPersons) => this.setJuristicPersons(juristicPersons))
