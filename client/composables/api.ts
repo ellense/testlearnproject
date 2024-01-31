@@ -62,6 +62,7 @@ export const VENDOR = {
     params?: GetAllVendorsForEntity
   ): Promise<GetAllVendorsForEntityReturnData> =>
     $Get("api/vendorfilter/", { params, isBearer: false }),
+    
   getVendorsForEntityInVendor: (
     params?: GetAllVendorsForEntityInVendor
   ): Promise<GetAllVendorsForEntityInVendorReturnData> =>

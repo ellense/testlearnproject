@@ -49,7 +49,7 @@ export interface IVendorIdAndName {
   name: string;
 }
 export interface GetAllVendorsForEntity {
-  entity_id?: string;
+  entity_id?: string[];
   page_size?: number;
   page?: number;
 }
@@ -57,6 +57,7 @@ export interface GetAllVendorsForEntityInVendor {
   entity_id?: string[]
   page_size?: number
   page?: number
+  search?: string; 
 }
 export interface GetAllVendorsForEntityReturnData extends Pagination {
   results: IVendorIdAndName[];
@@ -108,7 +109,7 @@ export interface IKuId {
   ku_id: string;
 }
 export interface IKuPost {
-  entity_id: string;
+  entity_id: string[];// изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
   vendor_id: string;
   period: string;
   date_start: Date | string;
@@ -119,7 +120,7 @@ export interface IKuPost {
 export interface IKuStore {
   newPercent: null;
   newType: string;
-  entityName: string;
+  entityName: string[];
   vendorName: string;
   newDateStart: Date;
   newDateEnd: Date;
