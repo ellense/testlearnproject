@@ -1,12 +1,14 @@
 <template>
   <div class="directoryBar">
-    <h2>Накладные поставок</h2>
-    <el-input
-      v-model="invoiceStore.search"
-      placeholder="Поиск"
-      style="max-width: 400px"
-      :prefix-icon="Search"
-    />
+    <div class="directoryBar_filter">
+      <h2>Накладные поставок</h2>
+      <!-- <el-select v-model="shopLegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
+        :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 300px"
+        @change="changeShopLegalEntity">
+        <el-option v-for="item in shopLegalEntityList" :key="item" :label="item" :value="item" />
+      </el-select> -->
+    </div>
+    <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px" :prefix-icon="Search"></el-input>
   </div>
 </template>
 
@@ -14,7 +16,11 @@
 import { Search } from "@element-plus/icons-vue";
 import { useInvoiceStore } from "~~/stores/invoiceStore";
 
-const invoiceStore = useInvoiceStore();
+const searchQuery = ref('');
+watch(searchQuery, (newValue: string) => {
+  // Вызов метода хранилища для выполнения поиска
+  useInvoiceStore().performSearch(newValue);
+});
 </script>
 
 <style scoped></style>

@@ -6,6 +6,14 @@ export interface IEntity {
   name: string;
   urasticaddress: string;
 }
+export interface EntityStore{
+  dataEntity: IEntity[],
+  search: string,
+  filterValue: GetAllEntities
+}
+export interface GetAllEntities {
+  search?: string; 
+}
 export interface IEntityIdAndName {
   entity_id: string;
   name: string;
@@ -82,11 +90,14 @@ export interface IInvoice {
 export interface GetAllInvoices {
   page_size?: number;
   page?: number;
+  search?: string;
 }
 export interface InvoiceStore {
-  invoice: IInvoice[];
+  dataInvoice: IInvoice[];
   pagination: Pagination | null;
   countRowTable: number;
+  search: string;
+  filterValue: GetAllInvoices
 }
 export interface GetAllInvoicesReturnData extends Pagination {
   results: IInvoice[];

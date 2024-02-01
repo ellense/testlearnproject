@@ -27,17 +27,8 @@ import { useVendorStore } from "~~/stores/vendorStore";
 
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
+
 const pageSize = ref(countRowTable);
-
-const paginationChange = (page: number) => {
-  try {
-    useVendorStore().setFilterValue('page', page);
-    useVendorStore().getVendorFromAPIWithFilter(page);
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
-  }
-};
-
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useVendorStore().setCountRowTable(val);
@@ -47,13 +38,20 @@ const handleSizeChange = async (val: number) => {
     console.error("Ошибка при загрузке данных", error);
   }
 };
+const paginationChange = (page: number) => {
+  try {
+    useVendorStore().setFilterValue('page', page);
+    useVendorStore().getVendorFromAPIWithFilter(page);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+};
 
-onMounted(() => {
-  watch(getVendors, (value) => {
-    tableData.value = value || [];
-    console.log('Updated tableData:', tableData.value);
-  });
+
+watch(getVendors, (value) => {
+  tableData.value = value || [];
 });
+
 
 onMounted(async () => {
   try {
@@ -63,6 +61,7 @@ onMounted(async () => {
   }
 });
 </script>
+
 <style scoped>
 .example-showcase .el-loading-mask {
   z-index: 9;

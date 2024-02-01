@@ -1,12 +1,7 @@
 <template>
   <div class="directoryBar">
     <h2>Юридические лица</h2>
-    <el-input
-      v-model="entityStore.search"
-      placeholder="Поиск"
-      style="max-width: 400px"
-      :prefix-icon="Search"
-    />
+    <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px" :prefix-icon="Search"></el-input>
   </div>
 </template>
 
@@ -14,7 +9,13 @@
 import { Search } from "@element-plus/icons-vue";
 import { useEntityTableStore } from "~~/stores/entityTableStore";
 
-const entityStore = useEntityTableStore();
+const searchQuery = ref('');
+
+watch(searchQuery, (newValue: string) => {
+  useEntityTableStore().performSearch(newValue);
+});
+
+
 </script>
 
 <style scoped></style>

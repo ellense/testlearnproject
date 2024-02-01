@@ -21,6 +21,7 @@ import type {
   GetAllVendorsForEntityInVendor,
   GetAllVendorsForEntityInVendorReturnData,
   EntityId,
+  GetAllEntities,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -49,8 +50,8 @@ export const INVOICE = {
     $Get("api/venddoclist", { params, isBearer: false }),
 };
 export const ENTITY = {
-  getEntitiesList: (data: IEntity): Promise<IEntity> =>
-    $Get("api/entitieslist/", { data, isBearer: false }),
+  getEntitiesList: (params: GetAllEntities): Promise<IEntity> =>
+    $Get("api/entitieslist/", { params, isBearer: false }),
   getEntityById: (data: IEntityIdAndName): Promise<IEntityIdAndName[]> =>
     $Get("api/entitieslist/", { data, isBearer: false }),
 };
@@ -69,8 +70,8 @@ export const VENDOR = {
     $Get("api/vendorlist/", { params, isBearer: false }),
   getEntityById: (): Promise<EntityId[]> =>
     $Get("api/entitieslist/", { isBearer: false }),
-    // getEntityById: (): Promise<IEntityIdAndName[]> =>
-    // $Get("api/entitieslist/", { isBearer: false }),
+  // getEntityById: (): Promise<IEntityIdAndName[]> =>
+  // $Get("api/entitieslist/", { isBearer: false }),
 };
 
 export const PRODUCT = {

@@ -28,15 +28,23 @@ import { useInvoiceStore } from "~~/stores/invoiceStore";
 const { getInvoices, pagination, countRowTable } = storeToRefs(
   useInvoiceStore()
 );
-
-const pageSize = ref(countRowTable);
 const tableData = ref<IInvoice[]>(getInvoices.value);
 
+const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useInvoiceStore().setCountRowTable(val);
   try {
-    await useInvoiceStore().fetchInvoicesList();
+    await useInvoiceStore().getInvoicesFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных 11", error);
+  }
+};
+const paginationChange = (page: number) => {
+  // useInvoiceStore().getInvoicesFromAPIWithFilter(page);
+  try {
+    useInvoiceStore().setFilterValue('page', page);
+    useInvoiceStore().getInvoicesFromAPIWithFilter(page);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
@@ -46,15 +54,11 @@ watch(getInvoices, (value) => {
   tableData.value = value || [];
 });
 
-const paginationChange = (page: number) => {
-  useInvoiceStore().fetchInvoicesList(page);
-};
-
 onMounted(async () => {
   try {
-    await useInvoiceStore().fetchInvoicesList();
+    await useInvoiceStore().getInvoicesFromAPIWithFilter();
   } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
+    console.error("Ошибка при загрузке данных 22", error);
   }
 });
 </script>

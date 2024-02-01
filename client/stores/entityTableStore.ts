@@ -1,48 +1,50 @@
 import { defineStore } from "pinia";
-import type { IEntity } from "~/utils/types/directoryTypes";
+import type { EntityStore, GetAllEntities, } from "~/utils/types/directoryTypes";
 
 export const useEntityTableStore = defineStore("EntityTableStore", {
-  state: () => ({
+  state: (): EntityStore => ({
+    dataEntity: [],
     search: "",
-    entityList: [] as IEntity[],
+    filterValue: {}
   }),
 
   getters: {
-    searchEntityList: (state) => {
-      const searchValue = state.search.toLowerCase();
-      return state.entityList.filter((item) => {
-        const entityidMatch = item.entity_id.toLowerCase().includes(searchValue);
-        const directornameMatch = item.directorname
-          .toLowerCase()
-          .includes(searchValue);
-        const nameMatch = item.name.toLowerCase().includes(searchValue);
-        const urasticaddressMatch = item.urasticaddress
-          .toLowerCase()
-          .includes(searchValue);
-        const urasticnameMatch = item.urasticname
-          .toLowerCase()
-          .includes(searchValue);
-        return (
-          entityidMatch ||
-          directornameMatch ||
-          nameMatch ||
-          urasticaddressMatch ||
-          urasticnameMatch
-        );
-      });
-    },
+    getEntities: (state) => {
+      console.log("getEntities getter:", state.dataEntity);
+      return state.dataEntity;
+    }
   },
 
   actions: {
-    async fetchEntitiesList(data: IEntity) {
+    async performSearch(searchQuery: string) {
       try {
-        const result = await ENTITY.getEntitiesList(data);
+        console.log("Performing search with query:", searchQuery);
+        this.setSearchQuery(searchQuery);
+        await this.getEntityFromAPIWithFilter();
+      } catch (error) {
+        console.error('Ошибка при выполнении поиска', error);
+      }
+    },
+
+    setSearchQuery(query: string) {
+      this.$state.search = query;
+    },
+
+    setFilterValue<
+      T extends keyof GetAllEntities,
+      U extends GetAllEntities[T],
+    >(field: T, value: U) {
+      this.$state.filterValue[field] = value
+    },
+    async getEntityFromAPIWithFilter() {
+      try {
+        const result = await ENTITY.getEntitiesList({
+          search: this.$state.search,
+        });
         if (Array.isArray(result)) {
-          // Если данные успешно получены и являются массивом, обновляем entityList в сторе
-          this.entityList = result;
+          this.dataEntity = result;
         } else {
-          // Если result не является массивом или равен null, обновляем entityList пустым массивом
-          this.entityList = [];
+          this.dataEntity = [];
           console.error("Данные не получены или не являются массивом");
         }
       } catch (error) {
