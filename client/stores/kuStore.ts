@@ -12,7 +12,7 @@ export const useKuStore = defineStore("KuStore", {
   state: (): IKuStore => ({
     newPercent: null,
     newType: "",
-    entityName: "",
+    entityName: [],
     vendorName: "",
     newDateStart: new Date(),
     newDateEnd: new Date(),
@@ -164,7 +164,7 @@ export const useKuStore = defineStore("KuStore", {
 
     async fetchKuEntity(data: IEntityIdAndName) {
       try {
-        const result = await ENTITY.getEntityNameById(data);
+        const result = await ENTITY.getEntityById(data);
         if (Array.isArray(result)) {
           this.dataEntity = result;
         } else {
@@ -176,7 +176,7 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
 
-    async fetchVendorsListForEntity(page?: number, entityid?: string) {
+    async fetchVendorsListForEntity(page?: number) {
       try {
         const vendors = await VENDOR.getVendorsForEntity({
           page_size: this.$state.countRowTable,

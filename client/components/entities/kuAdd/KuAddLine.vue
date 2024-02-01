@@ -206,7 +206,7 @@ onMounted(async () => {
 
 const onEntityChange = async () => {
   try {
-    await store.fetchVendorsListForEntity(undefined, store.entityName);
+    await store.fetchVendorsListForEntity(undefined);
     console.log("fetchVendorsListForEntity:", store.entityName);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
@@ -256,6 +256,7 @@ const addItemAndSendToBackend = async () => {
       ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
     }
   } catch (error) {
+    ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
     console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
   }

@@ -62,12 +62,15 @@ export const VENDOR = {
     params?: GetAllVendorsForEntity
   ): Promise<GetAllVendorsForEntityReturnData> =>
     $Get("api/vendorfilter/", { params, isBearer: false }),
+
   getVendorsForEntityInVendor: (
     params?: GetAllVendorsForEntityInVendor
   ): Promise<GetAllVendorsForEntityInVendorReturnData> =>
     $Get("api/vendorlist/", { params, isBearer: false }),
   getEntityById: (): Promise<EntityId[]> =>
     $Get("api/entitieslist/", { isBearer: false }),
+    // getEntityById: (): Promise<IEntityIdAndName[]> =>
+    // $Get("api/entitieslist/", { isBearer: false }),
 };
 
 export const PRODUCT = {
