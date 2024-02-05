@@ -46,7 +46,8 @@
         <el-col :span="5">
           <div class="custom-label">Поставщик</div>
           <el-form-item>
-            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName" tex>
+            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName"
+              tex>
               <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="
@@ -269,15 +270,15 @@ const addItemAndSendToBackend = async () => {
     status: "Создано",
     percent: store.newPercent,
   };
-  
-  
+
+
 
   try {
     const response = await KU.postKu(newItem);
     if (response) {
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
       router.push("ku");
-      
+
       ElMessage.success("Коммерческое условие успешно создано.");
     } else {
       console.error("Не удалось отправить экземпляр на бэкенд");
@@ -288,7 +289,7 @@ const addItemAndSendToBackend = async () => {
     console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
   }
-
+  router.push("ku");
 };
 </script>
 

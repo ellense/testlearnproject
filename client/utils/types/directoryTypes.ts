@@ -6,13 +6,13 @@ export interface IEntity {
   name: string;
   urasticaddress: string;
 }
-export interface EntityStore{
+export interface EntityStore {
   dataEntity: IEntity[],
   search: string,
   filterValue: GetAllEntities
 }
 export interface GetAllEntities {
-  search?: string; 
+  search?: string;
 }
 export interface IEntityIdAndName {
   entity_id: string;
@@ -65,7 +65,7 @@ export interface GetAllVendorsForEntityInVendor {
   entity_id?: string[]
   page_size?: number
   page?: number
-  search?: string; 
+  search?: string;
 }
 export interface GetAllVendorsForEntityReturnData extends Pagination {
   results: IVendorIdAndName[];
@@ -111,7 +111,7 @@ export interface IKuList {
   period: string;
   date_start: Date | string;
   date_end: Date | string;
-  graphic: string | null 
+  graphic: string | null
   status: string;
   base: number | null;
   percent: number | null;
@@ -120,13 +120,27 @@ export interface IKuId {
   ku_id: string;
 }
 export interface IKuPost {
-  entity_id: string[];// изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
+  entity_id: string[];// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
   vendor_id: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
   status: string;
   percent: number | null;
+}
+export interface IKuPostGraphic {
+  ku_id: string;
+  entity_id: string[];// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
+  vendor_id: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  status: string;
+  percent: number | null;
+}
+export interface IKuUpdateStatus {
+  ku_id: string;
+  status: string;
 }
 export interface IKuStore {
   newPercent: number | null;
@@ -140,7 +154,7 @@ export interface IKuStore {
   multipleTableRef: Ref | null;
   search: string;
   tableData: IKuList[];
-  tableDataGraphic: IGraphic[];
+  dataGraphic: IGraphic[];
   brand: IBrand[];
   producer: IProducer[];
   product: IProduct[];
@@ -155,12 +169,13 @@ export interface IKuStore {
   pagination: Pagination | null;
   countRowTable: number;
   vendors: IVendorIdAndName[];
+  filterValueGraphic: GetAllGraphic
 }
 
 // График
 export interface IGraphic {
   graph_id: number | null;
-  ku: string;
+  ku_id: string;
   vendor_id: string;
   period: string;
   date_start: Date | string;
@@ -169,6 +184,14 @@ export interface IGraphic {
   percent: number | null;
   sum_calc: number | null;
   sum_bonus: number | null;
+  status: string
+}
+export interface GetAllGraphic {
+  page_size?: number;
+  page?: number;
+}
+export interface GetAllGraphicsReturnData extends Pagination {
+  results: IGraphic[];
 }
 
 // Товары
@@ -179,13 +202,13 @@ export interface IProduct {
   name: string;
 }
 export interface GetAllProducts {
-  page_size?: number ;
+  page_size?: number;
   page?: number;
 }
 export interface ProductStore {
   product: IProduct[];
   pagination: Pagination | null;
-  countRowTable: number ;
+  countRowTable: number;
 }
 export interface GetAllProductsReturnData extends Pagination {
   results: IProduct[];

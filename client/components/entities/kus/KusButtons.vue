@@ -1,16 +1,14 @@
 <template>
   <div class="buttonBar">
     <div class="buttonBar_left">
-      <el-button @click="redirectToCreatePage">Создать</el-button>
-      <el-button @click="addGraphic()">Создать график</el-button>
-      <el-button @click="deleteKu()">Удалить</el-button>
+      <el-button @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать</el-button>
+      <el-button @click="addGraphic()" :loading="loading" :disabled="isCreateGraphicButtonDisabled">Создать
+        график</el-button>
+      <el-button @click="ApproveKu()">Утвердить</el-button>
+      <el-button @click="deleteKu()">Отменить</el-button>
     </div>
     <div class="buttonBar_search">
-      <el-input
-        v-model="store.search"
-        placeholder="Поиск по поставщику"
-        style="width: 200px"
-      />
+      <el-input v-model="store.search" placeholder="Поиск по поставщику" style="width: 200px" />
     </div>
   </div>
 </template>
@@ -20,12 +18,22 @@ import { useKuStore } from "~~/stores/kuStore";
 import { useRouter } from "vue-router";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
+import type { IKuPostGraphic } from "~/utils/types/directoryTypes";
 const store = useKuStore();
 const router = useRouter();
+const loading = ref(false);
 
 const redirectToCreatePage = () => {
   router.push("kuAdd");
 };
+
+const isCreateButtonDisabled = computed(() => {
+  return store.multipleSelection.length > 0;
+});
+const isCreateGraphicButtonDisabled = computed(() => {
+  return store.multipleSelection.length > 1
+});
+
 
 // Функция удаления выбранных строк
 const deleteKu = async () => {
@@ -50,133 +58,56 @@ const deleteKu = async () => {
   }
 };
 
-const addGraphic = () => {
-  const selectedRows = store.multipleSelection;
-  const messageClose = () => {
-    if (selectedRows.length === 1) {
-      ElMessage.success("График успешно создан.");
-    } else if (selectedRows.length > 1) {
-      ElMessage.success("Графики успешно созданы.");
-    } else if (selectedRows.length === 0) {
-      ElMessage.error("Коммерческое условие не выбрано.");
-    }
+
+
+const ApproveKu = async () => {
+  const selectedRows = store.multipleSelection
+  const data = {
+    ku_id: selectedRows[0].ku_id,
+    status: "Действует",
   };
 
-  selectedRows.forEach((selectedRow) => {
-    const dateStart = dayjs(selectedRow.date_start).toDate();
-    const dateEnd = dayjs(selectedRow.date_end).toDate();
-    let dateActual;
-
-    if (dayjs(dateEnd).diff(dateStart, "years") > 2) {
-      dateActual = dayjs(dateStart).add(2, "years").toDate();
-    } else {
-      dateActual = dayjs(dateEnd).toDate();
-    }
-    const numType = () => {
-      if (selectedRow.period === "Месяц") {
-        return 1;
-      } else if (selectedRow.period === "Квартал") {
-        return 3;
-      } else if (selectedRow.period === "Полгода") {
-        return 6;
-      } else if (selectedRow.period === "Год") {
-        return 12;
-      } else {
-        return 1;
-      }
-    };
-
-    const getLastDayOfMonth = (date: dayjs.Dayjs) => {
-      const lastDay = date
-        .clone()
-        .add(numType(), "month")
-        .startOf("month")
-        .subtract(1, "day");
-      return lastDay;
-    };
-
-    const numMonths =
-      (dateActual.getFullYear() - dateStart.getFullYear()) * 12 +
-      (dateActual.getMonth() - dateStart.getMonth());
-
-    for (let i = 0; i < numMonths / numType() + 1; i++) {
-      const nextMonthFirstDay = (i: number) => {
-        return dayjs(dateStart)
-          .add(numType() + i, "month")
-          .startOf("month")
-          .format("DD.MM.YYYY");
-      };
-      const dateCalc1 = nextMonthFirstDay(0);
-
-      const sumBonus1 =
-        dateActual &&
-        selectedRow.percent !== null &&
-        selectedRow.base !== null &&
-        dayjs(dateCalc1).isBefore(dayjs(), "day")
-          ? (selectedRow.percent * selectedRow.base) / 100
-          : null;
-      if (i === 0) {
-        store.addgraphic({
-          graph_id: store.tableDataGraphic.length + 1,
-          ku: selectedRow.ku_id,
-          vendor_id: selectedRow.vendor_id,
-          period: selectedRow.period,
-          date_start: dayjs(selectedRow.date_start).format("DD.MM.YYYY"),
-          date_end: getLastDayOfMonth(dayjs(dateStart)).format("DD.MM.YYYY"),
-          date_calc: dateCalc1,
-          percent: selectedRow.percent,
-          sum_calc: selectedRow.base,
-          sum_bonus: sumBonus1,
-        });
-      } else if (i > 0 && i < numMonths / numType()) {
-        let updatedDateStart = dayjs(dateStart)
-          .add(numType() * i, "month")
-          .startOf("month");
-        const dateCalc2 = nextMonthFirstDay(i);
-
-        const sumBonus2 =
-          dateActual &&
-          selectedRow.percent !== null &&
-          selectedRow.base !== null &&
-          dayjs(dateCalc2).isBefore(dayjs(), "day")
-            ? (selectedRow.percent * selectedRow.base) / 100
-            : null;
-
-        store.addgraphic({
-          graph_id: store.tableDataGraphic.length + 1,
-          ku: selectedRow.ku_id,
-          vendor_id: selectedRow.vendor_id,
-          period: selectedRow.period,
-          date_start: dayjs(updatedDateStart).format("DD.MM.YYYY"),
-          date_end: getLastDayOfMonth(dayjs(updatedDateStart)).format(
-            "DD.MM.YYYY"
-          ),
-          date_calc: dateCalc2,
-          percent: selectedRow.percent,
-          sum_calc: selectedRow.base,
-          sum_bonus: sumBonus2,
-        });
-      } else if (i === numMonths / numType()) {
-        let updatedDateStart2 = dayjs(dateStart)
-          .add(numType() * i, "month")
-          .startOf("month");
-        store.addgraphic({
-          graph_id: store.tableDataGraphic.length + 1,
-          ku: selectedRow.ku_id,
-          vendor_id: selectedRow.vendor_id,
-          period: selectedRow.period,
-          date_start: dayjs(updatedDateStart2).format("DD.MM.YYYY"),
-          date_end: dayjs(dateActual).format("DD.MM.YYYY"),
-          date_calc: nextMonthFirstDay(i),
-          percent: selectedRow.percent,
-          sum_calc: selectedRow.base,
-          sum_bonus: null,
-        });
-      }
-    }
-  });
-  messageClose();
+  try {
+    const response = await KU.updateKuStatus(data);
+    console.log("Статус успешно обновлен:", response);
+    // Добавьте обновление стора или другие действия, если необходимо
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса:", error);
+    // Обработка ошибок
+  }
 };
+
+const addGraphic = async () => {
+  const selectedRows = store.multipleSelection
+  const newItem: IKuPostGraphic = {
+    ku_id: selectedRows[0].ku_id,
+    entity_id: selectedRows.map((row) => row.entity_id),
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: selectedRows[0].date_start,
+    date_end: selectedRows[0].date_end,
+    status: selectedRows[0].status,
+    percent: selectedRows[0].percent,
+  };
+  loading.value = true;
+  try {
+    const response = await GRAPHIC.postGraphic(newItem);
+    if (response) {
+      console.log("Экземпляр успешно отправлен на бэкенд:", response);
+      ElMessage.success(`График расчета для ${newItem.ku_id} успешно создан.`);
+    } else {
+      console.error("Не удалось отправить экземпляр на бэкенд");
+      ElMessage.error("Возникла ошибка. График расчета не создан.");
+    }
+  } catch (error) {
+    ElMessage.error("Возникла ошибка. График расчета не создан.");
+    console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
+    console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+  } finally {
+    loading.value = false;
+  }
+}
+
 </script>
 
 <style scoped></style>

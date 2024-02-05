@@ -22,6 +22,10 @@ import type {
   GetAllVendorsForEntityInVendorReturnData,
   EntityId,
   GetAllEntities,
+  IKuPostGraphic,
+  GetAllGraphic,
+  GetAllGraphicsReturnData,
+  IKuUpdateStatus,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -83,18 +87,22 @@ export const PRODUCT = {
 
 export const KU = {
   getKuList: (data: IKuList): Promise<IKuList> =>
-    $Get("api/kulist", { data, isBearer: false }),
+    $Get("api/kulist/", { data, isBearer: false }),
   postKu: (data: IKuPost): Promise<IKuPost> =>
-    $Post("api/kulist", { data, isBearer: false }),
+    $Post("api/kulist/", { data, isBearer: false }),
   deleteKu: (data: IKuId) =>
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
+  updateKuStatus: (data: IKuUpdateStatus) =>
+    $Put("api/kudetail/", { data, isBearer: false }),
 };
 
 export const GRAPHIC = {
-  getGraphic: (data: IGraphic): Promise<IGraphic> =>
-    $Get("api/kugraph", { data, isBearer: false }),
-  postGraphic: (data: IGraphic): Promise<IGraphic> =>
-    $Post("api/kugraph", { data, isBearer: false }),
+  // getGraphic: (data: IGraphic): Promise<IGraphic> =>
+  //   $Get("api/graphlist", { data, isBearer: false }),
+  getGraphic: (params?: GetAllGraphic): Promise<GetAllGraphicsReturnData> =>
+    $Get("api/graphlist", { params, isBearer: false }),
+  postGraphic: (data: IKuPostGraphic): Promise<IKuPostGraphic> =>
+    $Post("api/create_graph/", { data, isBearer: false }),
 };
 
 export const PRODUCER = {

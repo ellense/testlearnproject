@@ -44,22 +44,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       this.$state.countRowTable = count;
     },
     //получение накладных
-    // async fetchInvoicesList(page?: number) {
-    //   try {
-    //     const invoices = await INVOICE.getInvoicesList({
-    //       page_size: this.$state.countRowTable,
-    //       page, 
-    //     });
-    //     this.$state.invoice = invoices.results;
-    //     this.$state.pagination = {
-    //       count: invoices.count,
-    //       previous: invoices.previous,
-    //       next: invoices.next,
-    //     };
-    //   } catch (error) {
-    //     return Promise.reject(error);
-    //   }
-    // },
+    
     async getInvoicesFromAPIWithFilter(page?: number) {
       this.setFilterValue('page', page);
       this.setFilterValue('search', this.$state.search);

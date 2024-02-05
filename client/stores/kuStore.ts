@@ -6,6 +6,7 @@ import type {
   IEntityIdAndName,
   IKuStore,
   IKuId,
+  GetAllGraphic,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -21,7 +22,7 @@ export const useKuStore = defineStore("KuStore", {
     multipleTableRef: null,
     search: "",
     tableData: [],
-    tableDataGraphic: [],
+    dataGraphic: [],
     brand: [],
     producer: [],
     product: [],
@@ -36,6 +37,7 @@ export const useKuStore = defineStore("KuStore", {
     pagination: null,
     countRowTable: 50,
     vendors: [],
+    filterValueGraphic: {}
   }),
 
   getters: {
@@ -52,6 +54,7 @@ export const useKuStore = defineStore("KuStore", {
         return vendorMatch || periodMatch || status;
       });
     },
+    getGraphic: (state) => state.dataGraphic,
     getProducers: (state) => state.producer,
     getBrands: (state) => state.brand,
     getProduct: (state) => state.product,
@@ -60,6 +63,17 @@ export const useKuStore = defineStore("KuStore", {
   },
 
   actions: {
+    //для пагинации
+    setCountRowTable(count: number) {
+      this.$state.countRowTable = count;
+    },
+    //для фильтрации
+    setFilterValue<
+      T extends keyof GetAllGraphic,
+      U extends GetAllGraphic[T],
+    >(field: T, value: U) {
+      this.$state.filterValueGraphic[field] = value
+    },
     setMultipleTableRef(ref: Ref) {
       this.multipleTableRef = ref;
     },
@@ -94,17 +108,37 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
 
-    async fetchGraphicList(data: IGraphic) {
+    async getGraphicsFromAPIWithFilter(page?: number) {
+      this.setFilterValue('page', page);
+      await GRAPHIC.getGraphic({
+        page_size: this.$state.countRowTable,
+        page,
+      })
+        .then((dataGraphic) => {
+          this.$state.dataGraphic = dataGraphic.results;
+          this.$state.pagination = {
+            count: dataGraphic.count,
+            previous: dataGraphic.previous,
+            next: dataGraphic.next,
+          };
+        })
+        .catch((error) => Promise.reject(error));
+    },
+    async fetchGraphicList(page?: number) {
       try {
-        const result = await GRAPHIC.getGraphic(data);
-        if (Array.isArray(result)) {
-          this.tableDataGraphic = result;
-        } else {
-          this.tableDataGraphic = [];
-          console.error("Данные не получены или не являются массивом");
-        }
+        const graphics = await GRAPHIC.getGraphic({
+          page_size: this.$state.countRowTable,
+          page,
+        });
+        this.$state.dataGraphic = graphics.results;
+        this.$state.pagination = {
+          count: graphics.count,
+          previous: graphics.previous,
+          next: graphics.next,
+        };
       } catch (error) {
         console.error("Произошла ошибка", error);
+        return Promise.reject(error);
       }
     },
 
@@ -198,20 +232,20 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
 
-    addgraphic(row: {
-      graph_id: number | null;
-      ku: string;
-      vendor_id: string;
-      period: string;
-      date_start: Date | string;
-      date_end: Date | string;
-      date_calc: Date | string;
-      percent: number | null;
-      sum_calc: number | null;
-      sum_bonus: number | null;
-    }) {
-      this.tableDataGraphic.push(row);
-    },
+    // addgraphic(row: {
+    //   graph_id: number | null;
+    //   ku: string;
+    //   vendor_id: string;
+    //   period: string;
+    //   date_start: Date | string;
+    //   date_end: Date | string;
+    //   date_calc: Date | string;
+    //   percent: number | null;
+    //   sum_calc: number | null;
+    //   sum_bonus: number | null;
+    // }) {
+    //   this.tableDataGraphic.push(row);
+    // },
 
     //проверить вообще используется ли она?
     async deleteSelectedRows() {
