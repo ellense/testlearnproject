@@ -129,7 +129,7 @@ export interface IKuPost {
   percent: number | null;
 }
 export interface IKuStore {
-  newPercent: null;
+  newPercent: number | null;
   newType: string;
   entityName: string[];
   vendorName: string;
