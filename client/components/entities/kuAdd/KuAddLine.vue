@@ -85,7 +85,7 @@
     <EntitiesKuAddRequirement />
     <div class="button_bottom">
       <el-button @click="addClose()">Отменить</el-button>
-      <el-button type="primary" @click="addItemAndSendToBackend()">Создать</el-button>
+      <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
     </div>
   </el-scrollbar>
 </template>
@@ -104,6 +104,7 @@ import type {
 
 const store = useKuStore();
 const router = useRouter();
+const loading = ref(false);
 
 //проверка полей формы
 const dateStartValidation = ref<"error" | "success" | "validating" | undefined>('success');
@@ -270,9 +271,7 @@ const addItemAndSendToBackend = async () => {
     status: "Создано",
     percent: store.newPercent,
   };
-
-
-
+  loading.value = true;
   try {
     const response = await KU.postKu(newItem);
     if (response) {
@@ -288,6 +287,8 @@ const addItemAndSendToBackend = async () => {
     ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
     console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+  } finally {
+    loading.value = false;
   }
   router.push("ku");
 };

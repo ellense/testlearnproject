@@ -1,20 +1,17 @@
 <template>
   <div class="directoryBar">
-    <div class="directoryBar_filter">
+    
       <h2>Поставщики</h2>
+      <div class="directoryBar_filter">
       <el-select v-model="shopLegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 300px"
         @change="changeShopLegalEntity">
         <el-option v-for="item in shopLegalEntityList" :key="item" :label="item" :value="item" />
-        <!-- <el-option
-    v-for="item in shopLegalEntityList"
-    :key="item"
-    :label="item"
-    :value="item"
-  /> -->
       </el-select>
-    </div>
+    
     <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px" :prefix-icon="Search"></el-input>
+  
+  </div>
   </div>
 </template>
 

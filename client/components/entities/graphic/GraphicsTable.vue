@@ -1,8 +1,10 @@
 <template>
   <div class="toolbarAdd"></div>
-  <el-scrollbar class="scrollTable" style="border: none">
+  <el-scrollbar class="scrollTable" style="border: none"  >
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" border>
+    <el-table :data="tableData" style="width: 100%"  height="calc(100vh - 185px)" border @selection-change="useKuStore().handleSelectionChange2">
+      <el-table-column type="selection" width="55" />
+      <el-table-column type="index" label="ID" sortable width="100" show-overflow-tooltip />
       <el-table-column property="graph_id" label="ID" sortable width="100" show-overflow-tooltip />
       <el-table-column property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
       <el-table-column property="vendor_id" label="Поставщик" width="200" sortable show-overflow-tooltip />

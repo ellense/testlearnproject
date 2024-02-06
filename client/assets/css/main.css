@@ -39,6 +39,7 @@ a {
 h1 {
   margin-left: 5px;
 }
+
 .btnExit {
   margin-left: 23px;
   margin-top: 10px;
@@ -63,7 +64,6 @@ h1 {
   display: flex;
   align-items: center;
   height: 40px;
-  margin: 10px 10px 0 0;
   gap: 20px;
 }
 
@@ -73,6 +73,7 @@ h1 {
   border-radius: 2px;
   height: 300px;
 }
+
 .mx-1{
   margin: 10px;
 

@@ -19,6 +19,7 @@ export const useKuStore = defineStore("KuStore", {
     newDateEnd: new Date(),
     newDateActual: new Date(),
     multipleSelection: [],
+    multipleSelection2:[],
     multipleTableRef: null,
     search: "",
     tableData: [],
@@ -92,6 +93,9 @@ export const useKuStore = defineStore("KuStore", {
 
     handleSelectionChange(val: IKuList[]) {
       this.multipleSelection = val;
+    },
+    handleSelectionChange2(val: IGraphic[]) {
+      this.multipleSelection2 = val;
     },
 
     async fetchKuList(data: IKuList) {

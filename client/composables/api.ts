@@ -26,6 +26,8 @@ import type {
   GetAllGraphic,
   GetAllGraphicsReturnData,
   IKuUpdateStatus,
+  IGraphicId,
+  IKuDeleteGraph,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -93,16 +95,20 @@ export const KU = {
   deleteKu: (data: IKuId) =>
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
   updateKuStatus: (data: IKuUpdateStatus) =>
-    $Put("api/kudetail/", { data, isBearer: false }),
+    $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
+  deleteGraphRow: (params: IKuDeleteGraph) =>
+    $Delete("api/graphlist/", { params, isBearer: false }),
 };
 
 export const GRAPHIC = {
   // getGraphic: (data: IGraphic): Promise<IGraphic> =>
   //   $Get("api/graphlist", { data, isBearer: false }),
   getGraphic: (params?: GetAllGraphic): Promise<GetAllGraphicsReturnData> =>
-    $Get("api/graphlist", { params, isBearer: false }),
+    $Get("api/graphlist/", { params, isBearer: false }),
   postGraphic: (data: IKuPostGraphic): Promise<IKuPostGraphic> =>
     $Post("api/create_graph/", { data, isBearer: false }),
+  deleteGraphic: (data: IGraphicId) =>
+    $Delete(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
 };
 
 export const PRODUCER = {

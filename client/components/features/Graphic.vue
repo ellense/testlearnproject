@@ -1,4 +1,5 @@
 <template>
+  <EntitiesGraphicBar />
   <EntitiesGraphicGraphicsTable />
 </template>
 

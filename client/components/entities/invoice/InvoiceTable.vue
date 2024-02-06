@@ -9,6 +9,7 @@
       <el-table-column property="vendor_id" label="Поставщик" width="150" sortable show-overflow-tooltip />
       <el-table-column property="vendor_name" label="Наименование" width="300" sortable show-overflow-tooltip />
       <el-table-column property="invoice_date" type="date" label="Дата" sortable show-overflow-tooltip />
+      <el-table-column property="products_amount" label="Сумма" sortable show-overflow-tooltip />
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">

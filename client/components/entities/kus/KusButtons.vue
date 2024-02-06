@@ -5,7 +5,7 @@
       <el-button @click="addGraphic()" :loading="loading" :disabled="isCreateGraphicButtonDisabled">Создать
         график</el-button>
       <el-button @click="ApproveKu()">Утвердить</el-button>
-      <el-button @click="deleteKu()">Отменить</el-button>
+      <el-button @click="CancelKu()">Отменить</el-button>
     </div>
     <div class="buttonBar_search">
       <el-input v-model="store.search" placeholder="Поиск по поставщику" style="width: 200px" />
@@ -57,28 +57,85 @@ const deleteKu = async () => {
     store.multipleSelection = [];
   }
 };
+const CancelKu = async () => {
+  const selectedRows = store.multipleSelection
+  const data = {
+    ku_id: selectedRows[0].ku_id,
+    status: "Запланировано",
+  };
+  const data2 = {
+    ku_id: selectedRows[0].ku_id,
+    status: "Отменен",
+    entity_id: selectedRows[0].entity_id,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: selectedRows[0].date_start,
+    date_end: selectedRows[0].date_end,
+    percent: selectedRows[0].percent,
+  };
+  try {
+    const response = await KU.deleteGraphRow(data);
+    console.log("строки графика успешно удалены:", response);
+    const response2 = await KU.updateKuStatus(data2);
+    console.log("строки графика успешно удалены:", response2);
+    await store.fetchKuList({
+      entity_id: "",
+      ku_id: "",
+      vendor_id: "",
+      period: "",
+      date_start: new Date(),
+      date_end: new Date(),
+      graph_exists: null,
+      status: "",
+      base: 100,
+      percent: null,
+    });
+  } catch (error) {
+    console.error("Ошибка при удалении строк графика:", error);
+  }
+};
 
-
-
+//утверждение ку
 const ApproveKu = async () => {
   const selectedRows = store.multipleSelection
   const data = {
     ku_id: selectedRows[0].ku_id,
     status: "Действует",
+    entity_id: selectedRows[0].entity_id,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: selectedRows[0].date_start,
+    date_end: selectedRows[0].date_end,
+    percent: selectedRows[0].percent,
   };
 
   try {
     const response = await KU.updateKuStatus(data);
     console.log("Статус успешно обновлен:", response);
-    // Добавьте обновление стора или другие действия, если необходимо
+    await store.fetchKuList({
+      entity_id: "",
+      ku_id: "",
+      vendor_id: "",
+      period: "",
+      date_start: new Date(),
+      date_end: new Date(),
+      graph_exists: null,
+      status: "",
+      base: 100,
+      percent: null,
+    });
   } catch (error) {
     console.error("Ошибка при обновлении статуса:", error);
-    // Обработка ошибок
   }
 };
 
+//создание графика
 const addGraphic = async () => {
   const selectedRows = store.multipleSelection
+  if (selectedRows[0].status != "Действует") {
+    ElMessage.error("Создать график можно только для действующего коммерческого условия");
+    return;
+  }
   const newItem: IKuPostGraphic = {
     ku_id: selectedRows[0].ku_id,
     entity_id: selectedRows.map((row) => row.entity_id),

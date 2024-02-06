@@ -85,6 +85,7 @@ export interface IInvoice {
   invoice_name: string;
   invoice_number: string;
   invoice_date: Date | string;
+  products_amount: number | null
 }
 
 export interface GetAllInvoices {
@@ -111,7 +112,7 @@ export interface IKuList {
   period: string;
   date_start: Date | string;
   date_end: Date | string;
-  graphic: string | null
+  graph_exists: boolean | null
   status: string;
   base: number | null;
   percent: number | null;
@@ -141,6 +142,16 @@ export interface IKuPostGraphic {
 export interface IKuUpdateStatus {
   ku_id: string;
   status: string;
+  entity_id: string;
+  vendor_id: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  percent: number | null;
+}
+export interface IKuDeleteGraph {
+  ku_id: string;
+  status: string;
 }
 export interface IKuStore {
   newPercent: number | null;
@@ -151,6 +162,7 @@ export interface IKuStore {
   newDateEnd: Date;
   newDateActual: Date;
   multipleSelection: IKuList[];
+  multipleSelection2: IGraphic[];
   multipleTableRef: Ref | null;
   search: string;
   tableData: IKuList[];
@@ -185,6 +197,9 @@ export interface IGraphic {
   sum_calc: number | null;
   sum_bonus: number | null;
   status: string
+}
+export interface IGraphicId {
+  graph_id: number | null;
 }
 export interface GetAllGraphic {
   page_size?: number;

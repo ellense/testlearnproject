@@ -57,18 +57,53 @@
         width="160"
         show-overflow-tooltip
       />
-      <el-table-column property="graphic" label="График расчета"/>
-      <el-table-column property="status" label="Статус" />
+      <el-table-column property="graph_exists" label="График расчета" width="100"/>
+      <el-table-column
+      prop="status"
+      label="Статус"
+      :filters="[
+        { text: 'Действует', value: 'Действует' },
+        { text: 'Создан', value: 'Создан' },
+      ]"
+      :filter-method="filterTag"
+      filter-placement="bottom-end"
+    >
+      <template #default="scope">
+        <el-tag
+        :type="getStatusTagType(scope.row.status)"
+          disable-transitions
+          >{{ scope.row.status }}</el-tag
+        >
+      </template>
+    </el-table-column>
     </el-table>
   </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, watch } from "vue";
+import type { IKuList } from "~/utils/types/directoryTypes";
 
 import { useKuStore } from "~~/stores/kuStore";
 const store = useKuStore();
 
+const filterTag = (value: string, row: IKuList) => {
+  return row.status === value
+}
+const getStatusTagType = (status: string) => {
+  switch (status) {
+    case 'Создан':
+      return '';
+    case 'Действует':
+      return 'success';
+    case 'Закрыт':
+      return 'info';
+    case 'Отменен':
+      return 'danger';
+    default:
+      return '';
+  }
+};
 onMounted(async () => {
   try {
     await store.fetchKuList({
@@ -78,7 +113,7 @@ onMounted(async () => {
       period: "",
       date_start: new Date(),
       date_end: new Date(),
-      graphic: null,
+      graph_exists: null,
       status: "",
       base: 100,
       percent: null,
