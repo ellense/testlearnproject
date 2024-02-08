@@ -21,6 +21,7 @@ export const useKuStore = defineStore("KuStore", {
     multipleSelection: [],
     multipleSelection2:[],
     multipleTableRef: null,
+    selectedKu: null,
     search: "",
     tableData: [],
     dataGraphic: [],

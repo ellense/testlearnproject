@@ -6,9 +6,10 @@
         график</el-button>
       <el-button type="success"  plain @click="ApproveKu()">Утвердить</el-button>
       <el-button type="danger" plain @click="CancelKu()">Отменить</el-button>
+      <el-button type="danger" plain @click="deleteKu()">удалить</el-button>
     </div>
     <div class="buttonBar_search">
-      <el-input v-model="store.search" placeholder="Поиск по поставщику" style="width: 200px" />
+      <!-- <el-input v-model="store.search" placeholder="Поиск по поставщику" style="width: 200px" /> -->
     </div>
   </div>
 </template>
@@ -65,7 +66,7 @@ const CancelKu = async () => {
   };
   const data2 = {
     ku_id: selectedRows[0].ku_id,
-    status: "Отменен",
+    status: "Отменено",
     entity_id: selectedRows[0].entity_id,
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
@@ -136,9 +137,16 @@ const addGraphic = async () => {
     ElMessage.error("Создать график можно только для действующего коммерческого условия");
     return;
   }
+   // Проверка наличия элементов в массиве entity_id и выбор первого элемента
+   const firstEntityId = selectedRows[0].entity_id;
+
+if (!firstEntityId) {
+  ElMessage.error("Массив entity_id пуст или первый элемент не существует.");
+  return;
+}
   const newItem: IKuPostGraphic = {
     ku_id: selectedRows[0].ku_id,
-    entity_id: selectedRows.map((row) => row.entity_id),
+    entity_id: firstEntityId,
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
@@ -163,6 +171,20 @@ const addGraphic = async () => {
   } finally {
     loading.value = false;
   }
+   await store.fetchKuList({
+      entity_id: "",
+      ku_id: "",
+      vendor_id: "",
+      period: "",
+      date_start: new Date(),
+      date_end: new Date(),
+      graph_exists: true,
+      status: "",
+      base: 100,
+      percent: null,
+    });
+  
+
 }
 
 </script>

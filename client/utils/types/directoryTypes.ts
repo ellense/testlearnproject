@@ -139,7 +139,7 @@ export interface IKuPost {
 }
 export interface IKuPostGraphic {
   ku_id: string;
-  entity_id: string[];// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
+  entity_id: string;// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
   vendor_id: string;
   period: string;
   date_start: Date | string;
@@ -172,6 +172,7 @@ export interface IKuStore {
   multipleSelection: IKuList[];
   multipleSelection2: IGraphic[];
   multipleTableRef: Ref | null;
+  selectedKu: IKuList | null;
   search: string;
   tableData: IKuList[];
   dataGraphic: IGraphic[];

@@ -26,7 +26,7 @@
       <el-table-column property="sum_bonus" label="Расчитано" show-overflow-tooltip />
       <el-table-column prop="status" label="Статус" :filters="[
         { text: 'Запланировано', value: 'Запланировано' },
-        { text: 'Расчитано', value: 'Расчитано' },
+        { text: 'Рассчитано', value: 'Рассчитано' },
         { text: 'Утверждено', value: 'Утверждено' },
       ]" :filter-method="filterTag" filter-placement="bottom-end">
         <template #default="scope">
@@ -60,7 +60,7 @@ const getStatusTagType = (status: string) => {
   switch (status) {
     case 'Запланировано':
       return '';
-    case 'Расчитано':
+    case 'Рассчитано':
       return 'warning';
     case 'Утверждено':
       return 'success';

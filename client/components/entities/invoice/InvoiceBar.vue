@@ -7,7 +7,7 @@
         :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 400px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-select v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
+      <el-select v-model="Vendor"  clearable filterable collapse-tags collapse-tags-tooltip
         placeholder="Фильтр по поставщику" style="width: 400px" @change="changeVendor">
 
         <el-option v-for="item in VendorList" :key="item" :label="item" :value="item" />

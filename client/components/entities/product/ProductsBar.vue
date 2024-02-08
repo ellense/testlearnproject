@@ -1,7 +1,7 @@
 <template>
   <div class="directoryBar">
     
-    <h2>Поставщики</h2>
+    <h2>Товары</h2>
     <div class="directoryBar_filter">
     
   
