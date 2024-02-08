@@ -3,11 +3,15 @@
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)">
       <el-table-column prop="invoice_id" label="ID" width="100" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
-      <el-table-column property="invoice_name" label="Наименование" width="200" sortable show-overflow-tooltip />
-      <el-table-column property="entity_id" label="Юр. лицо" width="130" sortable show-overflow-tooltip />
-      <el-table-column property="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
-      <el-table-column property="vendor_id" label="Поставщик" width="150" sortable show-overflow-tooltip />
-      <el-table-column property="vendor_name" label="Наименование" width="300" sortable show-overflow-tooltip />
+      <el-table-column property="invoice_name" label="Наименование" width="160" sortable show-overflow-tooltip />
+      <el-table-column label="Юридическое лицо">
+      <el-table-column property="entity_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
+      <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
+    </el-table-column>
+    <el-table-column label="Поставщик">
+      <el-table-column property="vendor_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
+      <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
+    </el-table-column>
       <el-table-column property="invoice_date" type="date" label="Дата" sortable show-overflow-tooltip />
       <el-table-column property="products_amount" label="Сумма" sortable show-overflow-tooltip />
     </el-table>

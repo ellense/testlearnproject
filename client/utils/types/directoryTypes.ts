@@ -52,6 +52,9 @@ export interface GetAllVendors {
 export interface GetAllVendorsReturnData extends Pagination {
   results: IVendor[]
 }
+export interface IVendorId {
+  vendor_id: string
+}
 export interface IVendorIdAndName {
   vendor_id: string
   name: string;
@@ -91,6 +94,8 @@ export interface IInvoice {
 export interface GetAllInvoices {
   page_size?: number;
   page?: number;
+  entity_id: string[];
+  vendor_id: string[];
   search?: string;
 }
 export interface InvoiceStore {
@@ -98,6 +103,9 @@ export interface InvoiceStore {
   pagination: Pagination | null;
   countRowTable: number;
   search: string;
+  legalEntity: string[]
+  // vendor: string[]
+  vendor: IVendorId[] 
   filterValue: GetAllInvoices
 }
 export interface GetAllInvoicesReturnData extends Pagination {
@@ -219,11 +227,14 @@ export interface IProduct {
 export interface GetAllProducts {
   page_size?: number;
   page?: number;
+  search?: string;
 }
 export interface ProductStore {
   product: IProduct[];
   pagination: Pagination | null;
   countRowTable: number;
+  search: string
+  filterValue: GetAllProducts
 }
 export interface GetAllProductsReturnData extends Pagination {
   results: IProduct[];

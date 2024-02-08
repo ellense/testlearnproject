@@ -1,11 +1,11 @@
 <template>
-<div class="buttonBar">
+<!-- <div class="buttonBar">
     <div class="buttonBar_left">
       <el-button @click="deleteGraphic()">Удалить</el-button>
     </div>
     <div class="buttonBar_search">
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup lang="ts">

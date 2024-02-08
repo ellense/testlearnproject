@@ -1,11 +1,11 @@
 <template>
   <div class="buttonBar">
     <div class="buttonBar_left">
-      <el-button @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать</el-button>
-      <el-button @click="addGraphic()" :loading="loading" :disabled="isCreateGraphicButtonDisabled">Создать
+      <el-button type="primary"  plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать КУ</el-button>
+      <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isCreateGraphicButtonDisabled">Создать
         график</el-button>
-      <el-button @click="ApproveKu()">Утвердить</el-button>
-      <el-button @click="CancelKu()">Отменить</el-button>
+      <el-button type="success"  plain @click="ApproveKu()">Утвердить</el-button>
+      <el-button type="danger" plain @click="CancelKu()">Отменить</el-button>
     </div>
     <div class="buttonBar_search">
       <el-input v-model="store.search" placeholder="Поиск по поставщику" style="width: 200px" />

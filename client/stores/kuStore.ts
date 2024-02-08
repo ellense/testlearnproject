@@ -202,7 +202,7 @@ export const useKuStore = defineStore("KuStore", {
 
     async fetchKuEntity(data: IEntityIdAndName) {
       try {
-        const result = await ENTITY.getEntityById(data);
+        const result = await ENTITY.getEntityByIdAndName(data);
         if (Array.isArray(result)) {
           this.dataEntity = result;
         } else {
@@ -216,7 +216,7 @@ export const useKuStore = defineStore("KuStore", {
 
     async fetchVendorsListForEntity(page?: number) {
       try {
-        const vendors = await VENDOR.getVendorsForEntity({
+        const vendors = await VENDOR.getVendorsForEntityInKU({
           page_size: this.$state.countRowTable,
           page,
           entity_id: this.$state.entityName,

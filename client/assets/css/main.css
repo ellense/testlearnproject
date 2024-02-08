@@ -20,8 +20,8 @@ a {
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
   margin: 10px 10px 0 0;
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
+  /* border: 1px solid var(--el-border-color);
+  border-radius: 2px; */
   height: calc(100vh - 160px);
 }
 
@@ -90,3 +90,21 @@ h1 {
   margin-bottom: 4px;
   font-size: 14px;
 }
+
+.el-table__column-filter-trigger {
+  padding-left: 10px !important;
+}
+/* .el-table {
+  border: 2px solid #303133 !important;
+}
+
+
+.el-table thead {
+  background-color: #F0F2F5 !important;
+  color: #b82c2c !important;  
+}
+
+
+.el-table th {
+  text-align: center !important;
+} */

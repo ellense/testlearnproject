@@ -63,7 +63,9 @@
       label="Статус"
       :filters="[
         { text: 'Действует', value: 'Действует' },
-        { text: 'Создан', value: 'Создан' },
+        { text: 'Создано', value: 'Создано' },
+        { text: 'Закрыто', value: 'Закрыто' },
+        { text: 'Отменено', value: 'Отменено' },
       ]"
       :filter-method="filterTag"
       filter-placement="bottom-end"
@@ -81,6 +83,7 @@
 </template>
 
 <script lang="ts" setup>
+import dayjs from "dayjs";
 import { ref, onMounted, watch } from "vue";
 import type { IKuList } from "~/utils/types/directoryTypes";
 
@@ -92,27 +95,29 @@ const filterTag = (value: string, row: IKuList) => {
 }
 const getStatusTagType = (status: string) => {
   switch (status) {
-    case 'Создан':
+    case 'Создано':
       return '';
     case 'Действует':
       return 'success';
-    case 'Закрыт':
+    case 'Закрыто':
       return 'info';
-    case 'Отменен':
+    case 'Отменено':
       return 'danger';
     default:
       return '';
   }
 };
+
 onMounted(async () => {
   try {
+    const currentDate = dayjs().format('DD.MM.YYYY');
     await store.fetchKuList({
       entity_id: "",
       ku_id: "",
       vendor_id: "",
       period: "",
-      date_start: new Date(),
-      date_end: new Date(),
+      date_start: currentDate,
+      date_end: currentDate,
       graph_exists: null,
       status: "",
       base: 100,

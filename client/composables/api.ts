@@ -28,6 +28,7 @@ import type {
   IKuUpdateStatus,
   IGraphicId,
   IKuDeleteGraph,
+  IVendorId,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -58,24 +59,27 @@ export const INVOICE = {
 export const ENTITY = {
   getEntitiesList: (params: GetAllEntities): Promise<IEntity> =>
     $Get("api/entitieslist/", { params, isBearer: false }),
-  getEntityById: (data: IEntityIdAndName): Promise<IEntityIdAndName[]> =>
+  getEntityByIdAndName: (data: IEntityIdAndName): Promise<IEntityIdAndName[]> =>
     $Get("api/entitieslist/", { data, isBearer: false }),
+  getEntityById: (): Promise<EntityId[]> =>
+    $Get("api/entitieslist/", { isBearer: false }),
 };
 
 export const VENDOR = {
   getVendorsList: (params?: GetAllVendors): Promise<GetAllVendorsReturnData> =>
     $Get("api/vendorlist/", { params, isBearer: false }),
-  getVendorsForEntity: (
+  getVendorsForEntityInKU: (
     params?: GetAllVendorsForEntity
   ): Promise<GetAllVendorsForEntityReturnData> =>
     $Get("api/vendorfilter/", { params, isBearer: false }),
-
   getVendorsForEntityInVendor: (
     params?: GetAllVendorsForEntityInVendor
   ): Promise<GetAllVendorsForEntityInVendorReturnData> =>
     $Get("api/vendorlist/", { params, isBearer: false }),
-  getEntityById: (): Promise<EntityId[]> =>
-    $Get("api/entitieslist/", { isBearer: false }),
+  getVendorById: (): Promise<IVendorId[]> =>
+    $Get("api/vendorlist/", { isBearer: false }),
+  // getEntityById: (): Promise<EntityId[]> =>
+  //   $Get("api/entitieslist/", { isBearer: false }),
   // getEntityById: (): Promise<IEntityIdAndName[]> =>
   // $Get("api/entitieslist/", { isBearer: false }),
 };

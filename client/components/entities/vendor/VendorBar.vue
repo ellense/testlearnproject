@@ -4,7 +4,7 @@
       <h2>Поставщики</h2>
       <div class="directoryBar_filter">
       <el-select v-model="shopLegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-        :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 300px"
+        :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 500px"
         @change="changeShopLegalEntity">
         <el-option v-for="item in shopLegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
@@ -21,16 +21,19 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { useVendorStore } from "~~/stores/vendorStore";
 
-const { juristicPersons,dataEntity } = storeToRefs(useVendorStore());
+const { juristicPersons } = storeToRefs(useVendorStore());
 
 const { filterValue } = storeToRefs(useVendorStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 const shopLegalEntity = ref<string[]>(filterValue.value.entity_id || []);
 const shopLegalEntityList = ref<string[]>(juristicPersons.value);
-// const shopLegalEntityList = ref<string[]>(dataEntity.value.map(item => `${item.entity_id} - ${item.name}`));
+
 
 const searchQuery = ref('');
+watch(searchQuery, (newValue: string) => {
+  useVendorStore().performSearch(newValue);
+});
 
 const changeShopLegalEntity = () => {
   useVendorStore().pagination = null;
@@ -39,11 +42,7 @@ const changeShopLegalEntity = () => {
   toggleTriggerFilter();
 };
 
-// Следим за изменениями в поле поиска и автоматически выполняем поиск
-watch(searchQuery, (newValue: string) => {
-  // Вызов метода хранилища для выполнения поиска
-  useVendorStore().performSearch(newValue);
-});
+
 
 watch(juristicPersons, (value) => {
   shopLegalEntityList.value = value;

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { IVendor, VendorStore, WithoutNullableKeys, IEntityIdAndName, GetAllVendorsForEntityInVendor, EntityId } from "~/utils/types/directoryTypes";
+import type { IVendor, VendorStore, WithoutNullableKeys, GetAllVendorsForEntityInVendor, EntityId } from "~/utils/types/directoryTypes";
 
 export const useVendorStore = defineStore("VendorStore", {
   state: (): VendorStore => ({
@@ -45,7 +45,7 @@ export const useVendorStore = defineStore("VendorStore", {
     //   this.$state.dataEntity = data;
     // },
     getJuristicPersonsFromApi() {
-      VENDOR.getEntityById()
+      ENTITY.getEntityById()
         .then((juristicPersons) => this.setJuristicPersons(juristicPersons))
         .catch((e) => console.log(e))
     },
