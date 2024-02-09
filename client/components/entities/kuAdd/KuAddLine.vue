@@ -46,18 +46,20 @@
         <el-col :span="5">
           <div class="custom-label">Поставщик</div>
           <el-form-item>
-            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName"
-              tex>
+            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName">
               <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="
-                    margin-left: 10px;
-                    float: right;
-                    color: var(--el-text-color-secondary);
-                    font-size: 13px;
-                  ">{{ item.value }}</span>
+            margin-left: 10px;
+            float: right;
+            color: var(--el-text-color-secondary);
+            font-size: 13px;
+          ">{{ item.value }}</span>
               </el-option>
             </el-select>
+            <div v-if="!store.entityName" style="font-size: 12px; color: var(--el-text-color-secondary); margin-top: 5px;">
+      Сначала выберите юридическое лицо
+    </div>
           </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -105,7 +107,8 @@ const store = useKuStore();
 const router = useRouter();
 const loading = ref(false);
 
-//проверка полей формы
+
+// Проверка полей формы
 const dateStartValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const dateStartError = ref<string | undefined>('');
 const dateEndValidation = ref<"error" | "success" | "validating" | undefined>('success');
@@ -113,36 +116,60 @@ const dateEndError = ref<string | undefined>('');
 const percentValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const percentError = ref<string | undefined>('');
 
+// Периоды и их соответствующие минимальные разницы в днях
+const periods: Record<string, number> = {
+  'Месяц': 30,
+  'Квартал': 90,
+  'Полгода': 180,
+  'Год': 365
+};
 
+// Функция проверки даты начала
 const validateDateStart = () => {
   const startDate = dayjs(store.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(store.newDateEnd, 'DD.MM.YYYY');
 
+  // Проверка на минимальную разницу в зависимости от выбранного периода
+  const minDiff = periods[store.newType];
   if (startDate.isAfter(endDate)) {
     dateStartValidation.value = 'error';
     dateStartError.value = 'Начальная дата не может быть позже конечной даты.';
+  } else if (endDate.diff(startDate, 'day') < minDiff) {
+    dateStartValidation.value = 'error';
+    dateStartError.value = `Минимальная разница между начальной и конечной датой должна быть не менее ${minDiff} дней для выбранного периода.`;
   } else {
     dateStartValidation.value = undefined;
     dateStartError.value = undefined;
   }
 };
 
+// Функция проверки даты окончания
 const validateDateEnd = () => {
   const startDate = dayjs(store.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(store.newDateEnd, 'DD.MM.YYYY');
-
+  // Проверка на минимальную разницу в зависимости от выбранного периода
+  const minDiff = periods[store.newType];
   if (startDate.isAfter(endDate)) {
     dateEndValidation.value = 'error';
     dateEndError.value = 'Конечная дата не может быть раньше начальной даты.';
+  } else if (endDate.diff(startDate, 'day') < minDiff) {
+    dateEndValidation.value = 'error';
+    dateEndError.value = `Минимальная разница между начальной и конечной датой должна быть не менее ${minDiff} дней для выбранного периода.`;
   } else {
     dateEndValidation.value = undefined;
     dateEndError.value = undefined;
   }
 };
 
+// Функция сброса дат при изменении периода
+const resetDatesOnPeriodChange = () => {
+  store.newDateStart = new Date()
+  store.newDateEnd = new Date();
+};
+
+// Функция проверки процента
 const validatePercent = () => {
   const percent = parseFloat(String(store.newPercent));
-
   if (isNaN(percent) || percent < 1 || percent > 100) {
     percentValidation.value = 'error';
     percentError.value = 'Введите корректный процент от 1 до 100.';
@@ -151,9 +178,19 @@ const validatePercent = () => {
     percentError.value = undefined;
   }
 };
+
+watch(() => store.newPercent, validatePercent);
 watch(() => store.newDateStart, validateDateStart);
 watch(() => store.newDateEnd, validateDateEnd);
-watch(() => store.newPercent, validatePercent);
+
+// Обработчик изменения выбранного периода
+watch(() => store.newType, (newValue, oldValue) => {
+  if (oldValue !== newValue) {
+    resetDatesOnPeriodChange();
+  }
+});
+//проверка полей формы
+
 
 const isFormValid = () => {
   const isEmpty = (value: any) => {
@@ -257,7 +294,6 @@ const addClose = () => {
 //отправка ку на бэк
 const addItemAndSendToBackend = async () => {
   if (!isFormValid()) {
-    // Если форма не валидна, выполните соответствующие действия, например, выведите сообщение об ошибке.
     ElMessage.error('Не все поля заполнены корректно.');
     return;
   }

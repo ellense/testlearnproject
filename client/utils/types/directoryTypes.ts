@@ -116,7 +116,9 @@ export interface GetAllInvoicesReturnData extends Pagination {
 export interface IKuList {
   ku_id: string;
   entity_id: string;
+  entity_name: string;
   vendor_id: string;
+  vendor_name: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
@@ -219,7 +221,10 @@ export interface GetAllKu_IdReturnData extends Pagination {
 export interface IGraphic {
   graph_id: number | null;
   ku_id: string;
+  entity_id: string;
+  entity_name: string;
   vendor_id: string;
+  vendor_name: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
