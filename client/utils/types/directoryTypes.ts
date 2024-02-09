@@ -120,7 +120,7 @@ export interface IKuList {
   period: string;
   date_start: Date | string;
   date_end: Date | string;
-  graph_exists: boolean | null
+  graph_exists: boolean | string
   status: string;
   base: number | null;
   percent: number | null;
@@ -173,7 +173,6 @@ export interface IKuStore {
   multipleSelection2: IGraphic[];
   multipleTableRef: Ref | null;
   selectedKu: IKuList | null;
-  search: string;
   tableData: IKuList[];
   dataGraphic: IGraphic[];
   brand: IBrand[];
@@ -187,10 +186,22 @@ export interface IKuStore {
   isAddConditionDisabled: boolean;
   vendorFilter: string;
   kuFilter: number | null;
-  pagination: Pagination | null;
-  countRowTable: number;
   vendors: IVendorIdAndName[];
   filterValueGraphic: GetAllGraphic
+  pagination: Pagination | null;
+  countRowTable: number;
+  search: string;
+  legalEntity: string[]
+  filterKuValue: GetAllKus
+}
+export interface GetAllKus {
+  page_size?: number;
+  page?: number;
+  entity_id?: string[];
+  search?: string;
+} 
+export interface GetAllKusReturnData extends Pagination {
+  results: IKuList[];
 }
 
 // График

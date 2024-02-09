@@ -2,8 +2,9 @@
   <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" style="border: none">
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
-    <!-- @selection-change="useKuStore().handleSelectionChange2" -->
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" border>
+    
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" border @selection-change="useKuStore().handleSelectionChange2">
+      <el-table-column type="selection" width="55" />
       <el-table-column type="index" label="ID" sortable width="100" show-overflow-tooltip />
       <el-table-column property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
       <el-table-column property="vendor_id" label="Поставщик" width="150" sortable show-overflow-tooltip />
@@ -84,12 +85,12 @@ watch(getGraphic, (value) => {
 });
 
 const paginationChange = (page: number) => {
-  useKuStore().fetchGraphicList(page);
+  useKuStore().getGraphicsFromAPIWithFilter(page);
 };
 
 onMounted(async () => {
   try {
-    await useKuStore().fetchGraphicList();
+    await useKuStore().getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

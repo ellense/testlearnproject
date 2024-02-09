@@ -30,7 +30,6 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       }
     },
 
-    //для фильтрации
     setSearchQuery(query: string) {
       console.log('Устанавливается запрос поиска:', query);
       this.$state.search = query;

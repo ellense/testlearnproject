@@ -20,8 +20,8 @@ a {
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
   margin: 10px 10px 0 0;
-  /* border: 1px solid var(--el-border-color);
-  border-radius: 2px; */
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
   height: calc(100vh - 160px);
 }
 

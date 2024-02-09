@@ -1,32 +1,39 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="filteredKuList" style="width: 100%" @selection-change="store.handleSelectionChange"
-      height="calc(100vh - 160px)" @row-dblclick="">
+    <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
+      height="calc(100vh - 225px)" @row-dblclick="">
       <el-table-column type="selection" width="55" />
       <el-table-column property="ku_id" label="Номер КУ" width="150" sortable show-overflow-tooltip />
       <el-table-column property="entity_id" label="Юр.лицо" width="200" sortable show-overflow-tooltip />
       <el-table-column property="vendor_id" label="Поставщик" width="200" sortable show-overflow-tooltip />
       <el-table-column property="percent" label="Процент" width="120" show-overflow-tooltip />
-      <el-table-column property="period" label="Период" width="120" show-overflow-tooltip />
-      <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="160"
+      <el-table-column prop="period" label="Период расчета" width="110" :filters="[
+        { text: 'Месяц', value: 'Месяц' },
+        { text: 'Квартал', value: 'Квартал' },
+        { text: 'Полгода', value: 'Полгода' },
+        { text: 'Год', value: 'Год' },
+      ]" :filter-method="filterPeriod" filter-placement="bottom-end">
+        <template #default="scope2">
+          {{ scope2.row.period }}
+        </template>
+      </el-table-column>
+      <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="110"
         show-overflow-tooltip />
-      <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="160" show-overflow-tooltip />
-      <!-- <el-table-column property="graph_exists" label="График расчета" width="100" /> -->
-
-
-      <!-- <el-table-column type="selection" width="100" property="graph_exists" label="График расчета" :disabled="true" /> -->
-      <el-table-column prop="graph_exists" label="График">
+      <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110" show-overflow-tooltip />
+      <el-table-column prop="graph_exists" label="График расчета" width="100" :filters="[
+        { text: 'Есть', value: 'true' },
+        { text: 'Нет', value: 'false' },
+      ]" :filter-method="filterGraphic" filter-placement="bottom-end">
         <template #default="scope2">
           <el-checkbox :checked="scope2.row.graph_exists" disabled></el-checkbox>
         </template>
       </el-table-column>
-
       <el-table-column prop="status" label="Статус" :filters="[
         { text: 'Действует', value: 'Действует' },
         { text: 'Создано', value: 'Создано' },
         { text: 'Закрыто', value: 'Закрыто' },
         { text: 'Отменено', value: 'Отменено' },
-      ]" :filter-method="filterTag" filter-placement="bottom-end">
+      ]" :filter-method="filterStatus" filter-placement="bottom-end">
         <template #default="scope">
           <el-tag :type="getStatusTagType(scope.row.status)" disable-transitions>{{ scope.row.status }}</el-tag>
         </template>
@@ -44,33 +51,72 @@
       </el-table-column> -->
     </el-table>
   </el-scrollbar>
+  <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
+      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
+      @size-change="handleSizeChange" @current-change="paginationChange" />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import dayjs from "dayjs";
+import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IKuList } from "~/utils/types/directoryTypes";
-
 import { useKuStore } from "~~/stores/kuStore";
-const store = useKuStore();
+
+const { getKu, pagination, countRowTable } = storeToRefs(
+  useKuStore()
+);
+const tableData = ref<IKuList[]>(getKu.value);
+
+//пагинация
+const pageSize = ref(countRowTable);
+const handleSizeChange = async (val: number) => {
+  pageSize.value = val;
+  useKuStore().setCountRowTable(val);
+  try {
+    await useKuStore().getKuFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных ку1", error);
+  }
+};
+const paginationChange = (page: number) => {
+  try {
+    useKuStore().setFilterValue('page', page);
+    useKuStore().getKuFromAPIWithFilter(page);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных ку2", error);
+  }
+};
+
+//монтирование и отслеживание таблицы
+watch(getKu, (value) => {
+  tableData.value = value || [];
+});
+
+onMounted(async () => {
+  try {
+    await useKuStore().getKuFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных ку3", error);
+  }
+});
 
 
 
-// const editWorker = (row: OutsourceExecutorInfo) => {
-//   selectedExecutor.value = { ...row }
-// }
+//фильтры в таблице
+const filterGraphic = (value: boolean, row: IKuList) => {
+  // return row.graph_exists === value
+  const graphExistsString = row.graph_exists.toString();
+  return graphExistsString === value.toString();
+}
 
+const filterPeriod = (value: string, row: IKuList) => {
+  return row.period === value
+}
 
-// const filterTag2 = (value: boolean, row: IKuList) => {
-//   // Преобразовать значение row.graph_exists в строку
-//   const graphExistsString = row.graph_exists.toString();
-
-//   // Сравнить строковое представление row.graph_exists с value
-//   return graphExistsString === value.toString();
-// }
-
-
-const filterTag = (value: string, row: IKuList) => {
+const filterStatus = (value: string, row: IKuList) => {
   return row.status === value
 }
 const getStatusTagType = (status: string) => {
@@ -88,36 +134,36 @@ const getStatusTagType = (status: string) => {
   }
 };
 
-onMounted(async () => {
-  try {
-    const currentDate = dayjs().format('DD.MM.YYYY');
-    await store.fetchKuList({
-      entity_id: "",
-      ku_id: "",
-      vendor_id: "",
-      period: "",
-      date_start: currentDate,
-      date_end: currentDate,
-      graph_exists: null,
-      status: "",
-      base: 100,
-      percent: null,
-    });
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     const currentDate = dayjs().format('DD.MM.YYYY');
+//     await store.fetchKuList({
+//       entity_id: "",
+//       ku_id: "",
+//       vendor_id: "",
+//       period: "",
+//       date_start: currentDate,
+//       date_end: currentDate,
+//       graph_exists: false,
+//       status: "",
+//       base: 100,
+//       percent: null,
+//     });
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// });
 
-//фильтры
-const filteredKuList = ref(store.searchTableData);
+// //фильтры
+// const filteredKuList = ref(store.searchTableData);
 
-watchEffect(() => {
-  filteredKuList.value = store.searchTableData;
-});
+// watchEffect(() => {
+//   filteredKuList.value = store.searchTableData;
+// });
 
-//открывание ку
-const rowDblclick = (kuId: number) => {
-  console.log("success");
-  useRouter().push({ path: `/ku/${kuId}` });
-};
+// //открывание ку
+// const rowDblclick = (kuId: number) => {
+//   console.log("success");
+//   useRouter().push({ path: `/ku/${kuId}` });
+// };
 </script>
