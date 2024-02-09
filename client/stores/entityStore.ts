@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import type { EntityStore, GetAllEntities, } from "~/utils/types/directoryTypes";
 
-export const useEntityTableStore = defineStore("EntityTableStore", {
+export const useEntityStore = defineStore("EntityStore", {
   state: (): EntityStore => ({
     dataEntity: [],
     search: "",

@@ -105,7 +105,7 @@ export interface InvoiceStore {
   search: string;
   legalEntity: string[]
   // vendor: string[]
-  vendor: IVendorId[] 
+  vendor: IVendorId[]
   filterValue: GetAllInvoices
 }
 export interface GetAllInvoicesReturnData extends Pagination {
@@ -139,7 +139,7 @@ export interface IKuPost {
 }
 export interface IKuPostGraphic {
   ku_id: string;
-  entity_id: string;// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
+  entity_id: string;
   vendor_id: string;
   period: string;
   date_start: Date | string;
@@ -191,17 +191,28 @@ export interface IKuStore {
   pagination: Pagination | null;
   countRowTable: number;
   search: string;
+  search2: string;
   legalEntity: string[]
+  legalEntity2: string[]
+  KuParams: string[]
   filterKuValue: GetAllKus
+  filterGraphicValue: GetAllGraphic
 }
 export interface GetAllKus {
   page_size?: number;
   page?: number;
   entity_id?: string[];
   search?: string;
-} 
+}
+export interface GetAllKu_Id {
+  page_size?: number;
+  page?: number;
+}
 export interface GetAllKusReturnData extends Pagination {
   results: IKuList[];
+}
+export interface GetAllKu_IdReturnData extends Pagination {
+  results: IKuId[];
 }
 
 // График
@@ -224,6 +235,9 @@ export interface IGraphicId {
 export interface GetAllGraphic {
   page_size?: number;
   page?: number;
+  entity_id?: string[];
+  ku_id?: string[];
+  search?: string;
 }
 export interface GetAllGraphicsReturnData extends Pagination {
   results: IGraphic[];

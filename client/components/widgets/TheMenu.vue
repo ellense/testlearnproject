@@ -4,38 +4,50 @@
       <el-menu style="font-size: 12px" active-color="#689EFF">
         <nuxt-link to="/ku">
           <el-menu-item index="1">
-            <el-icon><Document /></el-icon>
+            <el-icon>
+              <Document />
+            </el-icon>
             <span>Коммерческие условия</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/graphic">
           <el-menu-item index="2">
-            <el-icon><Calendar /></el-icon>
+            <el-icon>
+              <Calendar />
+            </el-icon>
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
         <el-divider />
         <nuxt-link to="/entity">
           <el-menu-item index="3">
-            <el-icon><Suitcase /></el-icon>
+            <el-icon>
+              <Suitcase />
+            </el-icon>
             <span>Юридические лица</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/invoice">
           <el-menu-item index="4">
-            <el-icon><Memo /></el-icon>
+            <el-icon>
+              <Memo />
+            </el-icon>
             <span>Накладные</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/vendor">
           <el-menu-item index="5">
-            <el-icon><Box /></el-icon>
+            <el-icon>
+              <Box />
+            </el-icon>
             <span>Поставщики</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/product">
           <el-menu-item index="6">
-            <el-icon><ShoppingCartFull /></el-icon>
+            <el-icon>
+              <ShoppingCartFull />
+            </el-icon>
             <span>Товары</span>
           </el-menu-item>
         </nuxt-link>
@@ -59,14 +71,8 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown> -->
-          <el-popconfirm
-            :title="'Выйти из ЛК?'"
-            :confirm-button-text="'Да'"
-            :cancel-button-text="'Нет'"
-            :hide-icon="true"
-            width="200px"
-            @confirm="logOut()"
-          >
+          <el-popconfirm :title="'Выйти из ЛК?'" :confirm-button-text="'Да'" :cancel-button-text="'Нет'" :hide-icon="true"
+            width="200px" @confirm="logOut()">
             <template #reference>
               <div class="main-menu__logout-button">
                 <span>Выход</span>
@@ -100,19 +106,23 @@ const logOut = () => useAuthStore().logout();
 .el-aside {
   color: var(--el-text-color-primary);
 }
+
 .el-menu {
   border-right: none;
 }
+
 .el-menu:first-child {
   margin-top: 24px;
 }
+
 .el-menu-item {
   height: 40px;
 }
+
 .el-text {
   margin-left: 30px;
 }
+
 .main-menu__logout-button {
   width: 100%;
-}
-</style>
+}</style>

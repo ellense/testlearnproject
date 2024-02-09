@@ -20,10 +20,7 @@
       <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="110"
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110" show-overflow-tooltip />
-      <el-table-column prop="graph_exists" label="График расчета" width="100" :filters="[
-        { text: 'Есть', value: 'true' },
-        { text: 'Нет', value: 'false' },
-      ]" :filter-method="filterGraphic" filter-placement="bottom-end">
+      <el-table-column prop="graph_exists" label="График расчета" width="100">
         <template #default="scope2">
           <el-checkbox :checked="scope2.row.graph_exists" disabled></el-checkbox>
         </template>
@@ -38,28 +35,16 @@
           <el-tag :type="getStatusTagType(scope.row.status)" disable-transitions>{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
-      <!-- <el-table-column label="Действия" class-name="cell__button" width="120">
-        <template #default="scope">
-          <div class="f-center" style="width: 100%">
-            <el-button
-              class="base-button_success base-button_table-button"
-              @click="editWorker(scope.row)"
-              >Редактировать</el-button>
-            >
-          </div>
-        </template>
-      </el-table-column> -->
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>
 </template>
 
 <script lang="ts" setup>
-import dayjs from "dayjs";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IKuList } from "~/utils/types/directoryTypes";
@@ -134,36 +119,4 @@ const getStatusTagType = (status: string) => {
   }
 };
 
-// onMounted(async () => {
-//   try {
-//     const currentDate = dayjs().format('DD.MM.YYYY');
-//     await store.fetchKuList({
-//       entity_id: "",
-//       ku_id: "",
-//       vendor_id: "",
-//       period: "",
-//       date_start: currentDate,
-//       date_end: currentDate,
-//       graph_exists: false,
-//       status: "",
-//       base: 100,
-//       percent: null,
-//     });
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
-
-// //фильтры
-// const filteredKuList = ref(store.searchTableData);
-
-// watchEffect(() => {
-//   filteredKuList.value = store.searchTableData;
-// });
-
-// //открывание ку
-// const rowDblclick = (kuId: number) => {
-//   console.log("success");
-//   useRouter().push({ path: `/ku/${kuId}` });
-// };
 </script>

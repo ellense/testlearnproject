@@ -1,23 +1,18 @@
 <template>
-  <el-dialog
-    v-model="kuStore.dialogFormVisible"
-    title="Фильтрация товаров по накладных"
-    close-on-click-modal
-    close-on-press-escape
-    draggable
-  >
+  <el-dialog v-model="kuStore.dialogFormVisible" title="Фильтрация товаров по накладных" close-on-click-modal
+    close-on-press-escape draggable>
     <el-tabs type="border-card">
       <el-tab-pane label="Производитель">
-        <EntitiesKuAddFiltresProducer/>
+        <EntitiesKuAddFiltresProducer />
       </el-tab-pane>
       <el-tab-pane label="Торговая марка">
-        <EntitiesKuAddFiltresBrand/>
+        <EntitiesKuAddFiltresBrand />
       </el-tab-pane>
       <el-tab-pane label="Категория">
-        <EntitiesKuAddFiltresClassificator/>
+        <EntitiesKuAddFiltresClassificator />
       </el-tab-pane>
       <el-tab-pane label="Товар">
-         <EntitiesKuAddFiltresProduct/>
+        <EntitiesKuAddFiltresProduct />
       </el-tab-pane>
     </el-tabs>
 
@@ -30,20 +25,8 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
 import { useKuStore } from "~~/stores/kuStore";
 
 const kuStore = useKuStore();
-import { useEntityTableStore } from "@/stores/entityTableStore";
 
-const entityStore = useEntityTableStore();
-const filteredEntityList = ref(entityStore.searchEntityList);
-
-// Обновляем filteredEntityList при изменении searchEntityList
-watch(
-  () => entityStore.searchEntityList,
-  () => {
-    filteredEntityList.value = entityStore.searchEntityList;
-  }
-);
 </script>

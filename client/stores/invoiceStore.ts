@@ -51,19 +51,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
         (legalEntity) => legalEntity.entity_id
       )
     },
-    // getVendorFromApi() {
-    //   console.log('Запрос данных о поставщиках...');
-    //   VENDOR.getVendorById()
-    //     .then((vendor) => {
-    //       console.log('Получены данные о поставщиках:', vendor);
-    //       this.setVendor(vendor);
-    //     })
-    //     .catch((error) => {
-    //       console.error('Ошибка при получении данных о поставщиках:', error.message);
-    //       // Вы также можете вывести полный объект ошибки для получения дополнительной информации:
-    //       console.error('Полная ошибка:', error);
-    //     });
-    // },
+
     async fetchVendorsListForEntityInInvoice(page?: number) {
       try {
         const vendors = await VENDOR.getVendorsForEntityInKU({
@@ -85,12 +73,6 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
         return Promise.reject(error);
       }
     },
-    // setVendor(data: IVendorId[]) {
-    //   console.log('Устанавливаются данные о поставщиках:', data);
-    //   this.$state.vendor = data.map(
-    //     (vendor) => vendor.vendor_id
-    //   )
-    // },
     setFilterValue<
       T extends keyof GetAllInvoices,
       U extends GetAllInvoices[T],
@@ -104,7 +86,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       this.$state.countRowTable = count;
     },
 
-    
+
     //получение накладных
     async getInvoicesFromAPIWithFilter(page?: number) {
       console.log('Выполняется запрос накладных с фильтрацией...');

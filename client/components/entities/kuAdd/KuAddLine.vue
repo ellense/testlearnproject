@@ -96,7 +96,6 @@ import { ref } from "vue";
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
 import { useKuStore } from "~~/stores/kuStore";
-import { useEntityTableStore } from "~~/stores/entityTableStore";
 import type {
   IEntityIdAndName,
   IVendorIdAndName,

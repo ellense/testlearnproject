@@ -1,11 +1,11 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table :data="tableData" style="width: 100%;" height="calc(100vh - 185px) " border>
-      <el-table-column prop="itemid" label="Номер" width="100" show-overflow-tooltip   /> 
-        <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
-        <el-table-column prop="classifier_name" label="Категория" width="400" show-overflow-tooltip />
+      <el-table-column prop="itemid" label="Номер" width="100" show-overflow-tooltip />
+      <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
+      <el-table-column prop="classifier_name" label="Категория" width="400" show-overflow-tooltip />
       <el-table-column prop="brand_name" label="Бренд" />
-      
+
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
@@ -55,6 +55,4 @@ onMounted(async () => {
   }
 });
 </script>
-<style scoped>
-
-</style>
+<style scoped></style>

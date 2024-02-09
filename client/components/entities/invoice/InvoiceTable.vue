@@ -5,19 +5,19 @@
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
       <el-table-column property="invoice_name" label="Наименование" width="160" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
-      <el-table-column property="entity_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
-      <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
-    </el-table-column>
-    <el-table-column label="Поставщик">
-      <el-table-column property="vendor_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
-      <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
-    </el-table-column>
+        <el-table-column property="entity_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
+        <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
+      </el-table-column>
+      <el-table-column label="Поставщик">
+        <el-table-column property="vendor_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
+        <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
+      </el-table-column>
       <el-table-column property="invoice_date" type="date" label="Дата" sortable show-overflow-tooltip />
       <el-table-column property="products_amount" label="Сумма" show-overflow-tooltip />
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>
@@ -44,7 +44,6 @@ const handleSizeChange = async (val: number) => {
   }
 };
 const paginationChange = (page: number) => {
-  // useInvoiceStore().getInvoicesFromAPIWithFilter(page);
   try {
     useInvoiceStore().setFilterValue('page', page);
     useInvoiceStore().getInvoicesFromAPIWithFilter(page);

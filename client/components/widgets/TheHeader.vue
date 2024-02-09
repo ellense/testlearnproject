@@ -18,6 +18,7 @@
   justify-content: space-between;
   height: 100%;
 }
+
 h1 {
   color: #337ecc;
   font-size: 20px;

@@ -7,14 +7,13 @@
 
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
-import { useEntityTableStore } from "~~/stores/entityTableStore";
+import { useEntityStore } from "~~/stores/entityStore";
 
 const searchQuery = ref('');
 
 watch(searchQuery, (newValue: string) => {
-  useEntityTableStore().performSearch(newValue);
+  useEntityStore().performSearch(newValue);
 });
-
 
 </script>
 

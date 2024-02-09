@@ -13,9 +13,9 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
-import { useEntityTableStore } from "@/stores/entityTableStore";
+import { useEntityStore } from "@/stores/entityStore";
 import type { IEntity } from "~/utils/types/directoryTypes";
-const { getEntities } = storeToRefs(useEntityTableStore());
+const { getEntities } = storeToRefs(useEntityStore());
 
 const tableData = ref<IEntity[]>(getEntities.value);
 
@@ -29,7 +29,7 @@ watch(getEntities, (value) => {
 onMounted(async () => {
   try {
     console.log("Before API call");
-    await useEntityTableStore().getEntityFromAPIWithFilter();
+    await useEntityStore().getEntityFromAPIWithFilter();
     console.log("After API call");
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);

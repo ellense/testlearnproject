@@ -1,35 +1,29 @@
 <template>
-  <!-- <div class="buttonBar">
-    <div class="buttonBar_left"> -->
-      <div class="directoryBar">
-        <div >
-      <el-button type="primary"  plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать КУ</el-button>
-      <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isCreateGraphicButtonDisabled">Создать
+  <div class="directoryBar">
+    <div>
+      <el-button type="primary" plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать
+        КУ</el-button>
+      <el-button type="primary" plain @click="addGraphic()" :loading="loading"
+        :disabled="isCreateGraphicButtonDisabled">Создать
         график</el-button>
-      <el-button type="success"  plain @click="ApproveKu()" :disabled="isCreateGraphicButtonDisabled">Утвердить</el-button>
+      <el-button type="success" plain @click="ApproveKu()" :disabled="isCreateGraphicButtonDisabled">Утвердить</el-button>
       <el-button type="danger" plain @click="CancelKu()" :disabled="isCreateGraphicButtonDisabled">Отменить</el-button>
-      <el-button type="danger" plain @click="deleteKu()" >удалить</el-button>
+      <el-button type="danger" plain @click="deleteKu()">удалить</el-button>
     </div>
-      <div class="directoryBar_filter">
+    <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 400px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 400px;" ></el-input>
-      </div>
+      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 400px;"></el-input>
     </div>
-      <!-- </div>
-    <div class="buttonBar_search">
-   <el-input v-model="store.search" placeholder="Поиск по поставщику" style="width: 200px" />
-    </div>
-  </div> -->
+  </div>
 </template>
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useKuStore } from "~~/stores/kuStore";
 import { useRouter } from "vue-router";
-import dayjs from "dayjs";
 import "dayjs/locale/ru";
 import type { IKuPostGraphic } from "~/utils/types/directoryTypes";
 const store = useKuStore();
@@ -73,9 +67,6 @@ onMounted(() => {
   useKuStore().getLegalEntityFromApi();
 });
 
-
-
-
 //кнопка создать ку
 const redirectToCreatePage = () => {
   router.push("kuAdd");
@@ -87,7 +78,6 @@ const isCreateButtonDisabled = computed(() => {
 const isCreateGraphicButtonDisabled = computed(() => {
   return store.multipleSelection.length > 1
 });
-
 
 // Функция удаления выбранных строк
 const deleteKu = async () => {
@@ -168,16 +158,9 @@ const addGraphic = async () => {
     ElMessage.error("Создать график можно только для действующего коммерческого условия");
     return;
   }
-   // Проверка наличия элементов в массиве entity_id и выбор первого элемента
-   const firstEntityId = selectedRows[0].entity_id;
-
-if (!firstEntityId) {
-  ElMessage.error("Массив entity_id пуст или первый элемент не существует.");
-  return;
-}
   const newItem: IKuPostGraphic = {
     ku_id: selectedRows[0].ku_id,
-    entity_id: firstEntityId,
+    entity_id: selectedRows[0].entity_id,
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
@@ -203,8 +186,6 @@ if (!firstEntityId) {
     loading.value = false;
   }
   await useKuStore().getKuFromAPIWithFilter();
-  
-
 }
 
 </script>

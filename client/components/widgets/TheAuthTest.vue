@@ -4,28 +4,14 @@
       <div class="auth-container__form">
         <el-form :model="form" @submit.prevent.stop="login">
           <el-form-item>
-            <el-input
-              v-model="form.username"
-              placeholder="Введите логин"
-              :prefix-icon="Message"
-            />
+            <el-input v-model="form.username" placeholder="Введите логин" :prefix-icon="Message" />
           </el-form-item>
           <el-form-item>
-            <el-input
-              v-model="form.password"
-              placeholder="Введите пароль"
-              :prefix-icon="Lock"
-            />
+            <el-input v-model="form.password" placeholder="Введите пароль" :prefix-icon="Lock" />
           </el-form-item>
           <el-form-item>
-            <el-button
-              native-type="submit"
-              type="primary"
-              :full-width="true"
-              :scopes="'all'"
-              :for-all="true"
-              style="width: 100%"
-            >
+            <el-button native-type="submit" type="primary" :full-width="true" :scopes="'all'" :for-all="true"
+              style="width: 100%">
               Войти
             </el-button>
           </el-form-item>
@@ -68,10 +54,9 @@ const login = () => {
       });
   } else {
     message.warning(
-      `Не заполнен ${
-        !form.username && !form.password
-          ? "логин и пароль"
-          : !form.username
+      `Не заполнен ${!form.username && !form.password
+        ? "логин и пароль"
+        : !form.username
           ? "логин"
           : " пароль"
       }`
@@ -84,6 +69,7 @@ const login = () => {
 .el-form {
   margin-top: 30px;
 }
+
 .login-container {
   display: flex;
   height: 100vh;

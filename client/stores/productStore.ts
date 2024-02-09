@@ -8,7 +8,6 @@ export const useProductStore = defineStore("ProductStore", {
     countRowTable: 100,
     search: "",
     filterValue: {},
-    // productList: [] as IProduct[],
   }),
 
   getters: {

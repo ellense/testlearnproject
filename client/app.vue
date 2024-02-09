@@ -1,11 +1,15 @@
 <template>
   <el-config-provider :locale="locale">
-    
     <NuxtLayout>
-      
-      <template #header><WidgetsTheHeader /></template>
-      <template #menu><WidgetsTheMenu /></template>
-      <template #content><NuxtPage /></template>
+      <template #header>
+        <WidgetsTheHeader />
+      </template>
+      <template #menu>
+        <WidgetsTheMenu />
+      </template>
+      <template #content>
+        <NuxtPage />
+      </template>
     </NuxtLayout>
   </el-config-provider>
 </template>
@@ -23,8 +27,6 @@ if (!auth.isAuth) auth.initAuth();
 await auth.authPromise;
 </script>
 
-<style scoped>
- .el-main {
+<style scoped>.el-main {
   padding: 0 0 20px 30px;
-}
-</style>
+}</style>

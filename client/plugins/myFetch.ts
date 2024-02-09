@@ -204,8 +204,8 @@ export default defineNuxtPlugin(() => {
         promise = $fetch(config.REFRESH_URL, {
           method: "post",
           body: { refresh: token.refresh },
-          onRequest() {},
-          onResponse() {},
+          onRequest() { },
+          onResponse() { },
         });
 
       let tokens: any;

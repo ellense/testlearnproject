@@ -1,5 +1,4 @@
 <template>
-
   <div class="directoryBar">
     <h2>Накладные поставок</h2>
     <div class="directoryBar_filter">
@@ -7,22 +6,14 @@
         :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 400px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
-      <!-- <el-select v-model="Vendor"  clearable filterable collapse-tags collapse-tags-tooltip
-        placeholder="Фильтр по поставщику" style="width: 400px" @change="changeVendor">
-
-        <el-option v-for="item in VendorList" :key="item" :label="item" :value="item" />
-      </el-select> -->
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 400px;" ></el-input>
-    </div> 
+      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 400px;"></el-input>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
-import type { IVendorId } from "~/utils/types/directoryTypes";
 import { useInvoiceStore } from "~~/stores/invoiceStore";
-import { useKuStore } from "~~/stores/kuStore";
 const { legalEntity, vendor } = storeToRefs(useInvoiceStore());
 
 //для поиска
@@ -51,8 +42,6 @@ const changeLegalEntity = () => {
 watch(legalEntity, (value) => {
   LegalEntityList.value = value;
 });
-
-
 
 watch(triggerFilter, () => {
   useInvoiceStore().getInvoicesFromAPIWithFilter();

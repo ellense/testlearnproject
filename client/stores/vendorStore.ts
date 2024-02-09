@@ -36,14 +36,6 @@ export const useVendorStore = defineStore("VendorStore", {
     },
 
     //для фильтра
-    // getJuristicPersonsFromApi() {
-    //   VENDOR.getEntityById()
-    //     .then((dataEntity) => this.setJuristicPersons(dataEntity))
-    //     .catch((e) => console.log(e))
-    // },
-    // setJuristicPersons(data: IEntityIdAndName[]) {
-    //   this.$state.dataEntity = data;
-    // },
     getJuristicPersonsFromApi() {
       ENTITY.getEntityById()
         .then((juristicPersons) => this.setJuristicPersons(juristicPersons))
@@ -65,6 +57,7 @@ export const useVendorStore = defineStore("VendorStore", {
     setCountRowTable(count: number) {
       this.$state.countRowTable = count;
     },
+
     //получение поставщиков
     async getVendorFromAPIWithFilter(page?: number) {
       this.setFilterValue('page', page);

@@ -1,14 +1,11 @@
 <template>
   <div class="directoryBar">
-    
     <h2>Товары</h2>
     <div class="directoryBar_filter">
-    
-  
-  <el-input v-model="searchQuery" placeholder="Поиск по номеру и наименованию" style="width: 400px;" :prefix-icon="Search"></el-input>
-
-</div>
-</div>
+      <el-input v-model="searchQuery" placeholder="Поиск по номеру и наименованию" style="width: 400px;"
+        :prefix-icon="Search"></el-input>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">

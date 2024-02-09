@@ -1,12 +1,18 @@
 <template>
   <el-container class="layout-container-demo">
-    <div class=""><slot name="header"></slot></div>
+    <div class="">
+      <slot name="header"></slot>
+    </div>
     <div v-if="isAuth" class="layout-default__body">
       <el-container>
-        <div><slot name="menu"></slot></div>
-        <el-main
-          ><div><slot name="content"></slot></div
-        ></el-main>
+        <div>
+          <slot name="menu"></slot>
+        </div>
+        <el-main>
+          <div>
+            <slot name="content"></slot>
+          </div>
+        </el-main>
       </el-container>
     </div>
 
@@ -30,5 +36,4 @@ const { isAuth } = storeToRefs(useAuthStore());
 
 .layout-container-demo .el-main {
   padding: 0 0 20px 30px;
-}
-</style>
+}</style>

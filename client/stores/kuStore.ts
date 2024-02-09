@@ -7,6 +7,9 @@ import type {
   IKuStore,
   EntityId,
   GetAllKus,
+  GetAllGraphic,
+  IKuId,
+  GetAllKu_Id,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -40,9 +43,15 @@ export const useKuStore = defineStore("KuStore", {
     pagination: null,
     countRowTable: 20,
     legalEntity: [],
+    legalEntity2: [],
     search: "",
+    search2: "",
+    KuParams: [],
     filterKuValue: {
       entity_id: []
+    },
+    filterGraphicValue: {
+      entity_id: [], ku_id: []
     }
   }),
 
@@ -94,6 +103,20 @@ export const useKuStore = defineStore("KuStore", {
       this.$state.search = query;
     },
 
+    //для поиска в ку
+    async performSearchGraphic(searchQuery: string) {
+      try {
+        this.setSearchQueryGraphic(searchQuery);
+        await this.getGraphicsFromAPIWithFilter();
+      } catch (error) {
+        console.error('Ошибка при выполнении поиска ку', error);
+      }
+    },
+    setSearchQueryGraphic(query: string) {
+      console.log('Устанавливается запрос поиска ку:', query);
+      this.$state.search2 = query;
+    },
+
     //для фильтрации ку
     getLegalEntityFromApi() {
       console.log('Запрос данных о юридических лицах...');
@@ -116,6 +139,45 @@ export const useKuStore = defineStore("KuStore", {
     >(field: T, value: U) {
       console.log('Устанавливается значение фильтра ку:', field, value);
       this.$state.filterKuValue[field] = value
+    },
+
+    //для фильтрации графика
+    getLegalEntityFromApi2() {
+      ENTITY.getEntityById()
+        .then((legalEntity2) => {
+          console.log('Получены данные о юридических лицах:', legalEntity2);
+          this.setLegalEntity2(legalEntity2);
+        })
+        .catch((e) => console.error('Ошибка при получении данных о юридических лицах:', e));
+    },
+    setLegalEntity2(data: EntityId[]) {
+      this.$state.legalEntity2 = data.map(
+        (legalEntity2) => legalEntity2.entity_id
+      )
+    },
+
+    getKuIdFromApi() {
+      const params: GetAllKu_Id = {
+        page_size: 100,
+        page: 1,
+      };
+
+      KU.getKuIdList(params)
+        .then((data) => {
+          console.log('Получены данные о код ку:', data);
+          this.setKuId(data.results);
+        })
+        .catch((error) => console.error('Ошибка при получении данных о код ку:', error));
+    },
+    setKuId(data: IKuId[]) {
+      this.$state.KuParams = data.map((item) => item.ku_id);
+      // Можете также обновить другие свойства, если необходимо
+    },
+    setFilterValue2<
+      T extends keyof GetAllGraphic,
+      U extends GetAllGraphic[T],
+    >(field: T, value: U) {
+      this.$state.filterGraphicValue[field] = value
     },
 
     //для пагинации
@@ -152,10 +214,14 @@ export const useKuStore = defineStore("KuStore", {
 
     //получение данных графика
     async getGraphicsFromAPIWithFilter(page?: number) {
-      this.setFilterValue('page', page);
+      this.setFilterValue2('page', page);
+      this.setFilterValue2('search', this.$state.search2);
       await GRAPHIC.getGraphic({
         page_size: this.$state.countRowTable,
         page,
+        entity_id: this.$state.filterGraphicValue?.entity_id || [],
+        ku_id: this.$state.filterGraphicValue?.ku_id || [],
+        search: this.$state.search2,
       })
         .then((dataGraphic) => {
           this.$state.dataGraphic = dataGraphic.results;
@@ -168,23 +234,6 @@ export const useKuStore = defineStore("KuStore", {
         .catch((error) => Promise.reject(error));
     },
 
-    // async fetchGraphicList(page?: number) {
-    //   try {
-    //     const graphics = await GRAPHIC.getGraphic({
-    //       page_size: this.$state.countRowTable,
-    //       page,
-    //     });
-    //     this.$state.dataGraphic = graphics.results;
-    //     this.$state.pagination = {
-    //       count: graphics.count,
-    //       previous: graphics.previous,
-    //       next: graphics.next,
-    //     };
-    //   } catch (error) {
-    //     console.error("Произошла ошибка", error);
-    //     return Promise.reject(error);
-    //   }
-    // },
     //получение данных о производителе
     async fetchProducerList(page?: number) {
       try {
@@ -276,24 +325,5 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
 
-    //проверить вообще используется ли она?
-    // async deleteSelectedRows() {
-    //   const selectedRows = this.multipleSelection.map((row) => row.ku_id);
-
-    //   try {
-    //     // Используйте ваш API-метод deleteKu с каждым идентификатором
-    //     for (const ku_id of selectedRows) {
-    //       await KU.deleteKu({ ku_id });
-
-    //       // Обновите данные таблицы в хранилище после успешного удаления каждого элемента
-    //       this.tableData = this.tableData.filter((row) => row.ku_id !== ku_id);
-    //     }
-
-    //     // Очистите выделение после удаления всех элементов
-    //     this.multipleSelection = [];
-    //   } catch (error) {
-    //     console.error("Ошибка при удалении строк:", error);
-    //   }
-    // },
   },
 });
