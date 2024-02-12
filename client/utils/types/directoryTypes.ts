@@ -331,9 +331,6 @@ export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
 }
 
-
-
-
 //общие
 export interface Pagination {
   count: number;
@@ -343,3 +340,60 @@ export interface Pagination {
 export type WithoutNullableKeys<Type> = {
   [Key in keyof Type]-?: WithoutNullableKeys<NonNullable<Type[Key]>>;
 };
+
+
+
+
+
+export interface ITree {
+  label: string;
+  classifier_code: number;
+  children?: ITree[];
+}
+
+
+
+
+//дерево категорий
+export interface IGetCategoryList {
+  network_key?: number
+  hierarchy_key?: number
+  id?: number
+  lvl?: number
+}
+
+interface ICategoryBase {
+  id: number | null
+}
+
+export interface ICategory extends ICategoryBase {
+  name: string | null
+  external_id: number | null
+  external_code: string | null
+  lvl: number | null
+  is_active: number | null
+  hierarchy_key: number | null
+  network_key: number | null
+  category_parent: number | null
+}
+
+// export interface ITree {
+//   id: number
+//   label: string
+//   lvl: number
+//   disabled?: boolean
+//   children?: ITree[]
+// }
+
+export interface ICategoryList extends ICategory {
+  category_list: ICategory[]
+  ready: any
+  categoty_tree: ITree[]
+}
+
+export interface IPlanVersionSetCategory extends ICategoryBase {
+  id: number
+  plan_version_key: number
+  category_key: number
+  get_category_name: string
+}

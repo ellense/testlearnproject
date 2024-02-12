@@ -36,25 +36,25 @@ interface ColumnTable {
 const columnTable: ColumnTable[] = [
     {
         field: 'entity_id',
-        label: 'Дата работы',
+        label: 'Юр. лицо',
         type: 'string',
         width: 100,
     },
     {
         field: 'ku_id',
-        label: 'Торговая точка',
+        label: 'Код ку',
         type: 'string',
         width: 250,
     },
     {
         field: 'period',
-        label: 'Наименование услуги',
+        label: 'Период расчета',
         type: 'string',
         width: 250,
     },
     {
         field: 'percent',
-        label: 'Номер заявки',
+        label: 'Процент',
         type: 'string',
         width: 130,
     },

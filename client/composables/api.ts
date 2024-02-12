@@ -1,3 +1,4 @@
+import type { Tree } from "element-plus/es/components/tree-v2/src/types";
 import type { AuthApiData, GetUserData } from "~/utils/types/authTypes";
 import type {
   IEntity,
@@ -31,6 +32,7 @@ import type {
   GetAllKus,
   GetAllKu_Id,
   GetAllKu_IdReturnData,
+  ITree,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -113,4 +115,9 @@ export const PRODUCER = {
 export const BRAND = {
   getBrand: (params?: GetAllBrands): Promise<GetAllBrandsReturnData> =>
     $Get("api/brandlist", { params, isBearer: false }),
+};
+
+export const CATEGORY = {
+  getCategory: (data:ITree): Promise<ITree> =>
+    $Get("api/classifiersTest/", { data, isBearer: false }),
 };
