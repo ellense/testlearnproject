@@ -1,5 +1,6 @@
 <template>
   <EntitiesGraphicBar />
+  <EntitiesGraphicReport/>
   <EntitiesGraphicGraphicsTable />
 </template>
 

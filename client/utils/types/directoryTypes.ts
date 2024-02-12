@@ -199,6 +199,10 @@ export interface IKuStore {
   KuParams: string[]
   filterKuValue: GetAllKus
   filterGraphicValue: GetAllGraphic
+  producerSelect: string[]
+  brandSelect: string[]
+  ProducerList:IProducer
+
 }
 export interface GetAllKus {
   page_size?: number;
@@ -246,6 +250,20 @@ export interface GetAllGraphic {
 }
 export interface GetAllGraphicsReturnData extends Pagination {
   results: IGraphic[];
+}
+export interface GraphicForExcelReport {
+  entity_id: string;
+  ku_id: string;
+  period: string;
+  percent: number;
+  status: string;
+}
+export interface ReportStore{
+  dialogForm: boolean
+  graphic: GraphicForExcelReport[]
+  getGraphicDone: boolean
+  printReportToggle: boolean
+  filterValue: GetAllGraphic
 }
 
 // Товары

@@ -7,6 +7,15 @@
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
       <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 400px;"></el-input>
+      <!-- <el-date-picker
+          v-model="dateSelect"
+          type="daterange"
+          format="DD.MM.YYYY"
+          start-placeholder="Начало"
+          end-placeholder="Окончание"
+          :clearable="true"
+          @change="changeDateSelect"
+        /> -->
     </div>
   </div>
 </template>
@@ -22,6 +31,52 @@ watch(searchQuery, (newValue: string) => {
   useInvoiceStore().performSearch(newValue);
 });
 
+// /* Даты */ нужно на беке сделать фильт по периоду
+
+// const dateSelectInit = () => [
+//   new Date().setDate(new Date().getDate() - 60),
+//   new Date().setDate(new Date().getDate() + 60),
+// ]
+// const getDateFromStore = (): any[] => {
+//   if (
+//     !filterValue.value.vacancy_date_from ||
+//     !filterValue.value.vacancy_date_to
+//   ) {
+//     return dateSelectInit()
+//   } else {
+//     return [
+//       new Date(
+//         strToDateNumberToDate(filterValue.value.vacancy_date_from)
+//       ).toDateString(),
+//       new Date(
+//         strToDateNumberToDate(filterValue.value.vacancy_date_to)
+//       ).toDateString(),
+//     ]
+//   }
+// }
+// const dateSelect = ref<any[]>(getDateFromStore())
+
+// const changeDateSelect = () => {
+//   if (!dateSelect.value) {
+//     useVacanciesStore().removeFilterValue('vacancy_date_from')
+//     useVacanciesStore().removeFilterValue('vacancy_date_to')
+//     toggleTriggerFilter()
+//     return
+//   }
+//   useVacanciesStore().setFilterValue(
+//     'vacancy_date_from',
+//     new Date(dateSelect.value[0]).toLocaleDateString()
+//   )
+//   useVacanciesStore().setFilterValue(
+//     'vacancy_date_to',
+//     new Date(dateSelect.value[1]).toLocaleDateString()
+//   )
+//   toggleTriggerFilter()
+// }
+
+// onMounted(() => {
+//   changeDateSelect()
+// })
 
 //для фильтрации
 const { filterValue } = storeToRefs(useInvoiceStore())

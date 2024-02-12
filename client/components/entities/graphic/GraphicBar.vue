@@ -2,6 +2,7 @@
   <div class="directoryBar">
     <div>
       <el-button @click="deleteGraphic()">Удалить</el-button>
+      <el-button @click="useReportStore().dialogForm = true">Создать отчет</el-button>
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="3"
@@ -22,6 +23,7 @@
 
 import { storeToRefs } from "pinia";
 import { useKuStore } from "~~/stores/kuStore";
+import { useReportStore } from "~~/stores/reportStore";
 //для поиска
 const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
@@ -50,7 +52,7 @@ watch(legalEntity2, (value) => {
 });
 
 //для фильтрации по ку
-const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
+ const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
 const KuList = ref<string[]>(KuParams.value);
 
 const changeKu = () => {

@@ -10,6 +10,8 @@ import type {
   GetAllGraphic,
   IKuId,
   GetAllKu_Id,
+  GetAllProducer,
+  IProducer,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -52,6 +54,11 @@ export const useKuStore = defineStore("KuStore", {
     },
     filterGraphicValue: {
       entity_id: [], ku_id: []
+    },
+    producerSelect: [],
+    brandSelect: [],
+    ProducerList: {
+      producer_name: ""
     }
   }),
 
@@ -234,6 +241,23 @@ export const useKuStore = defineStore("KuStore", {
         .catch((error) => Promise.reject(error));
     },
 
+    // fetchProducerList() {
+    //   const params: GetAllProducer = {
+    //     page_size: 100,
+    //     page: 1,
+    //   };
+
+    //   PRODUCER.getProducer(params)
+    //     .then((data) => {
+    //       console.log('Получены данные о код ку:', data);
+    //       this.setProducer(data.results);
+    //     })
+    //     .catch((error) => console.error('Ошибка при получении данных о код ку:', error));
+    // },
+    // setProducer(data: IProducer[]) {
+    //   this.$state.producerSelect = data.map((item) => item.producer_name);
+    //   // Можете также обновить другие свойства, если необходимо
+    // },
     //получение данных о производителе
     async fetchProducerList(page?: number) {
       try {

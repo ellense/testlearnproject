@@ -81,8 +81,8 @@
     </form>
     <h3>Фильтрация по товарам</h3>
     <div>
-      <el-button text bg @click="onAddItem()" :disabled="isAddAllDisabled">+ Все</el-button>
-      <el-button text bg @click="dialogOpen()" :disabled="isAddConditionDisabled">+ Условие по товарам</el-button>
+      <el-button  size="small" text bg @click="onAddItem()" :disabled="isAddAllDisabled">+ Все</el-button>
+      <el-button  size="small" text bg @click="dialogOpen()" :disabled="isAddConditionDisabled">+ Условие по товарам</el-button>
     </div>
     <EntitiesKuAddRequirement />
     <div class="button_bottom">
@@ -161,11 +161,7 @@ const validateDateEnd = () => {
   }
 };
 
-// Функция сброса дат при изменении периода
-const resetDatesOnPeriodChange = () => {
-  store.newDateStart = new Date()
-  store.newDateEnd = new Date();
-};
+
 
 // Функция проверки процента
 const validatePercent = () => {
@@ -183,10 +179,26 @@ watch(() => store.newPercent, validatePercent);
 watch(() => store.newDateStart, validateDateStart);
 watch(() => store.newDateEnd, validateDateEnd);
 
+// Функция сброса дат при изменении периода
+const resetDatesOnPeriodChange = () => {
+
+  store.newDateStart = new Date()
+  store.newDateEnd = new Date();
+};
+// Функция сброса поставщика
+const resetVendorOnEntityChange = () => {
+  store.vendorName = "";
+};
 // Обработчик изменения выбранного периода
 watch(() => store.newType, (newValue, oldValue) => {
   if (oldValue !== newValue) {
     resetDatesOnPeriodChange();
+  }
+});
+// Обработчик изменения выбранного юр.лица
+watch(() => store.entityName, (newValue, oldValue) => {
+  if (oldValue !== newValue) {
+    resetVendorOnEntityChange();
   }
 });
 //проверка полей формы

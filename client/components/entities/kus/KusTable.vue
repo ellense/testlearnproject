@@ -3,7 +3,7 @@
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
       height="calc(100vh - 225px)" @row-dblclick="">
       <el-table-column type="selection" width="55" />
-      <el-table-column property="ku_id" label="Номер КУ" width="150" sortable show-overflow-tooltip />
+      <el-table-column property="ku_id" label="Код КУ" width="150" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
         <el-table-column property="entity_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
