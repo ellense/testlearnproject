@@ -1,8 +1,10 @@
 <template>
-    <div>
-        <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
-            default-expand-all  />
-    </div>
+    <div class="productTree">
+        <h3>Категории товаров</h3>
+    <el-scrollbar class="scrollTree">
+        <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code" />
+    </el-scrollbar>
+</div>
 </template>
 
 
@@ -16,7 +18,7 @@ import { useCategoriesStore } from '~~/stores/categoriesStore'
 const treeData = ref<ITree[]>([]);
 const treeRef = ref<InstanceType<typeof ElTree>>()
 
-    const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
+const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
     const parentNode = nodes.filter(node => node.parent_code === parentCode);
     if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
 
@@ -32,7 +34,7 @@ const treeRef = ref<InstanceType<typeof ElTree>>()
 const fetchData = async (data: ITree) => {
     try {
         const result = await CATEGORY.getCategory(data);
-        
+
         if (Array.isArray(result)) {
             treeData.value = buildTree(result, '0');
             console.log("treeData", treeData.value);
@@ -53,7 +55,7 @@ onMounted(async () => {
         await fetchData({
             name: "string",
             classifier_code: 1,
-            children:[] ,
+            children: [],
             parent_code: "",
         });
         console.log("After API call");
@@ -75,4 +77,10 @@ const defaultProps = {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.scrollTree {
+  margin-right: 10px; 
+  height: calc(100vh - 250px);
+}
+</style>

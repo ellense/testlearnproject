@@ -9,13 +9,7 @@ a {
   text-decoration: none;
 }
 
-/* контейнер для всей таблицы */
-.container-table {
-  margin-right: 300px;
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
-  height: 400px;
-}
+
 
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
@@ -24,6 +18,27 @@ a {
   border-radius: 2px;
   height: calc(100vh - 160px);
 }
+
+.product {
+  display: flex;
+  height: calc(100vh - 160px);
+  margin: 10px 10px 0 0;
+}
+/* .scrollTableProduct {
+  min-width: calc(100% - 100px); 
+  margin-left: 10px; 
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+  height: calc(100vh - 185px);
+} */
+.productTree {
+  min-width: 500px;
+  border: 1px solid var(--el-border-color);
+  height: calc(100vh - 185px);
+  border-radius: 2px;
+  margin-right: 10px; 
+}
+
 
 /* панель с кнопками сверху таблицы */
 .buttonBar {

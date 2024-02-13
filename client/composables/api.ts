@@ -33,6 +33,7 @@ import type {
   GetAllKu_Id,
   GetAllKu_IdReturnData,
   ITree,
+  IKuPost2,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -88,7 +89,9 @@ export const KU = {
     $Get("api/kulist/", { params, isBearer: false }),
   getKuIdList: (params: GetAllKu_Id): Promise<GetAllKu_IdReturnData> =>
     $Get("api/kulist/", { params, isBearer: false }),
-  postKu: (data: IKuPost): Promise<IKuPost> =>
+  // postKu: (data: IKuPost, params:IKuPost2): Promise<IKuPost> =>
+  //   $Post("api/kulist/", { data,params, isBearer: false }),
+    postKu: (data: IKuPost): Promise<IKuPost> =>
     $Post("api/kulist/", { data, isBearer: false }),
   deleteKu: (data: IKuId) =>
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),

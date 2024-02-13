@@ -288,7 +288,7 @@ let isAddConditionDisabled = ref(store.isAddConditionDisabled);
 //таблица условий
 const onAddItem = () => {
   store.tableDataRequirement.push({
-    number: "Все",
+    type_item: "Все",
     product: "",
     category: "",
     producer: "",
@@ -318,13 +318,17 @@ const addItemAndSendToBackend = async () => {
     status: "Создано",
     percent: store.newPercent,
   };
+  // const newItem2 = {
+  //   requirements: store.tableDataRequirement,
+  // };
   loading.value = true;
   try {
     const response = await KU.postKu(newItem);
     if (response) {
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
+      console.log("newItem", newItem);
+      // console.log("newItem2", newItem2);
       router.push("ku");
-
       ElMessage.success("Коммерческое условие успешно создано.");
     } else {
       console.error("Не удалось отправить экземпляр на бэкенд");

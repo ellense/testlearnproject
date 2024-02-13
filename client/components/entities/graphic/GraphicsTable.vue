@@ -6,6 +6,7 @@
       @selection-change="useKuStore().handleSelectionChange2">
       <el-table-column type="selection" width="40" />
       <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip />
+      
       <el-table-column property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
         <el-table-column property="entity_id" label="Код" width="80" sortable show-overflow-tooltip />

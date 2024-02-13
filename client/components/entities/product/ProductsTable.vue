@@ -1,17 +1,21 @@
 <template>
-  <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%;" height="calc(100vh - 185px) " border>
-      <el-table-column prop="itemid" label="Номер" width="100" show-overflow-tooltip />
-      <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
-      <el-table-column prop="classifier_name" label="Категория" width="400" show-overflow-tooltip />
-      <el-table-column prop="brand_name" label="Бренд" />
+  <div>
+    <el-scrollbar class="scrollTableProduct">
+      <!-- <el-table :data="tableData" style="width:calc(100% - 510px);" height="calc(100vh - 185px) " border> -->
+        <el-table :data="tableData"  height="calc(100vh - 185px)" style="width: 100%;" >
 
-    </el-table>
-  </el-scrollbar>
-  <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-      @size-change="handleSizeChange" @current-change="paginationChange" />
+        <el-table-column prop="itemid" label="Номер" width="90" show-overflow-tooltip />
+        <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
+        <el-table-column prop="classifier_name" label="Категория" width="300" show-overflow-tooltip />
+        <el-table-column prop="brand_name" width="200" label="Бренд" />
+
+      </el-table>
+    </el-scrollbar>
+    <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
+      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+        :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
+        @size-change="handleSizeChange" @current-change="paginationChange" />
+    </div>
   </div>
 </template>
 
@@ -55,4 +59,12 @@ onMounted(async () => {
   }
 });
 </script>
-<style scoped></style>
+<style scoped>
+.scrollTableProduct {
+  min-width: calc(100% - 90px); 
+  margin-left: 10px; 
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+  height: calc(100vh - 185px);
+}
+</style>

@@ -139,6 +139,9 @@ export interface IKuPost {
   status: string;
   percent: number | null;
 }
+export interface IKuPost2 {
+  requirements: IRequirement[];
+}
 export interface IKuPostGraphic {
   ku_id: string;
   entity_id: string;
@@ -300,7 +303,7 @@ export interface IProfile {
 
 //Условия
 export interface IRequirement {
-  number: string;
+  type_item: string;
   product: string;
   category: string;
   producer: string;

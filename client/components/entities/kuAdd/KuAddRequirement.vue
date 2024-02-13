@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table style="width: 100%" height="calc(100vh - 700px)" :data="kuRequirementList">
-      <el-table-column property="number" label="Тип номенклатуры" width="200" show-overflow-tooltip />
+      <el-table-column property="type_item" label="Тип номенклатуры" width="200" show-overflow-tooltip />
       <el-table-column property="product" label="Товар" width="300" show-overflow-tooltip />
       <el-table-column property="category" label="Категория" width="200" show-overflow-tooltip />
       <el-table-column property="producer" label="Производитель" width="300" show-overflow-tooltip />

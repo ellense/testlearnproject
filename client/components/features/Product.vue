@@ -1,7 +1,9 @@
 <template>
-  <EntitiesProductProductsBar />
+  <EntitiesProductBar />
+<div class="product">
+  <EntitiesProductTree/>
   <EntitiesProductProductsTable />
-  <EntitiesProductCategory/>
+</div>
 </template>
 
 <script lang="ts" setup></script>
