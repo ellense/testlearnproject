@@ -346,8 +346,9 @@ export type WithoutNullableKeys<Type> = {
 
 
 export interface ITree {
-  label: string;
-  classifier_code: number;
+  name: string;
+  classifier_code: number 
+  parent_code: string
   children?: ITree[];
 }
 

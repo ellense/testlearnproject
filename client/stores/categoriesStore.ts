@@ -9,7 +9,10 @@ export const useCategoriesStore = defineStore("CategoriesStore", {
     }),
 
     getters: {
-
+        getCategory: (state) => {
+            console.log("getCateggories getter:", state.dataCategory);
+            return state.dataCategory;
+        }
     },
 
     actions: {
@@ -26,5 +29,20 @@ export const useCategoriesStore = defineStore("CategoriesStore", {
                 console.error("Произошла ошибка при получении даных категорий", error);
             }
         },
+        // async getEntityFromAPIWithFilter() {
+        //     try {
+        //         const result = await ENTITY.getEntitiesList({
+        //             search: this.$state.search,
+        //         });
+        //         if (Array.isArray(result)) {
+        //             this.dataEntity = result;
+        //         } else {
+        //             this.dataEntity = [];
+        //             console.error("Данные не получены или не являются массивом");
+        //         }
+        //     } catch (error) {
+        //         console.error("Произошла ошибка", error);
+        //     }
+        // },
     }
 })
