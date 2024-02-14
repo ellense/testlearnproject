@@ -1,6 +1,6 @@
 <template>
   <EntitiesKuAddLine />
-  <!-- <EntitiesKuAddFiltresForm /> -->
+  <EntitiesKuAddFiltresForm />
   <EntitiesKuAddFiltresKuAddFiltersFormProduct />
 </template>
 

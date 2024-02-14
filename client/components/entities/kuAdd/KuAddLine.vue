@@ -82,7 +82,8 @@
     <h3>Фильтрация по товарам</h3>
     <div>
       <el-button  size="small" text bg @click="onAddItem()" :disabled="isAddAllDisabled">+ Все</el-button>
-      <el-button  size="small" text bg @click="dialogOpen()" :disabled="isAddConditionDisabled">+ Условие по товарам</el-button>
+      <el-button  size="small" text bg @click="dialogOpenProduct()" :disabled="isAddConditionDisabled">+ Условие по товарам</el-button>
+      <el-button  size="small" text bg @click="dialogOpenCategory()" :disabled="isAddConditionDisabled">+ Условие по категории</el-button>
     </div>
     <EntitiesKuAddRequirement />
     <div class="button_bottom">
@@ -289,15 +290,18 @@ let isAddConditionDisabled = ref(store.isAddConditionDisabled);
 const onAddItem = () => {
   store.tableDataRequirement.push({
     type_item: "Все",
-    product: "",
-    category: "",
+    item_id: "",
+    item_name: "",
     producer: "",
     brand: "",
   });
   isAddAllDisabled = ref(true)
 };
-const dialogOpen = () => {
-  store.dialogFormVisible = true;
+const dialogOpenProduct = () => {
+  store.dialogFormProductVisible = true;
+};
+const dialogOpenCategory = () => {
+  store.dialogFormCategoryVisible = true;
 };
 const addClose = () => {
   router.push("ku");

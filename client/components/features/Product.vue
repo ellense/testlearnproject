@@ -8,4 +8,10 @@
 
 <script lang="ts" setup></script>
 
-<style></style>
+<style>
+.product {
+  display: flex;
+  height: calc(100vh - 160px);
+  margin: 10px 10px 0 0;
+}
+</style>

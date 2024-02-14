@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar class="scrollTable">
+  <el-scrollbar class="scrollTable" style="border: none">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
       height="calc(100vh - 225px)" @row-dblclick="">
       <el-table-column type="selection" width="55" />

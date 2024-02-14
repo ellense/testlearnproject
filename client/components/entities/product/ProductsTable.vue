@@ -1,13 +1,13 @@
 <template>
-  <div>
+  <div >
     <el-scrollbar class="scrollTableProduct">
       <!-- <el-table :data="tableData" style="width:calc(100% - 510px);" height="calc(100vh - 185px) " border> -->
-        <el-table :data="tableData"  height="calc(100vh - 185px)" style="width: 100%;" >
+        <el-table :data="tableData"  height="calc(100vh - 185px)" style=" width: 100%" >
 
         <el-table-column prop="itemid" label="Номер" width="90" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
         <el-table-column prop="classifier_name" label="Категория" width="300" show-overflow-tooltip />
-        <el-table-column prop="brand_name" width="200" label="Бренд" />
+        <el-table-column prop="brand_name" label="Бренд" width="200" show-overflow-tooltip />
 
       </el-table>
     </el-scrollbar>

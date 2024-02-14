@@ -101,6 +101,7 @@ const deleteKu = async () => {
     store.multipleSelection = [];
   }
 };
+
 const CancelKu = async () => {
   const selectedRows = store.multipleSelection
   const data = {

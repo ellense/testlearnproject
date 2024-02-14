@@ -11,7 +11,9 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
     search: "",
     filterValue: {
       entity_id: [],
-      vendor_id: []
+      vendor_id: [],
+      end_date: "",
+
     }
   }),
 
@@ -80,6 +82,11 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       console.log('Устанавливается значение фильтра:', field, value);
       this.$state.filterValue[field] = value
     },
+    removeFilterValue<T extends keyof GetAllInvoices>(field: T) {
+      if (this.$state.filterValue) {
+        delete this.$state.filterValue[field]
+      }
+    },
 
     //для пагинации
     setCountRowTable(count: number) {
@@ -92,12 +99,16 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       console.log('Выполняется запрос накладных с фильтрацией...');
       this.setFilterValue('page', page);
       this.setFilterValue('search', this.$state.search);
+      this.setFilterValue('start_date', this.$state.filterValue?.start_date);
+      this.setFilterValue('end_date', this.$state.filterValue?.end_date);
       await INVOICE.getInvoicesList({
         page_size: this.$state.countRowTable,
         page,
         entity_id: this.$state.filterValue?.entity_id || [],
         vendor_id: this.$state.filterValue?.vendor_id || [],
         search: this.$state.search,
+        start_date: this.$state.filterValue?.start_date,
+        end_date: this.$state.filterValue?.end_date,
       })
         .then((dataInvoice) => {
           console.log('Получены данные накладных:', dataInvoice);

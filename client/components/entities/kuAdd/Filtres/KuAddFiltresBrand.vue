@@ -1,45 +1,47 @@
 <template>
-  <!-- <div class="buttonBar_search">
-    <el-input placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+  <div class="frameTableFiltres">
+    <div class="buttonBar_search">
+      <el-input placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+    </div>
+    <el-scrollbar class="scrollTableFiltres">
+      <el-table v-if="tableData.length > 0" style="width: 100%" height="300" :data="tableData">
+        <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
+        <el-table-column prop="brand_name" label="Наименование" show-overflow-tooltip>
+        </el-table-column>
+      </el-table>
+    </el-scrollbar>
+    <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
+      <el-pagination layout="prev, pager, next" :page-count="Math.ceil(pagination.count / countRowTable)"
+        @current-change="paginationChange" />
+    </div>
   </div>
-  <el-scrollbar class="scrollTableFiltres">
-    <el-table v-if="tableData.length > 0" style="width: 100%" height="300" :data="tableData">
-      <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
-      <el-table-column prop="brand_name" label="Наименование" show-overflow-tooltip>
-      </el-table-column>
-    </el-table>
-  </el-scrollbar>
-  <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-    <el-pagination layout="prev, pager, next" :page-count="Math.ceil(pagination.count / countRowTable)"
-      @current-change="paginationChange" />
-  </div> -->
 </template>
 
 <script setup lang="ts">
-// import { ref, watch, onMounted } from "vue";
-// import { Search } from "@element-plus/icons-vue";
-// import { storeToRefs } from "pinia";
-// import { useKuStore } from "~~/stores/kuStore";
-// import type { IBrand } from "~/utils/types/directoryTypes";
-// const { getBrands, pagination, countRowTable } = storeToRefs(useKuStore());
+import { ref, watch, onMounted } from "vue";
+import { Search } from "@element-plus/icons-vue";
+import { storeToRefs } from "pinia";
+import { useKuStore } from "~~/stores/kuStore";
+import type { IBrand } from "~/utils/types/directoryTypes";
+const { getBrands, pagination, countRowTable } = storeToRefs(useKuStore());
 
-// const tableData = ref<IBrand[]>(getBrands.value);
+const tableData = ref<IBrand[]>(getBrands.value);
 
-// watch(getBrands, (value) => {
-//   tableData.value = value || [];
-// });
+watch(getBrands, (value) => {
+  tableData.value = value || [];
+});
 
-// const paginationChange = (page: number) => {
-//   useKuStore().fetchBrandList(page);
-// };
+const paginationChange = (page: number) => {
+  useKuStore().fetchBrandList(page);
+};
 
-// onMounted(async () => {
-//   try {
-//     await useKuStore().fetchBrandList();
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
+onMounted(async () => {
+  try {
+    await useKuStore().fetchBrandList();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+});
 </script>
 <style scoped>
 .el-tabs__content {

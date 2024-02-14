@@ -5,7 +5,7 @@
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 225px)" border
       @selection-change="useKuStore().handleSelectionChange2">
       <el-table-column type="selection" width="40" />
-      <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip />
+      <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
       
       <el-table-column property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
@@ -27,8 +27,8 @@
           {{ scope2.row.period }}
         </template>
       </el-table-column>
-      <el-table-column property="sum_calc" label="База расчета" width="150" show-overflow-tooltip />
-      <el-table-column property="percent" label="Процент" width="100" show-overflow-tooltip />
+      <el-table-column property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
+      <el-table-column property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column property="date_start" type="date" label="Начальная дата" width="105" sortable
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" label="Конечная дата" width="105" sortable show-overflow-tooltip />

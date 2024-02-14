@@ -97,6 +97,8 @@ export interface GetAllInvoices {
   entity_id: string[];
   vendor_id: string[];
   search?: string;
+  start_date?: string,
+  end_date?: string,
 }
 export interface InvoiceStore {
   dataInvoice: IInvoice[];
@@ -176,6 +178,7 @@ export interface IKuStore {
   newDateActual: Date;
   multipleSelection: IKuList[];
   multipleSelection2: IGraphic[];
+  multipleSelection3: IProduct[];
   multipleTableRef: Ref | null;
   selectedKu: IKuList | null;
   tableData: IKuList[];
@@ -186,7 +189,8 @@ export interface IKuStore {
   tableDataRequirement: IRequirement[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
-  dialogFormVisible: boolean;
+  dialogFormProductVisible: boolean;
+  dialogFormCategoryVisible: boolean;
   isAddAllDisabled: boolean;
   isAddConditionDisabled: boolean;
   vendorFilter: string;
@@ -197,15 +201,20 @@ export interface IKuStore {
   countRowTable: number;
   search: string;
   search2: string;
+  search3: string;
   legalEntity: string[]
   legalEntity2: string[]
   KuParams: string[]
   filterKuValue: GetAllKus
   filterGraphicValue: GetAllGraphic
+  filterProductValue: GetAllProducts
+  filterProducerValue: GetAllProducer
+  filterBrandValue: GetAllBrands
   producerSelect: string[]
   brandSelect: string[]
   ProducerList:IProducer
-
+  valueCategory_id: string
+  valueCategory_name: string
 }
 export interface GetAllKus {
   page_size?: number;
@@ -280,6 +289,7 @@ export interface GetAllProducts {
   page_size?: number;
   page?: number;
   search?: string;
+  categories_l4?: string[];
 }
 export interface ProductStore {
   product: IProduct[];
@@ -304,8 +314,8 @@ export interface IProfile {
 //Условия
 export interface IRequirement {
   type_item: string;
-  product: string;
-  category: string;
+  item_id: string;
+  item_name: string;
   producer: string;
   brand: string;
 }
@@ -317,6 +327,7 @@ export interface IProducer {
 export interface GetAllProducer {
   page_size?: number;
   page?: number;
+  categories_l4: string[];
 }
 export interface GetAllProducersReturnData extends Pagination {
   results: IProducer[];
@@ -329,6 +340,7 @@ export interface IBrand {
 export interface GetAllBrands {
   page_size?: number;
   page?: number;
+  producer_name: string
 }
 export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];

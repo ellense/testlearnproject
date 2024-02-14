@@ -1,6 +1,8 @@
 <template>
+  <EntitiesInvoiceTest/>
   <EntitiesInvoiceBar />
   <EntitiesInvoiceTable />
+  
 </template>
 
 <script lang="ts" setup></script>

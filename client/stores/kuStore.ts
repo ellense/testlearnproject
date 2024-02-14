@@ -12,6 +12,8 @@ import type {
   GetAllKu_Id,
   GetAllProducer,
   IProducer,
+  GetAllProducts,
+  IProduct,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -25,6 +27,7 @@ export const useKuStore = defineStore("KuStore", {
     newDateActual: new Date(),
     multipleSelection: [],
     multipleSelection2: [],
+    multipleSelection3: [],
     multipleTableRef: null,
     selectedKu: null,
     tableData: [],
@@ -35,7 +38,8 @@ export const useKuStore = defineStore("KuStore", {
     tableDataRequirement: [],
     dataEntity: [],
     dataVendor: [],
-    dialogFormVisible: false,
+    dialogFormProductVisible: false,
+    dialogFormCategoryVisible: false,
     isAddAllDisabled: false,
     isAddConditionDisabled: false,
     vendorFilter: "",
@@ -48,6 +52,7 @@ export const useKuStore = defineStore("KuStore", {
     legalEntity2: [],
     search: "",
     search2: "",
+    search3: "",
     KuParams: [],
     filterKuValue: {
       entity_id: []
@@ -55,11 +60,20 @@ export const useKuStore = defineStore("KuStore", {
     filterGraphicValue: {
       entity_id: [], ku_id: []
     },
+    filterProductValue: {},
+    filterProducerValue: {
+      categories_l4:[]
+    },
+    filterBrandValue: {
+      producer_name: ""
+    },
     producerSelect: [],
     brandSelect: [],
     ProducerList: {
       producer_name: ""
-    }
+    },
+    valueCategory_id:"",
+    valueCategory_name: "",
   }),
 
   getters: {
@@ -73,7 +87,7 @@ export const useKuStore = defineStore("KuStore", {
   },
 
   actions: {
-    //выборка элементов таблицы
+    //выборка элементов таблиц
     setMultipleTableRef(ref: Ref) {
       this.multipleTableRef = ref;
     },
@@ -93,6 +107,9 @@ export const useKuStore = defineStore("KuStore", {
     },
     handleSelectionChange2(val: IGraphic[]) {
       this.multipleSelection2 = val;
+    },
+    handleSelectionChange3(val: IProduct[]) {
+      this.multipleSelection3 = val;
     },
 
     //для поиска в ку
@@ -178,7 +195,6 @@ export const useKuStore = defineStore("KuStore", {
     },
     setKuId(data: IKuId[]) {
       this.$state.KuParams = data.map((item) => item.ku_id);
-      // Можете также обновить другие свойства, если необходимо
     },
     setFilterValue2<
       T extends keyof GetAllGraphic,
@@ -264,6 +280,7 @@ export const useKuStore = defineStore("KuStore", {
         const producers = await PRODUCER.getProducer({
           page_size: this.$state.countRowTable,
           page,
+          categories_l4: this.$state.filterProducerValue.categories_l4
         });
         this.$state.producer = producers.results;
         this.$state.pagination = {
@@ -276,12 +293,14 @@ export const useKuStore = defineStore("KuStore", {
         return Promise.reject(error);
       }
     },
+
     //получение данных о бренде
     async fetchBrandList(page?: number) {
       try {
         const brands = await BRAND.getBrand({
           page_size: this.$state.countRowTable,
           page,
+          producer_name: this.$state.filterBrandValue.producer_name
         });
         this.$state.brand = brands.results;
         this.$state.pagination = {
@@ -294,24 +313,44 @@ export const useKuStore = defineStore("KuStore", {
         return Promise.reject(error);
       }
     },
-    //получение данных о товарах для ку хотя они они одинаковые с обычными товарами
-    async fetchProductKuList(page?: number) {
+
+    //получение данных о товарах для ку  и фильтры хотя они они одинаковые с обычными товарами
+    async performSearchProduct(searchQuery: string) {
       try {
-        const products = await PRODUCT.getProductsList({
-          page_size: this.$state.countRowTable,
-          page,
-        });
-        this.$state.product = products.results;
-        this.$state.pagination = {
-          count: products.count,
-          previous: products.previous,
-          next: products.next,
-        };
+        this.setSearchProduct(searchQuery);
+        await this.getProductFromAPIWithFilter();
       } catch (error) {
-        console.error("Произошла ошибка", error);
-        return Promise.reject(error);
+        console.error('Ошибка при выполнении поиска', error);
       }
     },
+    setSearchProduct(query: string) {
+      this.$state.search3 = query;
+    },
+    setFilterValue3<
+      T extends keyof GetAllProducts,
+      U extends GetAllProducts[T],
+    >(field: T, value: U) {
+      this.$state.filterProductValue[field] = value
+    },
+    async getProductFromAPIWithFilter(page?: number) {
+      this.setFilterValue('page', page);
+      this.setFilterValue('search', this.$state.search3);
+      await PRODUCT.getProductsList({
+        page_size: this.$state.countRowTable,
+        page,
+        search: this.$state.search,
+      })
+        .then((product) => {
+          this.$state.product = product.results;
+          this.$state.pagination = {
+            count: product.count,
+            previous: product.previous,
+            next: product.next,
+          };
+        })
+        .catch((error) => Promise.reject(error));
+    },
+
     //получение данных о юр.лице для создания
     async fetchKuEntity(data: IEntityIdAndName) {
       try {
@@ -326,6 +365,7 @@ export const useKuStore = defineStore("KuStore", {
         console.error("Произошла ошибка", error);
       }
     },
+
     //получение данных о поставщиках для создания
     async fetchVendorsListForEntity(page?: number) {
       try {

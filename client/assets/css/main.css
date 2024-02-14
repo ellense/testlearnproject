@@ -23,16 +23,20 @@ a {
   display: flex;
   height: calc(100vh - 160px);
   margin: 10px 10px 0 0;
+  /* width: calc(100vw - 250px);
+  box-sizing: border-box; */
 }
 /* .scrollTableProduct {
-  min-width: calc(100% - 100px); 
-  margin-left: 10px; 
+  flex: 1;
+  min-width: calc(100% - 90px); 
+  margin: 0 10px 0 10px; 
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
   height: calc(100vh - 185px);
 } */
 .productTree {
   min-width: 500px;
+  max-width: 500px;
   border: 1px solid var(--el-border-color);
   height: calc(100vh - 185px);
   border-radius: 2px;
@@ -87,8 +91,13 @@ h1 {
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
   height: 300px;
+  width: 370px;
 }
 
+.frameTableFiltres{
+  width: 373px;
+  height: 100%;
+}
 .mx-1{
   margin: 10px;
 
