@@ -112,7 +112,7 @@ export const GRAPHIC = {
 
 export const PRODUCER = {
   getProducer: (params?: GetAllProducer): Promise<GetAllProducersReturnData> =>
-    $Get("api/brandlist", { params, isBearer: false }),
+    $Get("api/brandlist/", { params, isBearer: false }),
 };
 
 export const BRAND = {

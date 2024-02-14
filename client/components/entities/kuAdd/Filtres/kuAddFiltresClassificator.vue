@@ -96,13 +96,13 @@ const getCheckedKeys = (checkedKeys: any, checkedNodes: any) => {
   console.log("useKuStore().valueCategory_name",useKuStore().valueCategory_name)
   const keysOfLevel4 = checkedNodes.checkedKeys.filter((key: string) => key.length === 10);
   console.log('Ключи категорий 4 уровня:', keysOfLevel4);
-  useProductStore().pagination = null;
-  useProductStore().setFilterValue('categories_l4', keysOfLevel4);
+  useKuStore().pagination = null;
+  // useKuStore().setFilterValue4('l4', keysOfLevel4);
   toggleTriggerFilter();
 };
 
 watch(triggerFilter, () => {
-  useProductStore().getProductFromAPIWithFilter();
+  useKuStore().fetchProducerList();
 });
 
 const defaultProps = {

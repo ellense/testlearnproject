@@ -62,7 +62,7 @@ export const useKuStore = defineStore("KuStore", {
     },
     filterProductValue: {},
     filterProducerValue: {
-      categories_l4:[]
+      // l4:[]
     },
     filterBrandValue: {
       producer_name: ""
@@ -275,12 +275,57 @@ export const useKuStore = defineStore("KuStore", {
     //   // Можете также обновить другие свойства, если необходимо
     // },
     //получение данных о производителе
+    setFilterValue4<
+    T extends keyof GetAllProducer,
+    U extends GetAllProducer[T],
+  >(field: T, value: U) {
+    this.$state.filterProducerValue[field] = value
+  },
+
+    // async fetchProducerList(page?: number) {
+    //   this.setFilterValue4('page', page);
+    //   // this.setFilterValue4('l4', this.$state.filterProducerValue.l4);
+    //   await PRODUCER.getProducer({
+    //     page_size: this.$state.countRowTable,
+    //     page,
+    //     // l4: this.$state.filterProducerValue.l4,
+    //   })
+    //     .then((producer) => {
+    //       console.log('Получены данные произв:', producer);
+    //       this.$state.producer = producer.results;
+    //       this.$state.pagination = {
+    //         count: producer.count,
+    //         previous: producer.previous,
+    //         next: producer.next,
+    //       };
+    //     })
+    //     .catch((error) => {
+    //       console.error('Ошибка при получении данных произв:', error);
+    //       return Promise.reject(error)});
+    // },
+    // async fetchProducerList(page?: number) {
+    //   try {
+    //     const producers = await PRODUCER.getProducer({
+    //       page_size: this.$state.countRowTable,
+    //       page,
+    //       categories_l4: this.$state.filterProducerValue.categories_l4
+    //     });
+    //     this.$state.producer = producers.results;
+    //     this.$state.pagination = {
+    //       count: producers.count,
+    //       previous: producers.previous,
+    //       next: producers.next,
+    //     };
+    //   } catch (error) {
+    //     console.error("Произошла ошибка", error);
+    //     return Promise.reject(error);
+    //   }
+    // },
     async fetchProducerList(page?: number) {
       try {
         const producers = await PRODUCER.getProducer({
           page_size: this.$state.countRowTable,
           page,
-          categories_l4: this.$state.filterProducerValue.categories_l4
         });
         this.$state.producer = producers.results;
         this.$state.pagination = {
@@ -293,7 +338,6 @@ export const useKuStore = defineStore("KuStore", {
         return Promise.reject(error);
       }
     },
-
     //получение данных о бренде
     async fetchBrandList(page?: number) {
       try {

@@ -1,4 +1,5 @@
 <template>
+  <EntitiesInvoiceTest2/>
   <EntitiesInvoiceTest/>
   <EntitiesInvoiceBar />
   <EntitiesInvoiceTable />

@@ -2,7 +2,7 @@
   <div class="buttonBar_search">
     <el-input placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
   </div>
-  <el-scrollbar class="scrollTableFiltres">
+  <el-scrollbar class="scrollTableProductFiltres">
 
     <el-table style="width: 100%" height="300" :data="tableData">
       <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
@@ -36,12 +36,12 @@ watch(getProduct, (value) => {
 });
 
 const paginationChange = (page: number) => {
-  useKuStore().fetchProductKuList(page);
+  useKuStore().getProductFromAPIWithFilter(page);
 };
 
 onMounted(async () => {
   try {
-    await useKuStore().fetchProductKuList();
+    await useKuStore().getProductFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

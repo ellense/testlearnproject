@@ -327,7 +327,7 @@ export interface IProducer {
 export interface GetAllProducer {
   page_size?: number;
   page?: number;
-  categories_l4: string[];
+  // l4?: string[];
 }
 export interface GetAllProducersReturnData extends Pagination {
   results: IProducer[];
@@ -340,7 +340,7 @@ export interface IBrand {
 export interface GetAllBrands {
   page_size?: number;
   page?: number;
-  producer_name: string
+  producer_name?: string
 }
 export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];

@@ -86,6 +86,13 @@ h1 {
   gap: 20px;
 }
 
+/* .scrollTableProductFiltres {
+  margin: 10px 10px 0 0;
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+  height: 300px;
+}
+
 .scrollTableFiltres {
   margin: 10px 10px 0 0;
   border: 1px solid var(--el-border-color);
@@ -97,7 +104,7 @@ h1 {
 .frameTableFiltres{
   width: 373px;
   height: 100%;
-}
+} */
 .mx-1{
   margin: 10px;
 

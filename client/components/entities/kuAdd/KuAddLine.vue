@@ -1,5 +1,6 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
+    <EntitiesKuAddFiltresProducer/>
     <form>
       <el-row>
         <el-col :span="5">
@@ -90,6 +91,7 @@
       <el-button @click="addClose()">Отменить</el-button>
       <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
     </div>
+    
   </el-scrollbar>
 </template>
 
