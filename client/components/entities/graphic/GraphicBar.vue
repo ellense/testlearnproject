@@ -1,8 +1,8 @@
 <template>
   <div class="directoryBar">
     <div>
-      <el-button @click="deleteGraphic()">Удалить</el-button>
-      <el-button @click="useReportStore().dialogForm = true">Создать отчет</el-button>
+      <el-button @click="deleteGraphic()" >Удалить</el-button>
+      <el-button @click="useReportStore().dialogForm = true" >Создать отчет</el-button>
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="3"
@@ -29,7 +29,9 @@ const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
   useKuStore().performSearchGraphic(newValue);
 });
-
+const isButtonsDisabled = computed(() => {
+  return useKuStore().multipleSelection2.length > 1 || useKuStore().multipleSelection2.length === 0;
+});
 //для фильтрации 
 const { filterGraphicValue, legalEntity2, KuParams } = storeToRefs(useKuStore())
 const triggerFilter = ref<boolean>(true);

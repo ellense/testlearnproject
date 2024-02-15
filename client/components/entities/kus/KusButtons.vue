@@ -4,11 +4,11 @@
       <el-button type="primary" plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать
         КУ</el-button>
       <el-button type="primary" plain @click="addGraphic()" :loading="loading"
-        :disabled="isCreateGraphicButtonDisabled">Создать
+        :disabled="isButtonsDisabled">Создать
         график</el-button>
-      <el-button type="success" plain @click="ApproveKu()" :disabled="isCreateGraphicButtonDisabled">Утвердить</el-button>
-      <el-button type="danger" plain @click="CancelKu()" :disabled="isCreateGraphicButtonDisabled">Отменить</el-button>
-      <el-button type="danger" plain @click="deleteKu()">удалить</el-button>
+      <el-button type="success" plain @click="ApproveKu()" :disabled="isButtonsDisabled">Утвердить</el-button>
+      <el-button type="danger" plain @click="CancelKu()" :disabled="isButtonsDisabled">Отменить</el-button>
+      <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled">Удалить</el-button>
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
@@ -75,8 +75,11 @@ const redirectToCreatePage = () => {
 const isCreateButtonDisabled = computed(() => {
   return store.multipleSelection.length > 0;
 });
-const isCreateGraphicButtonDisabled = computed(() => {
-  return store.multipleSelection.length > 1
+const isButtonsDisabled = computed(() => {
+  return store.multipleSelection.length > 1 || store.multipleSelection.length === 0;
+});
+const isDeleteButtonDisabled = computed(() => {
+  return  store.multipleSelection.length === 0;
 });
 
 // Функция удаления выбранных строк

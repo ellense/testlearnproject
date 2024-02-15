@@ -1,6 +1,7 @@
 <template>
+  <EntitiesKuAddFiltresBrand />
   <EntitiesInvoiceTest2/>
-  <EntitiesInvoiceTest/>
+  <!-- <EntitiesInvoiceTest/> -->
   <EntitiesInvoiceBar />
   <EntitiesInvoiceTable />
   

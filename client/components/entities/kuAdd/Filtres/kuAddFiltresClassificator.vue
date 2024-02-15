@@ -92,12 +92,12 @@ const getCheckedKeys = (checkedKeys: any, checkedNodes: any) => {
   console.log('Отмеченные узлы:', checkedNodes);
   useKuStore().valueCategory_id = checkedNodes.checkedKeys.filter((key: string) => key.length === 10);
   console.log("useKuStore().valueCategory_id",useKuStore().valueCategory_id)
-  useKuStore().valueCategory_name = checkedNodes.name;
+  useKuStore().valueCategory_name = checkedNodes.name; //нормально вывести наименование
   console.log("useKuStore().valueCategory_name",useKuStore().valueCategory_name)
   const keysOfLevel4 = checkedNodes.checkedKeys.filter((key: string) => key.length === 10);
   console.log('Ключи категорий 4 уровня:', keysOfLevel4);
   useKuStore().pagination = null;
-  // useKuStore().setFilterValue4('l4', keysOfLevel4);
+  useKuStore().setFilterValue4('l4', keysOfLevel4);
   toggleTriggerFilter();
 };
 

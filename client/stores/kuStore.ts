@@ -14,6 +14,7 @@ import type {
   IProducer,
   GetAllProducts,
   IProduct,
+  GetAllBrands,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -62,7 +63,7 @@ export const useKuStore = defineStore("KuStore", {
     },
     filterProductValue: {},
     filterProducerValue: {
-      // l4:[]
+      l4:[]
     },
     filterBrandValue: {
       producer_name: ""
@@ -274,6 +275,13 @@ export const useKuStore = defineStore("KuStore", {
     //   this.$state.producerSelect = data.map((item) => item.producer_name);
     //   // Можете также обновить другие свойства, если необходимо
     // },
+
+
+
+
+
+
+
     //получение данных о производителе
     setFilterValue4<
     T extends keyof GetAllProducer,
@@ -282,27 +290,27 @@ export const useKuStore = defineStore("KuStore", {
     this.$state.filterProducerValue[field] = value
   },
 
-    // async fetchProducerList(page?: number) {
-    //   this.setFilterValue4('page', page);
-    //   // this.setFilterValue4('l4', this.$state.filterProducerValue.l4);
-    //   await PRODUCER.getProducer({
-    //     page_size: this.$state.countRowTable,
-    //     page,
-    //     // l4: this.$state.filterProducerValue.l4,
-    //   })
-    //     .then((producer) => {
-    //       console.log('Получены данные произв:', producer);
-    //       this.$state.producer = producer.results;
-    //       this.$state.pagination = {
-    //         count: producer.count,
-    //         previous: producer.previous,
-    //         next: producer.next,
-    //       };
-    //     })
-    //     .catch((error) => {
-    //       console.error('Ошибка при получении данных произв:', error);
-    //       return Promise.reject(error)});
-    // },
+    async fetchProducerList(page?: number) {
+      this.setFilterValue4('page', page);
+      this.setFilterValue4('l4', this.$state.filterProducerValue.l4);
+      await PRODUCER.getProducer({
+        page_size: this.$state.countRowTable,
+        page,
+        l4: this.$state.filterProducerValue.l4,
+      })
+        .then((producer) => {
+          console.log('Получены данные произв:', producer);
+          this.$state.producer = producer.results;
+          this.$state.pagination = {
+            count: producer.count,
+            previous: producer.previous,
+            next: producer.next,
+          };
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении данных произв:', error);
+          return Promise.reject(error)});
+    },
     // async fetchProducerList(page?: number) {
     //   try {
     //     const producers = await PRODUCER.getProducer({
@@ -321,42 +329,71 @@ export const useKuStore = defineStore("KuStore", {
     //     return Promise.reject(error);
     //   }
     // },
-    async fetchProducerList(page?: number) {
-      try {
-        const producers = await PRODUCER.getProducer({
-          page_size: this.$state.countRowTable,
-          page,
-        });
-        this.$state.producer = producers.results;
-        this.$state.pagination = {
-          count: producers.count,
-          previous: producers.previous,
-          next: producers.next,
-        };
-      } catch (error) {
-        console.error("Произошла ошибка", error);
-        return Promise.reject(error);
-      }
-    },
+    // async fetchProducerList(page?: number) {
+    //   try {
+    //     const producers = await PRODUCER.getProducer({
+    //       page_size: this.$state.countRowTable,
+    //       page,
+    //     });
+    //     this.$state.producer = producers.results;
+    //     this.$state.pagination = {
+    //       count: producers.count,
+    //       previous: producers.previous,
+    //       next: producers.next,
+    //     };
+    //   } catch (error) {
+    //     console.error("Произошла ошибка", error);
+    //     return Promise.reject(error);
+    //   }
+    // },
+    
+    
     //получение данных о бренде
+    setFilterValue5<
+    T extends keyof GetAllBrands,
+    U extends GetAllBrands[T],
+  >(field: T, value: U) {
+    this.$state.filterBrandValue[field] = value
+  },
     async fetchBrandList(page?: number) {
-      try {
-        const brands = await BRAND.getBrand({
-          page_size: this.$state.countRowTable,
-          page,
-          producer_name: this.$state.filterBrandValue.producer_name
-        });
-        this.$state.brand = brands.results;
-        this.$state.pagination = {
-          count: brands.count,
-          previous: brands.previous,
-          next: brands.next,
-        };
-      } catch (error) {
-        console.error("Произошла ошибка", error);
-        return Promise.reject(error);
-      }
+      this.setFilterValue5('page', page);
+      this.setFilterValue5('producer_name', this.$state.filterBrandValue.producer_name);
+      await BRAND.getBrand({
+        page_size: this.$state.countRowTable,
+        page,
+        producer_name: this.$state.filterBrandValue.producer_name,
+      })
+        .then((brand) => {
+          console.log('Получены данные бренда:', brand);
+          this.$state.brand = brand.results;
+          this.$state.pagination = {
+            count: brand.count,
+            previous: brand.previous,
+            next: brand.next,
+          };
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении данных бренда:', error);
+          return Promise.reject(error)});
     },
+    // async fetchBrandList(page?: number) {
+    //   try {
+    //     const brands = await BRAND.getBrand({
+    //       page_size: this.$state.countRowTable,
+    //       page,
+    //       // producer_name: this.$state.filterBrandValue.producer_name
+    //     });
+    //     this.$state.brand = brands.results;
+    //     this.$state.pagination = {
+    //       count: brands.count,
+    //       previous: brands.previous,
+    //       next: brands.next,
+    //     };
+    //   } catch (error) {
+    //     console.error("Произошла ошибка", error);
+    //     return Promise.reject(error);
+    //   }
+    // },
 
     //получение данных о товарах для ку  и фильтры хотя они они одинаковые с обычными товарами
     async performSearchProduct(searchQuery: string) {

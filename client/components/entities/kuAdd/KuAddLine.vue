@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
-    <EntitiesKuAddFiltresProducer/>
+    <!-- <EntitiesKuAddFiltresProducer/> -->
     <form>
       <el-row>
         <el-col :span="5">
@@ -85,6 +85,7 @@
       <el-button  size="small" text bg @click="onAddItem()" :disabled="isAddAllDisabled">+ Все</el-button>
       <el-button  size="small" text bg @click="dialogOpenProduct()" :disabled="isAddConditionDisabled">+ Условие по товарам</el-button>
       <el-button  size="small" text bg @click="dialogOpenCategory()" :disabled="isAddConditionDisabled">+ Условие по категории</el-button>
+      <!-- dialogOpenCategory() -->
     </div>
     <EntitiesKuAddRequirement />
     <div class="button_bottom">

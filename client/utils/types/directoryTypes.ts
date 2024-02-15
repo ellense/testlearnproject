@@ -327,7 +327,7 @@ export interface IProducer {
 export interface GetAllProducer {
   page_size?: number;
   page?: number;
-  // l4?: string[];
+  l4?: string[];
 }
 export interface GetAllProducersReturnData extends Pagination {
   results: IProducer[];

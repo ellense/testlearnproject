@@ -2,11 +2,11 @@
 
   <el-dialog v-model="useKuStore().dialogFormCategoryVisible"  width="70%" title="Выбор категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
-    <div class="containerFilter">
+    <!-- <div class="containerFilter"> -->
     <EntitiesKuAddFiltresClassificator/>
     <EntitiesKuAddFiltresProducer/>
     <EntitiesKuAddFiltresBrand/>
-    </div>
+    <!-- </div> -->
 
     <template #footer>
       <span class="dialog-footer">
