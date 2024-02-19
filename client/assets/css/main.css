@@ -55,6 +55,7 @@ a {
   margin-right: 10px;
 }
 
+
 h1 {
   margin-left: 5px;
 }
@@ -139,3 +140,6 @@ h1 {
 .el-table th {
   text-align: center !important;
 } */
+.loading-cursor {
+  cursor: wait; /* Установка курсора в виде элемента загрузки */
+}

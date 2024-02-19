@@ -34,6 +34,7 @@ import type {
   GetAllKu_IdReturnData,
   ITree,
   IKuPost2,
+  IKuList,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -97,6 +98,8 @@ export const KU = {
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
   updateKuStatus: (data: IKuUpdateStatus) =>
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
+  getInfoKu: (data: IKuId): Promise<IKuList> =>
+    $Get(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graphlist/", { params, isBearer: false }),
 };
@@ -117,7 +120,7 @@ export const PRODUCER = {
 
 export const BRAND = {
   getBrand: (params?: GetAllBrands): Promise<GetAllBrandsReturnData> =>
-    $Get("api/brandlist", { params, isBearer: false }),
+    $Get("api/brandlist/", { params, isBearer: false }),
 };
 
 export const CATEGORY = {

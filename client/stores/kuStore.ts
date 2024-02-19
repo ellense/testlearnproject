@@ -15,10 +15,13 @@ import type {
   GetAllProducts,
   IProduct,
   GetAllBrands,
+  IVendorIdAndName,
+  IBrand,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
   state: (): IKuStore => ({
+    //v-model атрибутов при создании
     newPercent: null,
     newType: "",
     entityName: [],
@@ -26,11 +29,16 @@ export const useKuStore = defineStore("KuStore", {
     newDateStart: new Date(),
     newDateEnd: new Date(),
     newDateActual: new Date(),
+    valueCategory_id: "",
+    valueCategory_name: "",
+    valueProducer_name: "",
+    valueBrand_name: "",
+    //селекты для множественного выбора
     multipleSelection: [],
     multipleSelection2: [],
     multipleSelection3: [],
     multipleTableRef: null,
-    selectedKu: null,
+    //данные 
     tableData: [],
     dataGraphic: [],
     brand: [],
@@ -39,21 +47,28 @@ export const useKuStore = defineStore("KuStore", {
     tableDataRequirement: [],
     dataEntity: [],
     dataVendor: [],
+    dataInfoKu:[],
+    //v-model диалоговых форм
     dialogFormProductVisible: false,
     dialogFormCategoryVisible: false,
-    isAddAllDisabled: false,
-    isAddConditionDisabled: false,
+    //дизэйбл
+    disableButtons: false,
+    //
     vendorFilter: "",
     kuFilter: null,
     vendors: [],
-    filterValueGraphic: {},
+    //пагинация в таблицах
     pagination: null,
     countRowTable: 20,
+    countRowTable2: 950,
+    //
     legalEntity: [],
     legalEntity2: [],
+    //поиски
     search: "",
     search2: "",
     search3: "",
+    //параметры для фильтров при запросах
     KuParams: [],
     filterKuValue: {
       entity_id: []
@@ -63,18 +78,16 @@ export const useKuStore = defineStore("KuStore", {
     },
     filterProductValue: {},
     filterProducerValue: {
-      l4:[]
+     
     },
     filterBrandValue: {
-      producer_name: ""
+    
     },
+    //
     producerSelect: [],
     brandSelect: [],
-    ProducerList: {
-      producer_name: ""
-    },
-    valueCategory_id:"",
-    valueCategory_name: "",
+
+
   }),
 
   getters: {
@@ -284,33 +297,58 @@ export const useKuStore = defineStore("KuStore", {
 
     //получение данных о производителе
     setFilterValue4<
-    T extends keyof GetAllProducer,
-    U extends GetAllProducer[T],
-  >(field: T, value: U) {
-    this.$state.filterProducerValue[field] = value
-  },
-
-    async fetchProducerList(page?: number) {
-      this.setFilterValue4('page', page);
-      this.setFilterValue4('l4', this.$state.filterProducerValue.l4);
-      await PRODUCER.getProducer({
-        page_size: this.$state.countRowTable,
-        page,
-        l4: this.$state.filterProducerValue.l4,
-      })
-        .then((producer) => {
-          console.log('Получены данные произв:', producer);
-          this.$state.producer = producer.results;
-          this.$state.pagination = {
-            count: producer.count,
-            previous: producer.previous,
-            next: producer.next,
-          };
-        })
-        .catch((error) => {
-          console.error('Ошибка при получении данных произв:', error);
-          return Promise.reject(error)});
+      T extends keyof GetAllProducer,
+      U extends GetAllProducer[T],
+    >(field: T, value: U) {
+      this.$state.filterProducerValue[field] = value
     },
+    async fetchAllProducers() {
+      try {
+        let allProducer: IProducer[] = [];
+        let nextPage = 1;
+        let totalPages = 1;
+        while (nextPage <= totalPages) {
+          const producers = await PRODUCER.getProducer({
+            page_size: this.$state.countRowTable2,
+            page: nextPage,
+            l4: this.$state.filterProducerValue.l4,
+          });
+          allProducer = allProducer.concat(producers.results);
+          totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
+          nextPage++;
+        }
+        console.log("Все данные о производителе:", allProducer);
+        this.$state.producer = allProducer;
+      } catch (error) {
+        console.error(
+          "Произошла ошибка при получении данных о производителе",
+          error
+        );
+        return Promise.reject(error);
+      }
+    },
+    // async fetchProducerList(page?: number) {
+    //   this.setFilterValue4('page', page);
+    //   this.setFilterValue4('l4', this.$state.filterProducerValue.l4);
+    //   await PRODUCER.getProducer({
+    //     page_size: this.$state.countRowTable,
+    //     page,
+    //     l4: this.$state.filterProducerValue.l4,
+    //   })
+    //     .then((producer) => {
+    //       console.log('Получены данные произв:', producer);
+    //       this.$state.producer = producer.results;
+    //       this.$state.pagination = {
+    //         count: producer.count,
+    //         previous: producer.previous,
+    //         next: producer.next,
+    //       };
+    //     })
+    //     .catch((error) => {
+    //       console.error('Ошибка при получении данных произв:', error);
+    //       return Promise.reject(error)
+    //     });
+    // },
     // async fetchProducerList(page?: number) {
     //   try {
     //     const producers = await PRODUCER.getProducer({
@@ -346,36 +384,62 @@ export const useKuStore = defineStore("KuStore", {
     //     return Promise.reject(error);
     //   }
     // },
-    
-    
+
+
     //получение данных о бренде
     setFilterValue5<
-    T extends keyof GetAllBrands,
-    U extends GetAllBrands[T],
-  >(field: T, value: U) {
-    this.$state.filterBrandValue[field] = value
-  },
-    async fetchBrandList(page?: number) {
-      this.setFilterValue5('page', page);
-      this.setFilterValue5('producer_name', this.$state.filterBrandValue.producer_name);
-      await BRAND.getBrand({
-        page_size: this.$state.countRowTable,
-        page,
-        producer_name: this.$state.filterBrandValue.producer_name,
-      })
-        .then((brand) => {
-          console.log('Получены данные бренда:', brand);
-          this.$state.brand = brand.results;
-          this.$state.pagination = {
-            count: brand.count,
-            previous: brand.previous,
-            next: brand.next,
-          };
-        })
-        .catch((error) => {
-          console.error('Ошибка при получении данных бренда:', error);
-          return Promise.reject(error)});
+      T extends keyof GetAllBrands,
+      U extends GetAllBrands[T],
+    >(field: T, value: U) {
+      this.$state.filterBrandValue[field] = value
     },
+    async fetchAllBrands() {
+      try {
+        let allBrands: IBrand[] = [];
+        let nextPage = 1;
+        let totalPages = 1;
+        while (nextPage <= totalPages) {
+          const brands = await BRAND.getBrand({
+            page_size: this.$state.countRowTable2,
+            page: nextPage,
+            producer_name: this.$state.filterBrandValue.producer_name,
+          });
+          allBrands = allBrands.concat(brands.results);
+          totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
+          nextPage++;
+        }
+        console.log("Все данные о брендах:", allBrands);
+        this.$state.brand = allBrands;
+      } catch (error) {
+        console.error(
+          "Произошла ошибка при получении данных о брендах",
+          error
+        );
+        return Promise.reject(error);
+      }
+    },
+    // async fetchBrandList(page?: number) {
+    //   this.setFilterValue5('page', page);
+    //   this.setFilterValue5('producer_name', this.$state.filterBrandValue.producer_name);
+    //   await BRAND.getBrand({
+    //     page_size: this.$state.countRowTable,
+    //     page,
+    //     producer_name: this.$state.filterBrandValue.producer_name,
+    //   })
+    //     .then((brand) => {
+    //       console.log('Получены данные бренда:', brand);
+    //       this.$state.brand = brand.results;
+    //       this.$state.pagination = {
+    //         count: brand.count,
+    //         previous: brand.previous,
+    //         next: brand.next,
+    //       };
+    //     })
+    //     .catch((error) => {
+    //       console.error('Ошибка при получении данных бренда:', error);
+    //       return Promise.reject(error)
+    //     });
+    // },
     // async fetchBrandList(page?: number) {
     //   try {
     //     const brands = await BRAND.getBrand({
@@ -461,6 +525,7 @@ export const useKuStore = defineStore("KuStore", {
           previous: vendors.previous,
           next: vendors.next,
         };
+        console.log("Все данные о поставщиках для юридического лица:", vendors.results);
       } catch (error) {
         console.error(
           "Произошла ошибка при получении данных о поставщиках для юридического лица",
@@ -469,6 +534,30 @@ export const useKuStore = defineStore("KuStore", {
         return Promise.reject(error);
       }
     },
-
-  },
+    async fetchAllVendorsForEntity2() {
+      try {
+        let allVendors: IVendorIdAndName[] = [];
+        let nextPage = 1;
+        let totalPages = 1;
+        while (nextPage <= totalPages) {
+          const vendors = await VENDOR.getVendorsForEntityInKU({
+            page_size: this.$state.countRowTable2,
+            page: nextPage,
+            entity_id: this.$state.entityName,
+          });
+          allVendors = allVendors.concat(vendors.results);
+          totalPages = Math.ceil(vendors.count / this.$state.countRowTable2);
+          nextPage++;
+        }
+        console.log("Все данные о поставщиках для юридического лица:", allVendors);
+        this.$state.dataVendor = allVendors;
+      } catch (error) {
+        console.error(
+          "Произошла ошибка при получении данных о поставщиках для юридического лица",
+          error
+        );
+        return Promise.reject(error);
+      }
+    },
+  }
 });

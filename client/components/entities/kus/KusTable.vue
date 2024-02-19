@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar class="scrollTable" style="border: none">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
-      height="calc(100vh - 225px)" @row-dblclick="">
+      height="calc(100vh - 225px)" @row-dblclick="row => rowDblclick(row.ku_id)">
       <el-table-column type="selection" width="55" />
       <el-table-column property="ku_id" label="Код КУ" width="150" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
@@ -12,8 +12,6 @@
         <el-table-column property="vendor_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
       </el-table-column>
-      <!-- <el-table-column property="entity_id" label="Юр.лицо" width="200" sortable show-overflow-tooltip />
-      <el-table-column property="vendor_id" label="Поставщик" width="200" sortable show-overflow-tooltip /> -->
       <el-table-column property="percent" label="Процент" width="120" show-overflow-tooltip />
       <el-table-column prop="period" label="Период расчета" width="110" :filters="[
         { text: 'Месяц', value: 'Месяц' },
@@ -58,10 +56,53 @@ import { ref, onMounted, watch } from "vue";
 import type { IKuList } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~~/stores/kuStore";
 
-const { getKu, pagination, countRowTable } = storeToRefs(
+const { getKu, pagination, countRowTable, dataInfoKu } = storeToRefs(
   useKuStore()
 );
 const tableData = ref<IKuList[]>(getKu.value);
+
+
+
+
+
+
+
+
+
+const rowDblclick = async (kuId: string) => {
+  const router = useRouter();
+const ku = "KY00006"
+  try {
+      const results = await KU.getInfoKu({
+        ku_id: kuId,
+      });
+      dataInfoKu = results
+      console.log("успешно получили данные ку_айди", results);
+ 
+    
+  } catch (error) {
+    console.error("Ошибка при получении данных ку_айди:", error);
+    ElMessage.error("Ошибка при получении данных ку_айди");
+  } 
+  // finally {
+  //   useKuStore().tableData = useKuStore().tableData.filter(
+  //     (row) => !selectedRows.includes(row.ku_id)
+  //   );
+  //   useKuStore().multipleSelection = [];
+  // }
+  router.push({ path: `/ku/${kuId}` });
+
+};
+
+
+
+
+
+
+
+
+
+
 
 //пагинация
 const pageSize = ref(countRowTable);
@@ -95,8 +136,6 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных ку3", error);
   }
 });
-
-
 
 //фильтры в таблице
 const filterGraphic = (value: boolean, row: IKuList) => {

@@ -1,6 +1,7 @@
 <template>
   <el-tree-select v-model="value" :data="treeData" show-checkbox filterable check-strictly :render-after-expand="false" style="width: 240px" :props="defaultProps"
     ref="treeRef" node-key="classifier_code" />
+
 </template>
   
 <script setup lang="ts">

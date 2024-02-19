@@ -1,6 +1,5 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
-    <!-- <EntitiesKuAddFiltresProducer/> -->
     <form>
       <el-row>
         <el-col :span="5">
@@ -47,7 +46,8 @@
         <el-col :span="5">
           <div class="custom-label">Поставщик</div>
           <el-form-item>
-            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName">
+            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName"
+              :title="disableSelectVendorTooltip">
               <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="
@@ -58,9 +58,10 @@
           ">{{ item.value }}</span>
               </el-option>
             </el-select>
-            <div v-if="!store.entityName" style="font-size: 12px; color: var(--el-text-color-secondary); margin-top: 5px;">
-      Сначала выберите юридическое лицо
-    </div>
+            <div v-if="!store.entityName"
+              style="font-size: 12px; color: var(--el-text-color-secondary); margin-top: 5px;">
+              Сначала выберите юридическое лицо
+            </div>
           </el-form-item>
         </el-col>
         <el-col :span="4">
@@ -80,19 +81,23 @@
         </el-col>
       </el-row>
     </form>
-    <h3>Фильтрация по товарам</h3>
+    <h3>Условия по товарам</h3>
     <div>
-      <el-button  size="small" text bg @click="onAddItem()" :disabled="isAddAllDisabled">+ Все</el-button>
-      <el-button  size="small" text bg @click="dialogOpenProduct()" :disabled="isAddConditionDisabled">+ Условие по товарам</el-button>
-      <el-button  size="small" text bg @click="dialogOpenCategory()" :disabled="isAddConditionDisabled">+ Условие по категории</el-button>
-      <!-- dialogOpenCategory() -->
+      <el-button size="small" text bg @click="onAddItem()" :disabled="store.disableButtons"
+        :title="disableButtonTooltip">+ Все</el-button>
+      <el-button size="small" text bg @click="dialogOpenProduct()" :disabled="store.disableButtons"
+        :title="disableButtonTooltip">+ Условие по
+        товарам</el-button>
+      <el-button size="small" text bg @click="dialogOpenCategory()" :class="{ 'loading-cursor': categoryDialogLoading }" :loading="categoryDialogLoading" :disabled="store.disableButtons"
+        :title="disableButtonTooltip">+ Условие по
+        категории</el-button>
     </div>
     <EntitiesKuAddRequirement />
     <div class="button_bottom">
       <el-button @click="addClose()">Отменить</el-button>
       <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
     </div>
-    
+
   </el-scrollbar>
 </template>
 
@@ -104,8 +109,10 @@ import { useRouter } from "vue-router";
 import { useKuStore } from "~~/stores/kuStore";
 import type {
   IEntityIdAndName,
+  ITree,
   IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
+import type { Action, ElTree } from 'element-plus'
 
 const store = useKuStore();
 const router = useRouter();
@@ -205,9 +212,8 @@ watch(() => store.entityName, (newValue, oldValue) => {
     resetVendorOnEntityChange();
   }
 });
+
 //проверка полей формы
-
-
 const isFormValid = () => {
   const isEmpty = (value: any) => {
     if (Array.isArray(value)) {
@@ -285,35 +291,135 @@ const onEntityChange = async () => {
   }
 };
 
-// хз надо или нет
-let isAddAllDisabled = ref(store.isAddAllDisabled);
-let isAddConditionDisabled = ref(store.isAddConditionDisabled);
+const disableSelectVendorTooltip = computed(() => {
+  return !store.entityName ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
+});
 
-//таблица условий
+const disableButtonTooltip = computed(() => {
+  return store.disableButtons ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
+});
+
+//добавление условия "все"
 const onAddItem = () => {
-  store.tableDataRequirement.push({
-    type_item: "Все",
-    item_id: "",
-    item_name: "",
-    producer: "",
-    brand: "",
-  });
-  isAddAllDisabled = ref(true)
+  if (store.tableDataRequirement.length === 0) {
+    store.tableDataRequirement.push({
+      item_type: "Все",
+      item_id: "",
+      item_name: "",
+      producer: "",
+      brand: "",
+    });
+
+
+  }
+  else {
+    ElMessageBox.alert('При добавлении условия "Все", предыдущие условия удалятся', 'Вы точно хотите удалить условия?', {
+      confirmButtonText: 'OK',
+      callback: (action: Action) => {
+        if (action === 'confirm') { // Проверяем, что пользователь подтвердил удаление
+          store.tableDataRequirement.length = 0;// Очищаем массив
+          store.tableDataRequirement.push({
+            item_type: "Все",
+            item_id: "",
+            item_name: "",
+            producer: "",
+            brand: "",
+          });
+          ElMessage({
+            type: 'info',
+            message: 'Предыдущие условия удалены. Условие "Все" добавлено', // Сообщение о том, что условия удалены
+          });
+        }
+      },
+    });
+
+  }
+  // disableButtons.value = true;
+  store.disableButtons = true;
 };
+const treeData = ref<ITree[]>([]);
+  const treeRef = ref<InstanceType<typeof ElTree>>()
+const categoryDialogLoading = ref(false);
+const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
+  const parentNode = nodes.filter(node => node.parent_code === parentCode);
+  if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
+
+  return parentNode.map(node => {
+    const children = buildTree(nodes, node.classifier_code.toString());
+    if (children.length) {
+      node.children = children;
+    }
+    return node;
+  });
+};
+
+// Функция для получения данных с бэкэнда и установки полученных данных в переменную treeData
+const fetchData = async (data: ITree) => {
+  try {
+    const result = await CATEGORY.getCategory(data);
+
+    if (Array.isArray(result)) {
+      treeData.value = buildTree(result, '0');
+      console.log("treeData", treeData.value);
+      treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
+    } else {
+      treeData.value = [];
+      console.error("Данные не получены или не являются массивом");
+    }
+  } catch (error) {
+    console.error("Произошла ошибка при получении данных категорий", error);
+  }
+};
+const dialogOpenCategory = async () => {
+  try {
+    categoryDialogLoading.value = true;
+
+    // Выполните асинхронные запросы для получения данных перед открытием диалогового окна
+    await store.fetchAllProducers();
+    await store.fetchAllBrands();
+    await fetchData({
+      name: "string",
+      classifier_code: 1,
+      children: [],
+      parent_code: "",
+    });
+
+    // После завершения загрузки данных установите флаг dialogFormCategoryVisible в true
+    store.dialogFormCategoryVisible = true;
+  } catch (error) {
+    console.error('Ошибка при загрузке данных для диалогового окна:', error);
+    ElMessage.error('Ошибка при загрузке данных для диалогового окна:');
+  } finally {
+    categoryDialogLoading.value = false;
+  }
+}
 const dialogOpenProduct = () => {
   store.dialogFormProductVisible = true;
 };
-const dialogOpenCategory = () => {
-  store.dialogFormCategoryVisible = true;
-};
+// const dialogOpenCategory = () => {
+//   store.dialogFormCategoryVisible = true;
+
+// };
 const addClose = () => {
   router.push("ku");
+  store.tableDataRequirement.length = 0;
+  store.entityName = [];
+  store.vendorName = "";
+  store.newType = "";
+  store.newDateStart = new Date();
+  store.newDateEnd = new Date();
+  store.newPercent = null;
+  store.disableButtons = false
 };
 
 //отправка ку на бэк
 const addItemAndSendToBackend = async () => {
   if (!isFormValid()) {
     ElMessage.error('Не все поля заполнены корректно.');
+    return;
+  }
+  if (store.tableDataRequirement.length === 0) {
+    ElMessage.error('Добавьте минимум одно условие по товарам');
     return;
   }
   const newItem = {
@@ -349,6 +455,14 @@ const addItemAndSendToBackend = async () => {
     loading.value = false;
   }
   router.push("ku");
+  store.tableDataRequirement.length = 0;
+  store.entityName = [];
+  store.vendorName = "";
+  store.newType = "";
+  store.newDateStart = new Date();
+  store.newDateEnd = new Date();
+  store.newPercent = null;
+  store.disableButtons = false
 };
 </script>
 
@@ -357,5 +471,8 @@ const addItemAndSendToBackend = async () => {
   margin: 20px 10px 0 0;
   display: flex;
   justify-content: flex-start;
+}
+.loading-cursor {
+  cursor: wait; /* Установка курсора в виде элемента загрузки */
 }
 </style>

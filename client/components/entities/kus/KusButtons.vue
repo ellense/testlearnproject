@@ -1,14 +1,19 @@
 <template>
   <div class="directoryBar">
     <div>
-      <el-button type="primary" plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled">Создать
+      <el-button type="primary" plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled"
+        :title="disableButtonCreateTooltip">Создать
         КУ</el-button>
-      <el-button type="primary" plain @click="addGraphic()" :loading="loading"
-        :disabled="isButtonsDisabled">Создать
+      <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
+        :title="disableButtonTooltip">Создать
         график</el-button>
-      <el-button type="success" plain @click="ApproveKu()" :disabled="isButtonsDisabled">Утвердить</el-button>
-      <el-button type="danger" plain @click="CancelKu()" :disabled="isButtonsDisabled">Отменить</el-button>
-      <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled">Удалить</el-button>
+      <el-button type="success" plain @click="ApproveKu()" :disabled="isButtonsDisabled"
+        :title="disableButtonTooltip">Утвердить</el-button>
+      <el-button type="danger" plain @click="CancelKu()" :disabled="isButtonsDisabled"
+        :title="disableButtonTooltip">Отменить</el-button>
+      <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
+        :title="disableButtonTooltip">Удалить</el-button>
+        
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
@@ -79,7 +84,7 @@ const isButtonsDisabled = computed(() => {
   return store.multipleSelection.length > 1 || store.multipleSelection.length === 0;
 });
 const isDeleteButtonDisabled = computed(() => {
-  return  store.multipleSelection.length === 0;
+  return store.multipleSelection.length === 0;
 });
 
 // Функция удаления выбранных строк
@@ -191,6 +196,14 @@ const addGraphic = async () => {
   }
   await useKuStore().getKuFromAPIWithFilter();
 }
+
+
+const disableButtonTooltip = computed(() => {
+  return store.multipleSelection.length > 1 || store.multipleSelection.length === 0 ? 'Кнопка заблокирована. Для доступа выберите КУ' : '';
+});
+const disableButtonCreateTooltip = computed(() => {
+  return store.multipleSelection.length > 0 ? 'Кнопка заблокирована. Для доступа отмените выбранные КУ' : '';
+});
 
 </script>
 

@@ -169,6 +169,7 @@ export interface IKuDeleteGraph {
   status: string;
 }
 export interface IKuStore {
+  //значения v-model при создании
   newPercent: number | null;
   newType: string;
   entityName: string[];
@@ -176,11 +177,16 @@ export interface IKuStore {
   newDateStart: Date;
   newDateEnd: Date;
   newDateActual: Date;
+  valueCategory_id: string
+  valueCategory_name: string
+  valueProducer_name: string;
+  valueBrand_name: string;
+  //селекты для множественного выбора
   multipleSelection: IKuList[];
   multipleSelection2: IGraphic[];
   multipleSelection3: IProduct[];
   multipleTableRef: Ref | null;
-  selectedKu: IKuList | null;
+  //данные таблиц
   tableData: IKuList[];
   dataGraphic: IGraphic[];
   brand: IBrand[];
@@ -189,32 +195,65 @@ export interface IKuStore {
   tableDataRequirement: IRequirement[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
+  dataInfoKu: IKuList[];
+  //v-model диалоговых форм
   dialogFormProductVisible: boolean;
   dialogFormCategoryVisible: boolean;
-  isAddAllDisabled: boolean;
-  isAddConditionDisabled: boolean;
+  //дизэйбл
+  disableButtons: boolean
+  //
   vendorFilter: string;
   kuFilter: number | null;
   vendors: IVendorIdAndName[];
-  filterValueGraphic: GetAllGraphic
+//пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;
+  countRowTable2: number;
+  //поиски
   search: string;
   search2: string;
   search3: string;
+  //
   legalEntity: string[]
   legalEntity2: string[]
+  //параметры для фильтров при запросах
   KuParams: string[]
   filterKuValue: GetAllKus
   filterGraphicValue: GetAllGraphic
   filterProductValue: GetAllProducts
   filterProducerValue: GetAllProducer
   filterBrandValue: GetAllBrands
+  //
   producerSelect: string[]
   brandSelect: string[]
-  ProducerList:IProducer
-  valueCategory_id: string
-  valueCategory_name: string
+}
+export interface IKuIdStore {
+  //v-model атрибутов
+  kuIdPercent: number | null;
+  kuIdType: string;
+  kuIdEntityName: string[];
+  kuIdVendorName: string;
+  kuIdDateStart: Date;
+  kuIdDateEnd: Date;
+  kuIdCategory_id: string
+  kuIdCategory_name: string
+  kuIdProducer_name: string;
+  kuIdBrand_name: string;
+  //v-model диалоговых форм
+  dialogFormProductVisible: boolean;
+  dialogFormCategoryVisible: boolean;
+  //дизэйбл
+  disableButtons: boolean
+  //данные 
+  brand: IBrand[];
+  producer: IProducer[];
+  product: IProduct[];
+  tableDataRequirement: IRequirement[];
+  dataEntity: IEntityIdAndName[];
+  dataVendor: IVendorIdAndName[];
+  
+  multipleSelectionProduct: IProduct[];
+  multipleTableRef: Ref | null;
 }
 export interface GetAllKus {
   page_size?: number;
@@ -313,7 +352,7 @@ export interface IProfile {
 
 //Условия
 export interface IRequirement {
-  type_item: string;
+  item_type: string;
   item_id: string;
   item_name: string;
   producer: string;

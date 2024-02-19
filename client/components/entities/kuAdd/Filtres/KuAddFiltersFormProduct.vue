@@ -74,7 +74,7 @@ const AddProductItem = () => {
 
   selectedRows.forEach(row => {
     useKuStore().tableDataRequirement.push({
-      type_item: "Таблица",
+      item_type: "Таблица",
       item_id: row.itemid,
       item_name: row.name,
       producer: "",
