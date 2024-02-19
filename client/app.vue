@@ -28,5 +28,5 @@ await auth.authPromise;
 </script>
 
 <style scoped>.el-main {
-  padding: 0 0 20px 30px;
+  padding: 0 0 20px 20px;
 }</style>

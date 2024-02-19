@@ -1,5 +1,5 @@
 <template>
-  <el-aside width="250px">
+  <el-aside width="210px">
     <el-scrollbar height="calc(100vh - 60px)">
       <el-menu style="font-size: 12px" active-color="#689EFF">
         <nuxt-link to="/ku">

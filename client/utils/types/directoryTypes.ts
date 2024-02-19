@@ -194,7 +194,7 @@ export interface IKuStore {
   tableDataRequirement: IRequirement[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
-  dataInfoKu: IKuList[];
+  // dataInfoKu: IKuList[];
   //v-model диалоговых форм
   dialogFormProductVisible: boolean;
   dialogFormCategoryVisible: boolean;
@@ -228,12 +228,13 @@ export interface IKuStore {
 }
 export interface IKuIdStore {
   //v-model атрибутов
+  ku_id: string;
   kuIdPercent: number | null;
-  kuIdType: string;
-  kuIdEntityName: string[];
+  kuIdPeriod: string;
+  kuIdEntityName: string;
   kuIdVendorName: string;
-  kuIdDateStart: Date;
-  kuIdDateEnd: Date;
+  kuIdDateStart: Date | string;
+  kuIdDateEnd: Date | string;
   kuIdCategory_id: string
   kuIdCategory_name: string
   kuIdProducer_name: string;
@@ -250,7 +251,7 @@ export interface IKuIdStore {
   tableDataRequirement: IRequirement[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
-  
+  dataInfoKu: IKuList[];
   multipleSelectionProduct: IProduct[];
   multipleTableRef: Ref | null;
 }
@@ -351,11 +352,11 @@ export interface IProfile {
 
 //Условия
 export interface IRequirement {
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
+  item_type: string ;
+  item_code: string ;
+  item_name: string ;
+  producer: string ;
+  brand: string ;
 }
 export interface IRequirementPost2 {
   ku_id: string;

@@ -1,7 +1,4 @@
 <template>
-    <div>
-        <el-button>Добавить</el-button>
-    </div>
     <el-scrollbar height="calc(100vh - 60px)">
         <form>
             <el-row>
@@ -26,7 +23,7 @@
                 <el-col :span="4">
                     <div class="custom-label">Период</div>
                     <el-form-item>
-                        <el-select v-model="store.kuIdType" clearable style="width: 214px">
+                        <el-select v-model="store.kuIdPeriod" clearable style="width: 214px">
                             <el-option label="Неделя" value="Неделя" :disabled="true"></el-option>
                             <el-option label="Месяц" value="Месяц"></el-option>
                             <el-option label="Квартал" value="Квартал"></el-option>
@@ -39,8 +36,8 @@
                 <el-col :span="5">
                     <div class="custom-label">Начальная дата</div>
                     <el-form-item :validate-status="dateStartValidation" :error="dateStartError">
-                        <el-date-picker v-model="store.kuIdDateStart" style="width: 214px" format="DD.MM.YYYY"
-                            value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выбрать"
+                        <el-date-picker v-model="store.kuIdDateStart" style="width: 214px" 
+                             clearable el-rowrable placeholder="Выбрать"
                             @change="validateDateStart"></el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -79,8 +76,8 @@
                 <el-col :span="5">
                     <div class="custom-label">Конечная дата</div>
                     <el-form-item :validate-status="dateEndValidation" :error="dateEndError">
-                        <el-date-picker v-model="store.kuIdDateEnd" style="width: 214px" format="DD.MM.YYYY"
-                            value-format="DD.MM.YYYY" clearable placeholder="Выбрать"
+                        <el-date-picker v-model="store.kuIdDateEnd" style="width: 214px" 
+                             clearable placeholder="Выбрать"
                             @change="validateDateEnd"></el-date-picker>
                     </el-form-item>
                 </el-col>
@@ -100,7 +97,7 @@
         <EntitiesKuAddRequirement />
         <div class="button_bottom">
             <el-button @click="addClose()">Отменить</el-button>
-            <el-button type="primary" @click="" :loading="loading">Создать</el-button>
+            <el-button type="primary" @click="" :loading="loading">Изменить</el-button>
         </div>
 
     </el-scrollbar>
@@ -146,7 +143,7 @@ const validateDateStart = () => {
     const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
 
     // Проверка на минимальную разницу в зависимости от выбранного периода
-    const minDiff = periods[store.kuIdType];
+    const minDiff = periods[store.kuIdPeriod];
     if (startDate.isAfter(endDate)) {
         dateStartValidation.value = 'error';
         dateStartError.value = 'Начальная дата не может быть позже конечной даты.';
@@ -164,7 +161,7 @@ const validateDateEnd = () => {
     const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
     const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
     // Проверка на минимальную разницу в зависимости от выбранного периода
-    const minDiff = periods[store.kuIdType];
+    const minDiff = periods[store.kuIdPeriod];
     if (startDate.isAfter(endDate)) {
         dateEndValidation.value = 'error';
         dateEndError.value = 'Конечная дата не может быть раньше начальной даты.';
@@ -206,7 +203,7 @@ const resetVendorOnEntityChange = () => {
     store.kuIdVendorName = "";
 };
 // Обработчик изменения выбранного периода
-watch(() => store.kuIdType, (newValue, oldValue) => {
+watch(() => store.kuIdPeriod, (newValue, oldValue) => {
     if (oldValue !== newValue) {
         resetDatesOnPeriodChange();
     }
@@ -230,7 +227,7 @@ const isFormValid = () => {
 
     // Проверка для каждого поля
     const isEntityNameValid = !isEmpty(store.kuIdEntityName);
-    const isNewTypeValid = !isEmpty(store.kuIdType);
+    const isNewTypeValid = !isEmpty(store.kuIdPeriod);
     const isNewDateStartValid = !isEmpty(store.kuIdDateStart);
     const isNewDateEndValid = !isEmpty(store.kuIdDateEnd);
     const isVendorNameValid = !isEmpty(store.kuIdVendorName);
@@ -307,9 +304,10 @@ const disableButtonTooltip = computed(() => {
 const addClose = () => {
     router.push({ path: '/' })
     store.tableDataRequirement.length = 0;
-    store.kuIdEntityName = [];
+    store.ku_id = "";
+    store.kuIdEntityName = "";
     store.kuIdVendorName = "";
-    store.kuIdType = "";
+    store.kuIdPeriod = "";
     store.kuIdDateStart = new Date();
     store.kuIdDateEnd = new Date();
     store.kuIdPercent = null;

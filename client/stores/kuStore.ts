@@ -47,7 +47,7 @@ export const useKuStore = defineStore("KuStore", {
     tableDataRequirement: [],
     dataEntity: [],
     dataVendor: [],
-    dataInfoKu:[],
+    // dataInfoKu:[],
     //v-model диалоговых форм
     dialogFormProductVisible: false,
     dialogFormCategoryVisible: false,

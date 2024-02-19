@@ -35,5 +35,5 @@ const { isAuth } = storeToRefs(useAuthStore());
 }
 
 .layout-container-demo .el-main {
-  padding: 0 0 20px 30px;
+  padding: 0 0 20px 20px;
 }</style>

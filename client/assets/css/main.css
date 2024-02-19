@@ -143,3 +143,9 @@ h1 {
 .loading-cursor {
   cursor: wait; /* Установка курсора в виде элемента загрузки */
 }
+.cell {
+  font-size: 13px;
+}
+.el-table .el-table__cell {
+  padding: 3px 0;
+}

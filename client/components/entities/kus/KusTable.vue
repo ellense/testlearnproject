@@ -55,8 +55,9 @@ import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IKuList } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~~/stores/kuStore";
+import { useKuIdStore } from "~~/stores/kuIdStore";
 
-const { getKu, pagination, countRowTable, dataInfoKu } = storeToRefs(
+const { getKu, pagination, countRowTable } = storeToRefs(
   useKuStore()
 );
 const tableData = ref<IKuList[]>(getKu.value);
@@ -71,19 +72,18 @@ const tableData = ref<IKuList[]>(getKu.value);
 
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
-const ku = "KY00001"
-  try {
-      const results = await KU.getInfoKu({
-        ku_id: ku,
-      });
-      // dataInfoKu = results
-      console.log("успешно получили данные ку_айди", results);
- 
+  useKuIdStore().getKuDetailFromApi(kuId)
+  // try {
+  //     const results = await KU.getInfoKu({
+  //       ku_id: kuId,
+  //     });
+  //     // dataInfoKu = results
+  //     console.log("успешно получили данные ку_айди", results);
     
-  } catch (error) {
-    console.error("Ошибка при получении данных ку_айди:", error);
-    ElMessage.error("Ошибка при получении данных ку_айди");
-  } 
+  // } catch (error) {
+  //   console.error("Ошибка при получении данных ку_айди:", error);
+  //   ElMessage.error("Ошибка при получении данных ку_айди");
+  // } 
   // finally {
   //   useKuStore().tableData = useKuStore().tableData.filter(
   //     (row) => !selectedRows.includes(row.ku_id)

@@ -13,10 +13,9 @@
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик">
-        <el-table-column property="vendor_id" label="Код" width="100" sortable show-overflow-tooltip />
+        <el-table-column property="vendor_id" label="Код" width="135" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="180" sortable show-overflow-tooltip />
       </el-table-column>
-      <!-- <el-table-column property="vendor_id" label="Поставщик" width="150" sortable show-overflow-tooltip /> -->
       <el-table-column prop="period" label="Период расчета" width="105" :filters="[
         { text: 'Месяц', value: 'Месяц' },
         { text: 'Квартал', value: 'Квартал' },
@@ -33,7 +32,8 @@
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" label="Конечная дата" width="105" sortable show-overflow-tooltip />
       <el-table-column property="date_calc" type="date" label="Дата расчета" width="105" sortable show-overflow-tooltip />
-      <el-table-column property="sum_bonus" label="Расчитано" show-overflow-tooltip />
+      <el-table-column property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
+      <el-table-column property="sum_bonus" label="Утверждено" width="110" show-overflow-tooltip />
       <el-table-column prop="status" label="Статус" :filters="[
         { text: 'Запланировано', value: 'Запланировано' },
         { text: 'Рассчитано', value: 'Рассчитано' },
