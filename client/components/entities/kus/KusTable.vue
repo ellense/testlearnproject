@@ -71,12 +71,12 @@ const tableData = ref<IKuList[]>(getKu.value);
 
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
-const ku = "KY00006"
+const ku = "KY00001"
   try {
       const results = await KU.getInfoKu({
-        ku_id: kuId,
+        ku_id: ku,
       });
-      dataInfoKu = results
+      // dataInfoKu = results
       console.log("успешно получили данные ку_айди", results);
  
     

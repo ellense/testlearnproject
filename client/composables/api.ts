@@ -35,6 +35,8 @@ import type {
   ITree,
   IKuPost2,
   IKuList,
+  IRequirementPost,
+  IRequirementPost2,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -92,8 +94,10 @@ export const KU = {
     $Get("api/kulist/", { params, isBearer: false }),
   // postKu: (data: IKuPost, params:IKuPost2): Promise<IKuPost> =>
   //   $Post("api/kulist/", { data,params, isBearer: false }),
-    postKu: (data: IKuPost): Promise<IKuPost> =>
-    $Post("api/kulist/", { data, isBearer: false }),
+  postKu: (data: IKuPost): Promise<IKuList> =>
+    $Post("api/ku_create/", { data, isBearer: false }),
+  postKuRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
+    $Post("api/included_product/", { data, isBearer: false }),
   deleteKu: (data: IKuId) =>
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
   updateKuStatus: (data: IKuUpdateStatus) =>
@@ -124,6 +128,6 @@ export const BRAND = {
 };
 
 export const CATEGORY = {
-  getCategory: (data:ITree): Promise<ITree> =>
+  getCategory: (data: ITree): Promise<ITree> =>
     $Get("api/classifiersTest/", { data, isBearer: false }),
 };

@@ -126,7 +126,6 @@ export interface IKuList {
   date_end: Date | string;
   graph_exists: boolean | string
   status: string;
-  base: number | null;
   percent: number | null;
 }
 export interface IKuId {
@@ -353,10 +352,27 @@ export interface IProfile {
 //Условия
 export interface IRequirement {
   item_type: string;
-  item_id: string;
+  item_code: string;
   item_name: string;
   producer: string;
   brand: string;
+}
+export interface IRequirementPost2 {
+  ku_id: string;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IRequirementPost {
+  ku_id: string;
+  requirements: IRequirement[]
+  // item_type: string;
+  // item_code: string;
+  // item_name: string;
+  // producer: string;
+  // brand: string;
 }
 
 // Производитель

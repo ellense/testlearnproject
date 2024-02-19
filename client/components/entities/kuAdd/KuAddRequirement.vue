@@ -2,7 +2,7 @@
   <el-scrollbar class="scrollTable">
     <el-table style="width: 100%" height="calc(100vh - 600px)" :data="kuRequirementList" border>
       <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
-      <el-table-column property="item_id" label="Связь с номенклатурой / категорией" width="150" show-overflow-tooltip />
+      <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="150" show-overflow-tooltip />
       <el-table-column property="item_name" label="Наименование" width="400" show-overflow-tooltip />
       <el-table-column property="producer" label="Производитель" width="400" show-overflow-tooltip />
       <el-table-column property="brand" label="Торговая марка" width="400" show-overflow-tooltip />

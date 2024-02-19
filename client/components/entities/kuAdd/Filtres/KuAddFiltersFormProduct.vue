@@ -75,11 +75,12 @@ const AddProductItem = () => {
   selectedRows.forEach(row => {
     useKuStore().tableDataRequirement.push({
       item_type: "Таблица",
-      item_id: row.itemid,
+      item_code: row.itemid,
       item_name: row.name,
       producer: "",
       brand: "",
     });
+    console.log("store.tableDataRequirementПРОДУКТЫ",useKuStore().tableDataRequirement);
   });
   toggleSelection()
   kuStore.dialogFormProductVisible = false;
