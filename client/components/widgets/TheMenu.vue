@@ -2,6 +2,7 @@
   <el-aside width="210px">
     <el-scrollbar height="calc(100vh - 60px)">
       <el-menu style="font-size: 12px" active-color="#689EFF">
+        <el-divider content-position="left" style=" color: #337ecc;">КУ поставщиков</el-divider>
         <nuxt-link to="/ku">
           <el-menu-item index="1">
             <el-icon>
@@ -18,25 +19,51 @@
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        <el-divider />
-        <nuxt-link to="/entity">
-          <el-menu-item index="3">
-            <el-icon>
-              <Suitcase />
-            </el-icon>
-            <span>Юридические лица</span>
-          </el-menu-item>
-        </nuxt-link>
         <nuxt-link to="/invoice">
-          <el-menu-item index="4">
+          <el-menu-item index="3">
             <el-icon>
               <Memo />
             </el-icon>
             <span>Накладные</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/vendor">
+        <el-divider content-position="left" style=" color: #337ecc;">КУ клиентов</el-divider>
+        <nuxt-link to="">
+          <el-menu-item index="4">
+            <el-icon>
+              <Document />
+            </el-icon>
+            <span>Коммерческие условия</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="">
           <el-menu-item index="5">
+            <el-icon>
+              <Calendar />
+            </el-icon>
+            <span>Графики расчетов</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="">
+          <el-menu-item index="6">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Накладные</span>
+          </el-menu-item>
+        </nuxt-link>
+        <el-divider content-position="left" style=" color: #337ecc;">Справочники</el-divider>
+        <nuxt-link to="/entity">
+          <el-menu-item index="7">
+            <el-icon>
+              <Suitcase />
+            </el-icon>
+            <span>Юридические лица</span>
+          </el-menu-item>
+        </nuxt-link>
+        
+        <nuxt-link to="/vendor">
+          <el-menu-item index="8">
             <el-icon>
               <Box />
             </el-icon>
@@ -44,7 +71,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/product">
-          <el-menu-item index="6">
+          <el-menu-item index="9">
             <el-icon>
               <ShoppingCartFull />
             </el-icon>
@@ -125,4 +152,7 @@ const logOut = () => useAuthStore().logout();
 
 .main-menu__logout-button {
   width: 100%;
-}</style>
+}
+
+
+</style>

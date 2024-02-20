@@ -7,7 +7,7 @@
             <el-input v-model="form.username" placeholder="Введите логин" :prefix-icon="Message" />
           </el-form-item>
           <el-form-item>
-            <el-input v-model="form.password" placeholder="Введите пароль" :prefix-icon="Lock" />
+            <el-input v-model="form.password" placeholder="Введите пароль" show-password type="password" :prefix-icon="Lock" />
           </el-form-item>
           <el-form-item>
             <el-button native-type="submit" type="primary" :full-width="true" :scopes="'all'" :for-all="true"

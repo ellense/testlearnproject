@@ -2,7 +2,7 @@
     <div class="productTree">
         <h3>Категории товаров:</h3>
         <el-scrollbar class="scrollTree">
-            <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
+            <el-tree :data="treeData" :props="defaultProps" show-checkbox  ref="treeRef" node-key="classifier_code"
                 @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node />
         </el-scrollbar>
     </div>

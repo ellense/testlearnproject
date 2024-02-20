@@ -104,6 +104,8 @@ export const KU = {
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
+    updateInfoKu: (data: IKuUpdateStatus) =>
+    $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graphlist/", { params, isBearer: false }),
 };

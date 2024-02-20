@@ -47,7 +47,6 @@ export const useKuStore = defineStore("KuStore", {
     tableDataRequirement: [],
     dataEntity: [],
     dataVendor: [],
-    // dataInfoKu:[],
     //v-model диалоговых форм
     dialogFormProductVisible: false,
     dialogFormCategoryVisible: false,
@@ -77,12 +76,8 @@ export const useKuStore = defineStore("KuStore", {
       entity_id: [], ku_id: []
     },
     filterProductValue: {},
-    filterProducerValue: {
-     
-    },
-    filterBrandValue: {
-    
-    },
+    filterProducerValue: {},
+    filterBrandValue: {},
     //
     producerSelect: [],
     brandSelect: [],

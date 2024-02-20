@@ -19,7 +19,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         ku_id: "",
         kuIdPercent: null,
         kuIdPeriod: "",
-        kuIdEntityName: "",
+        kuIdEntityName: [],
         kuIdVendorName: "",
         kuIdDateStart: new Date(),
         kuIdDateEnd: new Date(),
@@ -32,7 +32,10 @@ export const useKuIdStore = defineStore("KuIdStore", {
         dialogFormCategoryVisible: false,
         //дизэйбл
         disableButtons: false,
-
+        //пагинация в таблицах
+        pagination: null,
+        countRowTable: 20,
+        //
         multipleSelectionProduct: [],
         multipleTableRef: null,
 
@@ -45,18 +48,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
         handleSelectionChangeProduct(val: IProduct[]) {
             this.multipleSelectionProduct = val;
         },
-        // async getLegalEntityFromApi(kuId: string) {
-        //     console.log('Запрос данных о юридических лицах...');
-        //     await KU.getInfoKu({
-        //         ku_id: kuId,
-        //     }).then((tableData) => {
-        //         console.log('Получены данные ку:', tableData);
-        //         this.$state.dataInfoKu = tableData.results;
-        //     }).catch((error) => {
-        //         console.error('Ошибка при получении данных ку_айди:', error);
-        //         return Promise.reject(error);
-        //     });
-        // },
         async getKuDetailFromApi(kuId: string) {
             try {
                 const results = await KU.getInfoKu({
@@ -65,14 +56,36 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.ku_id = results.ku_id;
                 this.$state.kuIdPercent = results.percent;
                 this.$state.kuIdPeriod = results.period;
-                this.$state.kuIdEntityName = results.entity_name;
-                this.$state.kuIdVendorName = "results.vendor_name";
-                this.$state.kuIdDateStart = dayjs(results.date_start).format("DD.MM.YYYY");
-                this.$state.kuIdDateEnd = new Date(results.date_start);
+                this.$state.kuIdEntityName = [results.entity_name];
+                this.$state.kuIdVendorName = results.vendor_name;
+                this.$state.kuIdDateStart = new Date(results.date_start);
+                this.$state.kuIdDateEnd = new Date(results.date_end);
                 console.log("детально", this.kuIdPercent, this.$state.kuIdPeriod, this.$state.kuIdEntityName, this.$state.kuIdVendorName, this.$state.kuIdDateStart, this.$state.kuIdDateEnd)
                 console.log("успешно получили данные ку_айди", results);
             } catch (error) {
                 console.error("Ошибка при получении данных ку_айди:", error);
+            }
+        },
+        async fetchVendorsListForEntity(page?: number) {
+            try {
+                const vendors = await VENDOR.getVendorsForEntityInKU({
+                    page_size: this.$state.countRowTable,
+                    page,
+                    entity_id: this.$state.kuIdEntityName,
+                });
+                this.$state.dataVendor = vendors.results;
+                this.$state.pagination = {
+                    count: vendors.count,
+                    previous: vendors.previous,
+                    next: vendors.next,
+                };
+                console.log("Все данные о поставщиках для юридического лица:", vendors.results);
+            } catch (error) {
+                console.error(
+                    "Произошла ошибка при получении данных о поставщиках для юридического лица",
+                    error
+                );
+                return Promise.reject(error);
             }
         },
     },

@@ -5,7 +5,7 @@
                 <el-col :span="5">
                     <div class="custom-label">Юридическое лицо</div>
                     <el-form-item>
-                        <el-select v-model="store.kuIdEntityName" clearable filterable style="width: 300px"
+                        <el-select v-model="store.kuIdEntityName[0]" clearable filterable style="width: 300px"
                             @change="onEntityChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                                 <span style="float: left">{{ item.label }}</span>
@@ -36,9 +36,8 @@
                 <el-col :span="5">
                     <div class="custom-label">Начальная дата</div>
                     <el-form-item :validate-status="dateStartValidation" :error="dateStartError">
-                        <el-date-picker v-model="store.kuIdDateStart" style="width: 214px" 
-                             clearable el-rowrable placeholder="Выбрать"
-                            @change="validateDateStart"></el-date-picker>
+                        <el-date-picker v-model="store.kuIdDateStart" format="DD.MM.YYYY" style="width: 214px" clearable
+                            el-rowrable placeholder="Выбрать" @change="validateDateStart"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
@@ -48,19 +47,22 @@
                     <div class="custom-label">Поставщик</div>
                     <el-form-item>
                         <el-select v-model="store.kuIdVendorName" clearable filterable style="width: 300px"
-                            :disabled="!store.kuIdEntityName" :title="disableSelectVendorTooltip">
+                            :disabled="!store.kuIdEntityName[0]" :title="disableSelectVendorTooltip">
                             <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                                 <span style="float: left">{{ item.label }}</span>
                                 <span style="
-            margin-left: 10px;
-            float: right;
-            color: var(--el-text-color-secondary);
-            font-size: 13px;
-          ">{{ item.value }}</span>
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
                             </el-option>
                         </el-select>
-                        <div v-if="!store.kuIdEntityName"
-                            style="font-size: 12px; color: var(--el-text-color-secondary); margin-top: 5px;">
+                        <div v-if="!store.kuIdEntityName[0]" style="
+                font-size: 12px;
+                color: var(--el-text-color-secondary);
+                margin-top: 5px;
+              ">
                             Сначала выберите юридическое лицо
                         </div>
                     </el-form-item>
@@ -76,30 +78,27 @@
                 <el-col :span="5">
                     <div class="custom-label">Конечная дата</div>
                     <el-form-item :validate-status="dateEndValidation" :error="dateEndError">
-                        <el-date-picker v-model="store.kuIdDateEnd" style="width: 214px" 
-                             clearable placeholder="Выбрать"
-                            @change="validateDateEnd"></el-date-picker>
+                        <el-date-picker v-model="store.kuIdDateEnd" format="DD.MM.YYYY" style="width: 214px" clearable
+                            placeholder="Выбрать" @change="validateDateEnd"></el-date-picker>
                     </el-form-item>
                 </el-col>
             </el-row>
+            
         </form>
         <h3>Условия по товарам</h3>
         <div>
             <el-button size="small" text bg @click="" :disabled="store.disableButtons" :title="disableButtonTooltip">+
                 Все</el-button>
             <el-button size="small" text bg @click="" :disabled="store.disableButtons" :title="disableButtonTooltip">+
-                Условие по
-                товарам</el-button>
+                Условие по товарам</el-button>
             <el-button size="small" text bg @click="" :disabled="store.disableButtons" :title="disableButtonTooltip">+
-                Условие по
-                категории</el-button>
+                Условие по категории</el-button>
         </div>
         <EntitiesKuAddRequirement />
         <div class="button_bottom">
             <el-button @click="addClose()">Отменить</el-button>
             <el-button type="primary" @click="" :loading="loading">Изменить</el-button>
         </div>
-
     </el-scrollbar>
 </template>
 
@@ -114,7 +113,7 @@ import type {
     IEntityIdAndName,
     IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
-import type { Action } from 'element-plus'
+import type { Action } from "element-plus";
 
 const store = useKuIdStore();
 const store2 = useKuStore();
@@ -122,33 +121,40 @@ const router = useRouter();
 const loading = ref(false);
 
 // Проверка полей формы
-const dateStartValidation = ref<"error" | "success" | "validating" | undefined>('success');
-const dateStartError = ref<string | undefined>('');
-const dateEndValidation = ref<"error" | "success" | "validating" | undefined>('success');
-const dateEndError = ref<string | undefined>('');
-const percentValidation = ref<"error" | "success" | "validating" | undefined>('success');
-const percentError = ref<string | undefined>('');
+const dateStartValidation = ref<"error" | "success" | "validating" | undefined>(
+    "success"
+);
+const dateStartError = ref<string | undefined>("");
+const dateEndValidation = ref<"error" | "success" | "validating" | undefined>(
+    "success"
+);
+const dateEndError = ref<string | undefined>("");
+const percentValidation = ref<"error" | "success" | "validating" | undefined>(
+    "success"
+);
+const percentError = ref<string | undefined>("");
 
 // Периоды и их соответствующие минимальные разницы в днях
 const periods: Record<string, number> = {
-    'Месяц': 30,
-    'Квартал': 90,
-    'Полгода': 180,
-    'Год': 365
+    Месяц: 30,
+    Квартал: 90,
+    Полгода: 180,
+    Год: 365,
 };
 
 // Функция проверки даты начала
 const validateDateStart = () => {
-    const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
-    const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
-
+    // const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
+    // const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
+    const startDate = dayjs(store.kuIdDateStart);
+    const endDate = dayjs(store.kuIdDateEnd);
     // Проверка на минимальную разницу в зависимости от выбранного периода
     const minDiff = periods[store.kuIdPeriod];
     if (startDate.isAfter(endDate)) {
-        dateStartValidation.value = 'error';
-        dateStartError.value = 'Начальная дата не может быть позже конечной даты.';
-    } else if (endDate.diff(startDate, 'day') < minDiff) {
-        dateStartValidation.value = 'error';
+        dateStartValidation.value = "error";
+        dateStartError.value = "Начальная дата не может быть позже конечной даты.";
+    } else if (endDate.diff(startDate, "day") < minDiff) {
+        dateStartValidation.value = "error";
         dateStartError.value = `Минимальная разница между начальной и конечной датой должна быть не менее ${minDiff} дней для выбранного периода.`;
     } else {
         dateStartValidation.value = undefined;
@@ -158,15 +164,17 @@ const validateDateStart = () => {
 
 // Функция проверки даты окончания
 const validateDateEnd = () => {
-    const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
-    const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
+    // const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
+    // const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
+    const startDate = dayjs(store.kuIdDateStart);
+    const endDate = dayjs(store.kuIdDateEnd);
     // Проверка на минимальную разницу в зависимости от выбранного периода
     const minDiff = periods[store.kuIdPeriod];
     if (startDate.isAfter(endDate)) {
-        dateEndValidation.value = 'error';
-        dateEndError.value = 'Конечная дата не может быть раньше начальной даты.';
-    } else if (endDate.diff(startDate, 'day') < minDiff) {
-        dateEndValidation.value = 'error';
+        dateEndValidation.value = "error";
+        dateEndError.value = "Конечная дата не может быть раньше начальной даты.";
+    } else if (endDate.diff(startDate, "day") < minDiff) {
+        dateEndValidation.value = "error";
         dateEndError.value = `Минимальная разница между начальной и конечной датой должна быть не менее ${minDiff} дней для выбранного периода.`;
     } else {
         dateEndValidation.value = undefined;
@@ -174,14 +182,12 @@ const validateDateEnd = () => {
     }
 };
 
-
-
 // Функция проверки процента
 const validatePercent = () => {
     const percent = parseFloat(String(store.kuIdPercent));
     if (isNaN(percent) || percent < 1 || percent > 100) {
-        percentValidation.value = 'error';
-        percentError.value = 'Введите корректный процент от 1 до 100.';
+        percentValidation.value = "error";
+        percentError.value = "Введите корректный процент от 1 до 100.";
     } else {
         percentValidation.value = undefined;
         percentError.value = undefined;
@@ -192,36 +198,59 @@ watch(() => store.kuIdPercent, validatePercent);
 watch(() => store.kuIdDateStart, validateDateStart);
 watch(() => store.kuIdDateEnd, validateDateEnd);
 
+// переменная для отслеживания первого изменения kuIdPeriod
+let isFirstPeriodChange = true;
+
 // Функция сброса дат при изменении периода
 const resetDatesOnPeriodChange = () => {
-
-    store.kuIdDateStart = new Date()
-    store.kuIdDateEnd = new Date();
+    // Проверяем, не первое ли это изменение kuIdPeriod
+    if (!isFirstPeriodChange) {
+        store.kuIdDateStart = new Date("");
+        store.kuIdDateEnd = new Date("");
+    } else {
+        isFirstPeriodChange = false;
+    }
 };
+
+// Обработчик изменения выбранного периода
+watch(
+    () => store.kuIdPeriod,
+    (newValue, oldValue) => {
+        if (oldValue !== newValue) {
+            resetDatesOnPeriodChange();
+        }
+    }
+);
+//  переменная для отслеживания первого изменения kuIdEntityName
+let isFirstEntityChange = true;
+
 // Функция сброса поставщика
 const resetVendorOnEntityChange = () => {
-    store.kuIdVendorName = "";
+    // Проверяем, не первое ли это изменение kuIdEntityName
+    if (!isFirstEntityChange) {
+        store.kuIdVendorName = "";
+    } else {
+        isFirstEntityChange = false;
+    }
 };
-// Обработчик изменения выбранного периода
-watch(() => store.kuIdPeriod, (newValue, oldValue) => {
-    if (oldValue !== newValue) {
-        resetDatesOnPeriodChange();
-    }
-});
+
 // Обработчик изменения выбранного юр.лица
-watch(() => store.kuIdEntityName, (newValue, oldValue) => {
-    if (oldValue !== newValue) {
-        resetVendorOnEntityChange();
+watch(
+    () => store.kuIdEntityName[0],
+    (newValue, oldValue) => {
+        if (oldValue !== newValue) {
+            resetVendorOnEntityChange();
+        }
     }
-});
+);
 
 //проверка полей формы
 const isFormValid = () => {
     const isEmpty = (value: any) => {
         if (Array.isArray(value)) {
-            return value.some((item) => item === null || item.trim() === '');
+            return value.some((item) => item === null || item.trim() === "");
         } else {
-            return value === null || String(value).trim() === '';
+            return value === null || String(value).trim() === "";
         }
     };
 
@@ -243,7 +272,6 @@ const isFormValid = () => {
         isNewPercentValid
     );
 };
-
 
 //вывод данных юридического лица
 const options = ref<Array<{ label: string; value: string }>>([]);
@@ -270,7 +298,7 @@ onMounted(async () => {
 //вывод данных поставщика
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 watch(
-    () => store2.dataVendor,
+    () => store.dataVendor,
     (dataVendor: IVendorIdAndName[]) => {
         options2.value = dataVendor.map((item) => ({
             label: item.name,
@@ -280,39 +308,48 @@ watch(
 );
 onMounted(async () => {
     try {
-        await store2.fetchVendorsListForEntity();
+        await store.fetchVendorsListForEntity();
     } catch (error) {
         console.error("Ошибка при загрузке данных", error);
     }
 });
 const onEntityChange = async () => {
     try {
-        await store2.fetchVendorsListForEntity(undefined);
-        console.log("fetchVendorsListForEntity:", store2.entityName);
+        await store.fetchVendorsListForEntity(undefined);
     } catch (error) {
         console.error("Ошибка при загрузке данных", error);
     }
 };
 
 const disableSelectVendorTooltip = computed(() => {
-    return !store.kuIdEntityName ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
+    return !store.kuIdEntityName
+        ? "Выбор заблокирован. Для доступа сначала выберите юридическое лицо"
+        : "";
 });
 
 const disableButtonTooltip = computed(() => {
-    return store.disableButtons ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
+    return store.disableButtons
+        ? 'Кнопка заблокирована. Для доступа удалите условие "Все".'
+        : "";
 });
 const addClose = () => {
-    router.push({ path: '/' })
+    router.push({ path: "/" });
     store.tableDataRequirement.length = 0;
     store.ku_id = "";
-    store.kuIdEntityName = "";
+    store.kuIdEntityName = [];
     store.kuIdVendorName = "";
     store.kuIdPeriod = "";
     store.kuIdDateStart = new Date();
     store.kuIdDateEnd = new Date();
     store.kuIdPercent = null;
-    store.disableButtons = false
+    store.disableButtons = false;
 };
 </script>
 
-<style  scoped></style>
+<style scoped>
+.button_bottom {
+    margin: 20px 10px 0 0;
+    display: flex;
+    justify-content: flex-start;
+}
+</style>

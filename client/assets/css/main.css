@@ -9,8 +9,6 @@ a {
   text-decoration: none;
 }
 
-
-
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
   margin: 10px 10px 0 0;
@@ -23,26 +21,16 @@ a {
   display: flex;
   height: calc(100vh - 160px);
   margin: 10px 10px 0 0;
-  /* width: calc(100vw - 250px);
-  box-sizing: border-box; */
 }
-/* .scrollTableProduct {
-  flex: 1;
-  min-width: calc(100% - 90px); 
-  margin: 0 10px 0 10px; 
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
-  height: calc(100vh - 185px);
-} */
+
 .productTree {
-  min-width: 500px;
-  max-width: 500px;
+  min-width: 550px;
+  max-width: 550px;
   border: 1px solid var(--el-border-color);
   height: calc(100vh - 185px);
   border-radius: 2px;
   margin-right: 10px; 
 }
-
 
 /* панель с кнопками сверху таблицы */
 .buttonBar {
@@ -87,25 +75,6 @@ h1 {
   gap: 20px;
 }
 
-/* .scrollTableProductFiltres {
-  margin: 10px 10px 0 0;
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
-  height: 300px;
-}
-
-.scrollTableFiltres {
-  margin: 10px 10px 0 0;
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
-  height: 300px;
-  width: 370px;
-}
-
-.frameTableFiltres{
-  width: 373px;
-  height: 100%;
-} */
 .mx-1{
   margin: 10px;
 
@@ -126,26 +95,19 @@ h1 {
 .el-table__column-filter-trigger {
   padding-left: 10px !important;
 }
-/* .el-table {
-  border: 2px solid #303133 !important;
-}
 
-
-.el-table thead {
-  background-color: #F0F2F5 !important;
-  color: #b82c2c !important;  
-}
-
-
-.el-table th {
-  text-align: center !important;
-} */
 .loading-cursor {
   cursor: wait; /* Установка курсора в виде элемента загрузки */
 }
+
 .cell {
   font-size: 13px;
 }
+
 .el-table .el-table__cell {
   padding: 3px 0;
+}
+.el-divider__text.is-left  {
+color:#337ecc;
+font-weight: 600;
 }

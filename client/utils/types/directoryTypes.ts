@@ -204,7 +204,7 @@ export interface IKuStore {
   vendorFilter: string;
   kuFilter: number | null;
   vendors: IVendorIdAndName[];
-//пагинация в таблицах
+  //пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;
   countRowTable2: number;
@@ -231,7 +231,7 @@ export interface IKuIdStore {
   ku_id: string;
   kuIdPercent: number | null;
   kuIdPeriod: string;
-  kuIdEntityName: string;
+  kuIdEntityName: string[];
   kuIdVendorName: string;
   kuIdDateStart: Date | string;
   kuIdDateEnd: Date | string;
@@ -252,6 +252,10 @@ export interface IKuIdStore {
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
   dataInfoKu: IKuList[];
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  //
   multipleSelectionProduct: IProduct[];
   multipleTableRef: Ref | null;
 }
@@ -309,7 +313,7 @@ export interface GraphicForExcelReport {
   percent: number;
   status: string;
 }
-export interface ReportStore{
+export interface ReportStore {
   dialogForm: boolean
   graphic: GraphicForExcelReport[]
   getGraphicDone: boolean
@@ -352,11 +356,11 @@ export interface IProfile {
 
 //Условия
 export interface IRequirement {
-  item_type: string ;
-  item_code: string ;
-  item_name: string ;
-  producer: string ;
-  brand: string ;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
 }
 export interface IRequirementPost2 {
   ku_id: string;
@@ -369,11 +373,6 @@ export interface IRequirementPost2 {
 export interface IRequirementPost {
   ku_id: string;
   requirements: IRequirement[]
-  // item_type: string;
-  // item_code: string;
-  // item_name: string;
-  // producer: string;
-  // brand: string;
 }
 
 // Производитель
@@ -402,6 +401,14 @@ export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
 }
 
+//дерево категорий
+export interface ITree {
+  name: string;
+  classifier_code: number
+  parent_code: string
+  children?: ITree[];
+}
+
 //общие
 export interface Pagination {
   count: number;
@@ -416,56 +423,8 @@ export type WithoutNullableKeys<Type> = {
 
 
 
-export interface ITree {
-  name: string;
-  classifier_code: number 
-  parent_code: string
-  children?: ITree[];
-}
 
 
 
 
-//дерево категорий
-export interface IGetCategoryList {
-  network_key?: number
-  hierarchy_key?: number
-  id?: number
-  lvl?: number
-}
 
-interface ICategoryBase {
-  id: number | null
-}
-
-export interface ICategory extends ICategoryBase {
-  name: string | null
-  external_id: number | null
-  external_code: string | null
-  lvl: number | null
-  is_active: number | null
-  hierarchy_key: number | null
-  network_key: number | null
-  category_parent: number | null
-}
-
-// export interface ITree {
-//   id: number
-//   label: string
-//   lvl: number
-//   disabled?: boolean
-//   children?: ITree[]
-// }
-
-export interface ICategoryList extends ICategory {
-  category_list: ICategory[]
-  ready: any
-  categoty_tree: ITree[]
-}
-
-export interface IPlanVersionSetCategory extends ICategoryBase {
-  id: number
-  plan_version_key: number
-  category_key: number
-  get_category_name: string
-}

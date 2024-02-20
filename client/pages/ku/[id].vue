@@ -4,8 +4,7 @@
       <FeaturesKu />
     </el-scrollbar>
   </template>
+  
   <script setup lang="ts">
   import { useKuIdStore } from "~~/stores/kuIdStore";
-
-  
   </script>

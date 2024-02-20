@@ -334,7 +334,6 @@ const onAddItem = () => {
     });
 
   }
-  // disableButtons.value = true;
   store.disableButtons = true;
 };
 const treeData = ref<ITree[]>([]);
