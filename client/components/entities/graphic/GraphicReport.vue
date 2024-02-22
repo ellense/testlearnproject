@@ -22,17 +22,14 @@
 import { localizedExcelTableLabel } from "~/composables/localizedExcelTable";
 import { storeToRefs } from "pinia";
 import { useReportStore } from "~~/stores/reportStore";
-import type { IGraphicInfo } from "~/utils/types/directoryTypes";
+import type { GraphicForExcelReportInvoice, IGraphicInfo } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~/stores/kuStore";
 import { excel, type Range } from "~/composables/excel";
 import { dayjs } from "element-plus";
 const { utils, writeFile, getBorderCell, getColumnById } = excel;
 const {
-  printReportToggle,
-  graphic,
-  filterValue,
   getGraphicDone,
-  getGraphicInfo,
+  getInvoiceInfo,
 } = storeToRefs(useReportStore());
 interface ColumnTable {
   field: string;
@@ -45,64 +42,74 @@ interface ColumnTable {
 }
 const columnTable: ColumnTable[] = [
   {
-    field: "vendor_id",
+    field: "invoice_number",
     label: "№ накладной",
     type: "string",
     width: 100,
   },
   {
-    field: "ku_id",
+    field: "invoice_date",
     label: "Дата накладной",
     type: "string",
     width: 250,
   },
   {
-    field: "period",
+    field: "purch_number",
     label: "№ закупки",
     type: "string",
     width: 250,
   },
   {
-    field: "percent",
+    field: "purch_date",
     label: "Дата закупки",
     type: "string",
     width: 130,
   },
   {
-    field: "status",
+    field: "invoicestatus",
     label: "Статус документа",
     type: "string",
     width: 170,
   },
   {
-    field: "status",
+    field: "",
     label: "Кол-во (шт,л,кг.)",
-    type: "string",
+    type: "number",
     width: 170,
   },
   {
-    field: "status",
+    field: "products_amount",
     label: "Сумма без НДС",
-    type: "string",
+    type: "number",
     width: 170,
-    // summ: true,
-    // summary: 'sum',
+    summ: true,
+    summary: 'sum',
     style: { fontWeight: 'bold' }
   },
 ];
 
-const tableDataReport = ref<IGraphicInfo[]>(getGraphicInfo.value);
+// const tableDataReport = ref<IGraphicInfo[]>(getGraphicInfo.value);
 
-watch(getGraphicInfo, (value) => {
-  tableDataReport.value = value || [];
-  console.log("Новые данные получены из хранилища:", tableDataReport.value);
-});
-
-// const tableDataReport = ref<GraphicForExcelReportInvoice[]>(getInvoiceInfo.value);
-
-// watch(getInvoiceInfo, (value) => {
+// watch(getGraphicInfo, (value) => {
 //   tableDataReport.value = value || [];
 //   console.log("Новые данные получены из хранилища:", tableDataReport.value);
+// });
+
+
+
+const tableDataReport = ref<GraphicForExcelReportInvoice[]>(getInvoiceInfo.value);
+
+watch(getInvoiceInfo, (value) => {
+  tableDataReport.value = value || [];
+  console.log("Новые данные invoices получены из хранилища:", tableDataReport.value);
+});
+
+// onMounted(async () => {
+//   try {
+//     await useReportStore().getInvoiceDetailForGraphicFromAPIWithFilter();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
 // });
 
 function exportAsExcel() {
@@ -157,7 +164,7 @@ function exportAsExcel() {
     });
     dataSheet.push(columnHeader);
 
-    useReportStore().graphic.forEach((row) => {
+    useReportStore().invoices.forEach((row) => {
       const newRow: CellObject[] = [];
       columnTable.forEach((column) => {
         const cellValue = row[column.field as keyof typeof row];
@@ -175,7 +182,7 @@ function exportAsExcel() {
           }
         } else {
           newRow.push({
-            v: undefined, // или другое значение, которое вы хотите использовать для null
+            v: "!!", // или другое значение, которое вы хотите использовать для null
             t: "s",
           });
         }
@@ -189,7 +196,7 @@ function exportAsExcel() {
         const columnName = getColumnById(index + 1);
         summRow.push({
           t: "n",
-          f: `SUM(${columnName}${dataSheet.length - useReportStore().graphic.length + 1
+          f: `SUM(${columnName}${dataSheet.length - useReportStore().invoices.length + 1
             }:${columnName}${dataSheet.length})`,
           s: {
             font: { bold: true },

@@ -39,7 +39,9 @@
         { text: 'Утверждено', value: 'Утверждено' },
       ]" :filter-method="filterTag" filter-placement="bottom-end">
         <template #default="scope">
-          <el-tag :type="getStatusTagType(scope.row.status)" disable-transitions>{{ scope.row.status }}</el-tag>
+          <!-- :type="getStatusTagType(scope.row.status)" -->
+          <el-tag 
+           disable-transitions>{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
     </el-table>

@@ -320,21 +320,32 @@ export interface GetAllGraphic {
 export interface GetAllGraphicsReturnData extends Pagination {
   results: IGraphic[];
 }
+
 export interface GraphicForExcelReportInvoice {
   invoice_number: string;
-  date: string;
+  invoice_date: Date | string;
   purch_number: string;
   purch_date: Date | string;
   invoicestatus: string;
   products_amount: number | null;
 }
+export interface GetAllInvoicesForGraphic {
+  page_size?: number;
+  page?: number;
+  graph_id?: number | null;
+}
+export interface GetAllInvoicesForGraphicReturnData extends Pagination {
+  results: GraphicForExcelReportInvoice[];
+}
 export interface ReportStore {
   dialogForm: boolean
+  pagination: Pagination | null;
+  countRowTable: number;
   graphic: IGraphicInfo[]
   invoices: GraphicForExcelReportInvoice[]
   getGraphicDone: boolean
   printReportToggle: boolean
-  filterValue: GetAllGraphic
+  filterValueInvoice: GetAllInvoicesForGraphic
 }
 
 // Товары

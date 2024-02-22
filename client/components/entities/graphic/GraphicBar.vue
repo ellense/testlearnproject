@@ -93,7 +93,10 @@ const createReport = async() => {
   const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
   console.log("selectedRows[0]:",selectedRows[0])
   useReportStore().getGraphicDetailFromApi(selectedRows[0])
-  useReportStore().getInvoiceDetailForGraphicFromApi(selectedRows[0])
+  // useReportStore().getGraphicDetailFromApi(selectedRows[0])
+  useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
+  useReportStore().fetchAllInvoices(selectedRows[0])
+  // useReportStore().getInvoiceDetailForGraphicFromAPIWithFilter(selectedRows[0])
 
 }
 //удаление графиков

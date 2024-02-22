@@ -38,7 +38,10 @@
         { text: 'Отменено', value: 'Отменено' },
       ]" :filter-method="filterStatus" filter-placement="bottom-end">
         <template #default="scope">
-          <el-tag  disable-transitions :type="getStatusTagType(scope.row.status)">{{ scope.row.status }}</el-tag>
+          <!-- getStatusTagType(scope.row.status) -->
+          <!-- :type="statusTagType" -->
+          <el-tag  disable-transitions >{{ scope.row.status }}</el-tag>
+          statusTagType
         </template>
       </el-table-column>
     </el-table>
@@ -136,7 +139,7 @@ const filterPeriod = (value: string, row: IKuList) => {
 const filterStatus = (value: string, row: IKuList) => {
   return row.status === value
 }
-const getStatusTagType = (status: string) => {
+const getStatusTagType = (status: string):"success" | "info" | "danger" | "warning" | "primary" | string => {
   switch (status) {
     case 'Создано':
       return 'primary';
@@ -150,5 +153,33 @@ const getStatusTagType = (status: string) => {
       return 'info'; 
   }
 };
+const statusTagType = (status: string) => {
+  switch (status) {
+    case 'Создано':
+      return 'primary';
+    case 'Действует':
+      return 'success';
+    case 'Закрыто':
+      return 'info';
+    case 'Отменено':
+      return 'danger';
+    default:
+      return 'info'; 
+  }
+};
+// const getStatusTagType = (status: string): "success" | "info" | "danger" | "warning" | "primary" | string => {
+//   switch (status) {
+//     case 'Создано':
+//       return '';
+//     case 'Действует':
+//       return 'success';
+//     case 'Закрыто':
+//       return 'info';
+//     case 'Отменено':
+//       return 'danger';
+//     default:
+//       return '';
+//   }
+// };
 
 </script>

@@ -39,6 +39,8 @@ import type {
   IRequirementPost2,
   IGraphicInfo,
   GraphicForExcelReportInvoice,
+  GetAllInvoicesForGraphicReturnData,
+  GetAllInvoicesForGraphic,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -121,8 +123,10 @@ export const GRAPHIC = {
     $Delete(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
   getInfoGraphic: (data: IGraphicId): Promise<IGraphicInfo> =>
     $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
-  getInfoInvoicesForGraphic: (data: IGraphicId): Promise<GraphicForExcelReportInvoice> =>
-    $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
+  // getInfoInvoicesForGraphic: (data: IGraphicId): Promise<GraphicForExcelReportInvoice> =>
+  //   $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
+  getInfoInvoicesForGraphic: (params: GetAllInvoicesForGraphic): Promise<GetAllInvoicesForGraphicReturnData> =>
+    $Get("api/included_invoice_list/", { params, isBearer: false }),
 };
 
 export const PRODUCER = {
