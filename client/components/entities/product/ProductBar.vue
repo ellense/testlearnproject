@@ -2,7 +2,7 @@
   <div class="directoryBar">
     <h2>Товары</h2>
     <div class="directoryBar_filter">
-      <el-input v-model="searchQuery" placeholder="Поиск по номеру и наименованию" style="width: 400px;"
+      <el-input v-model="searchQuery" placeholder="Поиск по номеру и наименованию" style="max-width: 400px; min-width: 100px; width: 300px;"
         :prefix-icon="Search"></el-input>
     </div>
   </div>

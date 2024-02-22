@@ -4,10 +4,9 @@
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 225px)" border
       @selection-change="useKuStore().handleSelectionChange2">
-      <el-table-column type="selection" width="40" />
+      <el-table-column fixed type="selection" width="40" />
       <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
-      
-      <el-table-column property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
+      <el-table-column fixed property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
         <el-table-column property="entity_id" label="Код" width="80" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
@@ -32,9 +31,9 @@
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" label="Конечная дата" width="105" sortable show-overflow-tooltip />
       <el-table-column property="date_calc" type="date" label="Дата расчета" width="105" sortable show-overflow-tooltip />
-      <el-table-column property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
-      <el-table-column property="sum_bonus" label="Утверждено" width="110" show-overflow-tooltip />
-      <el-table-column prop="status" label="Статус" :filters="[
+      <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
+      <el-table-column fixed="right" property="sum_bonus" label="Утверждено" width="110" show-overflow-tooltip />
+      <el-table-column  fixed="right" prop="status" label="Статус" :filters="[
         { text: 'Запланировано', value: 'Запланировано' },
         { text: 'Рассчитано', value: 'Рассчитано' },
         { text: 'Утверждено', value: 'Утверждено' },
@@ -44,12 +43,13 @@
         </template>
       </el-table-column>
     </el-table>
-    <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-      <el-pagination v-model:pageSize="pageSize" :page-sizes="[20, 50, 100, 300, 500]"
+    <!-- v-if="pagination?.count && pagination.count > countRowTable" -->
+  </el-scrollbar>
+  <div  class="pagination">
+      <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" :page-sizes="[20, 50, 100, 300, 500]"
         :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
         @size-change="handleSizeChange" @current-change="paginationChange" />
     </div>
-  </el-scrollbar>
 </template>
 <script lang="ts" setup>
 import { ref, watch, onMounted } from "vue";
@@ -69,15 +69,16 @@ const filterTag2 = (value: string, row: IGraphic) => {
 const getStatusTagType = (status: string) => {
   switch (status) {
     case 'Запланировано':
-      return '';
+      return 'primary';
     case 'Рассчитано':
       return 'warning';
     case 'Утверждено':
       return 'success';
     default:
-      return '';
+      return 'info';
   }
 };
+
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;

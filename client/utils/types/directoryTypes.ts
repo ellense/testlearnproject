@@ -293,6 +293,20 @@ export interface IGraphic {
   sum_bonus: number | null;
   status: string
 }
+export interface IGraphicInfo {
+  graph_id: number | null;
+  ku_id: string;
+  vendor_id: string;
+  vendor_name: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  date_calc: Date | string;
+  percent: number | null;
+  sum_calc: number | null;
+  sum_bonus: number | null;
+  status: string
+}
 export interface IGraphicId {
   graph_id: number | null;
 }
@@ -306,16 +320,18 @@ export interface GetAllGraphic {
 export interface GetAllGraphicsReturnData extends Pagination {
   results: IGraphic[];
 }
-export interface GraphicForExcelReport {
-  entity_id: string;
-  ku_id: string;
-  period: string;
-  percent: number;
-  status: string;
+export interface GraphicForExcelReportInvoice {
+  invoice_number: string;
+  date: string;
+  purch_number: string;
+  purch_date: Date | string;
+  invoicestatus: string;
+  products_amount: number | null;
 }
 export interface ReportStore {
   dialogForm: boolean
-  graphic: GraphicForExcelReport[]
+  graphic: IGraphicInfo[]
+  invoices: GraphicForExcelReportInvoice[]
   getGraphicDone: boolean
   printReportToggle: boolean
   filterValue: GetAllGraphic
@@ -407,6 +423,7 @@ export interface ITree {
   classifier_code: number
   parent_code: string
   children?: ITree[];
+  isLeaf?: boolean;
 }
 
 //общие

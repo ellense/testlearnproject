@@ -38,12 +38,12 @@
         { text: 'Отменено', value: 'Отменено' },
       ]" :filter-method="filterStatus" filter-placement="bottom-end">
         <template #default="scope">
-          <el-tag :type="getStatusTagType(scope.row.status)" disable-transitions>{{ scope.row.status }}</el-tag>
+          <el-tag  disable-transitions :type="getStatusTagType(scope.row.status)">{{ scope.row.status }}</el-tag>
         </template>
       </el-table-column>
     </el-table>
   </el-scrollbar>
-  <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
+  <div v-if="pagination?.count" class="pagination">
     <el-pagination v-model:pageSize="pageSize" :page-sizes="[20, 50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
@@ -63,13 +63,7 @@ const { getKu, pagination, countRowTable } = storeToRefs(
 const tableData = ref<IKuList[]>(getKu.value);
 
 
-
-
-
-
-
-
-
+//открывание и редактитрование ку
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
@@ -93,15 +87,6 @@ const rowDblclick = async (kuId: string) => {
   router.push({ path: `/ku/${kuId}` });
 
 };
-
-
-
-
-
-
-
-
-
 
 
 //пагинация
@@ -154,7 +139,7 @@ const filterStatus = (value: string, row: IKuList) => {
 const getStatusTagType = (status: string) => {
   switch (status) {
     case 'Создано':
-      return '';
+      return 'primary';
     case 'Действует':
       return 'success';
     case 'Закрыто':
@@ -162,7 +147,7 @@ const getStatusTagType = (status: string) => {
     case 'Отменено':
       return 'danger';
     default:
-      return '';
+      return 'info'; 
   }
 };
 

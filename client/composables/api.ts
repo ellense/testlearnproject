@@ -37,6 +37,8 @@ import type {
   IKuList,
   IRequirementPost,
   IRequirementPost2,
+  IGraphicInfo,
+  GraphicForExcelReportInvoice,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -104,7 +106,7 @@ export const KU = {
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
-    updateInfoKu: (data: IKuUpdateStatus) =>
+  updateInfoKu: (data: IKuUpdateStatus) =>
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graphlist/", { params, isBearer: false }),
@@ -117,6 +119,10 @@ export const GRAPHIC = {
     $Post("api/create_graph/", { data, isBearer: false }),
   deleteGraphic: (data: IGraphicId) =>
     $Delete(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
+  getInfoGraphic: (data: IGraphicId): Promise<IGraphicInfo> =>
+    $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
+  getInfoInvoicesForGraphic: (data: IGraphicId): Promise<GraphicForExcelReportInvoice> =>
+    $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
 };
 
 export const PRODUCER = {

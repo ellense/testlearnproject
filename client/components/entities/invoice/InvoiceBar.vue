@@ -3,10 +3,10 @@
     <h2>Накладные поставок</h2>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-        :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="width: 400px" @change="changeLegalEntity">
+        :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="max-width: 400px; min-width: 100px; width: 300px;" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 400px;"></el-input>
+      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="max-width: 400px; min-width: 100px; width: 300px;"></el-input>
       <!-- <el-date-picker
           v-model="dateRange"
           type="daterange"
