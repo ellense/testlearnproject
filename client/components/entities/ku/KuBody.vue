@@ -5,7 +5,7 @@
                 <el-col :span="5">
                     <div class="custom-label">Юридическое лицо</div>
                     <el-form-item>
-                        <el-select v-model="store.kuIdEntityName[0]" clearable filterable style="width: 300px"
+                        <el-select v-model="store.kuIdEntityName.entity_name" clearable filterable style="width: 300px"
                             @change="onEntityChange">
                             <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
                                 <span style="float: left">{{ item.label }}</span>
@@ -46,8 +46,8 @@
                 <el-col :span="5">
                     <div class="custom-label">Поставщик</div>
                     <el-form-item>
-                        <el-select v-model="store.kuIdVendorName" clearable filterable style="width: 300px"
-                            :disabled="!store.kuIdEntityName[0]" :title="disableSelectVendorTooltip">
+                        <el-select v-model="store.kuIdVendorName.vendor_name" clearable filterable style="width: 300px"
+                            :disabled="!store.kuIdEntityName.entity_name" :title="disableSelectVendorTooltip">
                             <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                                 <span style="float: left">{{ item.label }}</span>
                                 <span style="
@@ -58,7 +58,7 @@
                   ">{{ item.value }}</span>
                             </el-option>
                         </el-select>
-                        <div v-if="!store.kuIdEntityName[0]" style="
+                        <div v-if="!store.kuIdEntityName.entity_name" style="
                 font-size: 12px;
                 color: var(--el-text-color-secondary);
                 margin-top: 5px;
@@ -83,7 +83,7 @@
                     </el-form-item>
                 </el-col>
             </el-row>
-            
+
         </form>
         <h3>Условия по товарам</h3>
         <div>
@@ -97,7 +97,8 @@
         <EntitiesKuAddRequirement />
         <div class="button_bottom">
             <el-button @click="addClose()">Отменить</el-button>
-            <el-button type="primary" @click="" :loading="loading">Изменить</el-button>
+            <el-button type="primary" @click="changeKuToBackend()" :loading="loading" :disabled="isEditButtonDisabled"
+                :title="disableButtonEditTooltip">Изменить</el-button>
         </div>
     </el-scrollbar>
 </template>
@@ -228,7 +229,10 @@ let isFirstEntityChange = true;
 const resetVendorOnEntityChange = () => {
     // Проверяем, не первое ли это изменение kuIdEntityName
     if (!isFirstEntityChange) {
-        store.kuIdVendorName = "";
+        store.kuIdVendorName = {
+            vendor_id: "",
+            vendor_name: "",
+        };
     } else {
         isFirstEntityChange = false;
     }
@@ -236,7 +240,7 @@ const resetVendorOnEntityChange = () => {
 
 // Обработчик изменения выбранного юр.лица
 watch(
-    () => store.kuIdEntityName[0],
+    () => store.kuIdEntityName,
     (newValue, oldValue) => {
         if (oldValue !== newValue) {
             resetVendorOnEntityChange();
@@ -301,8 +305,8 @@ watch(
     () => store.dataVendor,
     (dataVendor: IVendorIdAndName[]) => {
         options2.value = dataVendor.map((item) => ({
-            label: item.name,
-            value: item.vendor_id,
+            label: item.vendor_id,
+            value: item.name,
         }));
     }
 );
@@ -332,18 +336,113 @@ const disableButtonTooltip = computed(() => {
         ? 'Кнопка заблокирована. Для доступа удалите условие "Все".'
         : "";
 });
+
+const isEditButtonDisabled = computed(() => {
+    return store.kuIdStatus !== 'Создано';
+});
+
+const disableButtonEditTooltip = computed(() => {
+    return store.kuIdStatus !== 'Создано'
+        ? 'Вы можете изменить только КУ в статусе "создано".'
+        : "";
+});
 const addClose = () => {
     router.push({ path: "/" });
     store.tableDataRequirement.length = 0;
     store.ku_id = "";
-    store.kuIdEntityName = [];
-    store.kuIdVendorName = "";
+    store.kuIdEntityName = {
+        entity_id: [],
+        entity_name: "",
+    };
+    store.kuIdVendorName = {
+        vendor_id: "",
+        vendor_name: "",
+    };
     store.kuIdPeriod = "";
     store.kuIdDateStart = new Date();
     store.kuIdDateEnd = new Date();
     store.kuIdPercent = null;
     store.disableButtons = false;
 };
+const changeKuToBackend = async () => {
+    // Проверяем валидность формы
+    if (!isFormValid()) {
+        ElMessage.error('Не все поля заполнены корректно.');
+        return;
+    }
+    // Проверяем наличие хотя бы одного условия по товарам
+    // if (store.tableDataRequirement.length === 0) {
+    //     ElMessage.error('Добавьте минимум одно условие по товарам');
+    //     return;
+    // }
+
+    loading.value = true;
+
+    try {
+        // Создаем объект newItem для отправки на бэкенд
+        const newItem = {
+            ku_id: store.ku_id,
+            entity_id: store.kuIdEntityName.entity_id[0],
+            vendor_id: store.kuIdVendorName.vendor_id,
+            period: store.kuIdPeriod,
+            date_start: dayjs(store.kuIdDateStart).format("YYYY-MM-DD"),
+            date_end: dayjs(store.kuIdDateEnd).format("YYYY-MM-DD"),
+            status: "Создано",
+            percent: store.kuIdPercent,
+        };
+        console.log("newItem", newItem)
+        // Отправляем запрос на создание нового элемента на бэкенд
+        const response = await KU.updateKu(newItem);
+
+        // // Создаем массив объектов для каждого элемента из tableDataRequirement
+        // const requirementsArray = store.tableDataRequirement.map(item => ({
+        //   ku_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
+        //   item_type: item.item_type,
+        //   item_code: item.item_code,
+        //   item_name: item.item_name,
+        //   producer: item.producer,
+        //   brand: item.brand,
+        // }));
+
+        // // Отправляем каждый объект из массива на бэкенд
+        // const responses = await Promise.all(requirementsArray.map(newItem2 => KU.postKuRequirement(newItem2)));
+
+        // Проверяем успешность отправки всех объектов
+        // const allSuccess = responses.every(response => response !== undefined);
+        // && allSuccess
+        if (response) {
+            console.log("Экземпляр успешно отправлен на бэкенд:", response);
+            //   console.log("Условия успешно отправлены на бэкенд:", responses);
+            router.push("ku");
+            ElMessage.success("Коммерческое условие успешно изменено.");
+        } else {
+            console.error("Не удалось отправить экземпляр или условия на бэкенд из-за проверок");
+            ElMessage.error("Возникла ошибка. Коммерческое условие не изменено.");
+        }
+
+    } catch (error) {
+        ElMessage.error("Возникла ошибка. Коммерческое условие не изменено.");
+        console.error("Ошибка при отправке экземпляра или условий на бэкенд:", error);
+    } finally {
+        loading.value = false;
+        // Очищаем поля и таблицу условий
+        store.tableDataRequirement.length = 0;
+        store.kuIdEntityName = {
+            entity_id: [],
+            entity_name: "",
+        };;
+        store.kuIdVendorName = {
+            vendor_id: "",
+            vendor_name: "",
+        };
+        store.kuIdPeriod = "";
+        store.kuIdDateStart = new Date();
+        store.kuIdDateEnd = new Date();
+        store.kuIdPercent = null;
+        store.disableButtons = false;
+    }
+    router.push({ path: "/" });
+}
 </script>
 
 <style scoped>

@@ -426,6 +426,7 @@ const addItemAndSendToBackend = async () => {
   }
 
   loading.value = true;
+  let success = false; // Переменная для отслеживания успешности выполнения всех запросов
 
   try {
     // Создаем объект newItem для отправки на бэкенд
@@ -452,26 +453,42 @@ const addItemAndSendToBackend = async () => {
       brand: item.brand,
     }));
 
-    // Отправляем каждый объект из массива на бэкенд
-    const responses = await Promise.all(requirementsArray.map(newItem2 => KU.postKuRequirement(newItem2)));
+    // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
+    const responses = await Promise.all(requirementsArray.map(async newItem2 => {
+      try {
+        const response = await KU.postKuRequirement(newItem2);
+        return response;
+      } catch (error) {
+        console.error("Ошибка при отправке условия на бэкенд:", error);
+        return null;
+      }
+    }));
 
     // Проверяем успешность отправки всех объектов
-    const allSuccess = responses.every(response => response !== undefined);
+    success = responses.every(response => response !== null);
 
-    if (response && allSuccess) {
+    if (response && success) {
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
       console.log("Условия успешно отправлены на бэкенд:", responses);
+      await useKuStore().getKuFromAPIWithFilter();
       router.push("ku");
+
       ElMessage.success("Коммерческое условие успешно создано.");
     } else {
       console.error("Не удалось отправить экземпляр или условия на бэкенд");
       ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
+      return;
     }
   } catch (error) {
     ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
-    console.error("Ошибка при отправке экземпляра или условий на бэкенд:", error);
+    console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+    return;
   } finally {
     loading.value = false;
+  }
+
+  // Если все запросы были успешными, то выполняем дополнительные действия
+  if (!success) {
     // Очищаем поля и таблицу условий
     store.tableDataRequirement.length = 0;
     store.entityName = [];
@@ -480,9 +497,10 @@ const addItemAndSendToBackend = async () => {
     store.newDateStart = new Date();
     store.newDateEnd = new Date();
     store.newPercent = null;
-    store.disableButtons = false;
   }
 };
+
+
 
 </script>
 

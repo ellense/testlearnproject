@@ -18,6 +18,10 @@ export interface IEntityIdAndName {
   entity_id: string;
   name: string;
 }
+export interface IEntityIdAndNameForKu {
+  entity_id: string[];
+  entity_name: string;
+}
 export interface EntityId {
   entity_id: string;
 }
@@ -58,6 +62,10 @@ export interface IVendorId {
 export interface IVendorIdAndName {
   vendor_id: string
   name: string;
+}
+export interface IVendorIdAndNameForKu {
+  vendor_id: string
+  vendor_name: string;
 }
 export interface GetAllVendorsForEntity {
   entity_id?: string[];
@@ -153,7 +161,7 @@ export interface IKuPostGraphic {
   status: string;
   percent: number | null;
 }
-export interface IKuUpdateStatus {
+export interface IKuUpdate {
   ku_id: string;
   status: string;
   entity_id: string;
@@ -198,6 +206,7 @@ export interface IKuStore {
   //v-model диалоговых форм
   dialogFormProductVisible: boolean;
   dialogFormCategoryVisible: boolean;
+  dialogFormEditApprovedVisible: boolean;
   //дизэйбл
   disableButtons: boolean
   //
@@ -212,6 +221,9 @@ export interface IKuStore {
   search: string;
   search2: string;
   search3: string;
+  //
+  editApproved: number | null;
+  selectedRowEditApproved: IGraphic;
   //
   legalEntity: string[]
   legalEntity2: string[]
@@ -229,10 +241,11 @@ export interface IKuStore {
 export interface IKuIdStore {
   //v-model атрибутов
   ku_id: string;
+  kuIdStatus: string;
   kuIdPercent: number | null;
   kuIdPeriod: string;
-  kuIdEntityName: string[];
-  kuIdVendorName: string;
+  kuIdEntityName: IEntityIdAndNameForKu;
+  kuIdVendorName: IVendorIdAndNameForKu;
   kuIdDateStart: Date | string;
   kuIdDateEnd: Date | string;
   kuIdCategory_id: string
@@ -291,6 +304,7 @@ export interface IGraphic {
   percent: number | null;
   sum_calc: number | null;
   sum_bonus: number | null;
+  sum_approved: number | null;
   status: string
 }
 export interface IGraphicInfo {
@@ -306,6 +320,7 @@ export interface IGraphicInfo {
   sum_calc: number | null;
   sum_bonus: number | null;
   status: string
+  sum_approved: number | null;
 }
 export interface IGraphicId {
   graph_id: number | null;
@@ -329,7 +344,17 @@ export interface GraphicForExcelReportInvoice {
   invoicestatus: string;
   products_amount: number | null;
 }
-export interface GetAllInvoicesForGraphic {
+export interface GraphicForExcelReportProduct {
+  product_id: string;
+  amount: number | null;
+  product_qty: number | null;
+  product_name: string;
+  category_name: string;
+  producer_name: string;
+
+
+}
+export interface GetAllInvoicesAndProductForGraphic {
   page_size?: number;
   page?: number;
   graph_id?: number | null;
@@ -337,15 +362,20 @@ export interface GetAllInvoicesForGraphic {
 export interface GetAllInvoicesForGraphicReturnData extends Pagination {
   results: GraphicForExcelReportInvoice[];
 }
+export interface GetAllProductsForGraphicReturnData extends Pagination {
+  results: GraphicForExcelReportProduct[];
+}
 export interface ReportStore {
-  dialogForm: boolean
+  dialogFormReportInvoice: boolean
+  dialogFormReportProduct: boolean
   pagination: Pagination | null;
   countRowTable: number;
   graphic: IGraphicInfo[]
   invoices: GraphicForExcelReportInvoice[]
+  products: GraphicForExcelReportProduct[]
   getGraphicDone: boolean
   printReportToggle: boolean
-  filterValueInvoice: GetAllInvoicesForGraphic
+  filterValueInvoice: GetAllInvoicesAndProductForGraphic
 }
 
 // Товары

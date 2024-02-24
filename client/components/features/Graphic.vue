@@ -1,7 +1,9 @@
 <template>
   <EntitiesGraphicBar />
-  <EntitiesGraphicReport/>
+  <EntitiesGraphicReportInvoice/>
+  <EntitiesGraphicReportProduct/>
   <EntitiesGraphicGraphicsTable />
+  <EntitiesGraphicEditColumn/>
 </template>
 
 <script lang="ts" setup></script>

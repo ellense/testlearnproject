@@ -24,7 +24,6 @@ import type {
   IKuPostGraphic,
   GetAllGraphic,
   GetAllGraphicsReturnData,
-  IKuUpdateStatus,
   IGraphicId,
   IKuDeleteGraph,
   IVendorId,
@@ -40,7 +39,9 @@ import type {
   IGraphicInfo,
   GraphicForExcelReportInvoice,
   GetAllInvoicesForGraphicReturnData,
-  GetAllInvoicesForGraphic,
+  GetAllInvoicesAndProductForGraphic,
+  GetAllProductsForGraphicReturnData,
+  IKuUpdate,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -101,15 +102,13 @@ export const KU = {
   postKu: (data: IKuPost): Promise<IKuList> =>
     $Post("api/ku_create/", { data, isBearer: false }),
   postKuRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
-    $Post("api/included_product/", { data, isBearer: false }),
+    $Post("api/included_condition_create/", { data, isBearer: false }),
   deleteKu: (data: IKuId) =>
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
-  updateKuStatus: (data: IKuUpdateStatus) =>
+  updateKu: (data: IKuUpdate) =>
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
-  updateInfoKu: (data: IKuUpdateStatus) =>
-    $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graphlist/", { params, isBearer: false }),
 };
@@ -125,8 +124,12 @@ export const GRAPHIC = {
     $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
   // getInfoInvoicesForGraphic: (data: IGraphicId): Promise<GraphicForExcelReportInvoice> =>
   //   $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
-  getInfoInvoicesForGraphic: (params: GetAllInvoicesForGraphic): Promise<GetAllInvoicesForGraphicReturnData> =>
+  getInfoInvoicesForGraphic: (params: GetAllInvoicesAndProductForGraphic): Promise<GetAllInvoicesForGraphicReturnData> =>
     $Get("api/included_invoice_list/", { params, isBearer: false }),
+  getInfoProductsForGraphic: (params: GetAllInvoicesAndProductForGraphic): Promise<GetAllProductsForGraphicReturnData> =>
+    $Get("api/included_product_list/", { params, isBearer: false }),
+  updateGraphic: (data: IGraphicInfo) =>
+    $Put(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
 };
 
 export const PRODUCER = {

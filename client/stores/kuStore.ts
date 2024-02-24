@@ -50,8 +50,28 @@ export const useKuStore = defineStore("KuStore", {
     //v-model диалоговых форм
     dialogFormProductVisible: false,
     dialogFormCategoryVisible: false,
+    dialogFormEditApprovedVisible: false,
     //дизэйбл
     disableButtons: false,
+    //
+    editApproved: null,
+    selectedRowEditApproved: {
+      graph_id: null,
+      ku_id: "",
+      entity_id: "",
+      entity_name: "",
+      vendor_id: "",
+      vendor_name: "",
+      period: "",
+      date_start: "",
+      date_end: "",
+      date_calc: "",
+      percent: null,
+      sum_calc: null,
+      sum_bonus: null,
+      sum_approved: null,
+      status: "",
+    },
     //
     vendorFilter: "",
     kuFilter: null,

@@ -87,3 +87,22 @@ VITE_TIMEOUT: 1500
 # http://127.0.0.1:8000 дома
 
 shift + alt + F - форматирование
+
+
+
+
+
+# для Ники:
+
+создаешь в папке client файл .env
+пишешь в нем :
+    VITE_BASE_URL='http://127.0.0.1:8000'
+    VITE_REFRESH_URL: "api/token/refresh/"
+    VITE_LOGIN_URL: "api/token/"
+    VITE_ACCESS_KEY: "accessToken"
+    VITE_REFRESH_KEY: "refreshToken"
+    VITE_TIMEOUT: 1500
+в терминале пишешь:
+cd client
+yarn install
+npm run dev

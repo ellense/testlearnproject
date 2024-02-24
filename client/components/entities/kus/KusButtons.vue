@@ -1,19 +1,30 @@
 <template>
   <div class="directoryBar">
-    <div>
+    <div class="directoryBar_filter">
       <el-button type="primary" plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled"
         :title="disableButtonCreateTooltip">Создать
         КУ</el-button>
       <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip">Создать
+        :title="disableButtonTooltip" style="margin: 0;">Создать
         график</el-button>
-      <el-button type="success" plain @click="ApproveKu()" :disabled="isButtonsDisabled"
+      <el-dropdown :disabled="isButtonsDisabled">
+        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip">
+          Изменить статус<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item><el-button @click="ApproveKu()" link type="success">Утвердить</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="CancelKu()" link type="danger">Отменить</el-button></el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <!-- <el-button type="success" plain @click="ApproveKu()" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip">Утвердить</el-button>
       <el-button type="danger" plain @click="CancelKu()" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip">Отменить</el-button>
+        :title="disableButtonTooltip">Отменить</el-button> -->
       <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonTooltip">Удалить</el-button>
-        
+
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
@@ -27,6 +38,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
+import { ArrowDown } from '@element-plus/icons-vue'
 import { useKuStore } from "~~/stores/kuStore";
 import { useRouter } from "vue-router";
 import "dayjs/locale/ru";
@@ -95,6 +107,10 @@ const deleteKu = async () => {
     for (const ku_id of selectedRows) {
       const results = await KU.deleteKu({ ku_id });
       console.log("успешно удалилось", results);
+      store.tableData = store.tableData.filter(
+        (row) => !selectedRows.includes(row.ku_id)
+      );
+      store.multipleSelection = [];
     }
     if (selectedRows.length == 1)
       ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
@@ -102,12 +118,8 @@ const deleteKu = async () => {
   } catch (error) {
     console.error("Ошибка при удалении строк:", error);
     ElMessage.error("Ошибка при удалении коммерческого условия");
-  } finally {
-    store.tableData = store.tableData.filter(
-      (row) => !selectedRows.includes(row.ku_id)
-    );
-    store.multipleSelection = [];
   }
+
 };
 
 const CancelKu = async () => {
@@ -129,7 +141,7 @@ const CancelKu = async () => {
   try {
     const response = await KU.deleteGraphRow(data);
     console.log("строки графика успешно удалены:", response);
-    const response2 = await KU.updateKuStatus(data2);
+    const response2 = await KU.updateKu(data2);
     console.log("строки графика успешно удалены:", response2);
     await useKuStore().getKuFromAPIWithFilter();
   } catch (error) {
@@ -152,7 +164,7 @@ const ApproveKu = async () => {
   };
 
   try {
-    const response = await KU.updateKuStatus(data);
+    const response = await KU.updateKu(data);
     console.log("Статус успешно обновлен:", response);
     await useKuStore().getKuFromAPIWithFilter();
   } catch (error) {
@@ -180,7 +192,9 @@ const addGraphic = async () => {
   loading.value = true;
   try {
     const response = await GRAPHIC.postGraphic(newItem);
+    await useKuStore().getKuFromAPIWithFilter();
     if (response) {
+      await useKuStore().getKuFromAPIWithFilter();
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
       ElMessage.success(`График расчета для ${newItem.ku_id} успешно создан.`);
     } else {
@@ -193,8 +207,9 @@ const addGraphic = async () => {
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
   } finally {
     loading.value = false;
+
   }
-  await useKuStore().getKuFromAPIWithFilter();
+
 }
 
 

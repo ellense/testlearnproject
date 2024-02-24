@@ -17,10 +17,17 @@ export const useKuIdStore = defineStore("KuIdStore", {
         dataInfoKu: [],
         //v-model атрибутов
         ku_id: "",
+        kuIdStatus: "",
         kuIdPercent: null,
         kuIdPeriod: "",
-        kuIdEntityName: [],
-        kuIdVendorName: "",
+        kuIdEntityName: {
+            entity_id: [],
+            entity_name: "",
+        },
+        kuIdVendorName: {
+            vendor_id: "",
+            vendor_name: "",
+        },
         kuIdDateStart: new Date(),
         kuIdDateEnd: new Date(),
         kuIdCategory_id: "",
@@ -54,10 +61,17 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     ku_id: kuId,
                 });
                 this.$state.ku_id = results.ku_id;
+                this.$state.kuIdStatus = results.status;
                 this.$state.kuIdPercent = results.percent;
                 this.$state.kuIdPeriod = results.period;
-                this.$state.kuIdEntityName = [results.entity_name];
-                this.$state.kuIdVendorName = results.vendor_name;
+                this.$state.kuIdEntityName = {
+                    entity_id: [results.entity_id],
+                    entity_name: results.entity_name
+                };
+                this.$state.kuIdVendorName = {
+                    vendor_id: results.vendor_id,
+                    vendor_name: results.vendor_name
+                };
                 this.$state.kuIdDateStart = new Date(results.date_start);
                 this.$state.kuIdDateEnd = new Date(results.date_end);
                 console.log("детально", this.kuIdPercent, this.$state.kuIdPeriod, this.$state.kuIdEntityName, this.$state.kuIdVendorName, this.$state.kuIdDateStart, this.$state.kuIdDateEnd)
@@ -71,7 +85,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 const vendors = await VENDOR.getVendorsForEntityInKU({
                     page_size: this.$state.countRowTable,
                     page,
-                    entity_id: this.$state.kuIdEntityName,
+                    entity_id: this.$state.kuIdEntityName.entity_id
                 });
                 this.$state.dataVendor = vendors.results;
                 this.$state.pagination = {

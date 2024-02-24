@@ -19,16 +19,24 @@
         { text: 'Полгода', value: 'Полгода' },
         { text: 'Год', value: 'Год' },
       ]" :filter-method="filterPeriod" filter-placement="bottom-end">
-        <template #default="scope2">
-          {{ scope2.row.period }}
+        <template #default="scope">
+          {{ scope.row.period }}
         </template>
       </el-table-column>
       <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="110"
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110" show-overflow-tooltip />
-      <el-table-column prop="graph_exists" label="График расчета" width="100">
+      <!-- <el-table-column prop="graph_exists" label="График расчета" :filters="[
+        { text: 'Есть', value: 'true' },
+        { text: 'Нет', value: 'null' },
+      ]" :filter-method="filterStatus" filter-placement="bottom-end">
         <template #default="scope2">
-          <el-checkbox :checked="scope2.row.graph_exists" disabled></el-checkbox>
+          <el-tag  disable-transitions :type="getStatusTagTypeGraphic(scope2.row.graph_exists)">{{ scope2.row.graph_exists }}</el-tag>
+        </template>
+      </el-table-column> -->
+      <el-table-column prop="graph_exists" label="График расчета" width="100">
+        <template #default="scope4">
+          <el-checkbox :checked="scope4.row.graph_exists" disabled></el-checkbox>
         </template>
       </el-table-column>
       <el-table-column prop="status" label="Статус" :filters="[
@@ -37,11 +45,11 @@
         { text: 'Закрыто', value: 'Закрыто' },
         { text: 'Отменено', value: 'Отменено' },
       ]" :filter-method="filterStatus" filter-placement="bottom-end">
-        <template #default="scope">
+        <template #default="scope3">
           <!-- getStatusTagType(scope.row.status) -->
           <!-- :type="statusTagType" -->
-          <el-tag  disable-transitions >{{ scope.row.status }}</el-tag>
-          statusTagType
+          <el-tag  disable-transitions :type="getStatusTagType(scope3.row.status)">{{ scope3.row.status }}</el-tag>
+
         </template>
       </el-table-column>
     </el-table>
@@ -139,7 +147,7 @@ const filterPeriod = (value: string, row: IKuList) => {
 const filterStatus = (value: string, row: IKuList) => {
   return row.status === value
 }
-const getStatusTagType = (status: string):"success" | "info" | "danger" | "warning" | "primary" | string => {
+const getStatusTagType = (status: string):"success" | "info" | "danger" | "warning" | "primary" | undefined => {
   switch (status) {
     case 'Создано':
       return 'primary';
@@ -153,33 +161,16 @@ const getStatusTagType = (status: string):"success" | "info" | "danger" | "warni
       return 'info'; 
   }
 };
-const statusTagType = (status: string) => {
-  switch (status) {
-    case 'Создано':
-      return 'primary';
-    case 'Действует':
-      return 'success';
-    case 'Закрыто':
-      return 'info';
-    case 'Отменено':
-      return 'danger';
-    default:
-      return 'info'; 
-  }
-};
-// const getStatusTagType = (status: string): "success" | "info" | "danger" | "warning" | "primary" | string => {
-//   switch (status) {
-//     case 'Создано':
-//       return '';
-//     case 'Действует':
-//       return 'success';
-//     case 'Закрыто':
-//       return 'info';
-//     case 'Отменено':
-//       return 'danger';
-//     default:
-//       return '';
-//   }
-// };
 
+
+const getStatusTagTypeGraphic = (status: string): "success" | "info" | "danger" | "warning" | "primary" | undefined => {
+  switch (status) {
+    case 'Есть':
+      return 'success';
+    case 'Нет':
+      return 'info';
+    default:
+      return 'info'; 
+  }
+};
 </script>

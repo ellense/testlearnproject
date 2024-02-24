@@ -1,22 +1,24 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <el-button @click="deleteGraphic()" :disabled="isDeleteButtonDisabled" :title="disableButtonDeleteTooltip">Удалить</el-button>
-      <el-dropdown :disabled="isButtonsDisabled" >
-      <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip"> 
-        Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
-      </el-button>
-      <template #dropdown>
-        <el-dropdown-menu>
-          <el-dropdown-item><el-button @click="createReport()" 
-      link>Акт сверки взаиморасчетов с поставщиками по накладным</el-button></el-dropdown-item>
-          <el-dropdown-item><el-button @click="" 
-      link>Акт сверки взаиморасчетов с поставщиками по товарам</el-button></el-dropdown-item>
-          <el-dropdown-item><el-button @click="" 
-      link>Акт предоставления вознаграждения</el-button></el-dropdown-item>
-        </el-dropdown-menu>
-      </template>
-    </el-dropdown>
+      <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
+        :title="disableButtonDeleteTooltip">Удалить</el-button>
+      <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
+        :title="disableButtonTooltip" style="margin: 0;">Утвердить</el-button>
+      <el-dropdown :disabled="isButtonsDisabled">
+        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip">
+          Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item><el-button @click="createReportInvoice()" link>Акт сверки взаиморасчетов с поставщиками по
+                накладным</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="createReportProduct()" link>Акт сверки взаиморасчетов с поставщиками по
+                товарам</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="" link>Акт предоставления вознаграждения</el-button></el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="3"
@@ -66,7 +68,7 @@ watch(legalEntity2, (value) => {
 });
 
 //для фильтрации по ку
- const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
+const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
 const KuList = ref<string[]>(KuParams.value);
 
 const changeKu = () => {
@@ -88,17 +90,55 @@ onMounted(() => {
   useKuStore().getKuIdFromApi();
 });
 
-const createReport = async() => {
-  useReportStore().dialogForm = true
+const createReportInvoice = async () => {
+  useReportStore().dialogFormReportInvoice = true
   const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
-  console.log("selectedRows[0]:",selectedRows[0])
+  console.log("selectedRows[0]:", selectedRows[0])
   useReportStore().getGraphicDetailFromApi(selectedRows[0])
-  // useReportStore().getGraphicDetailFromApi(selectedRows[0])
   useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
   useReportStore().fetchAllInvoices(selectedRows[0])
   // useReportStore().getInvoiceDetailForGraphicFromAPIWithFilter(selectedRows[0])
 
 }
+const createReportProduct = async () => {
+  useReportStore().dialogFormReportProduct = true
+  const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
+  console.log("selectedRows[0]:", selectedRows[0])
+  useReportStore().getGraphicDetailFromApi(selectedRows[0])
+  useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
+  useReportStore().fetchAllProducts(selectedRows[0])
+
+}
+
+//утверждение графика
+const ApproveGraphic = async () => {
+  const selectedRows = useKuStore().multipleSelection2
+  console.log("selectedRows статус", selectedRows)
+  const data = {
+    graph_id: selectedRows[0].graph_id,
+    ku_id: selectedRows[0].ku_id,
+    status: "Утверждено",
+    vendor_name: selectedRows[0].vendor_name,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: selectedRows[0].date_start,
+    date_end: selectedRows[0].date_end,
+    date_calc: selectedRows[0].date_calc,
+    percent: selectedRows[0].percent,
+    sum_calc: selectedRows[0].sum_calc,
+    sum_bonus: selectedRows[0].sum_bonus,
+    sum_approved: selectedRows[0].sum_bonus,
+  };
+
+  try {
+    const response = await GRAPHIC.updateGraphic(data);
+    console.log("Статус графика успешно обновлен :", response);
+    await useKuStore().getGraphicsFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса грфика:", error);
+  }
+};
+
 //удаление графиков
 const deleteGraphic = async () => {
   const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
@@ -124,7 +164,7 @@ const isDeleteButtonDisabled = computed(() => {
   return useKuStore().multipleSelection2.length === 0;
 });
 const disableButtonTooltip = computed(() => {
-  return  useKuStore().multipleSelection2.length > 1 ||  useKuStore().multipleSelection2.length === 0 ? 'Кнопка заблокирована. Для доступа выберите только один график' : '';
+  return useKuStore().multipleSelection2.length > 1 || useKuStore().multipleSelection2.length === 0 ? 'Кнопка заблокирована. Для доступа выберите только один график' : '';
 });
 const disableButtonDeleteTooltip = computed(() => {
   return useKuStore().multipleSelection2.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';

@@ -1,17 +1,18 @@
 <template>
-  <el-dialog v-model="useReportStore().dialogForm" title="Предварительный отчет по расчету" close-on-click-modal>
-    <div class="reportTableWrapper__table">
+  <el-dialog v-model="useReportStore().dialogFormReportInvoice" title="Предварительный отчет по расчету c поставщиком по накладным" close-on-click-modal >
+    <div class="reportTableWrapper__table" >
       <!-- v-if="tableData.length > 0" -->
-      <vue-excel-editor v-model="tableDataReport" :readonly="true" :disable-panel-filter="true"
-        :disable-panel-setting="true" :localized-label="localizedExcelTableLabel">
+      <!-- :disable-panel-setting="true" :disable-panel-filter="true" :readonly="true"  -->
+      <vue-excel-editor v-model="tableDataReport" no-footer height="500px"
+      :localized-label="localizedExcelTableLabel" >
         <vue-excel-column v-for="column in columnTable" :key="column.field" :field="column.field" :label="column.label"
-          :type="column.type" :width="`${column.width}px`" :summary="column.summary" :init-style="column.style" />
+          :type="column.type" :width="`${column.width}px`" :summary="column.summary" :init-style="column.style"  />
       </vue-excel-editor>
       <div v-if="!getGraphicDone">Данных с такими параметрами нет</div>
     </div>
     <template #footer>
       <span>
-        <el-button @click="useReportStore().dialogForm = false">Отмена</el-button>
+        <el-button @click="useReportStore().dialogFormReportInvoice = false">Отмена</el-button>
         <el-button type="primary" @click="exportAsExcel()">Экспортировать в Excel</el-button>
       </span>
     </template>
@@ -22,14 +23,14 @@
 import { localizedExcelTableLabel } from "~/composables/localizedExcelTable";
 import { storeToRefs } from "pinia";
 import { useReportStore } from "~~/stores/reportStore";
-import type { GraphicForExcelReportInvoice, IGraphicInfo } from "~/utils/types/directoryTypes";
+import type { GraphicForExcelReportInvoice, IGraphicInfo, } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~/stores/kuStore";
 import { excel, type Range } from "~/composables/excel";
 import { dayjs } from "element-plus";
 const { utils, writeFile, getBorderCell, getColumnById } = excel;
 const {
   getGraphicDone,
-  getInvoiceInfo,
+  getInvoiceInfo
 } = storeToRefs(useReportStore());
 interface ColumnTable {
   field: string;
@@ -51,37 +52,37 @@ const columnTable: ColumnTable[] = [
     field: "invoice_date",
     label: "Дата накладной",
     type: "string",
-    width: 250,
+    width: 100,
   },
   {
     field: "purch_number",
     label: "№ закупки",
     type: "string",
-    width: 250,
+    width: 130,
   },
   {
     field: "purch_date",
     label: "Дата закупки",
     type: "string",
-    width: 130,
+    width: 100,
   },
   {
     field: "invoicestatus",
     label: "Статус документа",
     type: "string",
-    width: 170,
+    width: 100,
   },
   {
     field: "",
     label: "Кол-во (шт,л,кг.)",
     type: "number",
-    width: 170,
+    width: 100,
   },
   {
     field: "products_amount",
     label: "Сумма без НДС",
     type: "number",
-    width: 170,
+    width: 150,
     summ: true,
     summary: 'sum',
     style: { fontWeight: 'bold' }
@@ -230,8 +231,8 @@ function exportAsExcel() {
     colsInfo.push({ wch: column.width / 6 });
   });
   ws["!cols"] = colsInfo; // размеры колонок
-  utils.book_append_sheet(wb, ws, "Акт сверки с поставщиками");
-  writeFile(wb, "Акт сверки с поставщиками.xlsx");
+  utils.book_append_sheet(wb, ws, "Акт с поставщиком по накладным");
+  writeFile(wb, "Акт сверки взаиморасчетов с поставщиком по накладным.xlsx");
 }
 
 </script>
