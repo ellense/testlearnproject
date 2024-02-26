@@ -189,6 +189,7 @@ const addGraphic = async () => {
     date_end: selectedRows[0].date_end,
     status: selectedRows[0].status,
     percent: selectedRows[0].percent,
+    graph_exists:selectedRows[0].graph_exists,
   };
   loading.value = true;
   try {

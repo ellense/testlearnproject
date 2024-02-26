@@ -445,16 +445,17 @@ const addItemAndSendToBackend = async () => {
   }
 
   // Если все запросы были успешными, то выполняем дополнительные действия
-  if (!success) {
+
     // Очищаем поля и таблицу условий
     store.tableDataRequirement.length = 0;
+    store.disableButtons = false;
     store.entityName = [];
     store.vendorName = "";
     store.newType = "";
     store.newDateStart = new Date();
     store.newDateEnd = new Date();
     store.newPercent = null;
-  }
+
 };
 
 </script>

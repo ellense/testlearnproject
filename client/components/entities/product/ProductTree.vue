@@ -2,12 +2,11 @@
     <div class="productTree">
         <h3>Категории товаров:</h3>
         <el-scrollbar class="scrollTree">
-            <el-tree :data="treeData" :props="defaultProps" show-checkbox  ref="treeRef" node-key="classifier_code"
-                @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node  v-loading="loading"/>
+            <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
+                @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node v-loading="loading"/>
         </el-scrollbar>
     </div>
 </template>
-
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
@@ -20,6 +19,7 @@ import type { TreeNodeData } from 'element-plus/es/components/tree/src/tree.type
 const treeData = ref<ITree[]>([]);
 const treeRef = ref<InstanceType<typeof ElTree>>()
 const loading = ref()
+
 const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
     const parentNode = nodes.filter(node => node.parent_code === parentCode);
     if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
@@ -27,25 +27,27 @@ const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] =>
     return parentNode.map(node => {
         const children = buildTree(nodes, node.classifier_code.toString());
         if (children.length) {
-            node.children = children;
+            return { ...node, children }; // Создание нового объекта с установкой свойства children
         }
         return node;
     });
 };
 
-// Функция для получения данных с бэкэнда и установки полученных данных в переменную treeData
 const fetchData = async (data: ITree) => {
     try {
         loading.value = true;
         const result = await CATEGORY.getCategory(data);
 
+        console.log("Результат полученный с сервера:", result); // Логируем полученные данные
+
         if (Array.isArray(result)) {
+            console.log("Полученный массив данных:", result); // Логируем полученный массив данных
             treeData.value = buildTree(result, '0');
-            console.log("treeData", treeData.value);
+            console.log("Сформированное дерево данных:", treeData.value); // Логируем сформированное дерево данных
             treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
         } else {
             treeData.value = [];
-            console.error("Данные не получены или не являются массивом");
+            console.error("Данные не получены или не являются массивом:", result); // Логируем случай, когда данные не являются массивом
         }
         loading.value = false; 
     } catch (error) {
@@ -57,10 +59,10 @@ const fetchData = async (data: ITree) => {
 // Вызов функции fetchData при монтировании компонента
 onMounted(async () => {
     try {
-        console.log("Before API call");
+        console.log("!!!!!!!");
         await fetchData({
             name: "string",
-            classifier_code: 1,
+            classifier_code: '0',
             children: [],
             parent_code: "",
         });

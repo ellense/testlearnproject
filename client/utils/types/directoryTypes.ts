@@ -160,6 +160,7 @@ export interface IKuPostGraphic {
   date_end: Date | string;
   status: string;
   percent: number | null;
+  graph_exists: boolean | string
 }
 export interface IKuUpdate {
   ku_id: string;
@@ -462,11 +463,12 @@ export interface GetAllBrandsReturnData extends Pagination {
 
 //дерево категорий
 export interface ITree {
+
   name: string;
-  classifier_code: number
-  parent_code: string
+  classifier_code: string; // Лучше использовать string, если коды могут содержать не только числа
+  parent_code: string;
   children?: ITree[];
-  isLeaf?: boolean;
+
 }
 
 //общие

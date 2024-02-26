@@ -25,12 +25,12 @@
           {{ scope2.row.period }}
         </template>
       </el-table-column>
-      <el-table-column property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
-      <el-table-column property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column property="date_start" type="date" label="Начальная дата" width="105" sortable
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" label="Конечная дата" width="105" sortable show-overflow-tooltip />
       <el-table-column property="date_calc" type="date" label="Дата расчета" width="105" sortable show-overflow-tooltip />
+      <el-table-column fixed="right" property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
+      <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
       <el-table-column fixed="right" prop="sum_approved" label="Утверждено" width="110" show-overflow-tooltip>
         <template #default="scope">
@@ -84,16 +84,16 @@ const filterTag = (value: string, row: IGraphic) => {
 const filterTag2 = (value: string, row: IGraphic) => {
   return row.period === value
 }
-const getStatusTagType = (status: string): "success" | "info" | "danger" | "warning" | "primary" | undefined => {
+const getStatusTagType = (status: string)=> {
   switch (status) {
-    case 'Запланировано':
-      return 'primary';
-    case 'Рассчитано':
-      return 'warning';
-    case 'Утверждено':
-      return 'success';
+    case "Запланировано":
+      return "";
+    case "Рассчитано":
+      return "warning";
+    case "Утверждено":
+      return "success";
     default:
-      return 'info';
+      return "info";
   }
 };
 
