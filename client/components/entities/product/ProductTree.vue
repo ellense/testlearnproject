@@ -3,7 +3,7 @@
         <h3>Категории товаров:</h3>
         <el-scrollbar class="scrollTree">
             <el-tree :data="treeData" :props="defaultProps" show-checkbox  ref="treeRef" node-key="classifier_code"
-                @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node />
+                @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node  v-loading="loading"/>
         </el-scrollbar>
     </div>
 </template>
@@ -19,7 +19,7 @@ import type { TreeNodeData } from 'element-plus/es/components/tree/src/tree.type
 
 const treeData = ref<ITree[]>([]);
 const treeRef = ref<InstanceType<typeof ElTree>>()
-
+const loading = ref()
 const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
     const parentNode = nodes.filter(node => node.parent_code === parentCode);
     if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
@@ -36,6 +36,7 @@ const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] =>
 // Функция для получения данных с бэкэнда и установки полученных данных в переменную treeData
 const fetchData = async (data: ITree) => {
     try {
+        loading.value = true;
         const result = await CATEGORY.getCategory(data);
 
         if (Array.isArray(result)) {
@@ -46,7 +47,9 @@ const fetchData = async (data: ITree) => {
             treeData.value = [];
             console.error("Данные не получены или не являются массивом");
         }
+        loading.value = false; 
     } catch (error) {
+        loading.value = false; 
         console.error("Произошла ошибка при получении данных категорий", error);
     }
 };

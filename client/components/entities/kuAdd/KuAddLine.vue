@@ -47,7 +47,7 @@
           <div class="custom-label">Поставщик</div>
           <el-form-item>
             <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName"
-              :title="disableSelectVendorTooltip">
+              :title="disableSelectVendorTooltip" @change="onVendorChange">
               <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="
@@ -88,9 +88,9 @@
       <el-button size="small" text bg @click="dialogOpenProduct()" :disabled="store.disableButtons"
         :title="disableButtonTooltip">+ Условие по
         товарам</el-button>
-        <!-- :loading="categoryDialogLoading"  -->
-      <el-button size="small" text bg @click="dialogOpenCategory()" 
-       :disabled="store.disableButtons" :title="disableButtonTooltip">+ Условие по
+      <!-- :loading="categoryDialogLoading"  -->
+      <el-button size="small" text bg @click="dialogOpenCategory()" :disabled="store.disableButtons"
+        :title="disableButtonTooltip">+ Условие по
         категории</el-button>
     </div>
     <EntitiesKuAddRequirement />
@@ -261,7 +261,7 @@ onMounted(async () => {
       name: "",
     });
   } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
+    console.error("Ошибка при загрузке данных юр. лица", error);
   }
 });
 
@@ -280,15 +280,25 @@ onMounted(async () => {
   try {
     await store.fetchVendorsListForEntity();
   } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
+    console.error("Ошибка при загрузке данных поставщика", error);
   }
 });
 const onEntityChange = async () => {
   try {
     await store.fetchVendorsListForEntity(undefined);
-    console.log("fetchVendorsListForEntity:", store.entityName);
+    console.log("выбранное юр.лицо:", store.entityName);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
+  }
+};
+
+const onVendorChange = async () => {
+  try {
+    console.log("поставщик:", store.vendorName);
+    store.setFilterValue3('vendor_id', store.vendorName);
+    await store.getProductFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных товаров по фильтру поставщика", error);
   }
 };
 
@@ -310,7 +320,7 @@ const onAddItem = () => {
       producer: "",
       brand: "",
     });
-    console.log("store.tableDataRequirementВСЕ", store.tableDataRequirement);
+    console.log("данные условия ВСЕ", store.tableDataRequirement);
 
   }
   else {
@@ -337,62 +347,7 @@ const onAddItem = () => {
   }
   store.disableButtons = true;
 };
-// const treeData = ref<ITree[]>([]);
-// const treeRef = ref<InstanceType<typeof ElTree>>()
-// const categoryDialogLoading = ref(false);
-// const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
-//   const parentNode = nodes.filter(node => node.parent_code === parentCode);
-//   if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
-
-//   return parentNode.map(node => {
-//     const children = buildTree(nodes, node.classifier_code.toString());
-//     if (children.length) {
-//       node.children = children;
-//     }
-//     return node;
-//   });
-// };
-
-// Функция для получения данных с бэкэнда и установки полученных данных в переменную treeData
-// const fetchData = async (data: ITree) => {
-//   try {
-//     const result = await CATEGORY.getCategory(data);
-
-//     if (Array.isArray(result)) {
-//       treeData.value = buildTree(result, '0');
-//       console.log("treeData", treeData.value);
-//       treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
-//     } else {
-//       treeData.value = [];
-//       console.error("Данные не получены или не являются массивом");
-//     }
-//   } catch (error) {
-//     console.error("Произошла ошибка при получении данных категорий", error);
-//   }
-// };
-// const dialogOpenCategory = async () => {
-//   try {
-//     categoryDialogLoading.value = true;
-
-//     // Выполните асинхронные запросы для получения данных перед открытием диалогового окна
-//     await store.fetchAllProducers();
-//     await store.fetchAllBrands();
-//     await fetchData({
-//       name: "string",
-//       classifier_code: 1,
-//       children: [],
-//       parent_code: "",
-//     });
-
-//     // После завершения загрузки данных установите флаг dialogFormCategoryVisible в true
-//     store.dialogFormCategoryVisible = true;
-//   } catch (error) {
-//     console.error('Ошибка при загрузке данных для диалогового окна:', error);
-//     ElMessage.error('Ошибка при загрузке данных для диалогового окна:');
-//   } finally {
-//     categoryDialogLoading.value = false;
-//   }
-// }
+//кнопки добавления условий
 const dialogOpenProduct = () => {
   store.dialogFormProductVisible = true;
 };
@@ -400,6 +355,8 @@ const dialogOpenCategory = () => {
   store.dialogFormCategoryVisible = true;
 
 };
+
+//отменить
 const addClose = () => {
   router.push("ku");
   store.tableDataRequirement.length = 0;
@@ -499,8 +456,6 @@ const addItemAndSendToBackend = async () => {
     store.newPercent = null;
   }
 };
-
-
 
 </script>
 

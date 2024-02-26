@@ -2,7 +2,7 @@
   <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" style="border: none">
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 225px)" border
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 225px)" border v-loading="loading"
       @selection-change="useKuStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick">
       <el-table-column fixed type="selection" width="40" />
       <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
@@ -62,7 +62,7 @@ import { useKuStore } from "~~/stores/kuStore";
 import { storeToRefs } from "pinia";
 import type { IGraphic } from "~/utils/types/directoryTypes";
 const { getGraphic, pagination, countRowTable } = storeToRefs(useKuStore());
-
+const loading = ref()
 const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseEvent) => {
   if (column.property === 'sum_approved') {
     if (row.status === 'Утверждено') {
@@ -118,8 +118,11 @@ const paginationChange = (page: number) => {
 
 onMounted(async () => {
   try {
+    loading.value = true;
     await useKuStore().getGraphicsFromAPIWithFilter();
+    loading.value = false;
   } catch (error) {
+    loading.value = false;
     console.error("Ошибка при загрузке данных", error);
   }
 });

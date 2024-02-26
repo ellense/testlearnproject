@@ -1,8 +1,9 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <el-button type="primary" plain @click="redirectToCreatePage" :disabled="isCreateButtonDisabled"
-        :title="disableButtonCreateTooltip">Создать
+      <!-- :disabled="isCreateButtonDisabled"  :title="disableButtonCreateTooltip"-->
+      <el-button type="primary" plain @click="redirectToCreatePage" 
+       >Создать
         КУ</el-button>
       <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip" style="margin: 0;">Создать
@@ -28,7 +29,7 @@
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-        :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 200px" @change="changeLegalEntity">
+        :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
       <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;"></el-input>

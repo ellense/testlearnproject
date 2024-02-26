@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" v-loading="loading">
       <el-table-column prop="invoice_id" label="ID" width="100" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
       <el-table-column property="invoice_name" label="Наименование" width="160" sortable show-overflow-tooltip />
@@ -33,6 +33,8 @@ const { getInvoices, pagination, countRowTable } = storeToRefs(
 );
 const tableData = ref<IInvoice[]>(getInvoices.value);
 
+const loading = ref()
+
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
@@ -58,8 +60,11 @@ watch(getInvoices, (value) => {
 
 onMounted(async () => {
   try {
+    loading.value = true; 
     await useInvoiceStore().getInvoicesFromAPIWithFilter();
+    loading.value = false; 
   } catch (error) {
+    loading.value = false; 
     console.error("Ошибка при загрузке данных 22", error);
   }
 });

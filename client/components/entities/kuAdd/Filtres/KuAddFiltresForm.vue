@@ -5,9 +5,9 @@
     <div class="selectCategory">
       <div>
         <div class="custom-label">Категория</div>
-        <el-tree-select v-model="value" :data="treeData" filterable clearable
-          placeholder="Выберите категорию" :render-after-expand="false" style="width: 500px" class="tree_U"
-          :props="defaultProps" ref="treeRef" node-key="classifier_code" @change="getCheckedKeys"  />
+        <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
+          :render-after-expand="false" style="width: 500px" class="tree_U" :props="defaultProps" ref="treeRef"
+          node-key="classifier_code" @change="getCheckedKeys" />
       </div>
       <div>
         <div class="custom-label">Производитель</div>
@@ -100,7 +100,7 @@ const value = ref()
 const treeData = ref<ITree[]>([]);
 const treeRef = ref<InstanceType<typeof ElTree>>()
 
-  const defaultProps = {
+const defaultProps = {
   children: 'children',
   label: 'name',
   isLeaf: 'isLeaf',
@@ -200,14 +200,16 @@ onMounted(async () => {
   }
 });
 
-
+//изменение поля дерева
 let selectedCategoryName = '';
-const getCheckedKeys = (checkedKeys: any, checkedNodes: any) => {
-
-  store.valueBrand_name = ""
-  store.valueProducer_name = ""
+const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
+  store.valueBrand_name = "";
+  store.valueProducer_name = "";
+  useKuStore().setFilterValue4("l4", []);
+  useKuStore().setFilterValue5('producer_name', undefined);
+  await store.fetchAllProducers();
+  await store.fetchAllBrands();
   console.log('Отмеченные ключи:', checkedKeys);
-  console.log('Отмеченные узлы:', checkedNodes);
 
   if (checkedKeys && checkedKeys.length > 0) {
     const selectedCategoryKey = checkedKeys; // Получаем ключ выбранной категории
@@ -216,26 +218,18 @@ const getCheckedKeys = (checkedKeys: any, checkedNodes: any) => {
     const selectedCategory = findCategoryByKey(treeData.value, selectedCategoryKey);
 
     if (selectedCategory) {
-      selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории
+      selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории для отправки в условия
     }
     useKuStore().setFilterValue4("l4", selectedCategoryKey);
-    console.log('Фильтр производителей обновлен:', useKuStore().filterProducerValue);
+    useKuStore().setFilterValue5("l4", selectedCategoryKey);
+   
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
       useKuStore().fetchAllProducers(); // Выполнить запрос с фильтром по категории
-      console.log('Выполнен запрос на получение данных производителей.');
-    } else {// Если категория не выбрана (очищена), сбросить фильтр по производителям и выполнить запрос без фильтра
-      useKuStore().setFilterValue4("l4", []); // Сбросить фильтр
-      console.log('Сброшен фильтр производителей:', useKuStore().filterProducerValue);
-      useKuStore().fetchAllProducers(); // Выполнить запрос без фильтра
-      console.log('Выполнен запрос на получение всех данных производителей.');
+      useKuStore().fetchAllBrands();
+      console.log('Выполнены запросы по фильтру категории.');
     }
-    console.log('Выполнен запрос на получение данных производителей.');
   }
-
-
-
-};
-
+}
 
 // Функция для поиска категории по ключу в дереве данных
 const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
@@ -253,6 +247,7 @@ const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
   return undefined;
 };
 
+//добавление условий по категории
 const AddCategoryItem = async () => {
   if (store.valueProducer_name || value.value || store.valueBrand_name) {
     console.log("valueProducer_name", store.valueProducer_name);
@@ -286,7 +281,7 @@ const AddCategoryItem = async () => {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }
 };
-//добавление условий по категории
+
 
 </script>
 

@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" v-loading="loading">
       <el-table-column label="Номер" prop="vendor_id" width="140" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
       <el-table-column prop="urasticname" label="Полное наименование" width="300" show-overflow-tooltip sortable />
@@ -28,7 +28,7 @@ import { useVendorStore } from "~~/stores/vendorStore";
 
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
-
+  const loading = ref()
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
@@ -54,9 +54,12 @@ watch(getVendors, (value) => {
 
 onMounted(async () => {
   try {
+    loading.value = true; 
     await useVendorStore().getVendorFromAPIWithFilter();
+    loading.value = false;
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
+    loading.value = false;
   }
 });
 </script>

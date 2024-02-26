@@ -2,7 +2,7 @@
   <div >
     <el-scrollbar class="scrollTableProduct">
       <!-- <el-table :data="tableData" style="width:calc(100% - 510px);" height="calc(100vh - 185px) " border> -->
-        <el-table :data="tableData"  height="calc(100vh - 185px)" style=" width: 100%" >
+        <el-table :data="tableData"  height="calc(100vh - 185px)" style=" width: 100%" v-loading="loading">
 
         <el-table-column prop="itemid" label="Номер" width="90" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="500" show-overflow-tooltip />
@@ -31,7 +31,7 @@ const { getProducts, pagination, countRowTable } = storeToRefs(
 
 const pageSize = ref(countRowTable);
 const tableData = ref<IProduct[]>(getProducts.value);
-
+  const loading = ref()
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useProductStore().setCountRowTable(val);
@@ -53,8 +53,11 @@ const paginationChange = (page: number) => {
 
 onMounted(async () => {
   try {
+    loading.value = true; 
     await useProductStore().getProductFromAPIWithFilter();
+    loading.value = false; 
   } catch (error) {
+    loading.value = false; 
     console.error("Ошибка при загрузке данных", error);
   }
 });

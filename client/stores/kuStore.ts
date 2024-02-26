@@ -276,6 +276,7 @@ export const useKuStore = defineStore("KuStore", {
         search: this.$state.search2,
       })
         .then((dataGraphic) => {
+          console.log('Получены данные графика:', dataGraphic);
           this.$state.dataGraphic = dataGraphic.results;
           this.$state.pagination = {
             count: dataGraphic.count,
@@ -283,7 +284,10 @@ export const useKuStore = defineStore("KuStore", {
             next: dataGraphic.next,
           };
         })
-        .catch((error) => Promise.reject(error));
+        .catch((error) => {
+          console.error('Ошибка при получении данных графика:', error);
+          return Promise.reject(error);
+        });
     },
 
     // fetchProducerList() {
@@ -418,6 +422,7 @@ export const useKuStore = defineStore("KuStore", {
             page_size: this.$state.countRowTable2,
             page: nextPage,
             producer_name: this.$state.filterBrandValue.producer_name,
+            l4: this.$state.filterProducerValue.l4,
           });
           allBrands = allBrands.concat(brands.results);
           totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
@@ -492,15 +497,19 @@ export const useKuStore = defineStore("KuStore", {
     >(field: T, value: U) {
       this.$state.filterProductValue[field] = value
     },
+    
     async getProductFromAPIWithFilter(page?: number) {
-      this.setFilterValue('page', page);
-      this.setFilterValue('search', this.$state.search3);
+      this.setFilterValue3('page', page);
+      this.setFilterValue3('search', this.$state.search3);
+      this.setFilterValue3('vendor_id', this.$state.vendorName);
       await PRODUCT.getProductsList({
         page_size: this.$state.countRowTable,
         page,
-        search: this.$state.search,
+        search: this.$state.search3,
+        vendor_id: this.$state.vendorName
       })
         .then((product) => {
+          console.log('Получены данные товаров:', product);
           this.$state.product = product.results;
           this.$state.pagination = {
             count: product.count,
@@ -508,7 +517,10 @@ export const useKuStore = defineStore("KuStore", {
             next: product.next,
           };
         })
-        .catch((error) => Promise.reject(error));
+        .catch((error) => {
+          console.error('Ошибка при получении данных товаров:', error);
+          return Promise.reject(error);
+        });
     },
 
     //получение данных о юр.лице для создания

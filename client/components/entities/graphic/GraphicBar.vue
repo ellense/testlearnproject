@@ -21,14 +21,14 @@
       </el-dropdown>
     </div>
     <div class="directoryBar_filter">
-      <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="3"
-        placeholder="Фильтр по КУ" style="width: 200px" @change="changeKu">
+      <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="2"
+        placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu">
         <el-option v-for="item in KuList" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
+      <!-- <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 200px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
-      </el-select>
+      </el-select> -->
 
       <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;"></el-input>
     </div>

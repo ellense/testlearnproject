@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar class="scrollTable" style="border: none">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
-      height="calc(100vh - 225px)" @row-dblclick="row => rowDblclick(row.ku_id)">
+      height="calc(100vh - 225px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading">
       <el-table-column type="selection" width="55" />
       <el-table-column property="ku_id" label="Код КУ" width="150" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
@@ -73,32 +73,14 @@ const { getKu, pagination, countRowTable } = storeToRefs(
 );
 const tableData = ref<IKuList[]>(getKu.value);
 
+const loading = ref()
 
 //открывание и редактитрование ку
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
-  // try {
-  //     const results = await KU.getInfoKu({
-  //       ku_id: kuId,
-  //     });
-  //     // dataInfoKu = results
-  //     console.log("успешно получили данные ку_айди", results);
-    
-  // } catch (error) {
-  //   console.error("Ошибка при получении данных ку_айди:", error);
-  //   ElMessage.error("Ошибка при получении данных ку_айди");
-  // } 
-  // finally {
-  //   useKuStore().tableData = useKuStore().tableData.filter(
-  //     (row) => !selectedRows.includes(row.ku_id)
-  //   );
-  //   useKuStore().multipleSelection = [];
-  // }
   router.push({ path: `/ku/${kuId}` });
-
 };
-
 
 //пагинация
 const pageSize = ref(countRowTable);
@@ -125,10 +107,15 @@ watch(getKu, (value) => {
   tableData.value = value || [];
 });
 
+
+
 onMounted(async () => {
   try {
+    loading.value = true; 
     await useKuStore().getKuFromAPIWithFilter();
+    loading.value = false; 
   } catch (error) {
+    loading.value = false; 
     console.error("Ошибка при загрузке данных ку3", error);
   }
 });

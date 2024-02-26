@@ -390,6 +390,7 @@ export interface GetAllProducts {
   page?: number;
   search?: string;
   categories_l4?: string[];
+  vendor_id?: string;
 }
 export interface ProductStore {
   product: IProduct[];
@@ -453,6 +454,7 @@ export interface GetAllBrands {
   page_size?: number;
   page?: number;
   producer_name?: string
+  l4?: string[];
 }
 export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
