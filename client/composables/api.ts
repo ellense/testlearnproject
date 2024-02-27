@@ -43,6 +43,7 @@ import type {
   GetAllProductsForGraphicReturnData,
   IKuUpdate,
   IRequirement,
+  GetAllCategory,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -145,5 +146,7 @@ export const BRAND = {
 
 export const CATEGORY = {
   getCategory: (data: ITree): Promise<ITree> =>
-    $Get("api/classifiersTest/", { data, isBearer: false }),
+    $Get("api/classifiers_tree/", { data, isBearer: false }),
+  getCategory2: (params: GetAllCategory): Promise<ITree> =>
+    $Get("api/classifiers_tree/", { params, isBearer: false }),
 };

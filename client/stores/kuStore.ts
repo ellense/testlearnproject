@@ -18,6 +18,7 @@ import type {
   IVendorIdAndName,
   IBrand,
   GetAllVendorsForEntity,
+  ITree,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -48,6 +49,8 @@ export const useKuStore = defineStore("KuStore", {
     tableDataRequirement: [],
     dataEntity: [],
     dataVendor: [],
+    treeData: [],
+    treeRef: null,
     //v-model диалоговых форм
     dialogFormProductVisible: false,
     dialogFormCategoryVisible: false,
@@ -143,6 +146,10 @@ export const useKuStore = defineStore("KuStore", {
       this.multipleSelection3 = val;
     },
 
+    //для разной пагинации
+    setCountRowTable(count: number) {
+      this.$state.countRowTable = count;
+    },
 
     //получение КУ с фильтром
     async getKuFromAPIWithFilter(page?: number) {
@@ -207,6 +214,58 @@ export const useKuStore = defineStore("KuStore", {
       )
     },
 
+
+
+
+    //дерево
+
+    // async buildTree(nodes: ITree[], parentCode: string | null = null): Promise<ITree[]> {
+    //   const parentNode = nodes.filter(node => node.parent_code === parentCode);
+    //   if (!parentNode.length) return [];
+
+    //   return parentNode.map(async node => {
+    //     const children =  this.buildTree(nodes, node.classifier_code.toString());
+    //     if (children.length) {
+    //       node.children = children;
+    //     }
+    //     return node;
+    //   });
+    // },
+
+    // async fetchData(data: ITree) {
+    //   try {
+    //     const result = await CATEGORY.getCategory(data);
+    //     if (Array.isArray(result)) {
+    //       this.treeData = await this.buildTree(result, '0');
+    //       console.log("treeData", this.treeData);
+    //       if (this.treeRef) {
+    //         this.treeRef.updateKeyChildren(data.classifier_code, this.treeData);
+    //       }
+    //     } else {
+    //       this.treeData = [];
+    //       console.error("Данные не получены или не являются массивом");
+    //     }
+    //   } catch (error) {
+    //     console.error("Произошла ошибка при получении данных категорий", error);
+    //   }
+    // },
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //получение данных о производителе с фильтром
     async fetchAllProducers() {
       try {
@@ -218,6 +277,7 @@ export const useKuStore = defineStore("KuStore", {
             page_size: this.$state.countRowTable2,
             page: nextPage,
             l4: this.$state.filterProducerValue.l4,
+            vendor_id: this.$state.vendorName
           });
           allProducer = allProducer.concat(producers.results);
           totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
@@ -252,6 +312,7 @@ export const useKuStore = defineStore("KuStore", {
             page: nextPage,
             producer_name: this.$state.filterBrandValue.producer_name,
             l4: this.$state.filterProducerValue.l4,
+            vendor_id: this.$state.vendorName
           });
           allBrands = allBrands.concat(brands.results);
           totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
@@ -333,28 +394,7 @@ export const useKuStore = defineStore("KuStore", {
     },
 
     //получение данных о поставщиках для создания
-    // async fetchVendorsListForEntity(page?: number) {
-    //   try {
-    //     const vendors = await VENDOR.getVendorsForEntityInKU({
-    //       page_size: this.$state.countRowTable,
-    //       page,
-    //       entity_id: this.$state.entityName,
-    //     });
-    //     this.$state.dataVendor = vendors.results;
-    //     this.$state.pagination = {
-    //       count: vendors.count,
-    //       previous: vendors.previous,
-    //       next: vendors.next,
-    //     };
-    //     console.log("Все данные о поставщиках для юридического лица:", vendors.results);
-    //   } catch (error) {
-    //     console.error(
-    //       "Произошла ошибка при получении данных о поставщиках для юридического лица",
-    //       error
-    //     );
-    //     return Promise.reject(error);
-    //   }
-    // },
+
     async fetchAllVendorsListForEntity() {
       try {
         let allVendors: IVendorIdAndName[] = [];

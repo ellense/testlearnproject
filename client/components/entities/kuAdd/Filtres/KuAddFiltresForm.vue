@@ -71,15 +71,15 @@ watch(() => store.brand, (brands: IBrand[]) => {
   options3.value = uniqueBrands.map(label => ({ label, value: label }));
 });
 
-onMounted(async () => {
-  try {
-    await store.fetchAllProducers();
-    await store.fetchAllBrands();
+// onMounted(async () => {
+//   try {
+//     await store.fetchAllProducers();
+//     await store.fetchAllBrands();
 
-  } catch (error) {
-    console.error('Ошибка при загрузке данных производителя и бренда', error);
-  }
-});
+//   } catch (error) {
+//     console.error('Ошибка при загрузке данных производителя и бренда', error);
+//   }
+// });
 
 const onProducerChange = async () => {
   store.valueBrand_name = "";
@@ -119,86 +119,39 @@ const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] =>
   });
 };
 
-// Функция для получения данных с бэкэнда и установки полученных данных в переменную treeData
-// const fetchData = async (data: ITree): Promise<ITree[]> => {
-//   try {
-//     const result = await CATEGORY.getCategory(data);
-
-//     if (Array.isArray(result)) {
-//       treeData.value = buildTree(result, '0');
-//       console.log("ДЕРЕВО:", treeData.value);
-//       treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
-//       return treeData.value; // Вернуть полученные данные в виде массива ITree[]
-//     } else {
-//       console.error("Данные не получены или не являются массивом");
-//       return []; // Вернуть пустой массив в случае ошибки или неправильных данных
-//     }
-//   } catch (error) {
-//     console.error("Произошла ошибка при получении данных категорий", error);
-//     return []; // Вернуть пустой массив в случае ошибки
-//   }
-// };
-
-
-// const load = async (node: any, resolve: any) => {
-//   try {
-//     console.log('Loading node:', node);
-//     if (node.level === 0) {
-//       const data = await fetchData(node.data); // Вызываем вашу функцию fetchData
-//       console.log('Fetched data:', data);
-//       if (data && data.length > 0) {
-//         const children = data.map((child: ITree) => ({
-//           ...child,
-//           isLeaf: child.children === undefined || child.children.length === 0,
-//         }));
-//         console.log('Resolved children:', children);
-//         resolve(children);
-//       } else {
-//         console.log('No data found or empty.');
-//         resolve([]);
-//       }
-//     } else {
-//       console.log('Node level is not 0. Resolving empty array.');
-//       resolve([]);
-//     }
-//   } catch (error) {
-//     console.error("Error occurred while loading tree node data", error);
-//     console.log('Resolving empty array due to error.');
-//     resolve([]);
-//   }
-// };
 const fetchData = async (data: ITree) => {
-  try {
-    const result = await CATEGORY.getCategory(data);
-
-    if (Array.isArray(result)) {
-      treeData.value = buildTree(result, '0');
-      console.log("treeData", treeData.value);
-      treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
-    } else {
-      treeData.value = [];
-      console.error("Данные не получены или не являются массивом");
-    }
-  } catch (error) {
-    console.error("Произошла ошибка при получении данных категорий", error);
-  }
+  // try {
+  //   const result = await CATEGORY.getCategory2(
+  //     vendor_id: store.vendorName,
+  //   );
+  //   if (Array.isArray(result)) {
+  //     treeData.value = buildTree(result, '0');
+  //     console.log("treeData", treeData.value);
+  //     treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
+  //   } else {
+  //     treeData.value = [];
+  //     console.error("Данные не получены или не являются массивом");
+  //   }
+  // } catch (error) {
+  //   console.error("Произошла ошибка при получении данных категорий", error);
+  // }
 };
 
 // Вызов функции fetchData при монтировании компонента
-onMounted(async () => {
-  try {
-    console.log("Before API call");
-    await fetchData({
-      name: "string",
-      classifier_code: 1,
-      children: [],
-      parent_code: "",
-    });
-    console.log("After API call");
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     console.log("Before API call");
+//     await fetchData({
+//       name: "string",
+//       classifier_code: 1,
+//       children: [],
+//       parent_code: "",
+//     });
+//     console.log("After API call");
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// });
 
 //изменение поля дерева
 let selectedCategoryName = '';

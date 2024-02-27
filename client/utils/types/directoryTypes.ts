@@ -1,3 +1,4 @@
+import type { ElTree } from 'element-plus'
 // юр.лица
 export interface IEntity {
   entity_id: string;
@@ -203,6 +204,8 @@ export interface IKuStore {
   tableDataRequirement: IRequirement[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
+  treeData: ITree[],
+  treeRef: typeof ElTree | null,
   // dataInfoKu: IKuList[];
   //v-model диалоговых форм
   dialogFormProductVisible: boolean;
@@ -443,6 +446,8 @@ export interface GetAllProducer {
   page_size?: number;
   page?: number;
   l4?: string[];
+  vendor_id?: string;
+
 }
 export interface GetAllProducersReturnData extends Pagination {
   results: IProducer[];
@@ -457,6 +462,7 @@ export interface GetAllBrands {
   page?: number;
   producer_name?: string
   l4?: string[];
+  vendor_id?: string;
 }
 export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
@@ -464,12 +470,15 @@ export interface GetAllBrandsReturnData extends Pagination {
 
 //дерево категорий
 export interface ITree {
-
   name: string;
   classifier_code: number; // Лучше использовать string, если коды могут содержать не только числа
   parent_code: string;
   children?: ITree[];
-
+}
+export interface GetAllCategory{
+  // page_size?: number;
+  // page?: number;
+  vendor_id?: string;
 }
 
 //общие
