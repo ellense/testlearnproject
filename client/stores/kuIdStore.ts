@@ -80,6 +80,18 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 console.error("Ошибка при получении данных ку_айди:", error);
             }
         },
+        // async getKuRequirementDetailFromApi(kuId: string) {
+        //     try {
+        //         const results = await KU.getInfoRequirements({
+        //             ku_id: kuId,
+        //         });
+        //         this.$state.tableDataRequirement = results
+        //         console.log("полученная таблица условий ку:", this.tableDataRequirement)
+        //         console.log("успешно получили данные условий:", results);
+        //     } catch (error) {
+        //         console.error("Ошибка при получении данных условий:", error);
+        //     }
+        // },
         async fetchVendorsListForEntity(page?: number) {
             try {
                 const vendors = await VENDOR.getVendorsForEntityInKU({

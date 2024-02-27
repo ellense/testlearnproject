@@ -235,6 +235,7 @@ export interface IKuStore {
   filterProductValue: GetAllProducts
   filterProducerValue: GetAllProducer
   filterBrandValue: GetAllBrands
+  filterVendorValue: GetAllVendorsForEntity
   //
   producerSelect: string[]
   brandSelect: string[]
@@ -465,7 +466,7 @@ export interface GetAllBrandsReturnData extends Pagination {
 export interface ITree {
 
   name: string;
-  classifier_code: string; // Лучше использовать string, если коды могут содержать не только числа
+  classifier_code: number; // Лучше использовать string, если коды могут содержать не только числа
   parent_code: string;
   children?: ITree[];
 

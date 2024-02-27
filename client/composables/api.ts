@@ -42,6 +42,7 @@ import type {
   GetAllInvoicesAndProductForGraphic,
   GetAllProductsForGraphicReturnData,
   IKuUpdate,
+  IRequirement,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -97,8 +98,6 @@ export const KU = {
     $Get("api/kulist/", { params, isBearer: false }),
   getKuIdList: (params: GetAllKu_Id): Promise<GetAllKu_IdReturnData> =>
     $Get("api/kulist/", { params, isBearer: false }),
-  // postKu: (data: IKuPost, params:IKuPost2): Promise<IKuPost> =>
-  //   $Post("api/kulist/", { data,params, isBearer: false }),
   postKu: (data: IKuPost): Promise<IKuList> =>
     $Post("api/ku_create/", { data, isBearer: false }),
   postKuRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
@@ -109,6 +108,8 @@ export const KU = {
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
+  getInfoRequirements: (params: IKuId): Promise<IRequirement[]> =>
+    $Get(`api/included_conditions_list/`, { params, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graphlist/", { params, isBearer: false }),
 };

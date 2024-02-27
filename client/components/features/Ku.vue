@@ -1,5 +1,6 @@
 <template>
-    <EntitiesKuBody/>
+    <EntitiesKuInfoAll/>
+    <EntitiesKuAddRequirement/>
   </template>
   
   <script lang="ts" setup></script>

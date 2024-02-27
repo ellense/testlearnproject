@@ -82,7 +82,7 @@ watch(triggerFilter, () => {
 });
 
 onMounted(() => {
-  useKuStore().getLegalEntityFromApi();
+  useKuStore().getLegalEntityFilterForKuFromApi();
 });
 
 //кнопка создать ку

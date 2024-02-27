@@ -86,8 +86,8 @@ watch(triggerFilter, () => {
 });
 
 onMounted(() => {
-  useKuStore().getLegalEntityFromApi2();
-  useKuStore().getKuIdFromApi();
+  useKuStore().getLegalEntityFilterForGraphicFromApi();
+  useKuStore().getKuIdFilterForGraphicFromApi();
 });
 
 const createReportInvoice = async () => {

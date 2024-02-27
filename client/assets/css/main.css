@@ -113,3 +113,13 @@ h1 {
   color: #337ecc;
   font-weight: 600;
 }
+
+.el-popper {
+  min-width: 520px !important
+}
+.el-vl__window {
+  width: 100% !important
+}
+/* .el-select-dropdown__list .el-vl__window{
+  width: 100%;
+} */

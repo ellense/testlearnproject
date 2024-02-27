@@ -46,7 +46,32 @@
         <el-col :span="5">
           <div class="custom-label">Поставщик</div>
           <el-form-item>
-            <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName"
+
+            <el-select-v2 v-model="store.vendorName" clearable filterable style="width: 300px "
+              :disabled="!store.entityName" :title="disableSelectVendorTooltip" placeholder="Выберите поставщика"
+              :options="options2" @change="onVendorChange">
+              <template #option="{ option }">
+                <span>{{ option.label }}</span>
+                <span style="
+              margin-left: 10px;
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            ">{{ option.value }}</span>
+              </template>
+            </el-select-v2>
+
+            <el-select-v2 v-model="store.vendorName" clearable filterable :options="options2" :disabled="!store.entityName"
+               style="width: 500px" :title="disableSelectVendorTooltip" placeholder="Выберите поставщика">
+              <template #default="{ item }" width="600px" >
+                <span style="margin-right: 8px">{{ item.label }}</span>
+                <span style="color: var(--el-text-color-secondary); font-size: 12px; margin-left: 10px;
+                    float: right;">
+                  {{ item.value }}
+                </span>
+              </template>
+            </el-select-v2>
+            <!-- <el-select v-model="store.vendorName" clearable filterable style="width: 300px" :disabled="!store.entityName"
               :title="disableSelectVendorTooltip" @change="onVendorChange">
               <el-option v-for="item in options2" :key="item.value" :label="item.label" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
@@ -57,7 +82,7 @@
             font-size: 13px;
           ">{{ item.value }}</span>
               </el-option>
-            </el-select>
+            </el-select> -->
             <div v-if="!store.entityName"
               style="font-size: 12px; color: var(--el-text-color-secondary); margin-top: 5px;">
               Сначала выберите юридическое лицо
@@ -118,6 +143,28 @@ import type { Action, ElTree } from 'element-plus'
 const store = useKuStore();
 const router = useRouter();
 const loading = ref(false);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // Проверка полей формы
@@ -266,30 +313,68 @@ onMounted(async () => {
 });
 
 //вывод данных поставщика
+// const options2 = ref<Array<{ label: string; value: string }>>([]);
+
+// watch(() => store.dataVendor, (vendors: IVendorIdAndName[]) => {
+//   const uniqueVendors = Array.from(new Set(vendors.map(item => item.name)));
+//   options2.value = uniqueVendors.map(label => ({ label, value: label }));
+// });
 const options2 = ref<Array<{ label: string; value: string }>>([]);
-watch(
-  () => store.dataVendor,
-  (dataVendor: IVendorIdAndName[]) => {
-    options2.value = dataVendor.map((item) => ({
-      label: item.name,
-      value: item.vendor_id,
-    }));
-  }
-);
-onMounted(async () => {
-  try {
-    await store.fetchVendorsListForEntity();
-  } catch (error) {
-    console.error("Ошибка при загрузке данных поставщика", error);
-  }
+
+watch(() => store.dataVendor, (vendors: IVendorIdAndName[]) => {
+  options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
+const props = {
+  label: 'name',
+  value: 'vendor_id',
+}
+
+
+
+
+const initials = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
+
+const value = ref([])
+const optionstest = Array.from({ length: 1000 }).map((_, idx) => ({
+  value: `Option ${idx + 1}`,
+  label: `${initials[idx % 10]}${idx}`,
+}))
+
+// const options2 = ref<Array<{ label: string; value: string }>>([]);
+// watch(
+//   () => store.dataVendor,
+//   (dataVendor: IVendorIdAndName[]) => {
+//     options2.value = dataVendor.map((item) => ({
+//       label: item.name,
+//       value: item.vendor_id,
+//     }));
+//   }
+// );
+// onMounted(async () => {
+//   try {
+//     await store.fetchVendorsListForEntity();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных поставщика", error);
+//   }
+// });
 const onEntityChange = async () => {
-  try {
-    await store.fetchVendorsListForEntity(undefined);
-    console.log("выбранное юр.лицо:", store.entityName);
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
+  store.dataVendor = [];
+  store.setFilterValue6('entity_id', store.entityName);
+  if (store.entityName) { // Проверка, что выбрана торговая маркка
+    useKuStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
+    console.log('Выполнен запрос на получение данных производителей.');
+  } else {
+    useKuStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
+    console.log('Сброшен фильтр производителей:', useKuStore().filterBrandValue);
+
   }
+  // try {
+  //   await store.fetchVendorsListForEntity(undefined);
+  //   console.log("выбранное юр.лицо:", store.entityName);
+
+  // } catch (error) {
+  //   console.error("Ошибка при загрузке данных", error);
+  // }
 };
 
 const onVendorChange = async () => {
@@ -446,15 +531,15 @@ const addItemAndSendToBackend = async () => {
 
   // Если все запросы были успешными, то выполняем дополнительные действия
 
-    // Очищаем поля и таблицу условий
-    store.tableDataRequirement.length = 0;
-    store.disableButtons = false;
-    store.entityName = [];
-    store.vendorName = "";
-    store.newType = "";
-    store.newDateStart = new Date();
-    store.newDateEnd = new Date();
-    store.newPercent = null;
+  // Очищаем поля и таблицу условий
+  store.tableDataRequirement.length = 0;
+  store.disableButtons = false;
+  store.entityName = [];
+  store.vendorName = "";
+  store.newType = "";
+  store.newDateStart = new Date();
+  store.newDateEnd = new Date();
+  store.newPercent = null;
 
 };
 
@@ -470,5 +555,12 @@ const addItemAndSendToBackend = async () => {
 .loading-cursor {
   cursor: wait;
   /* Установка курсора в виде элемента загрузки */
+}
+
+.el-popper {
+  min-width: 600px !important
+}
+.el-vl__window {
+  width: 100% !important
 }
 </style>
