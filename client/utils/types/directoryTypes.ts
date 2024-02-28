@@ -178,6 +178,23 @@ export interface IKuDeleteGraph {
   status: string;
 }
 export interface IKuStore {
+  //селекты для множественного выбора
+  multipleSelection: IKuList[];
+  multipleTableRef: Ref | null;
+  //данные таблиц
+  tableData: IKuList[];
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  //поиски
+  search: string;
+  //
+  legalEntity: string[]
+  //параметры для фильтров при запросах
+  filterKuValue: GetAllKus
+}
+
+export interface IKuAddStore {
   //значения v-model при создании
   newPercent: number | null;
   newType: string;
@@ -191,13 +208,9 @@ export interface IKuStore {
   valueProducer_name: string;
   valueBrand_name: string;
   //селекты для множественного выбора
-  multipleSelection: IKuList[];
-  multipleSelection2: IGraphic[];
-  multipleSelection3: IProduct[];
+  multipleSelectionProduct: IProduct[];
   multipleTableRef: Ref | null;
   //данные таблиц
-  tableData: IKuList[];
-  dataGraphic: IGraphic[];
   brand: IBrand[];
   producer: IProducer[];
   product: IProduct[];
@@ -210,38 +223,23 @@ export interface IKuStore {
   //v-model диалоговых форм
   dialogFormProductVisible: boolean;
   dialogFormCategoryVisible: boolean;
-  dialogFormEditApprovedVisible: boolean;
   //дизэйбл
   disableButtons: boolean
   //
   vendorFilter: string;
-  kuFilter: number | null;
+  // kuFilter: number | null;
   vendors: IVendorIdAndName[];
   //пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;
   countRowTable2: number;
   //поиски
-  search: string;
-  search2: string;
-  search3: string;
-  //
-  editApproved: number | null;
-  selectedRowEditApproved: IGraphic;
-  //
-  legalEntity: string[]
-  legalEntity2: string[]
+  searchProduct: string;
   //параметры для фильтров при запросах
-  KuParams: string[]
-  filterKuValue: GetAllKus
-  filterGraphicValue: GetAllGraphic
   filterProductValue: GetAllProducts
   filterProducerValue: GetAllProducer
   filterBrandValue: GetAllBrands
   filterVendorValue: GetAllVendorsForEntity
-  //
-  producerSelect: string[]
-  brandSelect: string[]
 }
 export interface IKuIdStore {
   //v-model атрибутов
@@ -277,6 +275,7 @@ export interface IKuIdStore {
   multipleSelectionProduct: IProduct[];
   multipleTableRef: Ref | null;
 }
+
 export interface GetAllKus {
   page_size?: number;
   page?: number;
@@ -311,6 +310,33 @@ export interface IGraphic {
   sum_bonus: number | null;
   sum_approved: number | null;
   status: string
+}
+
+export interface IGraphicStore {
+  //селекты для множественного выбора
+  multipleSelectionGraphic: IGraphic[];
+  multipleTableRef: Ref | null;
+  //данные таблиц
+  dataGraphic: IGraphic[];
+  //v-model диалоговых форм
+  dialogFormEditApprovedVisible: boolean;
+  //
+  vendorFilter: string;
+  vendors: IVendorIdAndName[];
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  countRowTable2: number;
+  //поиски
+  searchGraphic: string;
+  //
+  editApproved: number | null;
+  selectedRowEditApproved: IGraphic;
+  //
+  legalEntity2: string[]
+  //параметры для фильтров при запросах
+  KuParams: string[]
+  filterGraphicValue: GetAllGraphic
 }
 export interface IGraphicInfo {
   graph_id: number | null;

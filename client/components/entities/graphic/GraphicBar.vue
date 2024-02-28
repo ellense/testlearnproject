@@ -38,16 +38,16 @@
 <script setup lang="ts">
 import { ArrowDown } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
-import { useKuStore } from "~~/stores/kuStore";
+import { useGraphicStore } from "~~/stores/graphicStore";
 import { useReportStore } from "~~/stores/reportStore";
 //для поиска
 const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
-  useKuStore().performSearchGraphic(newValue);
+  useGraphicStore().performSearchGraphic(newValue);
 });
 
 //для фильтрации 
-const { filterGraphicValue, legalEntity2, KuParams } = storeToRefs(useKuStore())
+const { filterGraphicValue, legalEntity2, KuParams } = storeToRefs(useGraphicStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
@@ -56,8 +56,8 @@ const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
 const LegalEntityList = ref<string[]>(legalEntity2.value);
 
 const changeLegalEntity = () => {
-  useKuStore().pagination = null;
-  useKuStore().setFilterValue2('entity_id', LegalEntity.value);
+  useGraphicStore().pagination = null;
+  useGraphicStore().setFilterValue2('entity_id', LegalEntity.value);
   console.log('shopLegalEntity.value:', LegalEntity.value);
 
   toggleTriggerFilter();
@@ -72,8 +72,8 @@ const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
 const KuList = ref<string[]>(KuParams.value);
 
 const changeKu = () => {
-  useKuStore().pagination = null;
-  useKuStore().setFilterValue2('ku_id', Ku.value);
+  useGraphicStore().pagination = null;
+  useGraphicStore().setFilterValue2('ku_id', Ku.value);
   toggleTriggerFilter();
 };
 
@@ -82,17 +82,17 @@ watch(KuParams, (value) => {
 });
 //для фильтрации
 watch(triggerFilter, () => {
-  useKuStore().getGraphicsFromAPIWithFilter();
+  useGraphicStore().getGraphicsFromAPIWithFilter();
 });
 
 onMounted(() => {
-  useKuStore().getLegalEntityFilterForGraphicFromApi();
-  useKuStore().getKuIdFilterForGraphicFromApi();
+  useGraphicStore().getLegalEntityFilterForGraphicFromApi();
+  useGraphicStore().getKuIdFilterForGraphicFromApi();
 });
 
 const createReportInvoice = async () => {
   useReportStore().dialogFormReportInvoice = true
-  const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
+  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
   console.log("selectedRows[0]:", selectedRows[0])
   useReportStore().getGraphicDetailFromApi(selectedRows[0])
   useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
@@ -102,7 +102,7 @@ const createReportInvoice = async () => {
 }
 const createReportProduct = async () => {
   useReportStore().dialogFormReportProduct = true
-  const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
+  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
   console.log("selectedRows[0]:", selectedRows[0])
   useReportStore().getGraphicDetailFromApi(selectedRows[0])
   useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
@@ -112,7 +112,7 @@ const createReportProduct = async () => {
 
 //утверждение графика
 const ApproveGraphic = async () => {
-  const selectedRows = useKuStore().multipleSelection2
+  const selectedRows = useGraphicStore().multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
@@ -133,7 +133,7 @@ const ApproveGraphic = async () => {
   try {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
-    await useKuStore().getGraphicsFromAPIWithFilter();
+    await useGraphicStore().getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
   }
@@ -141,7 +141,7 @@ const ApproveGraphic = async () => {
 
 //удаление графиков
 const deleteGraphic = async () => {
-  const selectedRows = useKuStore().multipleSelection2.map((row) => row.graph_id);
+  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
   try {
     for (const graph_id of selectedRows) {
       const results = await GRAPHIC.deleteGraphic({ graph_id });
@@ -151,23 +151,23 @@ const deleteGraphic = async () => {
     console.error("Ошибка при удалении строк:", error);
     ElMessage.error("Ошибка при удалении графика");
   } finally {
-    useKuStore().dataGraphic = useKuStore().dataGraphic.filter(
+    useGraphicStore().dataGraphic = useGraphicStore().dataGraphic.filter(
       (row) => !selectedRows.includes(row.graph_id)
     );
-    useKuStore().multipleSelection2 = [];
+    useGraphicStore().multipleSelectionGraphic = [];
   }
 };
 const isButtonsDisabled = computed(() => {
-  return useKuStore().multipleSelection2.length > 1 || useKuStore().multipleSelection2.length === 0;
+  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0;
 });
 const isDeleteButtonDisabled = computed(() => {
-  return useKuStore().multipleSelection2.length === 0;
+  return useGraphicStore().multipleSelectionGraphic.length === 0;
 });
 const disableButtonTooltip = computed(() => {
-  return useKuStore().multipleSelection2.length > 1 || useKuStore().multipleSelection2.length === 0 ? 'Кнопка заблокирована. Для доступа выберите только один график' : '';
+  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите только один график' : '';
 });
 const disableButtonDeleteTooltip = computed(() => {
-  return useKuStore().multipleSelection2.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';
+  return useGraphicStore().multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';
 });
 </script>
 

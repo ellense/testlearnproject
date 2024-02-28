@@ -136,10 +136,10 @@ const filterPeriod = (value: string, row: IKuList) => {
 const filterStatus = (value: string, row: IKuList) => {
   return row.status === value
 }
-const getStatusTagType = (status: string) => {
+const getStatusTagType = (status: string): "success" | "warning" | "info" | "primary" | "danger" | undefined  => {
   switch (status) {
     case 'Создано':
-      return "";
+      return "primary";
     case 'Действует':
       return "success";
     case 'Закрыто':
@@ -151,15 +151,4 @@ const getStatusTagType = (status: string) => {
   }
 };
 
-
-const getStatusTagTypeGraphic = (status: string) => {
-  switch (status) {
-    case 'Есть':
-      return "success";
-    case 'Нет':
-      return "info";
-    default:
-      return "info"; 
-  }
-};
 </script>

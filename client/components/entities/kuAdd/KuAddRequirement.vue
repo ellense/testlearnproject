@@ -19,8 +19,8 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 
-import { useKuStore } from "~~/stores/kuStore";
-const store = useKuStore();
+import { useKuAddStore } from "~~/stores/kuAddStore";
+const store = useKuAddStore();
 const kuRequirementList = ref(store.tableDataRequirement);
 
 //удаление условий

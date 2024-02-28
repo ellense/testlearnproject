@@ -5,7 +5,7 @@
       <el-input v-model="searchProductInKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
-      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="useKuStore().handleSelectionChange3"
+      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="useKuAddStore().handleSelectionChange3"
         ref="multipleTableRef" v-loading="loading">
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
@@ -33,12 +33,13 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
+import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuStore } from "~~/stores/kuStore";
 import { ElTable } from 'element-plus'
 
-const kuStore = useKuStore();
+const kuStore = useKuAddStore();
 const { getProduct, pagination, countRowTable } = storeToRefs(
-  useKuStore()
+  useKuAddStore()
 );
 const tableData = ref<IProduct[]>(getProduct.value);
 
@@ -51,7 +52,7 @@ watch(getProduct, (value) => {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuStore().setCountRowTable(val);
+  useKuAddStore().setCountRowTable(val);
   try {
     await useKuStore().getKuFromAPIWithFilter();
   } catch (error) {
@@ -60,14 +61,14 @@ const handleSizeChange = async (val: number) => {
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuStore().setFilterValue3('page', page);
-  useKuStore().getProductFromAPIWithFilter(page);
+  useKuAddStore().setFilterValue3('page', page);
+  useKuAddStore().getProductFromAPIWithFilter(page);
 };
 
 //поиск
 const searchProductInKu = ref('');
 watch(searchProductInKu, (newValue: string) => {
-  useKuStore().performSearchProduct(newValue);
+  useKuAddStore().performSearchProduct(newValue);
 });
 
 //для очистки выбора
@@ -84,17 +85,17 @@ const toggleSelection = (rows?: IProduct[]) => {
 
 //добавление условий
 const AddProductItem = () => {
-  const selectedRows = useKuStore().multipleSelection3;
+  const selectedRows = useKuAddStore().multipleSelectionProduct;
 
   selectedRows.forEach(row => {
-    useKuStore().tableDataRequirement.push({
+    useKuAddStore().tableDataRequirement.push({
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,
       producer: "",
       brand: "",
     });
-    console.log("store.tableDataRequirementПРОДУКТЫ",useKuStore().tableDataRequirement);
+    console.log("store.tableDataRequirementПРОДУКТЫ",useKuAddStore().tableDataRequirement);
   });
   toggleSelection()
   kuStore.dialogFormProductVisible = false;
@@ -104,7 +105,7 @@ const AddProductItem = () => {
 onMounted(async () => {
   try {
     loading.value = true; 
-    await useKuStore().getProductFromAPIWithFilter();
+    await useKuAddStore().getProductFromAPIWithFilter();
     loading.value = false;
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);

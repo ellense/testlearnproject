@@ -47,8 +47,8 @@
           <div class="custom-label">Поставщик</div>
           <el-form-item>
             <el-select-v2 v-model="store.vendorName" clearable filterable :options="options2" :disabled="!store.entityName"
-               style="width: 500px" :title="disableSelectVendorTooltip" placeholder="Выберите поставщика" @change="onVendorChange">
-              <template #default="{ item }" width="600px" >
+               style="width: 300px" :title="disableSelectVendorTooltip" placeholder="Выберите поставщика" @change="onVendorChange">
+              <template #default="{ item }" >
                 <span style="margin-right: 8px">{{ item.label }}</span>
                 <span style="color: var(--el-text-color-secondary); font-size: 12px; margin-left: 10px;
                     float: right;">
@@ -105,6 +105,7 @@ import { ref } from "vue";
 
 import dayjs from "dayjs";
 import { useRouter } from "vue-router";
+import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuStore } from "~~/stores/kuStore";
 import type {
   IEntityIdAndName,
@@ -113,7 +114,7 @@ import type {
 } from "~/utils/types/directoryTypes";
 import type { Action, ElTree } from 'element-plus'
 
-const store = useKuStore();
+const store = useKuAddStore();
 const router = useRouter();
 const loading = ref(false);
 
@@ -275,11 +276,11 @@ const onEntityChange = async () => {
   store.dataVendor = [];
   store.setFilterValue6('entity_id', store.entityName);
   if (store.entityName) { // Проверка, что выбрана торговая маркка
-    useKuStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
+    useKuAddStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
-    useKuStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-    console.log('Сброшен фильтр производителей:', useKuStore().filterBrandValue);
+    useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
+    console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandValue);
   }
 };
 

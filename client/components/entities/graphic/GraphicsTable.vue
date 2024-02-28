@@ -3,7 +3,7 @@
   <el-scrollbar class="scrollTable" style="border: none">
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 225px)" border v-loading="loading"
-      @selection-change="useKuStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick">
+      @selection-change="useGraphicStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick">
       <el-table-column fixed type="selection" width="40" />
       <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
       <el-table-column fixed property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
@@ -58,16 +58,16 @@
 </template>
 <script lang="ts" setup>
 import { ref, watch, onMounted } from "vue";
-import { useKuStore } from "~~/stores/kuStore";
+import { useGraphicStore } from "~~/stores/graphicStore";
 import { storeToRefs } from "pinia";
 import type { IGraphic } from "~/utils/types/directoryTypes";
-const { getGraphic, pagination, countRowTable } = storeToRefs(useKuStore());
+const { getGraphic, pagination, countRowTable } = storeToRefs(useGraphicStore());
 const loading = ref()
 const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseEvent) => {
   if (column.property === 'sum_approved') {
     if (row.status === 'Утверждено') {
-      useKuStore().selectedRowEditApproved = row;
-      useKuStore().dialogFormEditApprovedVisible = true;
+      useGraphicStore().selectedRowEditApproved = row;
+      useGraphicStore().dialogFormEditApprovedVisible = true;
       console.log('Вы нажали на ячейку столбца "Утверждено"');
     } else {
       ElMessage.error('Невозможно открыть диалоговое окно: статус не "Утвержденo"');
@@ -84,10 +84,10 @@ const filterTag = (value: string, row: IGraphic) => {
 const filterTag2 = (value: string, row: IGraphic) => {
   return row.period === value
 }
-const getStatusTagType = (status: string)=> {
+const getStatusTagType = (status: string): "success" | "warning" | "info" | "primary" | "danger" | undefined => {
   switch (status) {
     case "Запланировано":
-      return "";
+      return "primary";
     case "Рассчитано":
       return "warning";
     case "Утверждено":
@@ -100,9 +100,9 @@ const getStatusTagType = (status: string)=> {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuStore().setCountRowTable(val);
+  useGraphicStore().setCountRowTable(val);
   try {
-    await useKuStore().getGraphicsFromAPIWithFilter();
+    await useGraphicStore().getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных 11", error);
   }
@@ -113,13 +113,13 @@ watch(getGraphic, (value) => {
 });
 
 const paginationChange = (page: number) => {
-  useKuStore().getGraphicsFromAPIWithFilter(page);
+  useGraphicStore().getGraphicsFromAPIWithFilter(page);
 };
 
 onMounted(async () => {
   try {
     loading.value = true;
-    await useKuStore().getGraphicsFromAPIWithFilter();
+    await useGraphicStore().getGraphicsFromAPIWithFilter();
     loading.value = false;
   } catch (error) {
     loading.value = false;
