@@ -1,8 +1,8 @@
 <template>
-  <el-dialog v-model="kuStore.dialogFormProductVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
+  <el-dialog v-model="kuStore.dialogFormProductExVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="buttonBar_search">
-      <el-input v-model="searchProductInKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+      <el-input v-model="searchProductExKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
       <el-table style="width: 100%" height="300" :data="tableData" @selection-change="useKuAddStore().handleSelectionChange3"
@@ -21,7 +21,7 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="kuStore.dialogFormProductVisible = false">Отмена</el-button>
+        <el-button @click="kuStore.dialogFormProductExVisible = false">Отмена</el-button>
         <el-button @click="AddProductItem()">Сохранить</el-button>
       </span>
     </template>
@@ -34,18 +34,17 @@ import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import { useKuStore } from "~~/stores/kuStore";
 import { ElTable } from 'element-plus'
 
 const kuStore = useKuAddStore();
-const { getProduct, pagination, countRowTable } = storeToRefs(
+const { getProductEx, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
-const tableData = ref<IProduct[]>(getProduct.value);
+const tableData = ref<IProduct[]>(getProductEx.value);
 
 const loading = ref()
 
-watch(getProduct, (value) => {
+watch(getProductEx, (value) => {
   tableData.value = value || [];
 });
 
@@ -54,21 +53,21 @@ const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useKuAddStore().setCountRowTable(val);
   try {
-    await useKuStore().getKuFromAPIWithFilter();
+    await useKuAddStore().getProductFromExcludedWithFilter();
   } catch (error) {
-    console.error("Ошибка при загрузке данных ку1", error);
+    console.error("Ошибка при загрузке данных искл.продуктов", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterValue3('page', page);
-  useKuAddStore().getProductFromAPIWithFilter(page);
+  useKuAddStore().setFilterValue9('page', page);
+  useKuAddStore().getProductFromExcludedWithFilter(page);
 };
 
 //поиск
-const searchProductInKu = ref('');
-watch(searchProductInKu, (newValue: string) => {
-  useKuAddStore().performSearchProduct(newValue);
+const searchProductExKu = ref('');
+watch(searchProductExKu, (newValue: string) => {
+  useKuAddStore().performSearchProductEx(newValue);
 });
 
 //для очистки выбора
@@ -88,29 +87,29 @@ const AddProductItem = () => {
   const selectedRows = useKuAddStore().multipleSelectionProduct;
 
   selectedRows.forEach(row => {
-    useKuAddStore().tableDataRequirement.push({
+    useKuAddStore().tableDataExRequirement.push({
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,
       producer: "",
       brand: "",
     });
-    console.log("store.tableDataRequirementПРОДУКТЫ",useKuAddStore().tableDataRequirement);
+    console.log("исклПРОДУКТЫ",useKuAddStore().tableDataExRequirement);
   });
   toggleSelection()
-  kuStore.dialogFormProductVisible = false;
+  kuStore.dialogFormProductExVisible = false;
 };
 
-//монтирование данных в таблицу
-onMounted(async () => {
-  try {
-    loading.value = true; 
-    await useKuAddStore().getProductFromAPIWithFilter();
-    loading.value = false;
-  } catch (error) {
-    console.error("Ошибка при загрузке данных", error);
-    loading.value = false;
-  }
-});
+// //монтирование данных в таблицу
+// onMounted(async () => {
+//   try {
+//     loading.value = true; 
+//     await useKuAddStore().getProductFromExcludedWithFilter();
+//     loading.value = false;
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//     loading.value = false;
+//   }
+// });
 
 </script>

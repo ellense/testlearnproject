@@ -1,11 +1,11 @@
 <template>
-    <el-tabs v-model="activeName" type="border-card">
+    <el-tabs v-model="activeName" type="border-card" style="margin-right: 10px;">
         <el-tab-pane label="Основное" name="first"><EntitiesKuAddMainBasic/></el-tab-pane>
-        <el-tab-pane label="Условия бонуса" name="second">В разработке...</el-tab-pane>
+        <el-tab-pane label="Условия бонуса" name="second"><EntitiesKuAddMainBonus/></el-tab-pane>
         <el-tab-pane label="Исключенные накладные" name="third">В разработке...</el-tab-pane>
         <el-tab-pane label="Категорийные менеджеры" name="fourth">В разработке...</el-tab-pane>
         <el-tab-pane label="Должностные лица" name="fifth">В разработке...</el-tab-pane>
-        <h3>Условия по товарам</h3>
+
     <EntitiesKuAddRequirement />
     </el-tabs>
 </template>

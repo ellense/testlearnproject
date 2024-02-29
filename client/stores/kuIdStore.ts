@@ -11,7 +11,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         brand: [],
         producer: [],
         product: [],
-        tableDataRequirement: [],
+        tableDataInRequirement: [],
         dataEntity: [],
         dataVendor: [],
         dataInfoKu: [],
@@ -85,8 +85,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
         //         const results = await KU.getInfoRequirements({
         //             ku_id: kuId,
         //         });
-        //         this.$state.tableDataRequirement = results
-        //         console.log("полученная таблица условий ку:", this.tableDataRequirement)
+        //         this.$state.tableDataInRequirement = results
+        //         console.log("полученная таблица условий ку:", this.tableDataInRequirement)
         //         console.log("успешно получили данные условий:", results);
         //     } catch (error) {
         //         console.error("Ошибка при получении данных условий:", error);

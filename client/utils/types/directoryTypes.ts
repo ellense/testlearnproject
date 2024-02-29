@@ -150,7 +150,7 @@ export interface IKuPost {
   percent: number | null;
 }
 export interface IKuPost2 {
-  requirements: IRequirement[];
+  requirements: IIncludedRequirement[];
 }
 export interface IKuPostGraphic {
   ku_id: string;
@@ -203,28 +203,39 @@ export interface IKuAddStore {
   newDateStart: Date;
   newDateEnd: Date;
   newDateActual: Date;
-  valueCategory_id: string
-  valueCategory_name: string
-  valueProducer_name: string;
-  valueBrand_name: string;
+  valueCategory_idIn: string
+  valueCategory_nameIn: string
+  valueProducer_nameIn: string;
+  valueBrand_nameIn: string;
+  valueCategory_idEx: string
+  valueCategory_nameEx: string
+  valueProducer_nameEx: string;
+  valueBrand_nameEx: string;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
   multipleTableRef: Ref | null;
   //данные таблиц
-  brand: IBrand[];
-  producer: IProducer[];
-  product: IProduct[];
-  tableDataRequirement: IRequirement[];
+  brandIncluded: IBrand[];
+  brandExcluded: IBrand[];
+  producerIncluded: IProducer[];
+  producerExcluded: IProducer[];
+  productIncluded: IProduct[];
+  productExcluded: IProduct[];
+  tableDataInRequirement: IIncludedRequirement[];
+  tableDataExRequirement: IExcludedRequirement[]
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
   treeData: ITree[],
   treeRef: typeof ElTree | null,
   // dataInfoKu: IKuList[];
   //v-model диалоговых форм
-  dialogFormProductVisible: boolean;
-  dialogFormCategoryVisible: boolean;
-  //дизэйбл
-  disableButtons: boolean
+  dialogFormProductInVisible: boolean
+  dialogFormCategoryInVisible: boolean
+  dialogFormProductExVisible: boolean
+  dialogFormCategoryExVisible: boolean
+  //дизэйбл кнопок
+  disableButtonsIncluded: boolean
+  disableButtonsExcluded: boolean
   //
   vendorFilter: string;
   // kuFilter: number | null;
@@ -234,11 +245,15 @@ export interface IKuAddStore {
   countRowTable: number;
   countRowTable2: number;
   //поиски
-  searchProduct: string;
+  searchProductIncluded: string;
+  searchProductExcluded: string;
   //параметры для фильтров при запросах
-  filterProductValue: GetAllProducts
-  filterProducerValue: GetAllProducer
-  filterBrandValue: GetAllBrands
+  filterProductIncluded: GetAllProducts
+  filterProductExcluded: GetAllProducts
+  filterProducerIncluded: GetAllProducer
+  filterProducerExcluded: GetAllProducer
+  filterBrandIncluded: GetAllBrands
+  filterBrandExcluded: GetAllBrands
   filterVendorValue: GetAllVendorsForEntity
 }
 export interface IKuIdStore {
@@ -264,7 +279,7 @@ export interface IKuIdStore {
   brand: IBrand[];
   producer: IProducer[];
   product: IProduct[];
-  tableDataRequirement: IRequirement[];
+  tableDataInRequirement: IIncludedRequirement[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
   dataInfoKu: IKuList[];
@@ -444,7 +459,14 @@ export interface IProfile {
 }
 
 //Условия
-export interface IRequirement {
+export interface IIncludedRequirement {
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IExcludedRequirement {
   item_type: string;
   item_code: string;
   item_name: string;
@@ -461,7 +483,7 @@ export interface IRequirementPost2 {
 }
 export interface IRequirementPost {
   ku_id: string;
-  requirements: IRequirement[]
+  requirements: IIncludedRequirement[]
 }
 
 // Производитель

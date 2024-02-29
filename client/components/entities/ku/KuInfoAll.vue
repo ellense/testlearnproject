@@ -348,7 +348,7 @@ const disableButtonEditTooltip = computed(() => {
 });
 const addClose = () => {
     router.push({ path: "/" });
-    store.tableDataRequirement.length = 0;
+    store.tableDataInRequirement.length = 0;
     store.ku_id = "";
     store.kuIdEntityName = {
         entity_id: [],
@@ -371,7 +371,7 @@ const changeKuToBackend = async () => {
         return;
     }
     // Проверяем наличие хотя бы одного условия по товарам
-    // if (store.tableDataRequirement.length === 0) {
+    // if (store.tableDataInRequirement.length === 0) {
     //     ElMessage.error('Добавьте минимум одно условие по товарам');
     //     return;
     // }
@@ -394,8 +394,8 @@ const changeKuToBackend = async () => {
         // Отправляем запрос на создание нового элемента на бэкенд
         const response = await KU.updateKu(newItem);
 
-        // // Создаем массив объектов для каждого элемента из tableDataRequirement
-        // const requirementsArray = store.tableDataRequirement.map(item => ({
+        // // Создаем массив объектов для каждого элемента из tableDataInRequirement
+        // const requirementsArray = store.tableDataInRequirement.map(item => ({
         //   ku_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
         //   item_type: item.item_type,
         //   item_code: item.item_code,
@@ -426,7 +426,7 @@ const changeKuToBackend = async () => {
     } finally {
         loading.value = false;
         // Очищаем поля и таблицу условий
-        store.tableDataRequirement.length = 0;
+        store.tableDataInRequirement.length = 0;
         store.kuIdEntityName = {
             entity_id: [],
             entity_name: "",

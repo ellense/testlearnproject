@@ -1,17 +1,17 @@
 <template>
     <div>
-        <el-button size="small" text bg @click="onAddItem()" :disabled="store.disableButtons"
+        <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsExcluded"
             :title="disableButtonTooltip">+ Все</el-button>
-        <el-button size="small" text bg @click="dialogOpenProduct()" :disabled="store.disableButtons"
+        <el-button size="small"  round @click="dialogOpenProduct()" :disabled="store.disableButtonsExcluded"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
         <!-- :loading="categoryDialogLoading"  -->
-        <el-button size="small" text bg @click="dialogOpenCategory()" :disabled="store.disableButtons"
+        <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsExcluded"
             :title="disableButtonTooltip">+ Условие по
             категории</el-button>
     </div>
     <el-scrollbar class="scrollTable">
-        <el-table style="width: 100%" height="calc(100vh - 700px)" :data="kuRequirementList" border
+        <el-table style="width: 100%" height="calc(100vh - 705px)" :data="kuRequirementList" border
             empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"
@@ -36,48 +36,19 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 
 
 const store = useKuAddStore();
-const kuRequirementList = ref(store.tableDataRequirement);
-
-// //проверка полей формы
-// const isFormValid = () => {
-//   const isEmpty = (value: any) => {
-//     if (Array.isArray(value)) {
-//       return value.some((item) => item === null || item.trim() === '');
-//     } else {
-//       return value === null || String(value).trim() === '';
-//     }
-//   };
-
-//   // Проверка для каждого поля
-//   const isEntityNameValid = !isEmpty(store.entityName);
-//   const isNewTypeValid = !isEmpty(store.newType);
-//   const isNewDateStartValid = !isEmpty(store.newDateStart);
-//   const isNewDateEndValid = !isEmpty(store.newDateEnd);
-//   const isVendorNameValid = !isEmpty(store.vendorName);
-//   const isNewPercentValid = !isEmpty(store.newPercent);
-
-//   // Возвращаем результат общей проверки
-//   return (
-//     isEntityNameValid &&
-//     isNewTypeValid &&
-//     isNewDateStartValid &&
-//     isNewDateEndValid &&
-//     isVendorNameValid &&
-//     isNewPercentValid
-//   );
-// };
+const kuRequirementList = ref(store.tableDataExRequirement);
 
 //добавление условия "все"
 const onAddItem = () => {
-    if (store.tableDataRequirement.length === 0) {
-        store.tableDataRequirement.push({
+    if (store.tableDataExRequirement.length === 0) {
+        store.tableDataExRequirement.push({
             item_type: "Все",
             item_code: "",
             item_name: "",
             producer: "",
             brand: "",
         });
-        console.log("данные условия ВСЕ", store.tableDataRequirement);
+        console.log("данные условия ВСЕ", store.tableDataExRequirement);
 
     }
     else {
@@ -85,8 +56,8 @@ const onAddItem = () => {
             confirmButtonText: 'OK',
             callback: (action: Action) => {
                 if (action === 'confirm') { // Проверяем, что пользователь подтвердил удаление
-                    store.tableDataRequirement.length = 0;// Очищаем массив
-                    store.tableDataRequirement.push({
+                    store.tableDataExRequirement.length = 0;// Очищаем массив
+                    store.tableDataExRequirement.push({
                         item_type: "Все",
                         item_code: "",
                         item_name: "",
@@ -102,26 +73,26 @@ const onAddItem = () => {
         });
 
     }
-    store.disableButtons = true;
+    store.disableButtonsExcluded = true;
 };
 
 //кнопки добавления условий
 const dialogOpenProduct = () => {
-    store.dialogFormProductVisible = true;
+    store.dialogFormProductExVisible = true;
 };
 const dialogOpenCategory = () => {
-    store.dialogFormCategoryVisible = true;
+    store.dialogFormCategoryExVisible = true;
 
 };
 
 //удаление условий
 const deleteRow = (index: number) => {
-    store.tableDataRequirement.splice(index, 1);
-    store.disableButtons = false;
+    store.tableDataExRequirement.splice(index, 1);
+    store.disableButtonsExcluded = false;
 }
 
 const disableButtonTooltip = computed(() => {
-    return store.disableButtons ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
+    return store.disableButtonsExcluded ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
 });
 
 </script>

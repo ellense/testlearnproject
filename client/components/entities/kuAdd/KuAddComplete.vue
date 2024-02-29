@@ -56,7 +56,7 @@ const addItemAndSendToBackend = async () => {
     return;
   }
   // Проверяем наличие хотя бы одного условия по товарам
-  if (store.tableDataRequirement.length === 0) {
+  if (store.tableDataInRequirement.length === 0) {
     ElMessage.error('Добавьте минимум одно условие по товарам');
     return;
   }
@@ -79,8 +79,8 @@ const addItemAndSendToBackend = async () => {
     // Отправляем запрос на создание нового элемента на бэкенд
     const response = await KU.postKu(newItem);
 
-    // Создаем массив объектов для каждого элемента из tableDataRequirement
-    const requirementsArray = store.tableDataRequirement.map(item => ({
+    // Создаем массив объектов для каждого элемента из tableDataInRequirement
+    const requirementsArray = store.tableDataInRequirement.map(item => ({
       ku_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
       item_type: item.item_type,
       item_code: item.item_code,
@@ -126,8 +126,10 @@ const addItemAndSendToBackend = async () => {
   // Если все запросы были успешными, то выполняем дополнительные действия
 
   // Очищаем поля и таблицу условий
-  store.tableDataRequirement.length = 0;
-  store.disableButtons = false;
+  store.tableDataInRequirement.length = 0;
+  store.tableDataExRequirement.length = 0;
+  store.disableButtonsIncluded = false;
+  store.disableButtonsExcluded = false;
   store.entityName = [];
   store.vendorName = "";
   store.newType = "";
@@ -141,14 +143,16 @@ const addItemAndSendToBackend = async () => {
 //отменить
 const addClose = () => {
   router.push("ku");
-  store.tableDataRequirement.length = 0;
+  store.tableDataInRequirement.length = 0;
+  store.tableDataExRequirement.length = 0;
+  store.disableButtonsIncluded = false;
+  store.disableButtonsExcluded = false;
   store.entityName = [];
   store.vendorName = "";
   store.newType = "";
   store.newDateStart = new Date();
   store.newDateEnd = new Date();
   store.newPercent = null;
-  store.disableButtons = false
 };
 </script>
 

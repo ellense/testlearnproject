@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="useKuAddStore().dialogFormCategoryVisible" width="750px"
+  <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" width="750px"
     title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal close-on-press-escape
     draggable>
     <div class="selectCategory">
@@ -11,7 +11,7 @@
       </div>
       <div>
         <div class="custom-label">Производитель</div>
-        <el-select-v2 v-model="store.valueProducer_name" clearable filterable style="width: 500px; "
+        <el-select-v2 v-model="store.valueProducer_nameIn" clearable filterable style="width: 500px; "
           placeholder="Выберите производителя" :options="options2" @change="onProducerChange">
           <template #option="{ option }">
             <span>{{ option.label }}</span>
@@ -26,7 +26,7 @@
       </div>
       <div>
         <div class="custom-label">Торговая марка</div>
-        <el-select-v2 v-model="store.valueBrand_name" clearable filterable style="width: 500px"
+        <el-select-v2 v-model="store.valueBrand_nameIn" clearable filterable style="width: 500px"
           placeholder="Выберите торговую марку" :options="options3">
           <template #option="{ option }">
             <span>{{ option.label }}</span>
@@ -44,7 +44,7 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="useKuAddStore().dialogFormCategoryVisible = false">Отменить</el-button>
+        <el-button @click="useKuAddStore().dialogFormCategoryInVisible = false">Отменить</el-button>
         <el-button @click="AddCategoryItem()">Сохранить</el-button>
       </span>
     </template>
@@ -61,20 +61,20 @@ const store = useKuAddStore();
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 const options3 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(() => store.producer, (producers: IProducer[]) => {
+watch(() => store.producerIncluded, (producers: IProducer[]) => {
   const uniqueProducers = Array.from(new Set(producers.map(item => item.producer_name)));
   options2.value = uniqueProducers.map(label => ({ label, value: label }));
 });
 
-watch(() => store.brand, (brands: IBrand[]) => {
+watch(() => store.brandIncluded, (brands: IBrand[]) => {
   const uniqueBrands = Array.from(new Set(brands.map(item => item.brand_name)));
   options3.value = uniqueBrands.map(label => ({ label, value: label }));
 });
 
 // onMounted(async () => {
 //   try {
-//     await store.fetchAllProducers();
-//     await store.fetchAllBrands();
+//     await store.fetchAllProducersForInclided();
+//     await store.fetchAllBrandsForIncluded();
 
 //   } catch (error) {
 //     console.error('Ошибка при загрузке данных производителя и бренда', error);
@@ -82,15 +82,15 @@ watch(() => store.brand, (brands: IBrand[]) => {
 // });
 
 const onProducerChange = async () => {
-  store.valueBrand_name = "";
-  store.setFilterValue5('producer_name', store.valueProducer_name);
-  if (store.valueProducer_name) { // Проверка, что выбрана торговая маркка
-    useKuAddStore().fetchAllBrands(); // Выполнить запрос с фильтром по производителям
+  store.valueBrand_nameIn = "";
+  store.setFilterValue5('producer_name', store.valueProducer_nameIn);
+  if (store.valueProducer_nameIn) { // Проверка, что выбрана торговая маркка
+    useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
     useKuAddStore().setFilterValue5('producer_name', undefined); // Сбросить фильтр
-    console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandValue);
-    useKuAddStore().fetchAllBrands(); // Выполнить запрос без фильтра
+    console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
+    useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
     console.log('Выполнен запрос на получение всех данных производителей.');
   }
 };
@@ -156,12 +156,12 @@ const fetchData = async (data: ITree) => {
 //изменение поля дерева
 let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
-  store.valueBrand_name = "";
-  store.valueProducer_name = "";
+  store.valueBrand_nameIn = "";
+  store.valueProducer_nameIn = "";
   useKuAddStore().setFilterValue4("l4", []);
   useKuAddStore().setFilterValue5('producer_name', undefined);
-  await store.fetchAllProducers();
-  await store.fetchAllBrands();
+  await store.fetchAllProducersForInclided();
+  await store.fetchAllBrandsForIncluded();
   console.log('Отмеченные ключи:', checkedKeys);
 
   if (checkedKeys && checkedKeys.length > 0) {
@@ -177,8 +177,8 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
     useKuAddStore().setFilterValue5("l4", selectedCategoryKey);
    
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
-      useKuAddStore().fetchAllProducers(); // Выполнить запрос с фильтром по категории
-      useKuAddStore().fetchAllBrands();
+      useKuAddStore().fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
+      useKuAddStore().fetchAllBrandsForIncluded();
       console.log('Выполнены запросы по фильтру категории.');
     }
   }
@@ -202,24 +202,24 @@ const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
 
 //добавление условий по категории
 const AddCategoryItem = async () => {
-  if (store.valueProducer_name || value.value || store.valueBrand_name) {
-    console.log("valueProducer_name", store.valueProducer_name);
-    console.log("valueBrand_name", store.valueBrand_name);
+  if (store.valueProducer_nameIn || value.value || store.valueBrand_nameIn) {
+    console.log("valueProducer_name", store.valueProducer_nameIn);
+    console.log("valueBrand_name", store.valueBrand_nameIn);
 
     // Используем сохраненное значение selectedCategoryName
-    useKuAddStore().tableDataRequirement.push({
+    useKuAddStore().tableDataInRequirement.push({
       item_type: "Категория",
       item_code: value.value,
       item_name: selectedCategoryName, // Передаем имя выбранной категории
-      producer: store.valueProducer_name,
-      brand: store.valueBrand_name,
+      producer: store.valueProducer_nameIn,
+      brand: store.valueBrand_nameIn,
     });
-    console.log("store.tableDataRequirementКАТЕГОРИЯ", store.tableDataRequirement);
+    console.log("store.tableDataRequirementКАТЕГОРИЯ", store.tableDataInRequirement);
 
-    useKuAddStore().dialogFormCategoryVisible = false;
+    useKuAddStore().dialogFormCategoryInVisible = false;
     value.value = "";
-    store.valueProducer_name = "";
-    store.valueBrand_name = "";
+    store.valueProducer_nameIn = "";
+    store.valueBrand_nameIn = "";
     await fetchData({
       name: "string",
       classifier_code: 1,
@@ -228,8 +228,8 @@ const AddCategoryItem = async () => {
     });
     useKuAddStore().setFilterValue4("l4", []);
     useKuAddStore().setFilterValue5('producer_name', undefined);
-    await store.fetchAllProducers();
-    await store.fetchAllBrands();
+    await store.fetchAllProducersForInclided();
+    await store.fetchAllBrandsForIncluded();
   } else {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }

@@ -2,7 +2,7 @@
 <el-tabs  v-model="activeName" class="demo-tabs" @tab-click="handleClick">
     <el-tab-pane label="Включенные условия" name="first"><EntitiesKuAddRequirementIncluded/></el-tab-pane>
     <el-tab-pane label="Исключенные условия" name="second"><EntitiesKuAddRequirementExcluded/></el-tab-pane>
-    <el-tab-pane label="наименование контракта" name="third">В разработке...</el-tab-pane>
+    <el-tab-pane label="Наименование контракта" name="third">В разработке...</el-tab-pane>
   </el-tabs>
 </template>
 <script lang="ts" setup>
@@ -17,7 +17,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 </script>
 <style>
 .demo-tabs>.el-tabs__content {
-    padding: 10px;
+    padding: 0 10px 10px 10px !important;
     color: #3b3c3f;
 }
 </style>

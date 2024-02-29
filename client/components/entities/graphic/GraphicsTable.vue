@@ -84,10 +84,10 @@ const filterTag = (value: string, row: IGraphic) => {
 const filterTag2 = (value: string, row: IGraphic) => {
   return row.period === value
 }
-const getStatusTagType = (status: string): "success" | "warning" | "info" | "primary" | "danger" | undefined => {
+const getStatusTagType = (status: string): "success" | "warning" | "info" | "" | "danger" | undefined => {
   switch (status) {
     case "Запланировано":
-      return "primary";
+      return "";
     case "Рассчитано":
       return "warning";
     case "Утверждено":

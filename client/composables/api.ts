@@ -39,7 +39,7 @@ import type {
   GetAllInvoicesAndProductForGraphic,
   GetAllProductsForGraphicReturnData,
   IKuUpdate,
-  IRequirement,
+  IIncludedRequirement,
   GetAllCategory,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
@@ -106,7 +106,7 @@ export const KU = {
     $Put(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/kudetail/${data.ku_id}/`, { data, isBearer: false }),
-  getInfoRequirements: (params: IKuId): Promise<IRequirement[]> =>
+  getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
     $Get(`api/included_conditions_list/`, { params, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graphlist/", { params, isBearer: false }),
@@ -116,7 +116,7 @@ export const GRAPHIC = {
   getGraphic: (params?: GetAllGraphic): Promise<GetAllGraphicsReturnData> =>
     $Get("api/graphlist/", { params, isBearer: false }),
   postGraphic: (data: IKuPostGraphic): Promise<IKuPostGraphic> =>
-    $Post("api/create_graph/", { data, isBearer: false }),
+    $Post("api/graph_create/", { data, isBearer: false }),
   deleteGraphic: (data: IGraphicId) =>
     $Delete(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
   getInfoGraphic: (data: IGraphicId): Promise<IGraphicInfo> =>

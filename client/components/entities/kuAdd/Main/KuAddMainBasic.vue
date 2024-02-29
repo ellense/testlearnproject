@@ -1,4 +1,5 @@
 <template>
+  <el-scrollbar height="calc(100vh - 600px)">
     <form>
       <el-row>
         <el-col :span="5">
@@ -78,6 +79,7 @@
         </el-col>
       </el-row>
     </form>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -128,7 +130,7 @@ const onEntityChange = async () => {
         console.log('Выполнен запрос на получение данных производителей.');
     } else {
         useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-        console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandValue);
+        console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
     }
 };
 
@@ -138,9 +140,15 @@ const onVendorChange = async () => {
         store.setFilterValue3('vendor_id', store.vendorName);
         store.setFilterValue4('vendor_id', store.vendorName);
         store.setFilterValue5('vendor_id', store.vendorName);
-        await store.getProductFromAPIWithFilter();
-        await store.fetchAllProducers();
-        await store.fetchAllBrands();
+        await store.getProductFromIncludedWithFilter();
+        await store.fetchAllProducersForInclided();
+        await store.fetchAllBrandsForIncluded();
+        store.setFilterValue8('vendor_id', store.vendorName);
+        store.setFilterValue7('vendor_id', store.vendorName);
+        store.setFilterValue9('vendor_id', store.vendorName);
+        await store.getProductFromExcludedWithFilter();
+        await store.fetchAllProducersForExcluded();
+        await store.fetchAllBrandsForExcluded();
     } catch (error) {
         console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
     }

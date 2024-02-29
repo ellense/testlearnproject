@@ -5,14 +5,14 @@
       <el-table-column type="selection" width="55" />
       <el-table-column property="ku_id" label="Код КУ" width="150" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
-        <el-table-column property="entity_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
+        <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик">
-        <el-table-column property="vendor_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
+        <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="percent" label="Процент" width="120" show-overflow-tooltip />
+      <el-table-column property="percent" label="Процент" width="80" show-overflow-tooltip />
       <el-table-column prop="period" label="Период расчета" width="110" :filters="[
         { text: 'Месяц', value: 'Месяц' },
         { text: 'Квартал', value: 'Квартал' },
@@ -34,7 +34,7 @@
           <el-tag  disable-transitions :type="getStatusTagTypeGraphic(scope2.row.graph_exists)">{{ scope2.row.graph_exists }}</el-tag>
         </template>
       </el-table-column> -->
-      <el-table-column prop="graph_exists" label="График расчета" width="100">
+      <el-table-column prop="graph_exists" label="График расчета" width="80" align="center">
         <template #default="scope4">
           <el-checkbox :checked="scope4.row.graph_exists" disabled></el-checkbox>
         </template>
@@ -136,10 +136,10 @@ const filterPeriod = (value: string, row: IKuList) => {
 const filterStatus = (value: string, row: IKuList) => {
   return row.status === value
 }
-const getStatusTagType = (status: string): "success" | "warning" | "info" | "primary" | "danger" | undefined  => {
+const getStatusTagType = (status: string): "success" | "warning" | "info" | "" | "danger" | undefined  => {
   switch (status) {
     case 'Создано':
-      return "primary";
+      return "";
     case 'Действует':
       return "success";
     case 'Закрыто':

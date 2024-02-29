@@ -20,11 +20,11 @@
 import { ref } from "vue";
 
 import { useKuIdStore } from "~~/stores/kuIdStore";
-const kuRequirementList = ref(useKuIdStore().tableDataRequirement);
+const kuRequirementList = ref(useKuIdStore().tableDataInRequirement);
 
 //удаление условий
 const deleteRow = (index: number) => {
-  useKuIdStore().tableDataRequirement.splice(index, 1);
+  useKuIdStore().tableDataInRequirement.splice(index, 1);
   useKuIdStore().disableButtons = false;
 }
 </script>

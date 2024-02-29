@@ -21,6 +21,7 @@ a {
   display: flex;
   height: calc(100vh - 160px);
   margin: 10px 10px 0 0;
+  color: #cacaca;
 }
 
 .productTree {
@@ -124,3 +125,7 @@ h1 {
 /* .el-select-dropdown__list .el-vl__window{
   width: 100%;
 } */
+
+.el-tabs__item {
+  font-weight: 600 !important;
+}
