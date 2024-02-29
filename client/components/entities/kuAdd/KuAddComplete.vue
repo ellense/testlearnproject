@@ -1,0 +1,174 @@
+<template>
+  <el-scrollbar height="calc(100vh - 60px)">
+    <EntitiesKuAddMain />
+   
+    <div class="button_bottom">
+      <el-button @click="addClose()">Отменить</el-button>
+      <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
+    </div>
+
+  </el-scrollbar>
+</template>
+
+<script lang="ts" setup>
+import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuStore } from "~~/stores/kuStore";
+import dayjs from "dayjs";
+
+const store = useKuAddStore();
+const router = useRouter();
+const loading = ref(false);
+
+//проверка полей формы
+const isFormValid = () => {
+  const isEmpty = (value: any) => {
+    if (Array.isArray(value)) {
+      return value.some((item) => item === null || item.trim() === '');
+    } else {
+      return value === null || String(value).trim() === '';
+    }
+  };
+
+  // Проверка для каждого поля
+  const isEntityNameValid = !isEmpty(store.entityName);
+  const isNewTypeValid = !isEmpty(store.newType);
+  const isNewDateStartValid = !isEmpty(store.newDateStart);
+  const isNewDateEndValid = !isEmpty(store.newDateEnd);
+  const isVendorNameValid = !isEmpty(store.vendorName);
+  const isNewPercentValid = !isEmpty(store.newPercent);
+
+  // Возвращаем результат общей проверки
+  return (
+    isEntityNameValid &&
+    isNewTypeValid &&
+    isNewDateStartValid &&
+    isNewDateEndValid &&
+    isVendorNameValid &&
+    isNewPercentValid
+  );
+};
+
+//отправка ку на бэк
+const addItemAndSendToBackend = async () => {
+  // Проверяем валидность формы
+  if (!isFormValid()) {
+    ElMessage.error('Не все поля заполнены корректно.');
+    return;
+  }
+  // Проверяем наличие хотя бы одного условия по товарам
+  if (store.tableDataRequirement.length === 0) {
+    ElMessage.error('Добавьте минимум одно условие по товарам');
+    return;
+  }
+
+  loading.value = true;
+  let success = false; // Переменная для отслеживания успешности выполнения всех запросов
+
+  try {
+    // Создаем объект newItem для отправки на бэкенд
+    const newItem = {
+      entity_id: store.entityName,
+      vendor_id: store.vendorName,
+      period: store.newType,
+      date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
+      date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
+      status: "Создано",
+      percent: store.newPercent,
+    };
+
+    // Отправляем запрос на создание нового элемента на бэкенд
+    const response = await KU.postKu(newItem);
+
+    // Создаем массив объектов для каждого элемента из tableDataRequirement
+    const requirementsArray = store.tableDataRequirement.map(item => ({
+      ku_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
+      item_type: item.item_type,
+      item_code: item.item_code,
+      item_name: item.item_name,
+      producer: item.producer,
+      brand: item.brand,
+    }));
+
+    // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
+    const responses = await Promise.all(requirementsArray.map(async newItem2 => {
+      try {
+        const response = await KU.postKuRequirement(newItem2);
+        return response;
+      } catch (error) {
+        console.error("Ошибка при отправке условия на бэкенд:", error);
+        return null;
+      }
+    }));
+
+    // Проверяем успешность отправки всех объектов
+    success = responses.every(response => response !== null);
+
+    if (response && success) {
+      console.log("Экземпляр успешно отправлен на бэкенд:", response);
+      console.log("Условия успешно отправлены на бэкенд:", responses);
+      await useKuStore().getKuFromAPIWithFilter();
+      router.push("ku");
+
+      ElMessage.success("Коммерческое условие успешно создано.");
+    } else {
+      console.error("Не удалось отправить экземпляр или условия на бэкенд");
+      ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
+      return;
+    }
+  } catch (error) {
+    ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
+    console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+    return;
+  } finally {
+    loading.value = false;
+  }
+
+  // Если все запросы были успешными, то выполняем дополнительные действия
+
+  // Очищаем поля и таблицу условий
+  store.tableDataRequirement.length = 0;
+  store.disableButtons = false;
+  store.entityName = [];
+  store.vendorName = "";
+  store.newType = "";
+  store.newDateStart = new Date();
+  store.newDateEnd = new Date();
+  store.newPercent = null;
+
+};
+
+
+//отменить
+const addClose = () => {
+  router.push("ku");
+  store.tableDataRequirement.length = 0;
+  store.entityName = [];
+  store.vendorName = "";
+  store.newType = "";
+  store.newDateStart = new Date();
+  store.newDateEnd = new Date();
+  store.newPercent = null;
+  store.disableButtons = false
+};
+</script>
+
+<style scoped>
+.button_bottom {
+  margin: 20px 10px 0 0;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.loading-cursor {
+  cursor: wait;
+  /* Установка курсора в виде элемента загрузки */
+}
+
+.el-popper {
+  min-width: 600px !important
+}
+
+.el-vl__window {
+  width: 100% !important
+}
+</style>

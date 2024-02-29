@@ -90,7 +90,8 @@ h1 {
 .custom-label {
   display: block;
   margin-bottom: 4px;
-  font-size: 14px;
+  font-size: 13px;
+  font-weight: 500;
 }
 
 .el-table__column-filter-trigger {
@@ -114,10 +115,10 @@ h1 {
   font-weight: 600;
 }
 
-.el-popper {
+.selectVendorInKuAdd .el-popper {
   min-width: 520px !important
 }
-.el-vl__window {
+.selectVendorInKuAdd .el-vl__window {
   width: 100% !important
 }
 /* .el-select-dropdown__list .el-vl__window{

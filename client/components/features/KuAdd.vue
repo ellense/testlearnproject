@@ -1,7 +1,6 @@
 <template>
-  <EntitiesKuAddLine />
-  <EntitiesKuAddFiltresForm />
-  <EntitiesKuAddFiltresKuAddFiltersFormProduct />
+  <EntitiesKuAddComplete />
+
 </template>
 
 <script lang="ts" setup></script>
