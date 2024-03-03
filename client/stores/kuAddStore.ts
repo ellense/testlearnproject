@@ -44,6 +44,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         productExcluded: [],
         tableDataInRequirement: [],
         tableDataExRequirement: [],
+        tableDataPercent: [],
         dataEntity: [],
         dataVendor: [],
         treeData: [],

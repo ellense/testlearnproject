@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar height="calc(100vh - 60px)">
     <EntitiesKuAddMain />
-   
+
     <div class="button_bottom">
       <el-button @click="addClose()">Отменить</el-button>
       <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
@@ -128,6 +128,7 @@ const addItemAndSendToBackend = async () => {
   // Очищаем поля и таблицу условий
   store.tableDataInRequirement.length = 0;
   store.tableDataExRequirement.length = 0;
+  store.tableDataPercent.length = 0;
   store.disableButtonsIncluded = false;
   store.disableButtonsExcluded = false;
   store.entityName = [];
@@ -145,6 +146,7 @@ const addClose = () => {
   router.push("ku");
   store.tableDataInRequirement.length = 0;
   store.tableDataExRequirement.length = 0;
+  store.tableDataPercent.length = 0;
   store.disableButtonsIncluded = false;
   store.disableButtonsExcluded = false;
   store.entityName = [];

@@ -222,7 +222,8 @@ export interface IKuAddStore {
   productIncluded: IProduct[];
   productExcluded: IProduct[];
   tableDataInRequirement: IIncludedRequirement[];
-  tableDataExRequirement: IExcludedRequirement[]
+  tableDataExRequirement: IExcludedRequirement[];
+  tableDataPercent: IPercent[];
   dataEntity: IEntityIdAndName[];
   dataVendor: IVendorIdAndName[];
   treeData: ITree[],
@@ -306,6 +307,42 @@ export interface GetAllKusReturnData extends Pagination {
 }
 export interface GetAllKu_IdReturnData extends Pagination {
   results: IKuId[];
+}
+
+//Условия
+export interface IIncludedRequirement {
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IExcludedRequirement {
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IRequirementPost2 {
+  ku_id: string;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IRequirementPost {
+  ku_id: string;
+  requirements: IIncludedRequirement[]
+}
+
+//сложный процент
+export interface IPercent {
+  fix: boolean;
+  criteria: number | null;
+  percentSumma: number | null;
+  
 }
 
 // График
@@ -458,33 +495,7 @@ export interface IProfile {
   email: string;
 }
 
-//Условия
-export interface IIncludedRequirement {
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
-}
-export interface IExcludedRequirement {
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
-}
-export interface IRequirementPost2 {
-  ku_id: string;
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
-}
-export interface IRequirementPost {
-  ku_id: string;
-  requirements: IIncludedRequirement[]
-}
+
 
 // Производитель
 export interface IProducer {
