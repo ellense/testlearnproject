@@ -1,17 +1,17 @@
 <template>
     <div>
-        <el-button size="small"  round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
+        <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Все</el-button>
         <el-button size="small" round @click="dialogOpenProduct()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
         <!-- :loading="categoryDialogLoading"  -->
-        <el-button size="small"  round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
+        <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             категории</el-button>
     </div>
     <el-scrollbar class="scrollTable">
-        <el-table style="width: 100%" height="calc(100vh - 705px)" :data="kuRequirementList" border
+        <el-table style="width: 100%" height="calc(100vh - 745px)" :data="kuRequirementList" border
             empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"
@@ -29,6 +29,7 @@
         </el-table>
     </el-scrollbar>
 </template>
+
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { Action, ElTree } from 'element-plus'
@@ -96,3 +97,7 @@ const disableButtonTooltip = computed(() => {
 });
 
 </script>
+
+<style scoped>
+
+</style>

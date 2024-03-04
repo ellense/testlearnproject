@@ -21,7 +21,7 @@ a {
   display: flex;
   height: calc(100vh - 160px);
   margin: 10px 10px 0 0;
-  color: #cacaca;
+  color: #4d4d4d;
 }
 
 .productTree {
@@ -108,7 +108,8 @@ h1 {
 }
 
 .el-table .el-table__cell {
-  padding: 3px 0;
+  padding: 4px 0;
+  height: min-content;
 }
 
 .el-divider__text.is-left {
@@ -125,7 +126,16 @@ h1 {
 /* .el-select-dropdown__list .el-vl__window{
   width: 100%;
 } */
-
+.el-tabs--border-card>.el-tabs__content {
+  padding: 0 5px 15px 15px !important;
+}
 .el-tabs__item {
   font-weight: 600 !important;
 }
+.el-tabs {
+  --el-tabs-header-height: 35px;
+}
+.buttonAdd {
+  margin-top: 15px;
+}
+

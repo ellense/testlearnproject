@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="calc(100vh - 60px)">
+  <el-scrollbar height="calc(100vh - 120px)">
     <EntitiesKuAddMain />
 
     <div class="button_bottom">
