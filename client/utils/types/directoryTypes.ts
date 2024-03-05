@@ -60,6 +60,9 @@ export interface GetAllVendorsReturnData extends Pagination {
 export interface IVendorId {
   vendor_id: string
 }
+export interface IVendorName {
+  name: string
+}
 export interface IVendorIdAndName {
   vendor_id: string
   name: string;
@@ -69,18 +72,20 @@ export interface IVendorIdAndNameForKu {
   vendor_name: string;
 }
 export interface GetAllVendorsForEntity {
-  entity_id?: string[];
+  entity_id?: string;
+  vendor_id?: string;
   page_size?: number;
   page?: number;
 }
 export interface GetAllVendorsForEntityInVendor {
-  entity_id?: string[]
+  entity_ids?: string[]
   page_size?: number
   page?: number
   search?: string;
 }
 export interface GetAllVendorsForEntityReturnData extends Pagination {
-  results: IVendorIdAndName[];
+  resultsId: IVendorId[];
+  resultsName: IVendorName[];
 }
 export interface GetAllVendorsForEntityInVendorReturnData extends Pagination {
   results: IVendor[];
@@ -141,7 +146,7 @@ export interface IKuId {
   ku_id: string;
 }
 export interface IKuPost {
-  entity_id: string[];// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
+  entity_id: string;// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
   vendor_id: string;
   period: string;
   date_start: Date | string;
@@ -198,7 +203,9 @@ export interface IKuAddStore {
   //значения v-model при создании
   newPercent: number | null;
   newType: string;
-  entityName: string[];
+  entityId: string;
+  entityName: string;
+  vendorId: string;
   vendorName: string;
   newDateStart: Date;
   newDateEnd: Date;
@@ -225,7 +232,8 @@ export interface IKuAddStore {
   tableDataExRequirement: IExcludedRequirement[];
   tableDataPercent: IPercent[];
   dataEntity: IEntityIdAndName[];
-  dataVendor: IVendorIdAndName[];
+  dataVendorId: IVendorId[];
+  dataVendorName: IVendorName[];
   treeData: ITree[],
   treeRef: typeof ElTree | null,
   // dataInfoKu: IKuList[];
@@ -295,7 +303,7 @@ export interface IKuIdStore {
 export interface GetAllKus {
   page_size?: number;
   page?: number;
-  entity_id?: string[];
+  entity_ids?: string[];
   search?: string;
 }
 export interface GetAllKu_Id {
@@ -411,7 +419,7 @@ export interface IGraphicId {
 export interface GetAllGraphic {
   page_size?: number;
   page?: number;
-  entity_id?: string[];
+  entity_ids?: string[];
   ku_id?: string[];
   search?: string;
 }

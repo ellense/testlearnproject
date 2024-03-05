@@ -12,6 +12,7 @@ import type {
     IBrand,
     GetAllVendorsForEntity,
     IKuAddStore,
+    IVendorId,
 } from "~/utils/types/directoryTypes";
 
 export const useKuAddStore = defineStore("KuAddStore", {
@@ -19,7 +20,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
         //v-model атрибутов при создании
         newPercent: null,
         newType: "",
-        entityName: [],
+        entityId: "",
+        entityName: "",
+        vendorId: "",
         vendorName: "",
         newDateStart: new Date(),
         newDateEnd: new Date(),
@@ -46,7 +49,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
         tableDataExRequirement: [],
         tableDataPercent: [],
         dataEntity: [],
-        dataVendor: [],
+        dataVendorId: [],
+        dataVendorName: [],
         treeData: [],
         treeRef: null,
         //v-model диалоговых форм
@@ -134,9 +138,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
         //получение данных о поставщиках для создания
 
-        async fetchAllVendorsListForEntity() {
+        async fetchAllVendorsIdForEntity() {
             try {
-                let allVendors: IVendorIdAndName[] = [];
+                let allVendors: IVendorId[] = [];
                 let nextPage = 1;
                 let totalPages = 1;
                 while (nextPage <= totalPages) {
@@ -144,13 +148,14 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         entity_id: this.$state.filterVendorValue.entity_id,
+                        vendor_id:this.$state.filterVendorValue.vendor_id,
                     });
-                    allVendors = allVendors.concat(vendors.results);
+                    allVendors = allVendors.concat(vendors.resultsId);
                     totalPages = Math.ceil(vendors.count / this.$state.countRowTable2);
                     nextPage++;
                 }
                 console.log("Все данные о поставщиках:", allVendors);
-                this.$state.dataVendor = allVendors;
+                this.$state.dataVendorId = allVendors;
             } catch (error) {
                 console.error(
                     "Произошла ошибка при получении данных о поставщиках",
@@ -159,6 +164,25 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 return Promise.reject(error);
             }
         },
+        //получение поставщиков
+    async getVendorFromAPIWithFilter(page?: number) {
+        await VENDOR.getVendorsForEntityInKU({
+          page_size: this.$state.countRowTable,
+          page,
+          vendor_id:this.$state.filterVendorValue.vendor_id,
+        })
+          .then((dataVendor) => {
+            // this.$state.dataVendorName = dataVendor.resultsName;
+            this.$state.vendorName = dataVendor.resultsName[0].name;
+            console.log('Получены данные vendorName:', this.$state.vendorName);
+            this.$state.pagination = {
+              count: dataVendor.count,
+              previous: dataVendor.previous,
+              next: dataVendor.next,
+            };
+          })
+          .catch((error) => Promise.reject(error));
+      },
         setFilterValue6<
             T extends keyof GetAllVendorsForEntity,
             U extends GetAllVendorsForEntity[T],
@@ -214,7 +238,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.vendorName
+                        vendor_id: this.$state.vendorId
                     });
                     allProducer = allProducer.concat(producers.results);
                     totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
@@ -249,7 +273,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page: nextPage,
                         producer_name: this.$state.filterBrandIncluded.producer_name,
                         l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.vendorName
+                        vendor_id: this.$state.vendorId
                     });
                     allBrands = allBrands.concat(brands.results);
                     totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
@@ -276,12 +300,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async getProductFromIncludedWithFilter(page?: number) {
             this.setFilterValue3('page', page);
             this.setFilterValue3('search', this.$state.searchProductIncluded);
-            this.setFilterValue3('vendor_id', this.$state.vendorName);
+            this.setFilterValue3('vendor_id', this.$state.vendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
                 search: this.$state.searchProductIncluded,
-                vendor_id: this.$state.vendorName
+                vendor_id: this.$state.vendorId
             })
                 .then((product) => {
                     console.log('Получены данные товаров:', product);
@@ -327,7 +351,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         l4: this.$state.filterProducerExcluded.l4,
-                        vendor_id: this.$state.vendorName
+                        vendor_id: this.$state.vendorId
                     });
                     allProducer = allProducer.concat(producers.results);
                     totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
@@ -362,7 +386,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page: nextPage,
                         producer_name: this.$state.filterBrandExcluded.producer_name,
                         l4: this.$state.filterProducerExcluded.l4,
-                        vendor_id: this.$state.vendorName
+                        vendor_id: this.$state.vendorId
                     });
                     allBrands = allBrands.concat(brands.results);
                     totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
@@ -388,12 +412,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async getProductFromExcludedWithFilter(page?: number) {
             this.setFilterValue9('page', page);
             this.setFilterValue9('search', this.$state.searchProductExcluded);
-            this.setFilterValue9('vendor_id', this.$state.vendorName);
+            this.setFilterValue9('vendor_id', this.$state.vendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
                 search: this.$state.searchProductExcluded,
-                vendor_id: this.$state.vendorName
+                vendor_id: this.$state.vendorId
             })
                 .then((product) => {
                     console.log('Получены данные товаров:', product);

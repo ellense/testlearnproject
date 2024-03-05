@@ -23,7 +23,7 @@ const { juristicPersons } = storeToRefs(useVendorStore());
 const { filterValue } = storeToRefs(useVendorStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
-const shopLegalEntity = ref<string[]>(filterValue.value.entity_id || []);
+const shopLegalEntity = ref<string[]>(filterValue.value.entity_ids || []);
 const shopLegalEntityList = ref<string[]>(juristicPersons.value);
 
 
@@ -34,7 +34,7 @@ watch(searchQuery, (newValue: string) => {
 
 const changeShopLegalEntity = () => {
   useVendorStore().pagination = null;
-  useVendorStore().setFilterValue('entity_id', shopLegalEntity.value);
+  useVendorStore().setFilterValue('entity_ids', shopLegalEntity.value);
   console.log('shopLegalEntity.value:', shopLegalEntity.value);
   toggleTriggerFilter();
 };

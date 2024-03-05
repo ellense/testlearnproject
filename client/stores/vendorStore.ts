@@ -11,7 +11,7 @@ export const useVendorStore = defineStore("VendorStore", {
     search: "",
     filteredDataVendor: [],
     juristicPersons: [],
-    filterValue: { entity_id: [] }
+    filterValue: { entity_ids: [] }
   }),
 
   getters: {
@@ -65,7 +65,7 @@ export const useVendorStore = defineStore("VendorStore", {
       await VENDOR.getVendorsForEntityInVendor({
         page_size: this.$state.countRowTable,
         page,
-        entity_id: this.$state.filterValue?.entity_id || [],
+        entity_ids: this.$state.filterValue?.entity_ids || [],
         search: this.$state.search,
       })
         .then((dataVendor) => {

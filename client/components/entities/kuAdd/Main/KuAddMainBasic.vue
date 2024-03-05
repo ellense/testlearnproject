@@ -6,7 +6,7 @@
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
           <el-form-item label-width="130" label="Код компании">
             <!-- <el-text class="kuAddLabel">Код компании</el-text> -->
-            <el-select v-model="store.entityName" size="small" placeholder="Выберите код компании" clearable filterable
+            <el-select v-model="store.entityId" size="small" placeholder="Выберите код компании" clearable filterable
               style="width: 300px" @change="onEntityChange">
               <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
@@ -20,7 +20,7 @@
             </el-select>
           </el-form-item>
           <el-form-item label-width="130" label="Название компании">
-            <el-input size="small" style="width: 300px">
+            <el-input v-model="store.entityName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
@@ -30,9 +30,9 @@
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
             <div>
-              <el-select-v2 v-model="store.vendorName" size="small" clearable filterable :options="options2"
-                :disabled="!store.entityName" style="width: 300px" :title="disableSelectVendorTooltip"
-                placeholder="Выберите поставщика" @change="onVendorChange">
+              <!-- <el-select-v2 v-model="store.vendorId" size="small" clearable filterable :options="options2"
+                :disabled="!store.entityId" style="width: 300px" :title="disableSelectVendorTooltip"
+                placeholder="Выберите поставщика" @change="onVendorChange" name="value">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.value }}</span>
                   <span style="color: var(--el-text-color-secondary); font-size: 12px; margin-left: 10px;
@@ -40,7 +40,10 @@
                     {{ item.label }}
                   </span>
                 </template>
-              </el-select-v2>
+</el-select-v2> -->
+<el-select-v2 v-model="store.vendorId" size="small" placeholder="Выберите код компании" clearable filterable
+  style="width: 300px" @change="onVendorChange" :options="options2" value-key="value">
+</el-select-v2>
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Контракт">
@@ -64,20 +67,22 @@
               <el-option label="Полгода" value="Полгода"></el-option>
               <el-option label="Год" value="Год"></el-option>
             </el-select>
-          </el-form-item >
-          <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;" label-width="170" label="Начальная дата">
+          </el-form-item>
+          <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
+            label-width="170" label="Начальная дата">
             <el-date-picker v-model="store.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
               value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
               @change="validateDateStart"></el-date-picker>
-          </el-form-item >
-          <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170" label="Конечная дата">
+          </el-form-item>
+          <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
+            label="Конечная дата">
             <el-date-picker v-model="store.newDateEnd" style="width: 300px" size="small"
               placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
               @change="validateDateEnd"></el-date-picker>
           </el-form-item>
-          
+
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
-          <el-form-item label-width="170" label="Наименование поставщика">
+          <el-form-item v-model="store.vendorName" label-width="170" label="Наименование поставщика">
             <el-input size="small" style="width: 300px">
             </el-input>
           </el-form-item>
@@ -100,24 +105,25 @@
               el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
-            <el-input  style="width: 300px" :rows="4" size="small" type="textarea" placeholder="Введите предмет договора" />
+            <el-input style="width: 300px" :rows="4" size="small" type="textarea"
+              placeholder="Введите предмет договора" />
           </el-form-item>
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
           <el-form-item>
             <!-- <el-text class="kuAddLabel">База премии включает налог</el-text> -->
-            <el-checkbox  label="База премии включает налог" size="small"/> 
+            <el-checkbox label="База премии включает налог" size="small" />
           </el-form-item>
           <el-form-item>
             <!-- <el-text class="kuAddLabel">Исключать возвраты из расчета</el-text> -->
-            <el-checkbox label="Исключать возвраты из расчета" size="small"/> 
+            <el-checkbox label="Исключать возвраты из расчета" size="small" />
           </el-form-item>
           <el-form-item>
             <!-- <el-text class="kuAddLabel">Отрицательный товарооборот</el-text> -->
-            <el-checkbox label="Отрицательный товарооборот" size="small"/> 
+            <el-checkbox label="Отрицательный товарооборот" size="small" />
           </el-form-item>
-          <el-form-item label-width="170" label="Тип коммерческого условия"> 
+          <el-form-item label-width="170" label="Тип коммерческого условия">
             <!-- <el-text class="kuAddLabel">Тип коммерческого условия</el-text> -->
             <el-select size="small" clearable placeholder="Выберите тип КУ" style="width: 300px">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
@@ -144,6 +150,7 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import type {
   IEntityIdAndName,
   ITree,
+  IVendorId,
   IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 const store = useKuAddStore();
@@ -173,34 +180,63 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(() => store.dataVendor, (vendors: IVendorIdAndName[]) => {
-  options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
-});
+// watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
+//   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+// });
 
+watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
+  const uniqueVendors = Array.from(new Set(vendors.map(item => item.vendor_id)));
+  options2.value = uniqueVendors.map(label => ({ label, value: label }));
+});
+// const onEntityChange = async () => {
+//   store.dataVendor = [];
+//   store.setFilterValue6('entity_id', store.entityId);
+//   if (store.entityId) { // Проверка, что выбрана торговая маркка
+//     useKuAddStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
+//     console.log('Выполнен запрос на получение данных производителей.');
+//   } else {
+//     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
+//     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
+//   }
+// };
 const onEntityChange = async () => {
-  store.dataVendor = [];
-  store.setFilterValue6('entity_id', store.entityName);
-  if (store.entityName) { // Проверка, что выбрана торговая маркка
-    useKuAddStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
-    console.log('Выполнен запрос на получение данных производителей.');
+  store.entityName = ""; // Сбрасываем название компании перед загрузкой новых данных
+  store.dataVendorId = [];
+
+  // Проверяем, что выбран только один код компании
+  if (store.entityId && store.entityId.length > 0) {
+    const selectedEntity = options.value.find(option => option.value === store.entityId);
+    if (selectedEntity) {
+      store.entityName = selectedEntity.label;
+    }
+  }
+  //фильтр в поставщике
+  store.setFilterValue6('entity_id', store.entityId);
+  if (store.entityId) { // Проверка, что выбрана торговая маркка
+    useKuAddStore().fetchAllVendorsIdForEntity(); // Выполнить запрос с фильтром по производителям
+    console.log('Выполнен запрос на получение данных поставщиков.');
   } else {
     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-    console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
   }
 };
-
 const onVendorChange = async () => {
+  store.vendorName = "";
+  if (store.vendorId && store.vendorId.length > 0) {
+    store.setFilterValue6('vendor_id', store.vendorId);
+    store.getVendorFromAPIWithFilter()
+    
+  }
   try {
-    console.log("поставщик:", store.vendorName);
-    store.setFilterValue3('vendor_id', store.vendorName);
-    store.setFilterValue4('vendor_id', store.vendorName);
-    store.setFilterValue5('vendor_id', store.vendorName);
+    console.log("поставщик:", store.vendorId);
+    store.setFilterValue3('vendor_id', store.vendorId);
+    store.setFilterValue4('vendor_id', store.vendorId);
+    store.setFilterValue5('vendor_id', store.vendorId);
     await store.getProductFromIncludedWithFilter();
     await store.fetchAllProducersForInclided();
     await store.fetchAllBrandsForIncluded();
-    store.setFilterValue8('vendor_id', store.vendorName);
-    store.setFilterValue7('vendor_id', store.vendorName);
-    store.setFilterValue9('vendor_id', store.vendorName);
+    store.setFilterValue8('vendor_id', store.vendorId);
+    store.setFilterValue7('vendor_id', store.vendorId);
+    store.setFilterValue9('vendor_id', store.vendorId);
     await store.getProductFromExcludedWithFilter();
     await store.fetchAllProducersForExcluded();
     await store.fetchAllBrandsForExcluded();
@@ -289,7 +325,7 @@ const resetDatesOnPeriodChange = () => {
 };
 // Функция сброса поставщика
 const resetVendorOnEntityChange = () => {
-  store.vendorName = "";
+  store.vendorId = "";
 };
 // Обработчик изменения выбранного периода
 watch(() => store.newType, (newValue, oldValue) => {
@@ -298,7 +334,7 @@ watch(() => store.newType, (newValue, oldValue) => {
   }
 });
 // Обработчик изменения выбранного юр.лица
-watch(() => store.entityName, (newValue, oldValue) => {
+watch(() => store.entityId, (newValue, oldValue) => {
   if (oldValue !== newValue) {
     resetVendorOnEntityChange();
   }
@@ -306,7 +342,7 @@ watch(() => store.entityName, (newValue, oldValue) => {
 
 
 const disableSelectVendorTooltip = computed(() => {
-  return !store.entityName ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
+  return !store.entityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
 });
 
 

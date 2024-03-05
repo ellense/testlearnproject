@@ -23,7 +23,7 @@ export const useKuStore = defineStore("KuStore", {
     search: "",
     //параметры для фильтров при запросах
     filterKuValue: {
-      entity_id: []
+      entity_ids: []
     },
   }),
 
@@ -64,7 +64,7 @@ export const useKuStore = defineStore("KuStore", {
       await KU.getKuList({
         page_size: this.$state.countRowTable,
         page,
-        entity_id: this.$state.filterKuValue?.entity_id || [],
+        entity_ids: this.$state.filterKuValue?.entity_ids || [],
         search: this.$state.search,
       })
         .then((tableData) => {
