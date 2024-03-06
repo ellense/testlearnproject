@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="kuStore.dialogFormProductExVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
+  <el-dialog v-model="kuStore.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="buttonBar_search">
       <el-input v-model="searchProductExKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />

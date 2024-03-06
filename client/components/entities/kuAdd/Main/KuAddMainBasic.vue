@@ -6,7 +6,7 @@
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
           <el-form-item label-width="130" label="Код компании">
             <!-- <el-text class="kuAddLabel">Код компании</el-text> -->
-            <el-select v-model="store.entityId" size="small" placeholder="Выберите код компании" clearable filterable
+            <el-select v-model="store.newEntityId" size="small" placeholder="Выберите код компании" clearable filterable
               style="width: 300px" @change="onEntityChange">
               <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
@@ -20,19 +20,19 @@
             </el-select>
           </el-form-item>
           <el-form-item label-width="130" label="Название компании">
-            <el-input v-model="store.entityName" size="small" style="width: 300px">
+            <el-input v-model="store.newEntityName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
-            <el-input size="small" placeholder="Введите описание" style="width: 300px">
+            <el-input  v-model="store.newDescription" size="small" placeholder="Введите описание" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
             <div>
-              <!-- <el-select-v2 v-model="store.vendorId" size="small" clearable filterable :options="options2"
-                :disabled="!store.entityId" style="width: 300px" :title="disableSelectVendorTooltip"
-                placeholder="Выберите поставщика" @change="onVendorChange" name="value">
+              <el-select-v2 v-model="store.vendorId" size="small" clearable filterable :options="options2"
+                :disabled="!store.newEntityId" style="width: 300px" :title="disableSelectVendorTooltip"
+                placeholder="Выберите поставщика" @change="onVendorChange" >
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.value }}</span>
                   <span style="color: var(--el-text-color-secondary); font-size: 12px; margin-left: 10px;
@@ -40,18 +40,18 @@
                     {{ item.label }}
                   </span>
                 </template>
-</el-select-v2> -->
-<el-select-v2 v-model="store.vendorId" size="small" placeholder="Выберите код компании" clearable filterable
-  style="width: 300px" @change="onVendorChange" :options="options2" value-key="value">
 </el-select-v2>
+              <!-- <el-select-v2 v-model="store.newVendorId" size="small" placeholder="Выберите код компании" clearable
+                filterable style="width: 300px" @change="onVendorChange" :options="options2" value-key="value">
+              </el-select-v2> -->
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Контракт">
-            <el-input size="small" placeholder="Введите контракт" style="width: 300px">
+            <el-input v-model="store.newContract" size="small" placeholder="Введите контракт" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Тип товаров">
-            <el-select size="small" clearable placeholder="Выберите тип товаров" style="width: 300px">
+            <el-select v-model="store.newProduct_type" size="small" clearable placeholder="Выберите тип товаров" style="width: 300px">
               <el-option label="Продовольственные" value="Продовольственные"></el-option>
               <el-option label="Непродовольственные" value="Непродовольственные"></el-option>
             </el-select>
@@ -82,30 +82,30 @@
           </el-form-item>
 
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
-          <el-form-item v-model="store.vendorName" label-width="170" label="Наименование поставщика">
-            <el-input size="small" style="width: 300px">
+          <el-form-item label-width="170" label="Наименование поставщика">
+            <el-input v-model="store.newVendorName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Номер счета">
-            <el-input size="small" placeholder="Введите номер счета" style="width: 300px">
+            <el-input v-model="store.newDocu_account" size="small" placeholder="Введите номер счета" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Название договора">
-            <el-select size="small" clearable placeholder="Выберите название договора" style="width: 300px">
+            <el-select v-model="store.newDocu_name" size="small" clearable placeholder="Выберите название договора" style="width: 300px">
               <el-option label="Договор премий" value="Договор премий"></el-option>
               <el-option label="Договор услуг" value="Договор услуг"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Номер договора">
-            <el-input size="small" placeholder="Введите номер договора" style="width: 300px">
+            <el-input v-model="store.newDocu_number" size="small" placeholder="Введите номер договора" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Дата договора">
-            <el-date-picker style="width: 300px" size="small" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
+            <el-date-picker v-model="store.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
               el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
-            <el-input style="width: 300px" :rows="4" size="small" type="textarea"
+            <el-input v-model="store.newDocu_subject" style="width: 300px" :rows="4" size="small" type="textarea"
               placeholder="Введите предмет договора" />
           </el-form-item>
         </div>
@@ -113,26 +113,26 @@
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
           <el-form-item>
             <!-- <el-text class="kuAddLabel">База премии включает налог</el-text> -->
-            <el-checkbox label="База премии включает налог" size="small" />
+            <el-checkbox v-model="store.newTax" label="База премии включает налог" size="small" />
           </el-form-item>
           <el-form-item>
             <!-- <el-text class="kuAddLabel">Исключать возвраты из расчета</el-text> -->
-            <el-checkbox label="Исключать возвраты из расчета" size="small" />
+            <el-checkbox v-model="store.newExclude_return" label="Исключать возвраты из расчета" size="small" />
           </el-form-item>
           <el-form-item>
             <!-- <el-text class="kuAddLabel">Отрицательный товарооборот</el-text> -->
-            <el-checkbox label="Отрицательный товарооборот" size="small" />
+            <el-checkbox v-model="store.newNegative_turnover" label="Отрицательный товарооборот" size="small" />
           </el-form-item>
           <el-form-item label-width="170" label="Тип коммерческого условия">
             <!-- <el-text class="kuAddLabel">Тип коммерческого условия</el-text> -->
-            <el-select size="small" clearable placeholder="Выберите тип КУ" style="width: 300px">
+            <el-select v-model="store.newKu_type" size="small" clearable placeholder="Выберите тип КУ" style="width: 300px">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
               <el-option label="Услуга" value="Услуга"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Способ оплаты премии">
             <!-- <el-text class="kuAddLabel">Способ оплаты премии</el-text> -->
-            <el-select size="small" clearable placeholder="Выберите способ оплаты" style="width: 300px">
+            <el-select v-model="store.newPay_method" size="small" clearable placeholder="Выберите способ оплаты" style="width: 300px">
               <el-option label="Оплата" value="Оплата"></el-option>
               <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
             </el-select>
@@ -200,19 +200,19 @@ watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
 //   }
 // };
 const onEntityChange = async () => {
-  store.entityName = ""; // Сбрасываем название компании перед загрузкой новых данных
+  store.newEntityName = ""; // Сбрасываем название компании перед загрузкой новых данных
   store.dataVendorId = [];
 
   // Проверяем, что выбран только один код компании
-  if (store.entityId && store.entityId.length > 0) {
-    const selectedEntity = options.value.find(option => option.value === store.entityId);
+  if (store.newEntityId && store.newEntityId.length > 0) {
+    const selectedEntity = options.value.find(option => option.value === store.newEntityId);
     if (selectedEntity) {
-      store.entityName = selectedEntity.label;
+      store.newEntityName = selectedEntity.label;
     }
   }
   //фильтр в поставщике
-  store.setFilterValue6('entity_id', store.entityId);
-  if (store.entityId) { // Проверка, что выбрана торговая маркка
+  store.setFilterValue6('entity_id', store.newEntityId);
+  if (store.newEntityId) { // Проверка, что выбрана торговая маркка
     useKuAddStore().fetchAllVendorsIdForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных поставщиков.');
   } else {
@@ -220,23 +220,23 @@ const onEntityChange = async () => {
   }
 };
 const onVendorChange = async () => {
-  store.vendorName = "";
-  if (store.vendorId && store.vendorId.length > 0) {
-    store.setFilterValue6('vendor_id', store.vendorId);
+  store.newVendorName = "";
+  if (store.newVendorId && store.newVendorId.length > 0) {
+    store.setFilterValue6('vendor_id', store.newVendorId);
     store.getVendorFromAPIWithFilter()
-    
+
   }
   try {
-    console.log("поставщик:", store.vendorId);
-    store.setFilterValue3('vendor_id', store.vendorId);
-    store.setFilterValue4('vendor_id', store.vendorId);
-    store.setFilterValue5('vendor_id', store.vendorId);
+    console.log("поставщик:", store.newVendorId);
+    store.setFilterValue3('vendor_id', store.newVendorId);
+    store.setFilterValue4('vendor_id', store.newVendorId);
+    store.setFilterValue5('vendor_id', store.newVendorId);
     await store.getProductFromIncludedWithFilter();
     await store.fetchAllProducersForInclided();
     await store.fetchAllBrandsForIncluded();
-    store.setFilterValue8('vendor_id', store.vendorId);
-    store.setFilterValue7('vendor_id', store.vendorId);
-    store.setFilterValue9('vendor_id', store.vendorId);
+    store.setFilterValue8('vendor_id', store.newVendorId);
+    store.setFilterValue7('vendor_id', store.newVendorId);
+    store.setFilterValue9('vendor_id', store.newVendorId);
     await store.getProductFromExcludedWithFilter();
     await store.fetchAllProducersForExcluded();
     await store.fetchAllBrandsForExcluded();
@@ -300,20 +300,6 @@ const validateDateEnd = () => {
 };
 
 
-
-// Функция проверки процента
-const validatePercent = () => {
-  const percent = parseFloat(String(store.newPercent));
-  if (isNaN(percent) || percent < 1 || percent > 100) {
-    percentValidation.value = 'error';
-    percentError.value = 'Введите корректный процент от 1 до 100.';
-  } else {
-    percentValidation.value = undefined;
-    percentError.value = undefined;
-  }
-};
-
-watch(() => store.newPercent, validatePercent);
 watch(() => store.newDateStart, validateDateStart);
 watch(() => store.newDateEnd, validateDateEnd);
 
@@ -325,7 +311,7 @@ const resetDatesOnPeriodChange = () => {
 };
 // Функция сброса поставщика
 const resetVendorOnEntityChange = () => {
-  store.vendorId = "";
+  store.newVendorId = "";
 };
 // Обработчик изменения выбранного периода
 watch(() => store.newType, (newValue, oldValue) => {
@@ -334,7 +320,7 @@ watch(() => store.newType, (newValue, oldValue) => {
   }
 });
 // Обработчик изменения выбранного юр.лица
-watch(() => store.entityId, (newValue, oldValue) => {
+watch(() => store.newEntityId, (newValue, oldValue) => {
   if (oldValue !== newValue) {
     resetVendorOnEntityChange();
   }
@@ -342,7 +328,7 @@ watch(() => store.entityId, (newValue, oldValue) => {
 
 
 const disableSelectVendorTooltip = computed(() => {
-  return !store.entityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
+  return !store.newEntityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
 });
 
 

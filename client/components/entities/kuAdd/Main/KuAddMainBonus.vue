@@ -45,8 +45,7 @@ const addRow = () => {
 
 //удаление сложного процента
 const deleteRow = (index: number) => {
-  store.tableDataExRequirement.splice(index, 1);
-  store.disableButtonsExcluded = false;
+  store.tableDataPercent.splice(index, 1);
 }
 
 const onFixChange = (row: IPercent) => {

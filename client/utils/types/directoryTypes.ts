@@ -105,6 +105,15 @@ export interface IInvoice {
   products_amount: number | null
 }
 
+export interface IInvoiceForKu {
+  invoice_id: number | null;
+  vendor_id: string;
+  vendor_name: string;
+  invoice_name: string;
+  invoice_number: string;
+  invoice_date: Date | string;
+  products_amount: number | null
+}
 export interface GetAllInvoices {
   page_size?: number;
   page?: number;
@@ -114,6 +123,8 @@ export interface GetAllInvoices {
   start_date?: string,
   end_date?: string,
 }
+
+
 export interface InvoiceStore {
   dataInvoice: IInvoice[];
   pagination: Pagination | null;
@@ -146,13 +157,25 @@ export interface IKuId {
   ku_id: string;
 }
 export interface IKuPost {
-  entity_id: string;// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
-  vendor_id: string;
+  entity_key: string;// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
+  vendor_key: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
-  status: string;
-  percent: number | null;
+  status_ku: string;
+//   description: string;
+//   contract: string;
+//   product_type: string;
+//   docu_account: string;
+//   docu_name: string;
+//   docu_number: string;
+//   docu_date: Date | string;
+//   docu_subject: string;
+//   tax: boolean;
+//   exclude_return: boolean;
+//   negative_turnover: boolean;
+//   ku_type: string;
+//   pay_method: string;
 }
 export interface IKuPost2 {
   requirements: IIncludedRequirement[];
@@ -201,15 +224,27 @@ export interface IKuStore {
 
 export interface IKuAddStore {
   //значения v-model при создании
-  newPercent: number | null;
   newType: string;
-  entityId: string;
-  entityName: string;
-  vendorId: string;
-  vendorName: string;
+  newEntityId: string;
+  newEntityName: string;
+  newVendorId: string;
+  newVendorName: string;
   newDateStart: Date;
   newDateEnd: Date;
   newDateActual: Date;
+  newDescription: string;
+  newContract: string;
+  newProduct_type: string;
+  newDocu_account: string;
+  newDocu_name: string;
+  newDocu_number: string;
+  newDocu_date: Date | string;
+  newDocu_subject: string;
+  newTax: boolean;
+  newExclude_return: boolean;
+  newNegative_turnover: boolean;
+  newKu_type: string;
+  newPay_method: string;
   valueCategory_idIn: string
   valueCategory_nameIn: string
   valueProducer_nameIn: string;
@@ -220,6 +255,7 @@ export interface IKuAddStore {
   valueBrand_nameEx: string;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
+  multipleSelectionExInvoice: IInvoiceForKu[]
   multipleTableRef: Ref | null;
   //данные таблиц
   brandIncluded: IBrand[];
@@ -231,6 +267,8 @@ export interface IKuAddStore {
   tableDataInRequirement: IIncludedRequirement[];
   tableDataExRequirement: IExcludedRequirement[];
   tableDataPercent: IPercent[];
+  tableDataExInvoiceAll: IInvoiceForKu[]
+  tableDataExInvoiceSelect: IInvoiceForKu[]
   dataEntity: IEntityIdAndName[];
   dataVendorId: IVendorId[];
   dataVendorName: IVendorName[];
@@ -238,6 +276,7 @@ export interface IKuAddStore {
   treeRef: typeof ElTree | null,
   // dataInfoKu: IKuList[];
   //v-model диалоговых форм
+  dialogFormExInvoiceVisible: boolean
   dialogFormProductInVisible: boolean
   dialogFormCategoryInVisible: boolean
   dialogFormProductExVisible: boolean

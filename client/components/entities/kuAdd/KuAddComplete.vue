@@ -30,12 +30,11 @@ const isFormValid = () => {
   };
 
   // Проверка для каждого поля
-  const isEntityNameValid = !isEmpty(store.entityId);
+  const isEntityNameValid = !isEmpty(store.newEntityId);
   const isNewTypeValid = !isEmpty(store.newType);
   const isNewDateStartValid = !isEmpty(store.newDateStart);
   const isNewDateEndValid = !isEmpty(store.newDateEnd);
-  const isVendorNameValid = !isEmpty(store.vendorId);
-  const isNewPercentValid = !isEmpty(store.newPercent);
+  const isVendorNameValid = !isEmpty(store.newVendorId);
 
   // Возвращаем результат общей проверки
   return (
@@ -43,8 +42,7 @@ const isFormValid = () => {
     isNewTypeValid &&
     isNewDateStartValid &&
     isNewDateEndValid &&
-    isVendorNameValid &&
-    isNewPercentValid
+    isVendorNameValid
   );
 };
 
@@ -67,13 +65,12 @@ const addItemAndSendToBackend = async () => {
   try {
     // Создаем объект newItem для отправки на бэкенд
     const newItem = {
-      entity_id: store.entityId,
-      vendor_id: store.vendorId,
+      entity_key: store.newEntityId,
+      vendor_key: store.newVendorId,
       period: store.newType,
       date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
       date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
-      status: "Создано",
-      percent: store.newPercent,
+      status_ku: "Создано",
     };
 
     // Отправляем запрос на создание нового элемента на бэкенд
@@ -131,12 +128,11 @@ const addItemAndSendToBackend = async () => {
   store.tableDataPercent.length = 0;
   store.disableButtonsIncluded = false;
   store.disableButtonsExcluded = false;
-  store.entityId = "";
-  store.vendorId = "";
+  store.newEntityId = "";
+  store.newVendorId = "";
   store.newType = "";
   store.newDateStart = new Date();
   store.newDateEnd = new Date();
-  store.newPercent = null;
 
 };
 
@@ -149,12 +145,11 @@ const addClose = () => {
   store.tableDataPercent.length = 0;
   store.disableButtonsIncluded = false;
   store.disableButtonsExcluded = false;
-  store.entityId = "";
-  store.vendorId = "";
+  store.newEntityId = "";
+  store.newVendorId = "";
   store.newType = "";
   store.newDateStart = new Date();
   store.newDateEnd = new Date();
-  store.newPercent = null;
 };
 </script>
 
