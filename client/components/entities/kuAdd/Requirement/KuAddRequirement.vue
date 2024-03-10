@@ -21,5 +21,6 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 .demo-tabs>.el-tabs__content {
     padding: 0 10px 10px 10px !important;
     color: #3b3c3f;
+    min-height: 100px;
 }
 </style>

@@ -1,15 +1,32 @@
 <template>
-    <div class="productTree">
+    <!-- <div class="productTree"> -->
+    <!-- <vue-resizable minWidth=300 maxWidth=1500 active="[ 'r']" style=" 
+  border: 1px solid var(--el-border-color);
+  height: calc(100vh - 185px);
+  border-radius: 2px;
+  margin-right: 10px;
+"> -->
+<vue-resizable  minWidth=300 maxWidth=900 active="[ 'r']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 185px);
+  border-radius: 2px;
+
+  ">
         <h3>Категории товаров:</h3>
+
         <el-scrollbar class="scrollTree">
+
+
             <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
-                @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node v-loading="loading"/>
+                @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node v-loading="loading" />
+
+
         </el-scrollbar>
-    </div>
+    </vue-resizable>
+    <!-- </div> -->
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
+import VueResizable from 'vue-resizable'
 import type { ElTree } from 'element-plus'
 import { storeToRefs } from "pinia";
 import type { ITree } from '~/utils/types/directoryTypes';
@@ -49,9 +66,9 @@ const fetchData = async (data: ITree) => {
             treeData.value = [];
             console.error("Данные не получены или не являются массивом:", result); // Логируем случай, когда данные не являются массивом
         }
-        loading.value = false; 
+        loading.value = false;
     } catch (error) {
-        loading.value = false; 
+        loading.value = false;
         console.error("Произошла ошибка при получении данных категорий", error);
     }
 };
@@ -62,7 +79,7 @@ onMounted(async () => {
         console.log("!!!!!!!");
         await fetchData({
             name: "string",
-            classifier_code: '0',
+            classifier_code: 0,
             children: [],
             parent_code: "",
         });
@@ -90,7 +107,7 @@ const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 const getCheckedKeys = (checkedKeys: any, checkedNodes: any) => {
     // console.log('Отмеченные узлы:', checkedNodes);
     const keysOfLevel4 = checkedNodes.checkedKeys.filter((key: string) => key.length === 10);
-//   console.log('Ключи категорий 4 уровня:', keysOfLevel4);
+    //   console.log('Ключи категорий 4 уровня:', keysOfLevel4);
     useProductStore().pagination = null;
     useProductStore().setFilterValue('categories_l4', keysOfLevel4);
     toggleTriggerFilter();
@@ -108,7 +125,7 @@ const defaultProps = {
 
 <style scoped>
 .scrollTree {
-    margin-right: 10px;
+    padding-right: 15px;
     height: calc(100vh - 250px);
 }
 

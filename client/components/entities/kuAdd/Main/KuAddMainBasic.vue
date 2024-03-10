@@ -30,17 +30,13 @@
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
             <div>
-              <el-select-v2 v-model="store.vendorId" size="small" clearable filterable :options="options2"
-                :disabled="!store.newEntityId" style="width: 300px" :title="disableSelectVendorTooltip"
-                placeholder="Выберите поставщика" @change="onVendorChange" >
-                <template #default="{ item }" class="selectVendorInKuAdd">
-                  <span style="margin-right: 8px">{{ item.value }}</span>
-                  <span style="color: var(--el-text-color-secondary); font-size: 12px; margin-left: 10px;
-                    float: right;">
-                    {{ item.label }}
-                  </span>
-                </template>
-</el-select-v2>
+              <el-select-v2 v-model="store.newVendorId" size="small" clearable filterable :options="options2" :disabled="!store.newEntityId"
+               style="width: 300px" :title="disableSelectVendorTooltip" placeholder="Выберите поставщика" @change="onVendorChange" >
+              <template #default="{ item }" class="selectVendorInKuAdd">
+                <span style="margin-right: 8px">{{ item.label }}</span>
+              </template>
+            </el-select-v2>
+          
               <!-- <el-select-v2 v-model="store.newVendorId" size="small" placeholder="Выберите код компании" clearable
                 filterable style="width: 300px" @change="onVendorChange" :options="options2" value-key="value">
               </el-select-v2> -->
@@ -80,7 +76,14 @@
               placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
               @change="validateDateEnd"></el-date-picker>
           </el-form-item>
-
+          <div style="height: 500px; width: 500px; border: 1px solid red; position: relative;">
+    <vue-draggable-resizable :w="100" :h="100" :parent="true">
+      <p>Hello! I'm a flexible component. You can drag me around and you can resize me.</p>
+    </vue-draggable-resizable>
+  </div>
+  <vue-resizable width="200px" minWidth=100 maxWidth=500 active="[ 'l']" minHeight="100" maxHeight="100"style=" border: 1px solid red;">
+        <div class="resizable-content">flugl/k</div>
+    </vue-resizable>
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
           <el-form-item label-width="170" label="Наименование поставщика">
             <el-input v-model="store.newVendorName" size="small" style="width: 300px">
@@ -144,6 +147,8 @@
 </template>
 
 <script setup lang="ts">
+import VueDraggableResizable from 'vue-draggable-resizable'
+import VueResizable from 'vue-resizable'
 import { ref } from "vue";
 import dayjs from "dayjs";
 import { useKuAddStore } from "~~/stores/kuAddStore";
@@ -180,14 +185,65 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
-// watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-//   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
-// });
-
 watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-  const uniqueVendors = Array.from(new Set(vendors.map(item => item.vendor_id)));
-  options2.value = uniqueVendors.map(label => ({ label, value: label }));
+    options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
 });
+
+const onEntityChange = async () => {
+  //для наимен. юр. лица
+  store.newEntityName = "";
+  if (store.newEntityId && store.newEntityId.length > 0) {
+    const selectedEntity = options.value.find(option => option.value === store.newEntityId);
+    if (selectedEntity) {
+      store.newEntityName = selectedEntity.label;
+    }
+  }
+  //для поставщика
+    store.dataVendorId = [];
+    store.setFilterValue6('entity_id', store.newEntityId);
+    if (store.newEntityId) { // Проверка, что выбрана торговая маркка
+        useKuAddStore().fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
+        console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
+    } else {
+        useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
+    }
+};
+
+const onVendorChange = async () => {
+  store.newVendorName = "";
+  if (store.newVendorId && store.newVendorId.length > 0) {
+    store.setFilterValue6('vendor_id', store.newVendorId);
+    store.getVendorNameFromAPIWithFilter()
+  }
+    try {
+        console.log("поставщик:", store.newVendorId);
+        store.setFilterValue3('vendor_id', store.newVendorId);
+        store.setFilterValue4('vendor_id', store.newVendorId);
+        store.setFilterValue5('vendor_id', store.newVendorId);
+        await store.getProductFromIncludedWithFilter();
+        await store.fetchAllProducersForInclided();
+        await store.fetchAllBrandsForIncluded();
+        store.setFilterValue8('vendor_id', store.newVendorId);
+        store.setFilterValue7('vendor_id', store.newVendorId);
+        store.setFilterValue9('vendor_id', store.newVendorId);
+        await store.getProductFromExcludedWithFilter();
+        await store.fetchAllProducersForExcluded();
+        await store.fetchAllBrandsForExcluded();
+    } catch (error) {
+        console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+    }
+};
+
+// const options2 = ref<Array<{ label: string; value: string }>>([]);
+
+// // watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
+// //   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+// // });
+
+// watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
+//   const uniqueVendors = Array.from(new Set(vendors.map(item => item.vendor_id)));
+//   options2.value = uniqueVendors.map(label => ({ label, value: label }));
+// });
 // const onEntityChange = async () => {
 //   store.dataVendor = [];
 //   store.setFilterValue6('entity_id', store.entityId);
@@ -199,51 +255,51 @@ watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
 //     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
 //   }
 // };
-const onEntityChange = async () => {
-  store.newEntityName = ""; // Сбрасываем название компании перед загрузкой новых данных
-  store.dataVendorId = [];
+// const onEntityChange = async () => {
+//   store.newEntityName = ""; // Сбрасываем название компании перед загрузкой новых данных
+//   store.dataVendorId = [];
 
-  // Проверяем, что выбран только один код компании
-  if (store.newEntityId && store.newEntityId.length > 0) {
-    const selectedEntity = options.value.find(option => option.value === store.newEntityId);
-    if (selectedEntity) {
-      store.newEntityName = selectedEntity.label;
-    }
-  }
-  //фильтр в поставщике
-  store.setFilterValue6('entity_id', store.newEntityId);
-  if (store.newEntityId) { // Проверка, что выбрана торговая маркка
-    useKuAddStore().fetchAllVendorsIdForEntity(); // Выполнить запрос с фильтром по производителям
-    console.log('Выполнен запрос на получение данных поставщиков.');
-  } else {
-    useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-  }
-};
-const onVendorChange = async () => {
-  store.newVendorName = "";
-  if (store.newVendorId && store.newVendorId.length > 0) {
-    store.setFilterValue6('vendor_id', store.newVendorId);
-    store.getVendorFromAPIWithFilter()
+//   // Проверяем, что выбран только один код компании
+//   if (store.newEntityId && store.newEntityId.length > 0) {
+//     const selectedEntity = options.value.find(option => option.value === store.newEntityId);
+//     if (selectedEntity) {
+//       store.newEntityName = selectedEntity.label;
+//     }
+//   }
+//   //фильтр в поставщике
+//   store.setFilterValue6('entity_id', store.newEntityId);
+//   if (store.newEntityId) { // Проверка, что выбрана торговая маркка
+//     useKuAddStore().fetchAllVendorsIdForEntity(); // Выполнить запрос с фильтром по производителям
+//     console.log('Выполнен запрос на получение данных поставщиков.');
+//   } else {
+//     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
+//   }
+// };
+// const onVendorChange = async () => {
+//   store.newVendorName = "";
+//   if (store.newVendorId && store.newVendorId.length > 0) {
+//     store.setFilterValue6('vendor_id', store.newVendorId);
+//     store.getVendorFromAPIWithFilter()
 
-  }
-  try {
-    console.log("поставщик:", store.newVendorId);
-    store.setFilterValue3('vendor_id', store.newVendorId);
-    store.setFilterValue4('vendor_id', store.newVendorId);
-    store.setFilterValue5('vendor_id', store.newVendorId);
-    await store.getProductFromIncludedWithFilter();
-    await store.fetchAllProducersForInclided();
-    await store.fetchAllBrandsForIncluded();
-    store.setFilterValue8('vendor_id', store.newVendorId);
-    store.setFilterValue7('vendor_id', store.newVendorId);
-    store.setFilterValue9('vendor_id', store.newVendorId);
-    await store.getProductFromExcludedWithFilter();
-    await store.fetchAllProducersForExcluded();
-    await store.fetchAllBrandsForExcluded();
-  } catch (error) {
-    console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
-  }
-};
+//   }
+//   try {
+//     console.log("поставщик:", store.newVendorId);
+//     store.setFilterValue3('vendor_id', store.newVendorId);
+//     store.setFilterValue4('vendor_id', store.newVendorId);
+//     store.setFilterValue5('vendor_id', store.newVendorId);
+//     await store.getProductFromIncludedWithFilter();
+//     await store.fetchAllProducersForInclided();
+//     await store.fetchAllBrandsForIncluded();
+//     store.setFilterValue8('vendor_id', store.newVendorId);
+//     store.setFilterValue7('vendor_id', store.newVendorId);
+//     store.setFilterValue9('vendor_id', store.newVendorId);
+//     await store.getProductFromExcludedWithFilter();
+//     await store.fetchAllProducersForExcluded();
+//     await store.fetchAllBrandsForExcluded();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+//   }
+// };
 
 
 // Проверка полей формы
@@ -274,7 +330,7 @@ const validateDateStart = () => {
     dateStartError.value = 'Начальная дата не может быть позже конечной даты.';
   } else if (endDate.diff(startDate, 'day') < minDiff) {
     dateStartValidation.value = 'error';
-    dateStartError.value = `Мин. разница между датами не менее ${minDiff} дней для выбранного периода.`;
+    dateStartError.value = `Мин. разница между датами не менее ${minDiff} дней.`;
   } else {
     dateStartValidation.value = undefined;
     dateStartError.value = undefined;
@@ -292,7 +348,7 @@ const validateDateEnd = () => {
     dateEndError.value = 'Конечная дата не может быть раньше начальной даты.';
   } else if (endDate.diff(startDate, 'day') < minDiff) {
     dateEndValidation.value = 'error';
-    dateEndError.value = `Мин. разница между датами не менее ${minDiff} дней для выбранного периода.`;
+    dateEndError.value = `Мин. разница между датами не менее ${minDiff} дней.`;
   } else {
     dateEndValidation.value = undefined;
     dateEndError.value = undefined;

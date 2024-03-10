@@ -13,5 +13,6 @@
   display: flex;
   height: calc(100vh - 160px);
   margin: 10px 10px 0 0;
+  /* justify-content: space-between; */
 }
 </style>

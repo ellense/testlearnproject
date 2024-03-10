@@ -16,6 +16,12 @@ a {
   border-radius: 2px;
   height: calc(100vh - 160px);
 }
+.scrollTableRequirement {
+  margin: 10px 10px 0 0;
+  border: 1px solid var(--el-border-color);
+  border-radius: 2px;
+min-height: 100px;
+}
 
 .product {
   display: flex;

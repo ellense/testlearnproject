@@ -52,12 +52,12 @@ const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
 //для фильтрации по юр лицам
-const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
+const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_ids || []);
 const LegalEntityList = ref<string[]>(legalEntity2.value);
 
 const changeLegalEntity = () => {
   useGraphicStore().pagination = null;
-  useGraphicStore().setFilterValue2('entity_id', LegalEntity.value);
+  useGraphicStore().setFilterValue2('entity_ids', LegalEntity.value);
   console.log('shopLegalEntity.value:', LegalEntity.value);
 
   toggleTriggerFilter();

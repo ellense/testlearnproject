@@ -79,7 +79,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
         disableButtonsExcluded: false,
         //
         vendorFilter: "",
-        // kuFilter: null,
         vendors: [],
         //пагинация в таблицах
         pagination: null,
@@ -157,8 +156,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         },
 
         //получение данных о поставщиках для создания
-
-        async fetchAllVendorsIdForEntity() {
+        async fetchAllVendorIdForEntity() {
             try {
                 let allVendors: IVendorId[] = [];
                 let nextPage = 1;
@@ -168,9 +166,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         entity_id: this.$state.filterVendorValue.entity_id,
-                        vendor_id: this.$state.filterVendorValue.vendor_id,
                     });
-                    allVendors = allVendors.concat(vendors.resultsId);
+                    allVendors = allVendors.concat(vendors.results);
                     totalPages = Math.ceil(vendors.count / this.$state.countRowTable2);
                     nextPage++;
                 }
@@ -184,17 +181,17 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 return Promise.reject(error);
             }
         },
-        //получение поставщиков
-        async getVendorFromAPIWithFilter(page?: number) {
+        async getVendorNameFromAPIWithFilter(page?: number) {
             await VENDOR.getVendorsForEntityInKU({
                 page_size: this.$state.countRowTable,
                 page,
                 vendor_id: this.$state.filterVendorValue.vendor_id,
             })
                 .then((dataVendor) => {
-                    // this.$state.dataVendorName = dataVendor.resultsName;
-                    this.$state.newVendorName = dataVendor.resultsName[0].name;
+                    this.$state.newVendorName = dataVendor.results[0].name;
+                    // this.$state.dataVendorName = dataVendor.results;
                     console.log('Получены данные vendorName:', this.$state.newVendorName);
+                    // console.log('Получены данные dataVendorName:', this.$state.dataVendorName);
                     this.$state.pagination = {
                         count: dataVendor.count,
                         previous: dataVendor.previous,
@@ -209,7 +206,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
         >(field: T, value: U) {
             this.$state.filterVendorValue[field] = value
         },
-
 
 
         ////////////////////// ВКЛЮЧЕННЫЕ УСЛОВИЯ ///////////////////////////////////////

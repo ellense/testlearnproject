@@ -86,6 +86,7 @@ export interface GetAllVendorsForEntityInVendor {
 export interface GetAllVendorsForEntityReturnData extends Pagination {
   resultsId: IVendorId[];
   resultsName: IVendorName[];
+  results: IVendorIdAndName[]
 }
 export interface GetAllVendorsForEntityInVendorReturnData extends Pagination {
   results: IVendor[];
@@ -270,11 +271,11 @@ export interface IKuAddStore {
   tableDataExInvoiceAll: IInvoiceForKu[]
   tableDataExInvoiceSelect: IInvoiceForKu[]
   dataEntity: IEntityIdAndName[];
+  // dataVendor: IVendorIdAndName[]
   dataVendorId: IVendorId[];
   dataVendorName: IVendorName[];
   treeData: ITree[],
   treeRef: typeof ElTree | null,
-  // dataInfoKu: IKuList[];
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
   dialogFormProductInVisible: boolean

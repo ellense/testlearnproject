@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="calc(100vh - 120px)">
+  <el-scrollbar height="calc(100vh - 120px) !important">
     <EntitiesKuAddMain />
 
     <div class="button_bottom">
@@ -154,6 +154,9 @@ const addClose = () => {
 </script>
 
 <style scoped>
+/* .el-scrollbar__view{
+height: 100%;
+} */
 .button_bottom {
   margin: 20px 10px 0 0;
   display: flex;
