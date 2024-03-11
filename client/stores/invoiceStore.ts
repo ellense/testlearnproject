@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { EntityId, GetAllInvoices, IVendorId, InvoiceStore } from "~/utils/types/directoryTypes";
-
+import { useKuAddStore } from "~~/stores/kuAddStore";
 export const useInvoiceStore = defineStore("InvoiceStore", {
   state: (): InvoiceStore => ({
     dataInvoice: [],
@@ -11,7 +11,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
     search: "",
     filterValue: {
       entity_id: [],
-      vendor_id: [],
+      vendor_id: "",
       end_date: "",
 
     }
@@ -59,7 +59,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
         const vendors = await VENDOR.getVendorsForEntityInKU({
           page_size: this.$state.countRowTable,
           page,
-          entity_id: this.$state.legalEntity,
+          entity_id: this.$state.legalEntity[0],
         });
         this.$state.vendor = vendors.results;
         this.$state.pagination = {
@@ -79,7 +79,6 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       T extends keyof GetAllInvoices,
       U extends GetAllInvoices[T],
     >(field: T, value: U) {
-      console.log('Устанавливается значение фильтра:', field, value);
       this.$state.filterValue[field] = value
     },
     removeFilterValue<T extends keyof GetAllInvoices>(field: T) {
@@ -97,15 +96,11 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
     //получение накладных
     async getInvoicesFromAPIWithFilter(page?: number) {
       console.log('Выполняется запрос накладных с фильтрацией...');
-      this.setFilterValue('page', page);
-      this.setFilterValue('search', this.$state.search);
-      this.setFilterValue('start_date', this.$state.filterValue?.start_date);
-      this.setFilterValue('end_date', this.$state.filterValue?.end_date);
       await INVOICE.getInvoicesList({
         page_size: this.$state.countRowTable,
         page,
         entity_id: this.$state.filterValue?.entity_id || [],
-        vendor_id: this.$state.filterValue?.vendor_id || [],
+        vendor_id: this.$state.filterValue?.vendor_id,
         search: this.$state.search,
         start_date: this.$state.filterValue?.start_date,
         end_date: this.$state.filterValue?.end_date,
@@ -113,6 +108,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
         .then((dataInvoice) => {
           console.log('Получены данные накладных:', dataInvoice);
           this.$state.dataInvoice = dataInvoice.results;
+          useKuAddStore().tableDataExInvoiceAll = dataInvoice.results;
           this.$state.pagination = {
             count: dataInvoice.count,
             previous: dataInvoice.previous,

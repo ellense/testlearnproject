@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="calc(100vh - 120px) !important">
+  <!-- <el-scrollbar height="calc(100vh - 120px) !important"> -->
     <EntitiesKuAddMain />
 
     <div class="button_bottom">
@@ -7,7 +7,7 @@
       <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
     </div>
 
-  </el-scrollbar>
+  <!-- </el-scrollbar> -->
 </template>
 
 <script lang="ts" setup>

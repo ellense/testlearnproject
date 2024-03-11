@@ -1,18 +1,17 @@
 <template>
     <div>
-        <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsExcluded"
+        <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Все</el-button>
-        <el-button size="small"  round @click="dialogOpenProduct()" :disabled="store.disableButtonsExcluded"
+        <el-button size="small" round @click="dialogOpenProduct()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
         <!-- :loading="categoryDialogLoading"  -->
-        <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsExcluded"
+        <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             категории</el-button>
     </div>
     <el-scrollbar class="scrollTableRequirement">
-        <!-- calc(100vh - 745px) -->
-        <el-table style="width: 100%" height="calc(100vh - px)" :data="kuRequirementList" border
+        <el-table style="width: 100%; min-height:100px;" height="calc(100vh - 745px)" :data="kuRequirementList" border
             empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"
@@ -30,26 +29,28 @@
         </el-table>
     </el-scrollbar>
 </template>
+
 <script lang="ts" setup>
 import { ref } from "vue";
 import type { Action, ElTree } from 'element-plus'
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuIdStore } from "~~/stores/kuIdStore";
 
 
 const store = useKuAddStore();
-const kuRequirementList = ref(store.tableDataExRequirement);
+const kuRequirementList = ref(store.tableDataInRequirement);
 
 //добавление условия "все"
 const onAddItem = () => {
-    if (store.tableDataExRequirement.length === 0) {
-        store.tableDataExRequirement.push({
+    if (store.tableDataInRequirement.length === 0) {
+        store.tableDataInRequirement.push({
             item_type: "Все",
             item_code: "",
             item_name: "",
             producer: "",
             brand: "",
         });
-        console.log("данные условия ВСЕ", store.tableDataExRequirement);
+        console.log("данные условия ВСЕ", store.tableDataInRequirement);
 
     }
     else {
@@ -57,8 +58,8 @@ const onAddItem = () => {
             confirmButtonText: 'OK',
             callback: (action: Action) => {
                 if (action === 'confirm') { // Проверяем, что пользователь подтвердил удаление
-                    store.tableDataExRequirement.length = 0;// Очищаем массив
-                    store.tableDataExRequirement.push({
+                    store.tableDataInRequirement.length = 0;// Очищаем массив
+                    store.tableDataInRequirement.push({
                         item_type: "Все",
                         item_code: "",
                         item_name: "",
@@ -74,26 +75,30 @@ const onAddItem = () => {
         });
 
     }
-    store.disableButtonsExcluded = true;
+    store.disableButtonsIncluded = true;
 };
 
 //кнопки добавления условий
 const dialogOpenProduct = () => {
-    store.dialogFormProductExVisible = true;
+    store.dialogFormProductInVisible = true;
 };
 const dialogOpenCategory = () => {
-    store.dialogFormCategoryExVisible = true;
+    store.dialogFormCategoryInVisible = true;
 
 };
 
 //удаление условий
 const deleteRow = (index: number) => {
-    store.tableDataExRequirement.splice(index, 1);
-    store.disableButtonsExcluded = false;
+    store.tableDataInRequirement.splice(index, 1);
+    store.disableButtonsIncluded = false;
 }
 
 const disableButtonTooltip = computed(() => {
-    return store.disableButtonsExcluded ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
+    return store.disableButtonsIncluded ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
 });
 
 </script>
+
+<style scoped>
+
+</style>

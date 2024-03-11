@@ -119,7 +119,7 @@ export interface GetAllInvoices {
   page_size?: number;
   page?: number;
   entity_id: string[];
-  vendor_id: string[];
+  vendor_id: string;
   search?: string;
   start_date?: string,
   end_date?: string,
@@ -164,19 +164,19 @@ export interface IKuPost {
   date_start: Date | string;
   date_end: Date | string;
   status_ku: string;
-//   description: string;
-//   contract: string;
-//   product_type: string;
-//   docu_account: string;
-//   docu_name: string;
-//   docu_number: string;
-//   docu_date: Date | string;
-//   docu_subject: string;
-//   tax: boolean;
-//   exclude_return: boolean;
-//   negative_turnover: boolean;
-//   ku_type: string;
-//   pay_method: string;
+  //   description: string;
+  //   contract: string;
+  //   product_type: string;
+  //   docu_account: string;
+  //   docu_name: string;
+  //   docu_number: string;
+  //   docu_date: Date | string;
+  //   docu_subject: string;
+  //   tax: boolean;
+  //   exclude_return: boolean;
+  //   negative_turnover: boolean;
+  //   ku_type: string;
+  //   pay_method: string;
 }
 export interface IKuPost2 {
   requirements: IIncludedRequirement[];
@@ -200,7 +200,6 @@ export interface IKuUpdate {
   period: string;
   date_start: Date | string;
   date_end: Date | string;
-  percent: number | null;
 }
 export interface IKuDeleteGraph {
   ku_id: string;
@@ -271,7 +270,6 @@ export interface IKuAddStore {
   tableDataExInvoiceAll: IInvoiceForKu[]
   tableDataExInvoiceSelect: IInvoiceForKu[]
   dataEntity: IEntityIdAndName[];
-  // dataVendor: IVendorIdAndName[]
   dataVendorId: IVendorId[];
   dataVendorName: IVendorName[];
   treeData: ITree[],
@@ -306,38 +304,77 @@ export interface IKuAddStore {
   filterVendorValue: GetAllVendorsForEntity
 }
 export interface IKuIdStore {
+  //данные таблиц
+  brandIncluded: IBrand[];
+  brandExcluded: IBrand[];
+  producerIncluded: IProducer[];
+  producerExcluded: IProducer[];
+  productIncluded: IProduct[];
+  productExcluded: IProduct[];
+  tableDataInRequirement: IIncludedRequirement[];
+  tableDataExRequirement: IExcludedRequirement[];
+  tableDataPercent: IPercent[];
+  tableDataExInvoiceAll: IInvoiceForKu[]
+  tableDataExInvoiceSelect: IInvoiceForKu[]
+  dataEntity: IEntityIdAndName[];
+  dataVendorId: IVendorId[];
+  dataVendorName: IVendorName[];
+  treeData: ITree[],
+  treeRef: typeof ElTree | null,
+  //v-model диалоговых форм
+  dialogFormExInvoiceVisible: boolean
+  dialogFormProductInVisible: boolean
+  dialogFormCategoryInVisible: boolean
+  dialogFormProductExVisible: boolean
+  dialogFormCategoryExVisible: boolean
+  //дизэйбл кнопок
+  disableButtonsIncluded: boolean
+  disableButtonsExcluded: boolean
+   //поиски
+   searchProductIncluded: string;
+   searchProductExcluded: string;
   //v-model атрибутов
   ku_id: string;
   kuIdStatus: string;
-  kuIdPercent: number | null;
-  kuIdPeriod: string;
-  kuIdEntityName: IEntityIdAndNameForKu;
-  kuIdVendorName: IVendorIdAndNameForKu;
+  kuIdType: string;
+  kuIdEntityId: string;
+  kuIdEntityName: string;
+  kuIdVendorId: string;
+  kuIdVendorName: string;
   kuIdDateStart: Date | string;
   kuIdDateEnd: Date | string;
-  kuIdCategory_id: string
-  kuIdCategory_name: string
-  kuIdProducer_name: string;
-  kuIdBrand_name: string;
-  //v-model диалоговых форм
-  dialogFormProductVisible: boolean;
-  dialogFormCategoryVisible: boolean;
+  kuIdDateActual: Date | string;
+  kuIdDescription: string;
+  kuIdContract: string;
+  kuIdProduct_type: string;
+  kuIdDocu_account: string;
+  kuIdDocu_name: string;
+  kuIdDocu_number: string;
+  kuIdDocu_date: Date | string;
+  kuIdDocu_subject: string;
+  kuIdTax: boolean
+  kuIdExclude_return: boolean
+  kuIdNegative_turnover: boolean
+  kuIdKu_type: string;
+  kuIdPay_method: string;
+  kuIdCategory_idIn: string;
+  kuIdCategory_nameIn: string;
+  kuIdProducer_nameIn: string;
+  kuIdBrand_nameIn: string;
+  kuIdCategory_idEx: string;
+  kuIdCategory_nameEx: string;
+  kuIdProducer_nameEx: string;
+  kuIdBrand_nameEx: string;
   //дизэйбл
   disableButtons: boolean
-  //данные 
-  brand: IBrand[];
-  producer: IProducer[];
-  product: IProduct[];
-  tableDataInRequirement: IIncludedRequirement[];
-  dataEntity: IEntityIdAndName[];
-  dataVendor: IVendorIdAndName[];
-  dataInfoKu: IKuList[];
   //пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;
   //
   multipleSelectionProduct: IProduct[];
+  multipleSelectionExInvoice: IInvoiceForKu[]
   multipleTableRef: Ref | null;
+  filterVendorValue: GetAllVendorsForEntity
 }
 
 export interface GetAllKus {
@@ -390,7 +427,7 @@ export interface IPercent {
   fix: boolean;
   criteria: number | null;
   percentSumma: number | null;
-  
+
 }
 
 // График
@@ -582,7 +619,7 @@ export interface ITree {
   parent_code: string;
   children?: ITree[];
 }
-export interface GetAllCategory{
+export interface GetAllCategory {
   // page_size?: number;
   // page?: number;
   vendor_id?: string;

@@ -73,14 +73,14 @@ watch(() => store.brandExcluded, (brands: IBrand[]) => {
 
 const onProducerChange = async () => {
   store.valueBrand_nameEx = "";
-  store.setFilterValue5('producer_name', store.valueProducer_nameEx);
+  store.setFilterValue7('producer_name', store.valueProducer_nameEx);
   if (store.valueProducer_nameEx) { // Проверка, что выбрана торговая маркка
-    useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
+    useKuAddStore().fetchAllBrandsForExcluded(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
-    useKuAddStore().setFilterValue5('producer_name', undefined); // Сбросить фильтр
+    useKuAddStore().setFilterValue7('producer_name', undefined); // Сбросить фильтр
     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandExcluded);
-    useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
+    useKuAddStore().fetchAllBrandsForExcluded(); // Выполнить запрос без фильтра
     console.log('Выполнен запрос на получение всех данных производителей.');
   }
 };
@@ -148,10 +148,10 @@ let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
   store.valueBrand_nameEx = "";
   store.valueProducer_nameEx = "";
-  useKuAddStore().setFilterValue4("l4", []);
-  useKuAddStore().setFilterValue5('producer_name', undefined);
-  await store.fetchAllProducersForInclided();
-  await store.fetchAllBrandsForIncluded();
+  useKuAddStore().setFilterValue8("l4", []);
+  useKuAddStore().setFilterValue7('producer_name', undefined);
+  await store.fetchAllProducersForExcluded();
+  await store.fetchAllBrandsForExcluded();
   console.log('Отмеченные ключи:', checkedKeys);
 
   if (checkedKeys && checkedKeys.length > 0) {
@@ -163,12 +163,12 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
     if (selectedCategory) {
       selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории для отправки в условия
     }
-    useKuAddStore().setFilterValue4("l4", selectedCategoryKey);
-    useKuAddStore().setFilterValue5("l4", selectedCategoryKey);
+    useKuAddStore().setFilterValue8("l4", selectedCategoryKey);
+    useKuAddStore().setFilterValue7("l4", selectedCategoryKey);
    
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
-      useKuAddStore().fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
-      useKuAddStore().fetchAllBrandsForIncluded();
+      useKuAddStore().fetchAllProducersForExcluded(); // Выполнить запрос с фильтром по категории
+      useKuAddStore().fetchAllBrandsForExcluded();
       console.log('Выполнены запросы по фильтру категории.');
     }
   }
@@ -216,10 +216,10 @@ const AddCategoryItem = async () => {
       children: [],
       parent_code: "",
     });
-    useKuAddStore().setFilterValue4("l4", []);
-    useKuAddStore().setFilterValue5('producer_name', undefined);
-    await store.fetchAllProducersForInclided();
-    await store.fetchAllBrandsForIncluded();
+    useKuAddStore().setFilterValue8("l4", []);
+    useKuAddStore().setFilterValue7('producer_name', undefined);
+    await store.fetchAllProducersForExcluded();
+    await store.fetchAllBrandsForExcluded();
   } else {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }

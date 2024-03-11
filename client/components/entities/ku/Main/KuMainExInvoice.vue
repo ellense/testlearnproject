@@ -42,9 +42,10 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import type { IInvoiceForKu } from "~/utils/types/directoryTypes";
+import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
-const store = useKuAddStore();
+const store = useKuIdStore();
 const kuStore = useKuAddStore();
 const { getExInvoiceAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
@@ -62,15 +63,15 @@ const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useKuAddStore().setCountRowTable(val);
   try {
-    await useKuAddStore().getProductFromExcludedWithFilter();
+    // await useKuAddStore().getProductFromExcludedWithFilter();
   } catch (error) {
-    console.error("Ошибка при загрузке данных искл.накладных", error);
+    console.error("Ошибка при загрузке данных искл.продуктов", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterValue9('page', page);
-  useKuAddStore().getProductFromExcludedWithFilter(page);
+//   useKuAddStore().setFilterValue9('page', page);
+//   useKuAddStore().getProductFromExcludedWithFilter(page);
 };
 
 
@@ -104,7 +105,7 @@ const AddExInvoice = () => {
     console.log("искл.Накладные",useKuAddStore().tableDataExInvoiceSelect);
   });
   toggleSelection()
-  kuStore.dialogFormExInvoiceVisible = false;
+  store.dialogFormExInvoiceVisible = false;
 };
 </script>
 

@@ -23,6 +23,11 @@ a {
 min-height: 100px;
 }
 
+.button_bottom {
+  margin: 15px 10px 0 0 !important;
+  display: flex;
+  justify-content: flex-start;
+}
 .product {
   display: flex;
   height: calc(100vh - 160px);

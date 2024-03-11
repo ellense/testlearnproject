@@ -12,7 +12,7 @@
     </div>
     <el-scrollbar class="scrollTableRequirement">
         <!-- calc(100vh - 745px) -->
-        <el-table style="width: 100%" height="calc(100vh - px)" :data="kuRequirementList" border
+        <el-table style="width: 100%" height="calc(100vh - 745px)" :data="kuRequirementList" border
             empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"

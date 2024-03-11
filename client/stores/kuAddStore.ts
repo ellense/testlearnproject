@@ -1,4 +1,5 @@
 import { defineStore } from "pinia";
+import { useKuIdStore } from "~~/stores/kuIdStore";
 
 import type {
     IKuList,
@@ -14,6 +15,7 @@ import type {
     IVendorId,
     IInvoiceForKu,
 } from "~/utils/types/directoryTypes";
+import useStore from "element-plus/es/components/table/src/store/index.mjs";
 
 export const useKuAddStore = defineStore("KuAddStore", {
     state: (): IKuAddStore => ({
@@ -173,6 +175,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 }
                 console.log("Все данные о поставщиках:", allVendors);
                 this.$state.dataVendorId = allVendors;
+
             } catch (error) {
                 console.error(
                     "Произошла ошибка при получении данных о поставщиках",
@@ -189,8 +192,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
             })
                 .then((dataVendor) => {
                     this.$state.newVendorName = dataVendor.results[0].name;
+                    useKuIdStore().setKuIdVendorName(dataVendor.results[0].name)
                     // this.$state.dataVendorName = dataVendor.results;
-                    console.log('Получены данные vendorName:', this.$state.newVendorName);
+                    console.log('Получены данные vendorName:', this.$state.newVendorName, useKuIdStore().kuIdVendorName);
                     // console.log('Получены данные dataVendorName:', this.$state.dataVendorName);
                     this.$state.pagination = {
                         count: dataVendor.count,
@@ -262,6 +266,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 }
                 console.log("Все данные о производителе:", allProducer);
                 this.$state.producerIncluded = allProducer;
+                this.$state.producerExcluded = allProducer;
             } catch (error) {
                 console.error(
                     "Произошла ошибка при получении данных о производителе",
@@ -297,6 +302,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 }
                 console.log("Все данные о брендах:", allBrands);
                 this.$state.brandIncluded = allBrands;
+                this.$state.brandExcluded = allBrands;
             } catch (error) {
                 console.error(
                     "Произошла ошибка при получении данных о брендах",
@@ -324,8 +330,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 vendor_id: this.$state.newVendorId
             })
                 .then((product) => {
-                    console.log('Получены данные товаров:', product);
+                    console.log('Получены данные вкл товаров:', product);
                     this.$state.productIncluded = product.results;
+                    // this.$state.productExcluded = product.results;
                     this.$state.pagination = {
                         count: product.count,
                         previous: product.previous,
@@ -333,7 +340,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                     };
                 })
                 .catch((error) => {
-                    console.error('Ошибка при получении данных товаров:', error);
+                    console.error('Ошибка при получении данных вкл товаров ку_адд:', error);
                     return Promise.reject(error);
                 });
         },
@@ -342,7 +349,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 this.setSearchProductIn(searchQuery);
                 await this.getProductFromIncludedWithFilter();
             } catch (error) {
-                console.error('Ошибка при выполнении поиска', error);
+                console.error('Ошибка при выполнении поиска в вкл товарах ку_адд', error);
             }
         },
         setSearchProductIn(query: string) {
@@ -357,73 +364,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
 
         //////////////////////// ИСКЛЮЧЕННЫЕ УСЛОВИЯ   //////////////////////////////////////////////
-        async fetchAllProducersForExcluded() {
-            try {
-                let allProducer: IProducer[] = [];
-                let nextPage = 1;
-                let totalPages = 1;
-                while (nextPage <= totalPages) {
-                    const producers = await PRODUCER.getProducer({
-                        page_size: this.$state.countRowTable2,
-                        page: nextPage,
-                        l4: this.$state.filterProducerExcluded.l4,
-                        vendor_id: this.$state.newVendorId
-                    });
-                    allProducer = allProducer.concat(producers.results);
-                    totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
-                    nextPage++;
-                }
-                console.log("Все данные о производителе:", allProducer);
-                this.$state.producerExcluded = allProducer;
-            } catch (error) {
-                console.error(
-                    "Произошла ошибка при получении данных о производителе",
-                    error
-                );
-                return Promise.reject(error);
-            }
-        },
-        setFilterValue8<
-            T extends keyof GetAllProducer,
-            U extends GetAllProducer[T],
-        >(field: T, value: U) {
-            this.$state.filterProducerExcluded[field] = value
-        },
 
-        //получение данных о бренде с фильтром для включенных условий
-        async fetchAllBrandsForExcluded() {
-            try {
-                let allBrands: IBrand[] = [];
-                let nextPage = 1;
-                let totalPages = 1;
-                while (nextPage <= totalPages) {
-                    const brands = await BRAND.getBrand({
-                        page_size: this.$state.countRowTable2,
-                        page: nextPage,
-                        producer_name: this.$state.filterBrandExcluded.producer_name,
-                        l4: this.$state.filterProducerExcluded.l4,
-                        vendor_id: this.$state.newVendorId
-                    });
-                    allBrands = allBrands.concat(brands.results);
-                    totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
-                    nextPage++;
-                }
-                console.log("Все данные о брендах:", allBrands);
-                this.$state.brandExcluded = allBrands;
-            } catch (error) {
-                console.error(
-                    "Произошла ошибка при получении данных о брендах",
-                    error
-                );
-                return Promise.reject(error);
-            }
-        },
-        setFilterValue7<
-            T extends keyof GetAllBrands,
-            U extends GetAllBrands[T],
-        >(field: T, value: U) {
-            this.$state.filterBrandExcluded[field] = value
-        },
         //получение данных о товарах для условий с фильтром и поиск 
         async getProductFromExcludedWithFilter(page?: number) {
             this.setFilterValue9('page', page);
@@ -454,7 +395,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 this.setSearchProductEx(searchQuery);
                 await this.getProductFromExcludedWithFilter();
             } catch (error) {
-                console.error('Ошибка при выполнении поиска', error);
+                console.error('Ошибка при выполнении поиска в искл товарах ку_адд', error);
             }
         },
         setSearchProductEx(query: string) {

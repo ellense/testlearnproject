@@ -94,7 +94,7 @@
             <el-button size="small" text bg @click="" :disabled="store.disableButtons" :title="disableButtonTooltip">+
                 Условие по категории</el-button>
         </div>
-        <EntitiesKuAddRequirement />
+        <!-- <EntitiesKuAddRequirement /> -->
         <div class="button_bottom">
             <el-button @click="addClose()">Отменить</el-button>
             <el-button type="primary" @click="changeKuToBackend()" :loading="loading" :disabled="isEditButtonDisabled"
