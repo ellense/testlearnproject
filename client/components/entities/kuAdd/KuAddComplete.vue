@@ -131,8 +131,8 @@ const addItemAndSendToBackend = async () => {
   store.newEntityId = "";
   store.newVendorId = "";
   store.newType = "";
-  store.newDateStart = new Date();
-  store.newDateEnd = new Date();
+  store.newDateStart = "";
+  store.newDateEnd = "";
 
 };
 
@@ -148,8 +148,8 @@ const addClose = () => {
   store.newEntityId = "";
   store.newVendorId = "";
   store.newType = "";
-  store.newDateStart = new Date();
-  store.newDateEnd = new Date();
+  store.newDateStart = "";
+  store.newDateEnd = "";
 };
 </script>
 

@@ -58,8 +58,9 @@ const addClose = () => {
   store.kuIdEntityId = "";
   store.kuIdVendorId = "";
   store.kuIdType = "";
-  store.kuIdDateStart = new Date();
-  store.kuIdDateEnd = new Date();
+  store.kuIdDateStart = "";
+  store.kuIdDateEnd = "";
+  store.kuIdDocu_date = "";
 };
 const isEditButtonDisabled = computed(() => {
     return store.kuIdStatus !== 'Создано';
@@ -137,8 +138,9 @@ const changeKuToBackend = async () => {
         store.kuIdEntityId = "";
         store.kuIdVendorName = "";
         store.kuIdType = "";
-        store.kuIdDateStart = new Date();
-        store.kuIdDateEnd = new Date();
+        store.kuIdDateStart = "";
+        store.kuIdDateEnd = "";
+        store.kuIdDocu_date = "";
         store.disableButtons = false;
     }
     router.push({ path: "/" });

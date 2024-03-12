@@ -45,16 +45,16 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdEntityName: "",
         kuIdVendorId: "",
         kuIdVendorName: "",
-        kuIdDateStart: new Date(),
-        kuIdDateEnd: new Date(),
-        kuIdDateActual: new Date(),
+        kuIdDateStart: "",
+        kuIdDateEnd: "",
+        kuIdDateActual: "",
         kuIdDescription: "",
         kuIdContract: "",
         kuIdProduct_type: "",
         kuIdDocu_account: "",
         kuIdDocu_name: "",
         kuIdDocu_number: "",
-        kuIdDocu_date: new Date(),
+        kuIdDocu_date: "",
         kuIdDocu_subject: "",
         kuIdTax: false,
         kuIdExclude_return: false,
@@ -84,6 +84,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
     }),
 
     getters: {
+        getKuRequirement: (state) => state.tableDataInRequirement,
     },
 
     actions: {
@@ -134,6 +135,18 @@ export const useKuIdStore = defineStore("KuIdStore", {
         },
         setSearchProductEx(query: string) {
             this.$state.searchProductExcluded = query;
+        },
+        async getKuRequirementDetailFromApi(kuId: string) {
+            try {
+                const results = await KU.getInfoRequirements({
+                    ku_id: kuId,
+                });
+                this.$state.tableDataInRequirement = results
+                console.log("полученная таблица условий ку:", this.tableDataInRequirement)
+                console.log("успешно получили данные условий:", results);
+            } catch (error) {
+                console.error("Ошибка при получении данных условий:", error);
+            }
         },
     },
 

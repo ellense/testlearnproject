@@ -97,7 +97,7 @@
           </el-form-item>
           <el-form-item label-width="170" label="Дата договора">
             <el-date-picker v-model="store.kuIdDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY" clearable
-              el-rowrable placeholder="Выберите дату договора"></el-date-picker>
+               placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
             <el-input v-model="store.kuIdDocu_subject" style="width: 300px" :rows="4" size="small" type="textarea"
@@ -211,12 +211,12 @@ const onVendorChange = async () => {
         await store2.getProductFromIncludedWithFilter();
         await store2.fetchAllProducersForInclided();
         await store2.fetchAllBrandsForIncluded();
-        store2.setFilterValue8('vendor_id', store.kuIdVendorId);
-        store2.setFilterValue7('vendor_id', store.kuIdVendorId);
+        // store2.setFilterValue8('vendor_id', store.kuIdVendorId);
+        // store2.setFilterValue7('vendor_id', store.kuIdVendorId);
         store2.setFilterValue9('vendor_id', store.kuIdVendorId);
         await store2.getProductFromExcludedWithFilter();
-        await store2.fetchAllProducersForExcluded();
-        await store2.fetchAllBrandsForExcluded();
+        // await store2.fetchAllProducersForExcluded();
+        // await store2.fetchAllBrandsForExcluded();
     } catch (error) {
         console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
     }
@@ -350,8 +350,8 @@ watch(() => store.kuIdDateEnd, validateDateEnd);
 // Функция сброса дат при изменении периода
 const resetDatesOnPeriodChange = () => {
 
-  store.kuIdDateStart = new Date()
-  store.kuIdDateEnd = new Date();
+  store.kuIdDateStart = "";
+  store.kuIdDateEnd = "";
 };
 // Функция сброса поставщика
 const resetVendorOnEntityChange = () => {
@@ -388,8 +388,6 @@ const disableSelectVendorTooltip = computed(() => {
 .kuAddMainCol {
   display: flex;
   flex-direction: column;
-
-
 }
 
 .el-form-item {

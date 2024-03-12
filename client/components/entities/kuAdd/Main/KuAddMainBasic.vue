@@ -358,8 +358,8 @@ watch(() => store.newDateEnd, validateDateEnd);
 // Функция сброса дат при изменении периода
 const resetDatesOnPeriodChange = () => {
 
-  store.newDateStart = new Date()
-  store.newDateEnd = new Date();
+  store.newDateStart = "";
+  store.newDateEnd = "";
 };
 // Функция сброса поставщика
 const resetVendorOnEntityChange = () => {

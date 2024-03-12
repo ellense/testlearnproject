@@ -79,7 +79,7 @@ const loading = ref()
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
-  // useKuIdStore().getKuRequirementDetailFromApi(kuId)
+  useKuIdStore().getKuRequirementDetailFromApi(kuId)
  
   router.push({ path: `/ku/${kuId}` });
 };
@@ -136,10 +136,11 @@ const filterPeriod = (value: string, row: IKuList) => {
 const filterStatus = (value: string, row: IKuList) => {
   return row.status === value
 }
-const getStatusTagType = (status: string): "success" | "warning" | "info" | "" | "danger" | undefined  => {
+
+const getStatusTagType = (status: string): "success" | "warning" | "info" | "primary" | "danger" | undefined  => {// primary
   switch (status) {
     case 'Создано':
-      return "";
+      return "primary";
     case 'Действует':
       return "success";
     case 'Закрыто':

@@ -31,15 +31,33 @@
 </template>
 
 <script lang="ts" setup>
+import { storeToRefs } from "pinia";
 import { ref } from "vue";
 import type { Action, ElTree } from 'element-plus'
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
+import type { IIncludedRequirement } from "~/utils/types/directoryTypes";
+
+const { getKuRequirement } = storeToRefs(
+    useKuIdStore()
+);
+const store = useKuIdStore();
+// const kuRequirementList = ref(store.tableDataInRequirement);
+const kuRequirementList = ref<IIncludedRequirement[]>(getKuRequirement.value);
+    watch(() => getKuRequirement.value, (newValue) => {
+    console.log("getKuRequirement changed:", newValue);
+    kuRequirementList.value = newValue || [];
+    console.log("kuRequirementList:", kuRequirementList.value);
+});
 
 
-const store = useKuAddStore();
-const kuRequirementList = ref(store.tableDataInRequirement);
-
+onMounted(async () => {
+  try {
+    await store.getKuRequirementDetailFromApi(store.ku_id);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных условий куайди", error);
+  }
+});
 //добавление условия "все"
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {

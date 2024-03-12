@@ -229,9 +229,9 @@ export interface IKuAddStore {
   newEntityName: string;
   newVendorId: string;
   newVendorName: string;
-  newDateStart: Date;
-  newDateEnd: Date;
-  newDateActual: Date;
+  newDateStart: Date | string;
+  newDateEnd: Date | string;
+  newDateActual: Date | string;
   newDescription: string;
   newContract: string;
   newProduct_type: string;
