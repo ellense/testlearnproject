@@ -80,6 +80,7 @@ const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
   useKuIdStore().getKuRequirementDetailFromApi(kuId)
+
  
   router.push({ path: `/ku/${kuId}` });
 };

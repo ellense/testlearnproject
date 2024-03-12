@@ -408,6 +408,61 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.$state.filterProductExcluded[field] = value
         },
 
-
+        clearNewData() {
+            // Очищаем таблицу условий
+            this.tableDataInRequirement.length = 0;
+            this.tableDataExRequirement.length = 0;
+            this.tableDataPercent.length = 0;
+            // Значения v-model при создании
+            this.newType = '',
+            this.newEntityId = '';
+            this.newEntityName = '';
+            this.newVendorId = '';
+            this.newVendorName = '';
+            this.newDateStart = '';
+            this.newDateEnd = '';
+            this.newDateActual = '';
+            this.newDescription = '';
+            this.newContract = '';
+            this.newProduct_type = '';
+            this.newDocu_account = '';
+            this.newDocu_name = '';
+            this.newDocu_number = '';
+            this.newDocu_date = '';
+            this.newDocu_subject = '';
+            this.newTax = false;
+            this.newExclude_return = false;
+            this.newNegative_turnover = false;
+            this.newKu_type = '';
+            this.newPay_method = '';
+            this.valueCategory_idIn = '';
+            this.valueCategory_nameIn = '';
+            this.valueProducer_nameIn = '';
+            this.valueBrand_nameIn = '';
+            this.valueCategory_idEx = '';
+            this.valueCategory_nameEx = '';
+            this.valueProducer_nameEx = '';
+            this.valueBrand_nameEx = '';
+      
+            // Селекты для множественного выбора
+            this.multipleSelectionProduct = [];
+            this.multipleSelectionExInvoice = [];
+            this.multipleTableRef = null;
+      
+            // Сбрасываем флаги видимости диалоговых окон
+            this.dialogFormExInvoiceVisible = false;
+            this.dialogFormProductInVisible = false;
+            this.dialogFormCategoryInVisible = false;
+            this.dialogFormProductExVisible = false;
+            this.dialogFormCategoryExVisible = false;
+      
+            // Сбрасываем флаги дизейбла кнопок
+            this.disableButtonsIncluded = false;
+            this.disableButtonsExcluded = false;
+      
+            // Сбрасываем значения поисковых строк
+            this.searchProductIncluded = '';
+            this.searchProductExcluded = '';
+          }
     }
 });

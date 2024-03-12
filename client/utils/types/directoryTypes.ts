@@ -1,11 +1,18 @@
 import type { ElTree } from 'element-plus'
 // юр.лица
 export interface IEntity {
+  // external_code: string;
+  // director_name: string;
+  // urastic_name: string;
+  // name: string;
+  // urastic_address: string;
+  // merge_id: string;
   entity_id: string;
   directorname: string;
   urasticname: string;
   name: string;
   urasticaddress: string;
+  mergeid: string;
 }
 export interface EntityStore {
   dataEntity: IEntity[],
@@ -16,6 +23,7 @@ export interface GetAllEntities {
   search?: string;
 }
 export interface IEntityIdAndName {
+  // external_code: string;
   entity_id: string;
   name: string;
 }
@@ -24,12 +32,21 @@ export interface IEntityIdAndNameForKu {
   entity_name: string;
 }
 export interface EntityId {
+  // external_code: string;
   entity_id: string;
 }
 
 
 //поставщик
 export interface IVendor {
+  // external_code: string
+  // name: string
+  // urastic_name: string
+  // director_name: string
+  // urastic_adress: string
+  // inn_kpp: string
+  // entity_key: string
+  // entity_name: string
   vendor_id: string
   name: string
   urasticname: string
@@ -58,12 +75,14 @@ export interface GetAllVendorsReturnData extends Pagination {
   results: IVendor[]
 }
 export interface IVendorId {
+  // external_code: string
   vendor_id: string
 }
 export interface IVendorName {
   name: string
 }
 export interface IVendorIdAndName {
+  // external_code: string
   vendor_id: string
   name: string;
 }
@@ -152,31 +171,47 @@ export interface IKuList {
   date_end: Date | string;
   graph_exists: boolean | string
   status: string;
-  percent: number | null;
+
+  description: string;
+    contract: string;
+    product_type: string;
+    docu_account: string;
+    docu_name: string;
+    docu_number: string;
+    docu_date: Date | string;
+    docu_subject: string;
+    tax: boolean;
+    exclude_return: boolean;
+    negative_turnover: boolean;
+    ku_type: string;
+    pay_method: string;
 }
 export interface IKuId {
   ku_id: string;
 }
 export interface IKuPost {
-  entity_key: string;// string[] изменить тип в бд, потому что изменили множественный выбор, а он как цепочка потянул за собой везде изменения
-  vendor_key: string;
+  // entity_key: string;
+  // vendor_key: string;
+  entity_id: string;
+  vendor_id: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
-  status_ku: string;
-  //   description: string;
-  //   contract: string;
-  //   product_type: string;
-  //   docu_account: string;
-  //   docu_name: string;
-  //   docu_number: string;
-  //   docu_date: Date | string;
-  //   docu_subject: string;
-  //   tax: boolean;
-  //   exclude_return: boolean;
-  //   negative_turnover: boolean;
-  //   ku_type: string;
-  //   pay_method: string;
+  status: string;
+  // status_ku: string;
+    description: string;
+    contract: string;
+    product_type: string;
+    docu_account: string;
+    docu_name: string;
+    docu_number: string;
+    docu_date: Date | string;
+    docu_subject: string;
+    tax: boolean;
+    exclude_return: boolean;
+    negative_turnover: boolean;
+    ku_type: string;
+    pay_method: string;
 }
 export interface IKuPost2 {
   requirements: IIncludedRequirement[];
@@ -238,7 +273,7 @@ export interface IKuAddStore {
   newDocu_account: string;
   newDocu_name: string;
   newDocu_number: string;
-  newDocu_date: Date | string;
+  newDocu_date: Date | string ;
   newDocu_subject: string;
   newTax: boolean;
   newExclude_return: boolean;
@@ -303,6 +338,7 @@ export interface IKuAddStore {
   filterBrandExcluded: GetAllBrands
   filterVendorValue: GetAllVendorsForEntity
 }
+
 export interface IKuIdStore {
   //данные таблиц
   brandIncluded: IBrand[];
@@ -425,9 +461,14 @@ export interface IRequirementPost {
 //сложный процент
 export interface IPercent {
   fix: boolean;
-  criteria: number | null;
-  percentSumma: number | null;
-
+  criterion: number | null;
+  percent_sum: number | null;
+}
+export interface IPercentPost {
+  fix: boolean;
+  criterion: number | null;
+  percent_sum: number | null;
+  ku_key_id: string;
 }
 
 // График

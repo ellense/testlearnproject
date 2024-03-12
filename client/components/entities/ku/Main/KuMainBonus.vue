@@ -7,14 +7,14 @@
           <el-checkbox v-model="row.fix" @change="onFixChange(row)"></el-checkbox>
         </template>
       </el-table-column>
-      <el-table-column prop="criteria" label="Критерий в руб." width="200">
+      <el-table-column prop="criterion" label="Критерий в руб." width="200">
         <template #default="{ row }">
-          <el-input v-model="row.criteria" @change="onCriteriaChange(row)"></el-input>
+          <el-input v-model="row.criterion" @change="onCriteriaChange(row)"></el-input>
         </template>
       </el-table-column>
-      <el-table-column prop="percentSumma" label="Процент/Сумма за период" width="200">
+      <el-table-column prop="percent_sum" label="Процент/Сумма за период" width="200">
         <template #default="{ row }">
-          <el-input v-model="row.percentSumma" style="border: none !important" @change="onPercentSummaChange(row)"></el-input>
+          <el-input v-model="row.percent_sum" style="border: none !important" @change="onPercentSummaChange(row)"></el-input>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="Операция">
@@ -36,10 +36,25 @@ import { useKuIdStore } from "~~/stores/kuIdStore";
 const store = useKuIdStore();
 
 const tableData = ref(store.tableDataPercent);
+// const route = useRoute();
+// const kuId = ref(route.params.kuId);
+// // const bonuses = ref([]);
 
+// const fetchBonuses = async () => {
+//   try {
+//     const response = await KU.getKuRequirementBonus({ ku_id: kuId.value }); // Передайте kuId в запрос
+//     tableData.value = response;
+//   } catch (error) {
+//     console.error('Error fetching bonuses:', error);
+//   }
+// };
+
+// onMounted(() => {
+//   fetchBonuses();
+// });
 //добавление сложного процента
 const addRow = () => {
-  tableData.value.push({ criteria: null, percentSumma: null, fix: false });
+  tableData.value.push({ criterion: null, percent_sum: null, fix: false });
   console.log("данные бонуса:", tableData.value)
   console.log("данные бонуса в хранилище:", store.tableDataPercent)
 };
@@ -57,14 +72,14 @@ const onFixChange = (row: IPercent) => {
 // Обработчик изменений в критерии
 const onCriteriaChange = (row: IPercent) => {
   const rowIndex = tableData.value.findIndex(item => item === row);
-  store.tableDataPercent[rowIndex].criteria = row.criteria;
+  store.tableDataPercent[rowIndex].criterion = row.criterion;
   console.log("данные 2 бонуса в хранилище изменены:", store.tableDataPercent)
 };
 
 // Обработчик изменений в проценте/сумме за период
 const onPercentSummaChange = (row: IPercent) => {
   const rowIndex = tableData.value.findIndex(item => item === row);
-  store.tableDataPercent[rowIndex].percentSumma = row.percentSumma;
+  store.tableDataPercent[rowIndex].percent_sum = row.percent_sum;
   console.log("данные 3 бонуса в хранилище изменены:", store.tableDataPercent)
 };
 </script>

@@ -69,7 +69,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdCategory_nameEx: "",
         kuIdProducer_nameEx: "",
         kuIdBrand_nameEx: "",
-        
+
         //дизэйбл
         disableButtons: false,
         //пагинация в таблицах
@@ -88,7 +88,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
     },
 
     actions: {
-        setKuIdVendorName(name:string){
+        setKuIdVendorName(name: string) {
             this.kuIdVendorName = name;
         },
         handleSelectionChangeProduct(val: IProduct[]) {
@@ -108,7 +108,20 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.kuIdVendorName = results.vendor_name
                 this.$state.kuIdDateStart = results.date_start;
                 this.$state.kuIdDateEnd = new Date(results.date_end);
-                
+                this.$state.kuIdDescription = results.description;
+                this.$state.kuIdContract = results.contract;
+                this.$state.kuIdProduct_type = results.product_type;
+                this.$state.kuIdDocu_account = results.docu_account;
+                this.$state.kuIdDocu_name = results.docu_name;
+                this.$state.kuIdDocu_number = results.docu_number;
+                this.$state.kuIdDocu_date = new Date(results.docu_date)
+                this.$state.kuIdDocu_subject= results.docu_subject;
+                this.$state.kuIdTax= results.tax;
+                this.$state.kuIdExclude_return= results.exclude_return;
+                this.$state.kuIdNegative_turnover= results.negative_turnover;
+                this.$state.kuIdKu_type= results.ku_type;
+                this.$state.kuIdPay_method= results.pay_method;
+
                 console.log("успешно получили данные ку_айди", results);
             } catch (error) {
                 console.error("Ошибка при получении данных ку_айди:", error);
@@ -148,6 +161,83 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 console.error("Ошибка при получении данных условий:", error);
             }
         },
+        // async getKuRequirementDetailFromApi(kuId: string) {
+        //     try {
+        //         const results = await KU.getInfoRequirements({
+        //             ku_id: kuId,
+        //         });
+
+        //         // Очищаем массив перед добавлением новых данных
+        //         this.$state.tableDataInRequirement = [];
+
+        //         // Перебираем полученные результаты и добавляем их в массив
+        //         for (const item of results) {
+        //             this.$state.tableDataInRequirement.push(item);
+        //         }
+
+        //         console.log("полученная таблица условий ку:", this.tableDataInRequirement);
+        //         console.log("успешно получили данные условий:", results);
+        //     } catch (error) {
+        //         console.error("Ошибка при получении данных условий:", error);
+        //     }
+        // },
+        clearData() {
+            // Очищаем таблицу условий
+            this.tableDataInRequirement.length = 0;
+            this.tableDataExRequirement.length = 0;
+            this.tableDataPercent.length = 0;
+
+            // Сбрасываем флаги видимости диалоговых окон
+            this.dialogFormExInvoiceVisible = false;
+            this.dialogFormProductInVisible = false;
+            this.dialogFormCategoryInVisible = false;
+            this.dialogFormProductExVisible = false;
+            this.dialogFormCategoryExVisible = false;
+
+            // Сбрасываем флаги дизейбла кнопок
+            this.disableButtonsIncluded = false;
+            this.disableButtonsExcluded = false;
+
+            // Сбрасываем значения поисковых строк
+            this.searchProductIncluded = '';
+            this.searchProductExcluded = '';
+
+            // Сбрасываем значения в моделях данных
+            this.ku_id = '';
+            this.kuIdStatus = '';
+            this.kuIdType = '';
+            this.kuIdEntityId = '';
+            this.kuIdEntityName = '';
+            this.kuIdVendorId = '';
+            this.kuIdVendorName = '';
+            this.kuIdDateStart = '';
+            this.kuIdDateEnd = '';
+            this.kuIdDateActual = '';
+            this.kuIdDescription = '';
+            this.kuIdContract = '';
+            this.kuIdProduct_type = '';
+            this.kuIdDocu_account = '';
+            this.kuIdDocu_name = '';
+            this.kuIdDocu_number = '';
+            this.kuIdDocu_date = '';
+            this.kuIdDocu_subject = '';
+            this.kuIdTax = false;
+            this.kuIdExclude_return = false;
+            this.kuIdNegative_turnover = false;
+            this.kuIdKu_type = '';
+            this.kuIdPay_method = '';
+            this.kuIdCategory_idIn = '';
+            this.kuIdCategory_nameIn = '';
+            this.kuIdProducer_nameIn = '';
+            this.kuIdBrand_nameIn = '';
+            this.kuIdCategory_idEx = '';
+            this.kuIdCategory_nameEx = '';
+            this.kuIdProducer_nameEx = '';
+            this.kuIdBrand_nameEx = '';
+
+            // Сбрасываем флаг дизейбла кнопок
+            this.disableButtons = false;
+        }
     },
 
 })

@@ -52,7 +52,7 @@ export const useGraphicStore = defineStore("GraphicStore", {
     //параметры для фильтров при запросах
     KuParams: [],
     filterGraphicValue: {
-      entity_id: [], ku_id: []
+      entity_ids: [], ku_id: []
     },
   }),
 
@@ -92,7 +92,7 @@ export const useGraphicStore = defineStore("GraphicStore", {
       await GRAPHIC.getGraphic({
         page_size: this.$state.countRowTable,
         page,
-        entity_id: this.$state.filterGraphicValue?.entity_id || [],
+        entity_ids: this.$state.filterGraphicValue?.entity_ids || [],
         ku_id: this.$state.filterGraphicValue?.ku_id || [],
         search: this.$state.searchGraphic,
       })
@@ -144,6 +144,7 @@ export const useGraphicStore = defineStore("GraphicStore", {
     },
     setLegalEntity2(data: EntityId[]) {
       this.$state.legalEntity2 = data.map(
+        // (legalEntity2) => legalEntity2.external_code
         (legalEntity2) => legalEntity2.entity_id
       )
     },

@@ -43,6 +43,7 @@ export const useVendorStore = defineStore("VendorStore", {
     },
     setJuristicPersons(data: EntityId[]) {
       this.$state.juristicPersons = data.map(
+        // (juristicPerson) => juristicPerson.external_code
         (juristicPerson) => juristicPerson.entity_id
       )
     },

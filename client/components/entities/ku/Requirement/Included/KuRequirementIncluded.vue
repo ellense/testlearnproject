@@ -5,7 +5,6 @@
         <el-button size="small" round @click="dialogOpenProduct()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
-        <!-- :loading="categoryDialogLoading"  -->
         <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             категории</el-button>
@@ -42,22 +41,23 @@ const { getKuRequirement } = storeToRefs(
     useKuIdStore()
 );
 const store = useKuIdStore();
-// const kuRequirementList = ref(store.tableDataInRequirement);
-const kuRequirementList = ref<IIncludedRequirement[]>(getKuRequirement.value);
-    watch(() => getKuRequirement.value, (newValue) => {
-    console.log("getKuRequirement changed:", newValue);
-    kuRequirementList.value = newValue || [];
-    console.log("kuRequirementList:", kuRequirementList.value);
-});
+const kuRequirementList = ref(store.tableDataInRequirement);
+// // const kuRequirementList = ref<IIncludedRequirement[]>(getKuRequirement.value);
+//     watch(() => getKuRequirement.value, (newValue) => {
+//     console.log("getKuRequirement changed:", newValue);
+//     kuRequirementList.value = newValue || [];
+//     console.log("kuRequirementList:", kuRequirementList.value);
+// });
 
 
-onMounted(async () => {
-  try {
-    await store.getKuRequirementDetailFromApi(store.ku_id);
-  } catch (error) {
-    console.error("Ошибка при загрузке данных условий куайди", error);
-  }
-});
+// onMounted(async () => {
+//   try {
+//     console.log("store.ku_id",store.ku_id)
+//     await store.getKuRequirementDetailFromApi(store.ku_id);
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных условий куайди", error);
+//   }
+// });
 //добавление условия "все"
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {

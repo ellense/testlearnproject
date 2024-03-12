@@ -1,11 +1,11 @@
 <template>
   <!-- <el-scrollbar height="calc(100vh - 120px) !important"> -->
-    <EntitiesKuAddMain />
+  <EntitiesKuAddMain />
 
-    <div class="button_bottom">
-      <el-button @click="addClose()">Отменить</el-button>
-      <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
-    </div>
+  <div class="button_bottom">
+    <el-button @click="addClose()">Отменить</el-button>
+    <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
+  </div>
 
   <!-- </el-scrollbar> -->
 </template>
@@ -65,12 +65,30 @@ const addItemAndSendToBackend = async () => {
   try {
     // Создаем объект newItem для отправки на бэкенд
     const newItem = {
-      entity_key: store.newEntityId,
-      vendor_key: store.newVendorId,
+      // entity_key: store.newEntityId,
+      // vendor_key: store.newVendorId,
+      entity_id: store.newEntityId,
+      vendor_id: store.newVendorId,
       period: store.newType,
       date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
       date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
-      status_ku: "Создано",
+      // status_ku: "Создано",
+      status: "Создано",
+      description: store.newDescription,
+      contract: store.newContract,
+      product_type: store.newProduct_type,
+      docu_account: store.newDocu_account,
+      docu_name: store.newDocu_name,
+      docu_number: store.newDocu_number,
+      
+      docu_date: dayjs(store.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
+      docu_subject: store.newDocu_subject,
+      tax: store.newTax,
+      exclude_return: store.newExclude_return,
+      negative_turnover: store.newNegative_turnover,
+      ku_type: store.newKu_type,
+      pay_method: store.newPay_method,
+
     };
 
     // Отправляем запрос на создание нового элемента на бэкенд
@@ -86,6 +104,7 @@ const addItemAndSendToBackend = async () => {
       brand: item.brand,
     }));
 
+
     // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
     const responses = await Promise.all(requirementsArray.map(async newItem2 => {
       try {
@@ -97,12 +116,29 @@ const addItemAndSendToBackend = async () => {
       }
     }));
 
+    const requirementsBonusArray = store.tableDataPercent.map(item => ({
+      ku_key_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
+      fix: item.fix,
+      criterion: item.criterion,
+      percent_sum: item.percent_sum,
+    }));
+      // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
+      const responses3 = await Promise.all(requirementsBonusArray.map(async newItem3 => {
+      try {
+        const response = await KU.postKuRequirementBonus(newItem3);
+        return response;
+      } catch (error) {
+        console.error("Ошибка при отправке бонуса на бэкенд:", error);
+        return null;
+      }
+    }));
     // Проверяем успешность отправки всех объектов
     success = responses.every(response => response !== null);
 
     if (response && success) {
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
       console.log("Условия успешно отправлены на бэкенд:", responses);
+      console.log("бонус успешно отправлены на бэкенд:", responses3);
       await useKuStore().getKuFromAPIWithFilter();
       router.push("ku");
 
@@ -113,7 +149,7 @@ const addItemAndSendToBackend = async () => {
       return;
     }
   } catch (error) {
-    ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
+    // ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
     console.error("Ошибка при отправке экземпляра на бэкенд:", error);
     return;
   } finally {
@@ -122,17 +158,7 @@ const addItemAndSendToBackend = async () => {
 
   // Если все запросы были успешными, то выполняем дополнительные действия
 
-  // Очищаем поля и таблицу условий
-  store.tableDataInRequirement.length = 0;
-  store.tableDataExRequirement.length = 0;
-  store.tableDataPercent.length = 0;
-  store.disableButtonsIncluded = false;
-  store.disableButtonsExcluded = false;
-  store.newEntityId = "";
-  store.newVendorId = "";
-  store.newType = "";
-  store.newDateStart = "";
-  store.newDateEnd = "";
+  store.clearNewData()
 
 };
 
@@ -140,16 +166,7 @@ const addItemAndSendToBackend = async () => {
 //отменить
 const addClose = () => {
   router.push("ku");
-  store.tableDataInRequirement.length = 0;
-  store.tableDataExRequirement.length = 0;
-  store.tableDataPercent.length = 0;
-  store.disableButtonsIncluded = false;
-  store.disableButtonsExcluded = false;
-  store.newEntityId = "";
-  store.newVendorId = "";
-  store.newType = "";
-  store.newDateStart = "";
-  store.newDateEnd = "";
+  store.clearNewData()
 };
 </script>
 

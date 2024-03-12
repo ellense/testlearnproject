@@ -159,6 +159,7 @@ watch(
     options.value = dataEntity.map((item) => ({
       label: item.name,
       value: item.entity_id,
+      // value: item.external_code,
     }));
   }
 );
@@ -166,6 +167,7 @@ onMounted(async () => {
   try {
     await store.fetchKuEntity({
       entity_id: "",
+      // external_code: "",
       name: "",
     });
   } catch (error) {
@@ -178,6 +180,7 @@ onMounted(async () => {
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
 watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
+    // options2.value = vendors.map(item => ({ label: item.external_code, value: item.external_code }));
     options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
 });
 

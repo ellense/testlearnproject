@@ -119,6 +119,7 @@ export const useKuStore = defineStore("KuStore", {
     setLegalEntity(data: EntityId[]) {
       console.log('Устанавливаются данные о юридических лицах:', data);
       this.$state.legalEntity = data.map(
+        // (legalEntity) => legalEntity.external_code
         (legalEntity) => legalEntity.entity_id
       )
     },
