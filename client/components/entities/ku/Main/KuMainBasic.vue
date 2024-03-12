@@ -208,6 +208,15 @@ const onVendorChange = async () => {
         store2.setFilterValue3('vendor_id', store.kuIdVendorId);
         store2.setFilterValue4('vendor_id', store.kuIdVendorId);
         store2.setFilterValue5('vendor_id', store.kuIdVendorId);
+        // store2.setFilterCategory('vendor_id', store.kuIdVendorId);
+        // await store2.fetchData();
+  //       try {
+  //   console.log("Before API call");
+  //   await store2.fetchData();
+  //   console.log("After API call");
+  // } catch (error) {
+  //   console.error("Ошибка при загрузке данных", error);
+  // }
         await store2.getProductFromIncludedWithFilter();
         await store2.fetchAllProducersForInclided();
         await store2.fetchAllBrandsForIncluded();

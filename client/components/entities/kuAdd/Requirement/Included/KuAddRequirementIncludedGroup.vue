@@ -5,7 +5,10 @@
     <div class="selectCategory">
       <div>
         <div class="custom-label">Категория</div>
-        <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
+        <!-- <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
+          :render-after-expand="false" style="width: 500px" class="tree_U" :props="defaultProps" ref="treeRef"
+          node-key="classifier_code" @change="getCheckedKeys" /> -->
+          <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
           :render-after-expand="false" style="width: 500px" class="tree_U" :props="defaultProps" ref="treeRef"
           node-key="classifier_code" @change="getCheckedKeys" />
       </div>
@@ -71,16 +74,6 @@ watch(() => store.brandIncluded, (brands: IBrand[]) => {
   options3.value = uniqueBrands.map(label => ({ label, value: label }));
 });
 
-// onMounted(async () => {
-//   try {
-//     await store.fetchAllProducersForInclided();
-//     await store.fetchAllBrandsForIncluded();
-
-//   } catch (error) {
-//     console.error('Ошибка при загрузке данных производителя и бренда', error);
-//   }
-// });
-
 const onProducerChange = async () => {
   store.valueBrand_nameIn = "";
   store.setFilterValue5('producer_name', store.valueProducer_nameIn);
@@ -98,7 +91,7 @@ const onProducerChange = async () => {
 //дерево
 const value = ref()
 const treeData = ref<ITree[]>([]);
-const treeRef = ref<InstanceType<typeof ElTree>>()
+const treeRef = ref<InstanceType<typeof ElTree>>();
 
 const defaultProps = {
   children: 'children',
@@ -106,52 +99,10 @@ const defaultProps = {
   isLeaf: 'isLeaf',
 };
 
-const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
-  const parentNode = nodes.filter(node => node.parent_code === parentCode);
-  if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
-
-  return parentNode.map(node => {
-    const children = buildTree(nodes, node.classifier_code.toString());
-    if (children.length) {
-      node.children = children;
-    }
-    return node;
-  });
-};
-
-const fetchData = async (data: ITree) => {
-  // try {
-  //   const result = await CATEGORY.getCategory2(
-  //     vendor_id: store.vendorName,
-  //   );
-  //   if (Array.isArray(result)) {
-  //     treeData.value = buildTree(result, '0');
-  //     console.log("treeData", treeData.value);
-  //     treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
-  //   } else {
-  //     treeData.value = [];
-  //     console.error("Данные не получены или не являются массивом");
-  //   }
-  // } catch (error) {
-  //   console.error("Произошла ошибка при получении данных категорий", error);
-  // }
-};
-
-// Вызов функции fetchData при монтировании компонента
-// onMounted(async () => {
-//   try {
-//     console.log("Before API call");
-//     await fetchData({
-//       name: "string",
-//       classifier_code: 1,
-//       children: [],
-//       parent_code: "",
-//     });
-//     console.log("After API call");
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
+// Обновляем данные treeData после получения данных
+watch(() => store.treeData, (newTreeData: ITree[]) => {
+  treeData.value = newTreeData;
+});
 
 //изменение поля дерева
 let selectedCategoryName = '';
@@ -160,8 +111,6 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
   store.valueProducer_nameIn = "";
   useKuAddStore().setFilterValue4("l4", []);
   useKuAddStore().setFilterValue5('producer_name', undefined);
-  await store.fetchAllProducersForInclided();
-  await store.fetchAllBrandsForIncluded();
   console.log('Отмеченные ключи:', checkedKeys);
 
   if (checkedKeys && checkedKeys.length > 0) {
@@ -220,16 +169,11 @@ const AddCategoryItem = async () => {
     value.value = "";
     store.valueProducer_nameIn = "";
     store.valueBrand_nameIn = "";
-    await fetchData({
-      name: "string",
-      classifier_code: 1,
-      children: [],
-      parent_code: "",
-    });
+    useKuAddStore().removeFilterCategory("vendor_id")
     useKuAddStore().setFilterValue4("l4", []);
     useKuAddStore().setFilterValue5('producer_name', undefined);
-    await store.fetchAllProducersForInclided();
-    await store.fetchAllBrandsForIncluded();
+    // await store.fetchAllProducersForInclided();
+    // await store.fetchAllBrandsForIncluded();
   } else {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }

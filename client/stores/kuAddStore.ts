@@ -14,6 +14,8 @@ import type {
     IKuAddStore,
     IVendorId,
     IInvoiceForKu,
+    ITree,
+    GetAllCategory,
 } from "~/utils/types/directoryTypes";
 import useStore from "element-plus/es/components/table/src/store/index.mjs";
 
@@ -97,6 +99,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         filterBrandIncluded: {},
         filterBrandExcluded: {},
         filterVendorValue: {},
+        filterCategory: {},
 
 
     }),
@@ -212,41 +215,72 @@ export const useKuAddStore = defineStore("KuAddStore", {
         },
 
 
-        ////////////////////// ВКЛЮЧЕННЫЕ УСЛОВИЯ ///////////////////////////////////////
-        //дерево
+        ////////////////////////////////////////////////////////////////////
+        setFilterCategory<
+            T extends keyof GetAllCategory,
+            U extends GetAllCategory[T],
+        >(field: T, value: U) {
+            this.$state.filterCategory[field] = value
+            console.log("filterCategory",this.$state.filterCategory);
+        },
+        removeFilterCategory<T extends keyof GetAllCategory>(field: T) {
+            if (this.$state.filterCategory) {
+              delete this.$state.filterCategory[field]
+            }
+          },
+        // Метод для построения дерева
+        buildTree(nodes: ITree[], parentCode: string | null = null): ITree[] {
+            const parentNode = nodes.filter(node => node.parent_code === parentCode);
+            if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
 
-        // async buildTree(nodes: ITree[], parentCode: string | null = null): Promise<ITree[]> {
-        //   const parentNode = nodes.filter(node => node.parent_code === parentCode);
-        //   if (!parentNode.length) return [];
+            return parentNode.map(node => {
+                const children = this.buildTree(nodes, node.classifier_code.toString());
+                if (children.length) {
+                    node.children = children;
+                }
+                return node;
+            });
+        },
 
-        //   return parentNode.map(async node => {
-        //     const children =  this.buildTree(nodes, node.classifier_code.toString());
-        //     if (children.length) {
-        //       node.children = children;
+        // Метод для загрузки данных
+        async fetchCategories() {
+            try {
+                const vendorId = this.$state.newVendorId; // Получаем vendor_id из состояния хранилища
+                console.log("Before API call, vendorId ",vendorId);
+                // Передаем vendor_id в запрос
+                const result = await CATEGORY.getCategory2({ 
+                    vendor_id: this.$state.filterCategory.vendor_id,
+                });
+                if (Array.isArray(result)) {
+                    this.$state.treeData = this.buildTree(result, '0');
+                    console.log("treeData из стора", this.$state.treeData);
+                    // this.treeRef && this.treeRef.updateKeyChildren(data.classifier_code, this.treeData);
+                } else {
+                    this.treeData = [];
+                    console.error("Данные не получены или не являются массивом");
+                }
+                console.log("After API call");
+            } catch (error) {
+                console.error("Произошла ошибка при получении данных категорий", error);
+            }
+        },
+        // async fetchData() {
+        //     try {
+        //         const result = await CATEGORY.getCategory2({ 
+        //             vendor_id: this.$state.newVendorId 
+        //         });
+        //         if (Array.isArray(result)) {
+        //             this.$state.treeData = this.buildTree(result, '0');
+        //             console.log("treeData из стора", this.$state.treeData);
+        //             // this.treeRef && this.treeRef.updateKeyChildren(data.classifier_code, this.treeData);
+        //         } else {
+        //             this.treeData = [];
+        //             console.error("Данные не получены или не являются массивом");
+        //         }
+        //     } catch (error) {
+        //         console.error("Произошла ошибка при получении данных категорий", error);
         //     }
-        //     return node;
-        //   });
         // },
-
-        // async fetchData(data: ITree) {
-        //   try {
-        //     const result = await CATEGORY.getCategory(data);
-        //     if (Array.isArray(result)) {
-        //       this.treeData = await this.buildTree(result, '0');
-        //       console.log("treeData", this.treeData);
-        //       if (this.treeRef) {
-        //         this.treeRef.updateKeyChildren(data.classifier_code, this.treeData);
-        //       }
-        //     } else {
-        //       this.treeData = [];
-        //       console.error("Данные не получены или не являются массивом");
-        //     }
-        //   } catch (error) {
-        //     console.error("Произошла ошибка при получении данных категорий", error);
-        //   }
-        // },
-
-
         //получение данных о производителе с фильтром
         async fetchAllProducersForInclided() {
             try {
@@ -280,6 +314,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             U extends GetAllProducer[T],
         >(field: T, value: U) {
             this.$state.filterProducerIncluded[field] = value
+            console.log("filterProducerIncluded",this.$state.filterProducerIncluded);
         },
 
         //получение данных о бренде с фильтром для включенных условий
@@ -415,7 +450,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.tableDataPercent.length = 0;
             // Значения v-model при создании
             this.newType = '',
-            this.newEntityId = '';
+                this.newEntityId = '';
             this.newEntityName = '';
             this.newVendorId = '';
             this.newVendorName = '';
@@ -443,26 +478,26 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.valueCategory_nameEx = '';
             this.valueProducer_nameEx = '';
             this.valueBrand_nameEx = '';
-      
+
             // Селекты для множественного выбора
             this.multipleSelectionProduct = [];
             this.multipleSelectionExInvoice = [];
             this.multipleTableRef = null;
-      
+
             // Сбрасываем флаги видимости диалоговых окон
             this.dialogFormExInvoiceVisible = false;
             this.dialogFormProductInVisible = false;
             this.dialogFormCategoryInVisible = false;
             this.dialogFormProductExVisible = false;
             this.dialogFormCategoryExVisible = false;
-      
+
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
             this.disableButtonsExcluded = false;
-      
+
             // Сбрасываем значения поисковых строк
             this.searchProductIncluded = '';
             this.searchProductExcluded = '';
-          }
+        }
     }
 });

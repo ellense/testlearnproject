@@ -330,6 +330,7 @@ export interface IKuAddStore {
   searchProductIncluded: string;
   searchProductExcluded: string;
   //параметры для фильтров при запросах
+  filterCategory: GetAllCategory
   filterProductIncluded: GetAllProducts
   filterProductExcluded: GetAllProducts
   filterProducerIncluded: GetAllProducer
@@ -661,8 +662,8 @@ export interface ITree {
   children?: ITree[];
 }
 export interface GetAllCategory {
-  // page_size?: number;
-  // page?: number;
+  page_size?: number;
+  page?: number;
   vendor_id?: string;
 }
 

@@ -216,6 +216,8 @@ const onVendorChange = async () => {
         store.setFilterValue4('vendor_id', store.newVendorId);
         store.setFilterValue5('vendor_id', store.newVendorId);
         store.setFilterValue9('vendor_id', store.newVendorId);
+        store.setFilterCategory('vendor_id', store.newVendorId);
+        await store.fetchCategories();
         useInvoiceStore().setFilterValue('vendor_id', store.newVendorId);
         await store.getProductFromIncludedWithFilter();
         await store.fetchAllProducersForInclided();
