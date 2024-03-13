@@ -41,7 +41,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IInvoiceForKu } from "~/utils/types/directoryTypes";
+import type { IExInvoiceForKu } from "~/utils/types/directoryTypes";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
@@ -50,7 +50,7 @@ const kuStore = useKuAddStore();
 const { getExInvoiceAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
-const tableData = ref<IInvoiceForKu[]>(getExInvoiceAll.value);
+const tableData = ref<IExInvoiceForKu[]>(getExInvoiceAll.value);
 
 const loading = ref()
 
@@ -78,7 +78,7 @@ const paginationChange = (page: number) => {
 
 //для очистки выбора
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const toggleSelection = (rows?: IInvoiceForKu[]) => {
+const toggleSelection = (rows?: IExInvoiceForKu[]) => {
   if (rows) {
     rows.forEach((row) => {
       multipleTableRef.value!.toggleRowSelection(row, false)
@@ -101,6 +101,8 @@ const AddExInvoice = () => {
         invoice_number: row.invoice_number,
         invoice_date: new Date(row.invoice_date),
         products_amount: row.products_amount,
+        docid: row.docid,
+
     });
     console.log("искл.Накладные",useKuAddStore().tableDataExInvoiceSelect);
   });

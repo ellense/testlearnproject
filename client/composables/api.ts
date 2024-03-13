@@ -43,6 +43,7 @@ import type {
   GetAllCategory,
   IPercent,
   IPercentPost,
+  IExInvoiceForKuPost,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -131,7 +132,6 @@ export const KU = {
   //   $Get("api/ku_list/", { params, isBearer: false }),
   postKu: (data: IKuPost): Promise<IKuList> =>
     $Post("api/ku_create/", { data, isBearer: false }),
-
   deleteKu: (data: IKuId) =>
     $Delete(`api/kudetail/${data.ku_id}`, { data, isBearer: false }),
   updateKu: (data: IKuUpdate) =>
@@ -145,12 +145,16 @@ export const KU = {
   // getInfoKu: (data: IKuId): Promise<IKuList> =>
   //   $Get(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
 
-  postKuRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
+  postKuInRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
     $Post("api/included_condition_create/", { data, isBearer: false }),
+    postKuExRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
+    $Post("api/excluded_condition_create/", { data, isBearer: false }),
   postKuRequirementBonus: (data: IPercentPost): Promise<IPercentPost> =>
-  $Post("api/bonus_condition/", { data, isBearer: false }),
+    $Post("api/bonus_condition/", { data, isBearer: false }),
+  postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
+    $Post("api/excluded_venddoc/", { data, isBearer: false }),
   getKuRequirementBonus: (params: IKuId): Promise<IPercent[]> =>
-  $Get(`api/bonus_condition/`, { params, isBearer: false }),
+    $Get(`api/bonus_condition/`, { params, isBearer: false }),
   getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
     $Get(`api/included_conditions_list/`, { params, isBearer: false }),
   // getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
@@ -175,7 +179,7 @@ export const GRAPHIC = {
     $Delete(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
   getInfoGraphic: (data: IGraphicId): Promise<IGraphicInfo> =>
     $Get(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
-    updateGraphic: (data: IGraphicInfo) =>
+  updateGraphic: (data: IGraphicInfo) =>
     $Put(`api/graphdetail/${data.graph_id}/`, { data, isBearer: false }),
   // deleteGraphic: (data: IGraphicId) =>
   //   $Delete(`api/graph_detail/${data.graph_id}/`, { data, isBearer: false }),

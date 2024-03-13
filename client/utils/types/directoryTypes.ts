@@ -125,15 +125,7 @@ export interface IInvoice {
   products_amount: number | null
 }
 
-export interface IInvoiceForKu {
-  invoice_id: number | null;
-  vendor_id: string;
-  vendor_name: string;
-  invoice_name: string;
-  invoice_number: string;
-  invoice_date: Date | string;
-  products_amount: number | null
-}
+
 export interface GetAllInvoices {
   page_size?: number;
   page?: number;
@@ -171,20 +163,19 @@ export interface IKuList {
   date_end: Date | string;
   graph_exists: boolean | string
   status: string;
-
   description: string;
-    contract: string;
-    product_type: string;
-    docu_account: string;
-    docu_name: string;
-    docu_number: string;
-    docu_date: Date | string;
-    docu_subject: string;
-    tax: boolean;
-    exclude_return: boolean;
-    negative_turnover: boolean;
-    ku_type: string;
-    pay_method: string;
+  contract: string;
+  product_type: string;
+  docu_account: string;
+  docu_name: string;
+  docu_number: string;
+  docu_date: Date | string;
+  docu_subject: string;
+  tax: boolean;
+  exclude_return: boolean;
+  negative_turnover: boolean;
+  ku_type: string;
+  pay_method: string;
 }
 export interface IKuId {
   ku_id: string;
@@ -199,19 +190,19 @@ export interface IKuPost {
   date_end: Date | string;
   status: string;
   // status_ku: string;
-    description: string;
-    contract: string;
-    product_type: string;
-    docu_account: string;
-    docu_name: string;
-    docu_number: string;
-    docu_date: Date | string;
-    docu_subject: string;
-    tax: boolean;
-    exclude_return: boolean;
-    negative_turnover: boolean;
-    ku_type: string;
-    pay_method: string;
+  description: string;
+  contract: string;
+  product_type: string;
+  docu_account: string;
+  docu_name: string;
+  docu_number: string;
+  docu_date: Date | string;
+  docu_subject: string;
+  tax: boolean;
+  exclude_return: boolean;
+  negative_turnover: boolean;
+  ku_type: string;
+  pay_method: string;
 }
 export interface IKuPost2 {
   requirements: IIncludedRequirement[];
@@ -273,13 +264,20 @@ export interface IKuAddStore {
   newDocu_account: string;
   newDocu_name: string;
   newDocu_number: string;
-  newDocu_date: Date | string ;
+  newDocu_date: Date | string;
   newDocu_subject: string;
   newTax: boolean;
   newExclude_return: boolean;
   newNegative_turnover: boolean;
   newKu_type: string;
   newPay_method: string;
+  newOfFIOСounteragent: string;
+  newOfPostСounteragent: string;
+  newOfDocСounteragent: string;
+  newOfFIOEntity: string;
+  newOfPostEntity: string;
+  newOfDocEntity: string;
+
   valueCategory_idIn: string
   valueCategory_nameIn: string
   valueProducer_nameIn: string;
@@ -290,7 +288,8 @@ export interface IKuAddStore {
   valueBrand_nameEx: string;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
-  multipleSelectionExInvoice: IInvoiceForKu[]
+  multipleSelectionExInvoice: IExInvoiceForKu[]
+  multipleSelectionManager: IManagerForKu[]
   multipleTableRef: Ref | null;
   //данные таблиц
   brandIncluded: IBrand[];
@@ -302,8 +301,10 @@ export interface IKuAddStore {
   tableDataInRequirement: IIncludedRequirement[];
   tableDataExRequirement: IExcludedRequirement[];
   tableDataPercent: IPercent[];
-  tableDataExInvoiceAll: IInvoiceForKu[]
-  tableDataExInvoiceSelect: IInvoiceForKu[]
+  tableDataExInvoiceAll: IExInvoiceForKu[]
+  tableDataExInvoiceSelect: IExInvoiceForKu[]
+  tableDataManagerAll: IManagerForKu[]
+  tableDataManagerSelect: IManagerForKu[]
   dataEntity: IEntityIdAndName[];
   dataVendorId: IVendorId[];
   dataVendorName: IVendorName[];
@@ -311,6 +312,7 @@ export interface IKuAddStore {
   treeRef: typeof ElTree | null,
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
+  dialogFormManagersVisible: boolean
   dialogFormProductInVisible: boolean
   dialogFormCategoryInVisible: boolean
   dialogFormProductExVisible: boolean
@@ -351,8 +353,8 @@ export interface IKuIdStore {
   tableDataInRequirement: IIncludedRequirement[];
   tableDataExRequirement: IExcludedRequirement[];
   tableDataPercent: IPercent[];
-  tableDataExInvoiceAll: IInvoiceForKu[]
-  tableDataExInvoiceSelect: IInvoiceForKu[]
+  tableDataExInvoiceAll: IExInvoiceForKu[]
+  tableDataExInvoiceSelect: IExInvoiceForKu[]
   dataEntity: IEntityIdAndName[];
   dataVendorId: IVendorId[];
   dataVendorName: IVendorName[];
@@ -367,9 +369,9 @@ export interface IKuIdStore {
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   disableButtonsExcluded: boolean
-   //поиски
-   searchProductIncluded: string;
-   searchProductExcluded: string;
+  //поиски
+  searchProductIncluded: string;
+  searchProductExcluded: string;
   //v-model атрибутов
   ku_id: string;
   kuIdStatus: string;
@@ -409,7 +411,7 @@ export interface IKuIdStore {
   countRowTable: number;
   //
   multipleSelectionProduct: IProduct[];
-  multipleSelectionExInvoice: IInvoiceForKu[]
+  multipleSelectionExInvoice: IExInvoiceForKu[]
   multipleTableRef: Ref | null;
   filterVendorValue: GetAllVendorsForEntity
 }
@@ -470,6 +472,27 @@ export interface IPercentPost {
   criterion: number | null;
   percent_sum: number | null;
   ku_key_id: string;
+}
+
+//искл. накладные
+export interface IExInvoiceForKu {
+  invoice_id: number | null;
+  vendor_id: string;
+  vendor_name: string;
+  invoice_name: string;
+  invoice_number: string;
+  invoice_date: Date | string;
+  products_amount: number | null
+  docid: string
+}
+export interface IExInvoiceForKuPost {
+  ku_id: string;
+  doc_id: string;
+}
+//кат. менеджеры
+export interface IManagerForKu {
+  group: string;
+  discription: string;
 }
 
 // График

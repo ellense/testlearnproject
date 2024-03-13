@@ -2,17 +2,19 @@
   <el-scrollbar class="scrollTable" style="border: none">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
       height="calc(100vh - 225px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading">
-      <el-table-column type="selection" width="55" />
-      <el-table-column property="ku_id" label="Код КУ" width="150" sortable show-overflow-tooltip />
+      <el-table-column type="selection" width="40" />
+      <el-table-column property="ku_id" label="Код КУ" width="100" sortable show-overflow-tooltip />
+      <el-table-column property="contract" label="Контракт" width="200"  show-overflow-tooltip />
+      <el-table-column property="description" label="Описание" width="250" show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
         <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column label="Поставщик">
+      <el-table-column label="Поставщик">  
         <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="percent" label="Процент" width="80" show-overflow-tooltip />
+      <!-- <el-table-column property="percent" label="Процент" width="80" show-overflow-tooltip />
       <el-table-column prop="period" label="Период расчета" width="110" :filters="[
         { text: 'Месяц', value: 'Месяц' },
         { text: 'Квартал', value: 'Квартал' },
@@ -22,7 +24,7 @@
         <template #default="scope">
           {{ scope.row.period }}
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="110"
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110" show-overflow-tooltip />

@@ -212,10 +212,10 @@ const onVendorChange = async () => {
   }
     try {
         console.log("поставщик:", store.newVendorId);
-        store.setFilterValue3('vendor_id', store.newVendorId);
-        store.setFilterValue4('vendor_id', store.newVendorId);
-        store.setFilterValue5('vendor_id', store.newVendorId);
-        store.setFilterValue9('vendor_id', store.newVendorId);
+        store.setFilterProductInRequirement('vendor_id', store.newVendorId);
+        store.setFilterProducer('vendor_id', store.newVendorId);
+        store.setFilterBrand('vendor_id', store.newVendorId);
+        store.setFilterExInvoice('vendor_id', store.newVendorId);
         store.setFilterCategory('vendor_id', store.newVendorId);
         await store.fetchCategories();
         useInvoiceStore().setFilterValue('vendor_id', store.newVendorId);

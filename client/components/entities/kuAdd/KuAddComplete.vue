@@ -95,7 +95,7 @@ const addItemAndSendToBackend = async () => {
     const response = await KU.postKu(newItem);
 
     // Создаем массив объектов для каждого элемента из tableDataInRequirement
-    const requirementsArray = store.tableDataInRequirement.map(item => ({
+    const requirementsInArray = store.tableDataInRequirement.map(item => ({
       ku_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
       item_type: item.item_type,
       item_code: item.item_code,
@@ -105,10 +105,28 @@ const addItemAndSendToBackend = async () => {
     }));
 
 
-    // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
-    const responses = await Promise.all(requirementsArray.map(async newItem2 => {
+    const responses = await Promise.all(requirementsInArray.map(async newItem => {
       try {
-        const response = await KU.postKuRequirement(newItem2);
+        const response = await KU.postKuInRequirement(newItem);
+        return response;
+      } catch (error) {
+        console.error("Ошибка при отправке условия на бэкенд:", error);
+        return null;
+      }
+    }));
+
+    const requirementsExArray = store.tableDataExRequirement.map(item => ({
+      ku_id: response.ku_id, 
+      item_type: item.item_type,
+      item_code: item.item_code,
+      item_name: item.item_name,
+      producer: item.producer,
+      brand: item.brand,
+    }));
+
+    const response2 = await Promise.all(requirementsExArray.map(async newItem => {
+      try {
+        const response = await KU.postKuExRequirement(newItem);
         return response;
       } catch (error) {
         console.error("Ошибка при отправке условия на бэкенд:", error);
@@ -117,18 +135,33 @@ const addItemAndSendToBackend = async () => {
     }));
 
     const requirementsBonusArray = store.tableDataPercent.map(item => ({
-      ku_key_id: response.ku_id, // используем ku_id из ответа на предыдущий запрос
+      ku_key_id: response.ku_id, 
       fix: item.fix,
       criterion: item.criterion,
       percent_sum: item.percent_sum,
     }));
-      // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
-      const responses3 = await Promise.all(requirementsBonusArray.map(async newItem3 => {
+
+      const response3 = await Promise.all(requirementsBonusArray.map(async newItem => {
       try {
-        const response = await KU.postKuRequirementBonus(newItem3);
+        const response = await KU.postKuRequirementBonus(newItem);
         return response;
       } catch (error) {
         console.error("Ошибка при отправке бонуса на бэкенд:", error);
+        return null;
+      }
+    }));
+
+    const ExcludedInvoicesArray = store.tableDataExInvoiceSelect.map(item => ({
+      ku_id: response.ku_id, 
+      doc_id: item.docid,
+    }));
+      // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
+      const response4 = await Promise.all(ExcludedInvoicesArray.map(async newItem => {
+      try {
+        const response = await KU.postKuExInvoices(newItem);
+        return response;
+      } catch (error) {
+        console.error("Ошибка при отправке искл. накладных на бэкенд:", error);
         return null;
       }
     }));
@@ -137,11 +170,12 @@ const addItemAndSendToBackend = async () => {
 
     if (response && success) {
       console.log("Экземпляр успешно отправлен на бэкенд:", response);
-      console.log("Условия успешно отправлены на бэкенд:", responses);
-      console.log("бонус успешно отправлены на бэкенд:", responses3);
+      console.log("вклУсловия успешно отправлены на бэкенд:", responses);
+      console.log("исклУсловия успешно отправлены на бэкенд:", response2);
+      console.log("бонус успешно отправлены на бэкенд:", response3);
+      console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
       await useKuStore().getKuFromAPIWithFilter();
       router.push("ku");
-
       ElMessage.success("Коммерческое условие успешно создано.");
     } else {
       console.error("Не удалось отправить экземпляр или условия на бэкенд");
@@ -155,9 +189,6 @@ const addItemAndSendToBackend = async () => {
   } finally {
     loading.value = false;
   }
-
-  // Если все запросы были успешными, то выполняем дополнительные действия
-
   store.clearNewData()
 
 };

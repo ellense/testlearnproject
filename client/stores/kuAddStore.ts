@@ -13,7 +13,7 @@ import type {
     GetAllVendorsForEntity,
     IKuAddStore,
     IVendorId,
-    IInvoiceForKu,
+    IExInvoiceForKu,
     ITree,
     GetAllCategory,
 } from "~/utils/types/directoryTypes";
@@ -43,6 +43,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         newNegative_turnover: false,
         newKu_type: "",
         newPay_method: "",
+        newOfFIOСounteragent: "",
+        newOfPostСounteragent: "",
+        newOfDocСounteragent: "",
+        newOfFIOEntity: "",
+        newOfPostEntity: "",
+        newOfDocEntity: "",
         valueCategory_idIn: "",
         valueCategory_nameIn: "",
         valueProducer_nameIn: "",
@@ -54,6 +60,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         //селекты для множественного выбора
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
+        multipleSelectionManager: [],
         multipleTableRef: null,
         //данные 
         brandIncluded: [],
@@ -67,6 +74,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
         tableDataPercent: [],
         tableDataExInvoiceAll: [],
         tableDataExInvoiceSelect: [],
+        tableDataManagerAll: [],
+        tableDataManagerSelect: [],
         dataEntity: [],
         dataVendorId: [],
         dataVendorName: [],
@@ -74,6 +83,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         treeRef: null,
         //v-model диалоговых форм
         dialogFormExInvoiceVisible: false,
+        dialogFormManagersVisible: false,
         dialogFormProductInVisible: false,
         dialogFormCategoryInVisible: false,
         dialogFormProductExVisible: false,
@@ -107,6 +117,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
     getters: {
         // getKu: (state) => state.tableData,
         getExInvoiceAll: (state) => state.tableDataExInvoiceAll,
+        getManagerAll: (state) => state.tableDataManagerAll,
         getProducersIn: (state) => state.producerIncluded,
         getBrandsIn: (state) => state.brandIncluded,
         getProductIn: (state) => state.productIncluded,
@@ -136,7 +147,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         handleSelectionChange3(val: IProduct[]) {
             this.multipleSelectionProduct = val;
         },
-        handleSelectionChangeExInvoice(val: IInvoiceForKu[]) {
+        handleSelectionChangeExInvoice(val: IExInvoiceForKu[]) {
             this.multipleSelectionExInvoice = val;
         },
 
@@ -221,13 +232,13 @@ export const useKuAddStore = defineStore("KuAddStore", {
             U extends GetAllCategory[T],
         >(field: T, value: U) {
             this.$state.filterCategory[field] = value
-            console.log("filterCategory",this.$state.filterCategory);
+            console.log("filterCategory", this.$state.filterCategory);
         },
         removeFilterCategory<T extends keyof GetAllCategory>(field: T) {
             if (this.$state.filterCategory) {
-              delete this.$state.filterCategory[field]
+                delete this.$state.filterCategory[field]
             }
-          },
+        },
         // Метод для построения дерева
         buildTree(nodes: ITree[], parentCode: string | null = null): ITree[] {
             const parentNode = nodes.filter(node => node.parent_code === parentCode);
@@ -246,9 +257,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async fetchCategories() {
             try {
                 const vendorId = this.$state.newVendorId; // Получаем vendor_id из состояния хранилища
-                console.log("Before API call, vendorId ",vendorId);
+                console.log("Before API call, vendorId ", vendorId);
                 // Передаем vendor_id в запрос
-                const result = await CATEGORY.getCategory2({ 
+                const result = await CATEGORY.getCategory2({
                     vendor_id: this.$state.filterCategory.vendor_id,
                 });
                 if (Array.isArray(result)) {
@@ -309,12 +320,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 return Promise.reject(error);
             }
         },
-        setFilterValue4<
+        setFilterProducer<
             T extends keyof GetAllProducer,
             U extends GetAllProducer[T],
         >(field: T, value: U) {
             this.$state.filterProducerIncluded[field] = value
-            console.log("filterProducerIncluded",this.$state.filterProducerIncluded);
+            console.log("filterProducerIncluded", this.$state.filterProducerIncluded);
         },
 
         //получение данных о бренде с фильтром для включенных условий
@@ -346,7 +357,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 return Promise.reject(error);
             }
         },
-        setFilterValue5<
+        setFilterBrand<
             T extends keyof GetAllBrands,
             U extends GetAllBrands[T],
         >(field: T, value: U) {
@@ -355,9 +366,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
         //получение данных о товарах для условий с фильтром и поиск 
         async getProductFromIncludedWithFilter(page?: number) {
-            this.setFilterValue3('page', page);
-            this.setFilterValue3('search', this.$state.searchProductIncluded);
-            this.setFilterValue3('vendor_id', this.$state.newVendorId);
+            this.setFilterProductInRequirement('page', page);
+            this.setFilterProductInRequirement('search', this.$state.searchProductIncluded);
+            this.setFilterProductInRequirement('vendor_id', this.$state.newVendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
@@ -390,7 +401,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         setSearchProductIn(query: string) {
             this.$state.searchProductIncluded = query;
         },
-        setFilterValue3<
+        setFilterProductInRequirement<
             T extends keyof GetAllProducts,
             U extends GetAllProducts[T],
         >(field: T, value: U) {
@@ -402,9 +413,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
         //получение данных о товарах для условий с фильтром и поиск 
         async getProductFromExcludedWithFilter(page?: number) {
-            this.setFilterValue9('page', page);
-            this.setFilterValue9('search', this.$state.searchProductExcluded);
-            this.setFilterValue9('vendor_id', this.$state.newVendorId);
+            this.setFilterExInvoice('page', page);
+            this.setFilterExInvoice('search', this.$state.searchProductExcluded);
+            this.setFilterExInvoice('vendor_id', this.$state.newVendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
@@ -436,7 +447,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         setSearchProductEx(query: string) {
             this.$state.searchProductExcluded = query;
         },
-        setFilterValue9<
+        setFilterExInvoice<
             T extends keyof GetAllProducts,
             U extends GetAllProducts[T],
         >(field: T, value: U) {
@@ -448,6 +459,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.tableDataInRequirement.length = 0;
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
+            this.tableDataExInvoiceSelect.length = 0;
+            this.tableDataManagerSelect.length = 0;
             // Значения v-model при создании
             this.newType = '',
                 this.newEntityId = '';
@@ -482,6 +495,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             // Селекты для множественного выбора
             this.multipleSelectionProduct = [];
             this.multipleSelectionExInvoice = [];
+            this.multipleSelectionManager = [];
             this.multipleTableRef = null;
 
             // Сбрасываем флаги видимости диалоговых окон
@@ -490,6 +504,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.dialogFormCategoryInVisible = false;
             this.dialogFormProductExVisible = false;
             this.dialogFormCategoryExVisible = false;
+            this.dialogFormManagersVisible = false;
 
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;

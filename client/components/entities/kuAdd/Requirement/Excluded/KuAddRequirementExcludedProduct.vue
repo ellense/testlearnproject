@@ -58,9 +58,10 @@ const handleSizeChange = async (val: number) => {
     console.error("Ошибка при загрузке данных искл.продуктов", error);
   }
 };
+
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterValue9('page', page);
+  useKuAddStore().setFilterExInvoice('page', page);
   useKuAddStore().getProductFromExcludedWithFilter(page);
 };
 
