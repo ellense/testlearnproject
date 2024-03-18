@@ -22,9 +22,11 @@
             <el-table-column property="brand" label="Торговая марка" width="300" show-overflow-tooltip />
             <el-table-column fixed="right" label="Операция">
                 <template #default="scope">
-                    <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.$index)">
+                    <!-- <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.$index)">
                         Удалить
-                    </el-button>
+                    </el-button> -->
+                    <el-button plain type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+            style="width: 100%; height: 100%;"></el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -32,6 +34,7 @@
 </template>
 <script lang="ts" setup>
 import { ref } from "vue";
+import { Delete } from '@element-plus/icons-vue'
 import type { Action, ElTree } from 'element-plus'
 import { useKuAddStore } from "~~/stores/kuAddStore";
 

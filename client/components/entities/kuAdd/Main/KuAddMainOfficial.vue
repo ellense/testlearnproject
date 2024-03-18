@@ -5,17 +5,17 @@
                 <div class="kuAddMainCol">
                     <el-divider content-position="left" style=" color: #337ecc">Контрагент</el-divider>
                     <el-form-item label-width="200" label="ФИО">
-                        <el-input v-model="store.newOfFIOСounteragent" size="small" placeholder="Введите ФИО контрагента"
+                        <el-input v-model="store.newOfFIOСounteragent" size="small" clearable placeholder="Введите в род. падеже"
                             style="width: 300px">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Должность">
-                        <el-input v-model="store.newOfPostСounteragent" size="small" placeholder="Введите должность контрагента"
+                        <el-input v-model="store.newOfPostСounteragent" size="small" clearable placeholder="Введите в род. падеже"
                             style="width: 300px">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Уполномочивающий документ">
-                        <el-input v-model="store.newOfDocСounteragent" size="small" placeholder="Введите название уполномочивающего документа контрагента"
+                        <el-input v-model="store.newOfDocСounteragent" size="small" clearable placeholder="Введите в род. падеже"
                             style="width: 300px">
                         </el-input>
                     </el-form-item>
@@ -23,16 +23,16 @@
                 <div class="kuAddMainCol">
                     <el-divider content-position="left" style=" color: #337ecc">Юридическое лицо</el-divider>
                     <el-form-item label-width="200" label="ФИО">
-                        <el-input v-model="store.newOfFIOEntity" size="small" style="width: 300px" placeholder="Введите ФИО юр.лица">
+                        <el-input v-model="store.newOfFIOEntity" size="small" clearable style="width: 300px" placeholder="Введите в род. падеже">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Должность">
-                        <el-input v-model="store.newOfPostEntity" size="small" placeholder="Введите должность юр.лица"
+                        <el-input v-model="store.newOfPostEntity" size="small" clearable placeholder="Введите в род. падеже"
                             style="width: 300px">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Уполномочивающий документ">
-                        <el-input v-model="store.newOfDocEntity" size="small" placeholder="Введите название уполномочивающего документа юр. лица"
+                        <el-input v-model="store.newOfDocEntity" size="small" clearable placeholder="Введите в род. падеже"
                             style="width: 300px">
                         </el-input>
                     </el-form-item>

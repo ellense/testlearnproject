@@ -2,8 +2,8 @@
   <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" style="border: none">
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 225px)" border v-loading="loading"
-      @selection-change="useGraphicStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 205px)" border v-loading="loading"
+      @selection-change="useGraphicStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick" stripe>
       <el-table-column fixed type="selection" width="40" />
       <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
       <el-table-column fixed property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
@@ -28,7 +28,8 @@
       <el-table-column property="date_start" type="date" label="Начальная дата" width="105" sortable
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" label="Конечная дата" width="105" sortable show-overflow-tooltip />
-      <el-table-column property="date_calc" type="date" label="Дата расчета" width="105" sortable show-overflow-tooltip />
+      <el-table-column property="date_calc" type="date" label="Дата начисления" width="105" sortable show-overflow-tooltip />
+      <el-table-column property="" type="date" label="Дата расчета" width="105" sortable show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
       <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
@@ -51,7 +52,7 @@
     <!-- v-if="pagination?.count && pagination.count > countRowTable" -->
   </el-scrollbar>
   <div class="pagination">
-    <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" :page-sizes="[20, 50, 100, 300, 500]"
+    <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" :page-sizes="[ 50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>

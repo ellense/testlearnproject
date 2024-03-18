@@ -11,7 +11,7 @@ a {
 
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
-  margin: 10px 10px 0 0;
+  margin: 5px 10px 0 0;
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
   height: calc(100vh - 160px);
@@ -20,7 +20,7 @@ a {
   margin: 10px 10px 0 0;
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
-min-height: 100px;
+  min-height: 100px;
 }
 
 .button_bottom {
@@ -79,7 +79,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   height: 40px;
-  margin: 10px 10px 0 0;
+  margin: 5px 10px 0 0;
 }
 
 .directoryBar_filter {
@@ -87,6 +87,7 @@ h1 {
   align-items: center;
   height: 40px;
   gap: 10px;
+  /* background-color: #ff9f9fdc; */
 }
 
 .mx-1 {
@@ -115,12 +116,12 @@ h1 {
 }
 
 .cell {
-  font-size: 13px;
+  font-size: 12px;
 }
 
 .el-table .el-table__cell {
-  padding: 4px 0;
-  height: min-content;
+  padding: 2px 0 !important;
+  height: min-content !important;
 }
 
 .el-divider__text.is-left {
@@ -129,15 +130,15 @@ h1 {
 }
 
 .selectVendorInKuAdd .el-popper {
-  min-width: 520px !important
+  min-width: 520px !important;
 }
 .selectVendorInKuAdd .el-vl__window {
-  width: 100% !important
+  width: 100% !important;
 }
 /* .el-select-dropdown__list .el-vl__window{
   width: 100%;
 } */
-.el-tabs--border-card>.el-tabs__content {
+.el-tabs--border-card > .el-tabs__content {
   padding: 0 5px 15px 15px !important;
 }
 .el-tabs__item {
@@ -149,4 +150,3 @@ h1 {
 .buttonAdd {
   margin-top: 15px;
 }
-

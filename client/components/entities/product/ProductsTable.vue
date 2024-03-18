@@ -1,15 +1,12 @@
 <template>
   <div>
     <el-scrollbar class="scrollTableProduct">
-        <el-table :data="tableData" height="calc(100vh - 185px)" style="width: 100%" v-loading="loading">
-
+      <el-table :data="tableData" height="calc(100vh - 175px)" style="width: 100%" v-loading="loading" border>
         <el-table-column prop="itemid" label="Номер" width="90" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="400" show-overflow-tooltip />
         <el-table-column prop="classifier_name" label="Категория" width="300" show-overflow-tooltip />
-        <el-table-column prop="brand_name" label="Бренд"  show-overflow-tooltip />
-
+        <el-table-column prop="brand_name" label="Бренд" show-overflow-tooltip />
       </el-table>
-
     </el-scrollbar>
     <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
       <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
@@ -32,7 +29,7 @@ const { getProducts, pagination, countRowTable } = storeToRefs(
 
 const pageSize = ref(countRowTable);
 const tableData = ref<IProduct[]>(getProducts.value);
-  const loading = ref()
+const loading = ref()
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   useProductStore().setCountRowTable(val);
@@ -54,23 +51,22 @@ const paginationChange = (page: number) => {
 
 onMounted(async () => {
   try {
-    loading.value = true; 
+    loading.value = true;
     await useProductStore().getProductFromAPIWithFilter();
-    loading.value = false; 
+    loading.value = false;
   } catch (error) {
-    loading.value = false; 
+    loading.value = false;
     console.error("Ошибка при загрузке данных", error);
   }
 });
 </script>
 <style scoped>
 .scrollTableProduct {
-  min-width: calc(100vw - 1000px); 
-  max-width: calc(100vw - 600px); 
-  margin-left: 10px; 
+  min-width: calc(100vw - 1000px);
+  max-width: calc(100vw - 600px);
+  margin-left: 10px;
   border: 1px solid var(--el-border-color);
   border-radius: 2px;
   height: calc(100vh - 185px);
 }
-
 </style>

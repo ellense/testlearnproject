@@ -2,35 +2,35 @@
   <div class="directoryBar">
     <div class="directoryBar_filter">
       <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
-        :title="disableButtonDeleteTooltip">Удалить</el-button>
+        :title="disableButtonDeleteTooltip" size="small">Удалить</el-button>
       <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip" style="margin: 0;">Утвердить</el-button>
+        :title="disableButtonTooltip" style="margin: 0;" size="small">Утвердить</el-button>
       <el-dropdown :disabled="isButtonsDisabled">
-        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip">
+        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
           Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="createReportInvoice()" link>Акт сверки взаиморасчетов с поставщиками по
+            <el-dropdown-item><el-button @click="createReportInvoice()" link size="small">Акт сверки взаиморасчетов с поставщиками по
                 накладным</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="createReportProduct()" link>Акт сверки взаиморасчетов с поставщиками по
+            <el-dropdown-item><el-button @click="createReportProduct()" link size="small">Акт сверки взаиморасчетов с поставщиками по
                 товарам</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="" link>Акт предоставления вознаграждения</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="" link size="small">Акт предоставления вознаграждения</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="2"
-        placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu">
-        <el-option v-for="item in KuList" :key="item" :label="item" :value="item" />
+        placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu" size="small">
+        <el-option v-for="item in KuList" :key="item" :label="item" :value="item" size="small"/>
       </el-select>
       <!-- <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 200px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select> -->
 
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;"></el-input>
+      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
     </div>
   </div>
 </template>

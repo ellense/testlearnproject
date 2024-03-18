@@ -2,20 +2,20 @@
   <div class="directoryBar">
     <div class="directoryBar_filter">
       <!-- :disabled="isCreateButtonDisabled"  :title="disableButtonCreateTooltip"-->
-      <el-button type="primary" plain @click="redirectToCreatePage" 
+      <el-button type="primary" plain @click="redirectToCreatePage" size="small" 
        >Создать
         КУ</el-button>
       <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip" style="margin: 0;">Создать
+        :title="disableButtonTooltip" style="margin: 0;" size="small">Создать
         график</el-button>
       <el-dropdown :disabled="isButtonsDisabled">
-        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip">
+        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
           Изменить статус<el-icon class="el-icon--right"><arrow-down /></el-icon>
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="ApproveKu()" link type="success">Утвердить</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="CancelKu()" link type="danger">Отменить</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="ApproveKu()" link type="success" size="small">Утвердить</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="CancelKu()" link type="danger" size="small">Отменить</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -24,15 +24,15 @@
       <el-button type="danger" plain @click="CancelKu()" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip">Отменить</el-button> -->
       <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
-        :title="disableButtonTooltip">Удалить</el-button>
+        :title="disableButtonTooltip" size="small">Удалить</el-button>
 
     </div>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-        :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity">
+        :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity" size="small">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;"></el-input>
+      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
     </div>
   </div>
 </template>
@@ -62,12 +62,12 @@ const { filterKuValue } = storeToRefs(useKuStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
-const LegalEntity = ref<string[]>(filterKuValue.value.entity_id || []);
+const LegalEntity = ref<string[]>(filterKuValue.value.entity_ids || []);
 const LegalEntityList = ref<string[]>(legalEntity.value);
 
 const changeLegalEntity = () => {
   useKuStore().pagination = null;
-  useKuStore().setFilterValue('entity_id', LegalEntity.value);
+  useKuStore().setFilterValue('entity_ids', LegalEntity.value);
   console.log('shopLegalEntity.value:', LegalEntity.value);
 
   toggleTriggerFilter();
@@ -137,7 +137,6 @@ const CancelKu = async () => {
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
     date_end: selectedRows[0].date_end,
-    percent: selectedRows[0].percent,
   };
   try {
     const response = await KU.deleteGraphRow(data);
@@ -160,8 +159,7 @@ const ApproveKu = async () => {
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end,
-    percent: selectedRows[0].percent,
+    date_end: selectedRows[0].date_end
   };
 
   try {
@@ -188,7 +186,6 @@ const addGraphic = async () => {
     date_start: selectedRows[0].date_start,
     date_end: selectedRows[0].date_end,
     status: selectedRows[0].status,
-    percent: selectedRows[0].percent,
     graph_exists:selectedRows[0].graph_exists,
   };
   loading.value = true;

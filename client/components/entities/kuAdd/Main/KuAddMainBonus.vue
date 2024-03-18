@@ -1,7 +1,8 @@
 <template>
   <el-scrollbar height="calc(100vh - 560px)">
     <el-button size="small" round @click="addRow" class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 615px)" empty-text="Добавьте условия">
+    <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 615px)"
+      empty-text="Добавьте условия">
       <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
         <template #default="{ row }">
           <el-checkbox v-model="row.fix" @change="onFixChange(row)"></el-checkbox>
@@ -9,29 +10,30 @@
       </el-table-column>
       <el-table-column prop="criterion" label="Критерий в руб." width="200">
         <template #default="{ row }">
-          <el-input v-model="row.criterion" @change="onCriteriaChange(row)"></el-input>
+          <el-input v-model="row.criterion" @change="onCriteriaChange(row)" clearable size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column prop="percent_sum" label="Процент/Сумма за период" width="200">
         <template #default="{ row }">
-          <el-input v-model="row.percent_sum" style="border: none !important" @change="onPercentSummaChange(row)"></el-input>
+          <el-input v-model="row.percent_sum" style="border: none !important" @change="onPercentSummaChange(row)"
+            clearable size="small"></el-input>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Операция">
+      <el-table-column fixed="right" label="Операция" align="center">
         <template #default="scope">
-          <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.$index)">
-            Удалить
-          </el-button>
+          <el-button plain type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+            style="width: 100%; height: 100%;"></el-button>
         </template>
       </el-table-column>
     </el-table>
   </el-scrollbar>
 </template>
-  
+
 <script lang="ts" setup>
 import { ref } from 'vue';
 import type { IPercent } from '~/utils/types/directoryTypes';
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import { Delete } from '@element-plus/icons-vue'
 const store = useKuAddStore();
 
 const tableData = ref(store.tableDataPercent);

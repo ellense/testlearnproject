@@ -130,11 +130,11 @@ export interface GetAllInvoices {
   page_size?: number;
   page?: number;
   entity_id: string[];
-  vendor_id: string;
   search?: string;
   start_date?: string,
   end_date?: string,
 }
+
 
 
 export interface InvoiceStore {
@@ -215,7 +215,6 @@ export interface IKuPostGraphic {
   date_start: Date | string;
   date_end: Date | string;
   status: string;
-  percent: number | null;
   graph_exists: boolean | string
 }
 export interface IKuUpdate {
@@ -340,6 +339,7 @@ export interface IKuAddStore {
   filterBrandIncluded: GetAllBrands
   filterBrandExcluded: GetAllBrands
   filterVendorValue: GetAllVendorsForEntity
+  filterExInvoice: GetAllInvoicesForKu
 }
 
 export interface IKuIdStore {
@@ -489,12 +489,37 @@ export interface IExInvoiceForKuPost {
   ku_id: string;
   doc_id: string;
 }
+export interface GetAllInvoicesForKu {
+  page_size?: number;
+  page?: number;
+  entity_id: string[];
+  vendor_id: string;
+  start_date?: string,
+  end_date?: string,
+}
+export interface GetAllInvoicesForKuReturnData extends Pagination {
+  results: IExInvoiceForKu[];
+}
 //кат. менеджеры
 export interface IManagerForKu {
   group: string;
   discription: string;
 }
 
+export interface IManagerForKuPost {
+  ku_id: string
+  group: string;
+  discription: string;
+}
+export interface IOfficialForKuPost {
+  ku_id: string
+  counterparty_name: string;
+  counterparty_post: string;
+  counterparty_docu: string;
+  entity_name: string;
+  entity_post: string;
+  entity_docu: string;
+}
 // График
 export interface IGraphic {
   graph_id: number | null;

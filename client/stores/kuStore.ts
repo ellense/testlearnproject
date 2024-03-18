@@ -16,7 +16,7 @@ export const useKuStore = defineStore("KuStore", {
     tableData: [],
     //пагинация в таблицах
     pagination: null,
-    countRowTable: 20,
+    countRowTable: 50,
     //
     legalEntity: [],
     //поиски

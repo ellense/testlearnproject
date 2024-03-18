@@ -13,3 +13,8 @@
     permission: ['all'],
   })
   </script>
+  <style scoped>
+  h2 {
+    margin-bottom: 0;
+  }
+  </style>

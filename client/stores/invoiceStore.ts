@@ -11,7 +11,6 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
     search: "",
     filterValue: {
       entity_id: [],
-      vendor_id: "",
       end_date: "",
 
     }
@@ -101,7 +100,6 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
         page_size: this.$state.countRowTable,
         page,
         entity_id: this.$state.filterValue?.entity_id || [],
-        vendor_id: this.$state.filterValue?.vendor_id,
         search: this.$state.search,
         start_date: this.$state.filterValue?.start_date,
         end_date: this.$state.filterValue?.end_date,
@@ -109,7 +107,6 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
         .then((dataInvoice) => {
           console.log('Получены данные накладных:', dataInvoice);
           this.$state.dataInvoice = dataInvoice.results;
-          useKuAddStore().tableDataExInvoiceAll = dataInvoice.results;
           this.$state.pagination = {
             count: dataInvoice.count,
             previous: dataInvoice.previous,

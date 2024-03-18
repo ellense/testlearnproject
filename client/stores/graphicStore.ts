@@ -43,7 +43,7 @@ export const useGraphicStore = defineStore("GraphicStore", {
     vendors: [],
     //пагинация в таблицах
     pagination: null,
-    countRowTable: 20,
+    countRowTable: 50,
     countRowTable2: 950,
     //
     legalEntity2: [],

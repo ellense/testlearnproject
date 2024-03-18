@@ -1,19 +1,19 @@
 <template>
   <el-scrollbar class="scrollTable" style="border: none">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
-      height="calc(100vh - 225px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading">
-      <el-table-column type="selection" width="40" />
-      <el-table-column property="ku_id" label="Код КУ" width="100" sortable show-overflow-tooltip />
-      <el-table-column property="contract" label="Контракт" width="200"  show-overflow-tooltip />
+      height="calc(100vh - 205px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe border cellspacing="0" cellpadding="0">
+      <el-table-column type="selection" width="40" fixed/>
+      <el-table-column property="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
+      <el-table-column property="contract" label="Контракт" width="200" fixed show-overflow-tooltip  />
       <el-table-column property="description" label="Описание" width="250" show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
         <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column label="Поставщик">  
+      <!-- <el-table-column label="Поставщик">   -->
         <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
-      </el-table-column>
+      <!-- </el-table-column> -->
       <!-- <el-table-column property="percent" label="Процент" width="80" show-overflow-tooltip />
       <el-table-column prop="period" label="Период расчета" width="110" :filters="[
         { text: 'Месяц', value: 'Месяц' },
@@ -36,7 +36,7 @@
           <el-tag  disable-transitions :type="getStatusTagTypeGraphic(scope2.row.graph_exists)">{{ scope2.row.graph_exists }}</el-tag>
         </template>
       </el-table-column> -->
-      <el-table-column prop="graph_exists" label="График расчета" width="80" align="center">
+      <el-table-column prop="graph_exists" label="График расчета" width="80" align="center" fixed="right">
         <template #default="scope4">
           <el-checkbox :checked="scope4.row.graph_exists" disabled></el-checkbox>
         </template>
@@ -46,7 +46,7 @@
         { text: 'Создано', value: 'Создано' },
         { text: 'Закрыто', value: 'Закрыто' },
         { text: 'Отменено', value: 'Отменено' },
-      ]" :filter-method="filterStatus" filter-placement="bottom-end">
+      ]" :filter-method="filterStatus" filter-placement="bottom-end" fixed="right">
         <template #default="scope3">
           <!-- getStatusTagType(scope.row.status) -->
           <!-- :type="statusTagType" -->
@@ -57,9 +57,9 @@
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count" class="pagination">
-    <el-pagination v-model:pageSize="pageSize" :page-sizes="[20, 50, 100, 300, 500]"
+    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-      @size-change="handleSizeChange" @current-change="paginationChange" />
+      @size-change="handleSizeChange" @current-change="paginationChange" size="small"/>
   </div>
 </template>
 
@@ -82,7 +82,7 @@ const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
   useKuIdStore().getKuRequirementDetailFromApi(kuId)
-
+  
  
   router.push({ path: `/ku/${kuId}` });
 };
@@ -156,3 +156,4 @@ const getStatusTagType = (status: string): "success" | "warning" | "info" | "pri
 };
 
 </script>
+

@@ -6,19 +6,12 @@
   border-radius: 2px;
   margin-right: 10px;
 "> -->
-<vue-resizable  minWidth=300 maxWidth=900 active="[ 'r']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 185px);
-  border-radius: 2px;
-
-  ">
+    <vue-resizable minWidth=300 maxWidth=900 width="800px" active="[ 'r']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 175px);
+  border-radius: 2px; ">
         <h3>Категории товаров:</h3>
-
         <el-scrollbar class="scrollTree">
-
-
             <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
                 @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node v-loading="loading" />
-
-
         </el-scrollbar>
     </vue-resizable>
     <!-- </div> -->

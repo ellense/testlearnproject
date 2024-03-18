@@ -80,7 +80,7 @@ const addItemAndSendToBackend = async () => {
       docu_account: store.newDocu_account,
       docu_name: store.newDocu_name,
       docu_number: store.newDocu_number,
-      
+
       docu_date: dayjs(store.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
       docu_subject: store.newDocu_subject,
       tax: store.newTax,
@@ -116,7 +116,7 @@ const addItemAndSendToBackend = async () => {
     }));
 
     const requirementsExArray = store.tableDataExRequirement.map(item => ({
-      ku_id: response.ku_id, 
+      ku_id: response.ku_id,
       item_type: item.item_type,
       item_code: item.item_code,
       item_name: item.item_name,
@@ -135,13 +135,13 @@ const addItemAndSendToBackend = async () => {
     }));
 
     const requirementsBonusArray = store.tableDataPercent.map(item => ({
-      ku_key_id: response.ku_id, 
+      ku_key_id: response.ku_id,
       fix: item.fix,
       criterion: item.criterion,
       percent_sum: item.percent_sum,
     }));
 
-      const response3 = await Promise.all(requirementsBonusArray.map(async newItem => {
+    const response3 = await Promise.all(requirementsBonusArray.map(async newItem => {
       try {
         const response = await KU.postKuRequirementBonus(newItem);
         return response;
@@ -152,11 +152,11 @@ const addItemAndSendToBackend = async () => {
     }));
 
     const ExcludedInvoicesArray = store.tableDataExInvoiceSelect.map(item => ({
-      ku_id: response.ku_id, 
+      ku_id: response.ku_id,
       doc_id: item.docid,
     }));
-      // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
-      const response4 = await Promise.all(ExcludedInvoicesArray.map(async newItem => {
+    // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
+    const response4 = await Promise.all(ExcludedInvoicesArray.map(async newItem => {
       try {
         const response = await KU.postKuExInvoices(newItem);
         return response;
@@ -165,6 +165,34 @@ const addItemAndSendToBackend = async () => {
         return null;
       }
     }));
+
+    const ManagerArray = store.tableDataManagerSelect.map(item => ({
+      ku_id: response.ku_id,
+      group: item.group,
+      discription: item.discription
+    }));
+    // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
+    const response5 = await Promise.all(ManagerArray.map(async newItem => {
+      try {
+        const response = await KU.postKuManager(newItem);
+        return response;
+      } catch (error) {
+        console.error("Ошибка при отправке искл. накладных на бэкенд:", error);
+        return null;
+      }
+    }));
+    const OfficialArray = {
+      ku_id: response.ku_id,
+      counterparty_name: store.newOfFIOСounteragent,
+      counterparty_post: store.newOfPostСounteragent,
+      counterparty_docu: store.newOfDocСounteragent,
+      entity_name: store.newOfFIOEntity,
+      entity_post: store.newOfPostEntity,
+      entity_docu: store.newOfDocEntity,
+    };
+
+    // Отправляем запрос на создание нового элемента на бэкенд
+    const response6 = await KU.postKuOfficial(OfficialArray);
     // Проверяем успешность отправки всех объектов
     success = responses.every(response => response !== null);
 
@@ -174,6 +202,8 @@ const addItemAndSendToBackend = async () => {
       console.log("исклУсловия успешно отправлены на бэкенд:", response2);
       console.log("бонус успешно отправлены на бэкенд:", response3);
       console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
+      console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
+      console.log("Должн. лица успешно отправлены на бэкенд:", response6);
       await useKuStore().getKuFromAPIWithFilter();
       router.push("ku");
       ElMessage.success("Коммерческое условие успешно создано.");

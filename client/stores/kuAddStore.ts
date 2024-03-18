@@ -16,6 +16,7 @@ import type {
     IExInvoiceForKu,
     ITree,
     GetAllCategory,
+    GetAllInvoicesForKu,
 } from "~/utils/types/directoryTypes";
 import useStore from "element-plus/es/components/table/src/store/index.mjs";
 
@@ -110,7 +111,10 @@ export const useKuAddStore = defineStore("KuAddStore", {
         filterBrandExcluded: {},
         filterVendorValue: {},
         filterCategory: {},
-
+        filterExInvoice: {
+            entity_id: [],
+            vendor_id: "",
+        },
 
     }),
 
@@ -413,9 +417,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
         //получение данных о товарах для условий с фильтром и поиск 
         async getProductFromExcludedWithFilter(page?: number) {
-            this.setFilterExInvoice('page', page);
-            this.setFilterExInvoice('search', this.$state.searchProductExcluded);
-            this.setFilterExInvoice('vendor_id', this.$state.newVendorId);
+            this.setFilterProductEx('page', page);
+            this.setFilterProductEx('search', this.$state.searchProductExcluded);
+            this.setFilterProductEx('vendor_id', this.$state.newVendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
@@ -447,13 +451,50 @@ export const useKuAddStore = defineStore("KuAddStore", {
         setSearchProductEx(query: string) {
             this.$state.searchProductExcluded = query;
         },
-        setFilterExInvoice<
+        setFilterProductEx<
             T extends keyof GetAllProducts,
             U extends GetAllProducts[T],
         >(field: T, value: U) {
             this.$state.filterProductExcluded[field] = value
         },
 
+        //получение накладных
+        async getInvoicesFromAPIWithFilter(page?: number) {
+            console.log('Выполняется запрос искл.накладных с фильтрацией...');
+            await KU.getInvoicesList({
+                page_size: this.$state.countRowTable,
+                page,
+                entity_id: this.$state.filterExInvoice?.entity_id || [],
+                vendor_id: this.$state.filterExInvoice?.vendor_id,
+                start_date: this.$state.filterExInvoice?.start_date,
+                end_date: this.$state.filterExInvoice?.end_date,
+            })
+                .then((dataInvoice) => {
+                    console.log('Получены данные искл.накладных:', dataInvoice);
+                    this.$state.tableDataExInvoiceAll = dataInvoice.results;
+                    this.$state.pagination = {
+                        count: dataInvoice.count,
+                        previous: dataInvoice.previous,
+                        next: dataInvoice.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных искл. накладных:', error);
+                    return Promise.reject(error);
+                });
+        },
+        setFilterExInvoice<
+            T extends keyof GetAllInvoicesForKu,
+            U extends GetAllInvoicesForKu[T],
+        >(field: T, value: U) {
+            this.$state.filterExInvoice[field] = value
+        },
+        removeFilterExInvoice<T extends keyof GetAllInvoicesForKu>(field: T) {
+            if (this.$state.filterExInvoice) {
+                delete this.$state.filterExInvoice[field]
+            }
+            console.log("фильтр накладных очищен")
+        },
         clearNewData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;

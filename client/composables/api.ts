@@ -44,6 +44,10 @@ import type {
   IPercent,
   IPercentPost,
   IExInvoiceForKuPost,
+  GetAllInvoicesForKu,
+  GetAllInvoicesForKuReturnData,
+  IManagerForKuPost,
+  IOfficialForKuPost,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -147,7 +151,7 @@ export const KU = {
 
   postKuInRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
     $Post("api/included_condition_create/", { data, isBearer: false }),
-    postKuExRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
+  postKuExRequirement: (data: IRequirementPost2): Promise<IRequirementPost2> =>
     $Post("api/excluded_condition_create/", { data, isBearer: false }),
   postKuRequirementBonus: (data: IPercentPost): Promise<IPercentPost> =>
     $Post("api/bonus_condition/", { data, isBearer: false }),
@@ -157,6 +161,14 @@ export const KU = {
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
   getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
     $Get(`api/included_conditions_list/`, { params, isBearer: false }),
+  postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
+    $Post("api/manager_list/", { data, isBearer: false }),
+  postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
+    $Post("api/official_list/", { data, isBearer: false }),
+  getInvoicesList: (
+    params?: GetAllInvoicesForKu
+  ): Promise<GetAllInvoicesForKuReturnData> =>
+    $Get("api/venddoclist", { params, isBearer: false }),
   // getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
   //   $Get(`api/included_condition_list/`, { params, isBearer: false }),
 
