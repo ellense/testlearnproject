@@ -2,7 +2,7 @@
   <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" style="border: none">
     <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 205px)" border v-loading="loading"
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 208px)" border v-loading="loading"
       @selection-change="useGraphicStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick" stripe>
       <el-table-column fixed type="selection" width="40" />
       <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
@@ -38,18 +38,16 @@
           {{ scope.row.sum_approved }}
         </template>
       </el-table-column>
-      <el-table-column fixed="right" prop="status" label="Статус" :filters="[
+      <el-table-column prop="status" label="Статус" width="120" :filters="[
         { text: 'Запланировано', value: 'Запланировано' },
         { text: 'Рассчитано', value: 'Рассчитано' },
         { text: 'Утверждено', value: 'Утверждено' },
-      ]" :filter-method="filterTag" filter-placement="bottom-end">
-        <template #default="scope">
-          <!-- :type="getStatusTagType(scope.row.status)" -->
-          <el-tag disable-transitions :type="getStatusTagType(scope.row.status)">{{ scope.row.status }}</el-tag>
-        </template>
-      </el-table-column>
+      ]" :filter-method="filterTag" filter-placement="bottom-end" fixed="right">
+  <template #default="scope3">
+    <span :style="{ color: getStatusColor(scope3.row.status) }">{{ scope3.row.status }}</span>
+  </template>
+</el-table-column>
     </el-table>
-    <!-- v-if="pagination?.count && pagination.count > countRowTable" -->
   </el-scrollbar>
   <div class="pagination">
     <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" :page-sizes="[ 50, 100, 300, 500]"
@@ -72,7 +70,6 @@ const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseE
       console.log('Вы нажали на ячейку столбца "Утверждено"');
     } else {
       ElMessage.error('Невозможно открыть диалоговое окно: статус не "Утвержденo"');
-      // Здесь можно выполнить другие действия, например, отобразить уведомление пользователю
     }
   }
 };
@@ -85,18 +82,19 @@ const filterTag = (value: string, row: IGraphic) => {
 const filterTag2 = (value: string, row: IGraphic) => {
   return row.period === value
 }
-const getStatusTagType = (status: string): "success" | "warning" | "info" | "primary" | "danger" | undefined => {// primary
-  switch (status) {
-    case "Запланировано":
-      return "primary";
-    case "Рассчитано":
-      return "warning";
-    case "Утверждено":
-      return "success";
-    default:
-      return "info";
+
+const getStatusColor = (status: string) => {
+    switch(status) {
+      case 'Утверждено':
+        return '#55940e';
+      case 'Запланировано':
+        return '#117ba5'; 
+      case 'Рассчитано':
+        return '#e79e00'; 
+      default:
+        return '#000'; 
+    }
   }
-};
 
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {

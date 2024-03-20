@@ -162,9 +162,9 @@ export const KU = {
   getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
     $Get(`api/included_conditions_list/`, { params, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
-    $Post("api/manager_list/", { data, isBearer: false }),
+    $Post("api/manager_create/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
-    $Post("api/official_list/", { data, isBearer: false }),
+    $Post("api/official_create/", { data, isBearer: false }),
   getInvoicesList: (
     params?: GetAllInvoicesForKu
   ): Promise<GetAllInvoicesForKuReturnData> =>

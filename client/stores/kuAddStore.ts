@@ -93,6 +93,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         disableButtonsIncluded: false,
         disableButtonsExcluded: false,
         //
+        searchExInvoiceNumber: "",
         vendorFilter: "",
         vendors: [],
         //пагинация в таблицах
@@ -111,10 +112,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         filterBrandExcluded: {},
         filterVendorValue: {},
         filterCategory: {},
-        filterExInvoice: {
-            entity_id: [],
-            vendor_id: "",
-        },
+        filterExInvoice: {},
 
     }),
 
@@ -464,6 +462,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             await KU.getInvoicesList({
                 page_size: this.$state.countRowTable,
                 page,
+                searchNumber: this.$state.searchExInvoiceNumber,
                 entity_id: this.$state.filterExInvoice?.entity_id || [],
                 vendor_id: this.$state.filterExInvoice?.vendor_id,
                 start_date: this.$state.filterExInvoice?.start_date,
@@ -495,6 +494,22 @@ export const useKuAddStore = defineStore("KuAddStore", {
             }
             console.log("фильтр накладных очищен")
         },
+        //для поиска накладных по номеру накладной
+        async performSearchOfInvoice(searchQuery: string) {
+            try {
+                this.setSearchQuery(searchQuery);
+                await this.getInvoicesFromAPIWithFilter();
+            } catch (error) {
+                console.error('Ошибка при выполнении поиска по номеру накл.', error);
+            }
+        },
+        setSearchQuery(query: string) {
+            console.log('Устанавливается запрос поиска по номеру:', query);
+            this.$state.searchExInvoiceNumber = query;
+        },
+
+
+        //очищение всего
         clearNewData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;

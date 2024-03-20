@@ -2,7 +2,7 @@
     <div>
         <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsExcluded"
             :title="disableButtonTooltip">+ Все</el-button>
-        <el-button size="small"  round @click="dialogOpenProduct()" :disabled="store.disableButtonsExcluded"
+        <el-button size="small" round @click="dialogOpenProduct()" :disabled="store.disableButtonsExcluded"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
         <!-- :loading="categoryDialogLoading"  -->
@@ -12,7 +12,7 @@
     </div>
     <el-scrollbar class="scrollTableRequirement">
         <!-- calc(100vh - 745px) -->
-        <el-table style="width: 100%" height="calc(100vh - px)" :data="kuRequirementList" border
+        <el-table style="width: 100%; min-height:100px;" height="calc(100vh - 735px)" :data="kuRequirementList" border
             empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"
@@ -26,7 +26,7 @@
                         Удалить
                     </el-button> -->
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
-            style="width: 125px; height: 100%;">Удалить</el-button>
+                        style="width: 125px; height: 100%;">Удалить</el-button>
                 </template>
             </el-table-column>
         </el-table>

@@ -129,9 +129,9 @@ export interface IInvoice {
 export interface GetAllInvoices {
   page_size?: number;
   page?: number;
-  entity_id: string[];
+  entity_id?: string[];
   search?: string;
-  start_date?: string,
+  start_date?:  string,
   end_date?: string,
 }
 
@@ -320,6 +320,7 @@ export interface IKuAddStore {
   disableButtonsIncluded: boolean
   disableButtonsExcluded: boolean
   //
+  searchExInvoiceNumber: string;
   vendorFilter: string;
   // kuFilter: number | null;
   vendors: IVendorIdAndName[];
@@ -492,8 +493,9 @@ export interface IExInvoiceForKuPost {
 export interface GetAllInvoicesForKu {
   page_size?: number;
   page?: number;
-  entity_id: string[];
-  vendor_id: string;
+  searchNumber?: string;
+  entity_id?: string[];
+  vendor_id?: string;
   start_date?: string,
   end_date?: string,
 }

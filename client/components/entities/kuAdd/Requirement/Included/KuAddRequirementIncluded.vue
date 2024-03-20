@@ -98,6 +98,4 @@ const disableButtonTooltip = computed(() => {
 
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

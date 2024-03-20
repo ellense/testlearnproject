@@ -9,11 +9,7 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
     legalEntity: [],
     vendor: [],
     search: "",
-    filterValue: {
-      entity_id: [],
-      end_date: "",
-
-    }
+    filterValue: {}
   }),
 
   getters: {
