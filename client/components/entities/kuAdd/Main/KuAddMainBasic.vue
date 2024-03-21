@@ -25,7 +25,8 @@
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
-            <el-input v-model="store.newDescription" size="small" placeholder="Введите описание" clearable style="width: 300px">
+            <el-input v-model="store.newDescription" size="small" placeholder="Введите описание" clearable
+              style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
@@ -44,7 +45,8 @@
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Контракт">
-            <el-input v-model="store.newContract" size="small" placeholder="Введите контракт" clearable style="width: 300px">
+            <el-input v-model="store.newContract" size="small" placeholder="Введите контракт" clearable
+              style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Тип товаров">
@@ -106,26 +108,22 @@
               value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
-            <el-input v-model="store.newDocu_subject" style="width: 300px" clearable :rows="4" size="small" type="textarea"
-              placeholder="Введите предмет договора" />
+            <el-input v-model="store.newDocu_subject" style="width: 300px" clearable :rows="4" size="small"
+              type="textarea" placeholder="Введите предмет договора" />
           </el-form-item>
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
           <el-form-item>
-            <!-- <el-text class="kuAddLabel">База премии включает налог</el-text> -->
             <el-checkbox v-model="store.newTax" label="База премии включает налог" size="small" />
           </el-form-item>
           <el-form-item>
-            <!-- <el-text class="kuAddLabel">Исключать возвраты из расчета</el-text> -->
             <el-checkbox v-model="store.newExclude_return" label="Исключать возвраты из расчета" size="small" />
           </el-form-item>
           <el-form-item>
-            <!-- <el-text class="kuAddLabel">Отрицательный товарооборот</el-text> -->
             <el-checkbox v-model="store.newNegative_turnover" label="Отрицательный товарооборот" size="small" />
           </el-form-item>
           <el-form-item label-width="170" label="Тип коммерческого условия">
-            <!-- <el-text class="kuAddLabel">Тип коммерческого условия</el-text> -->
             <el-select v-model="store.newKu_type" size="small" clearable placeholder="Выберите тип КУ"
               style="width: 300px">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
@@ -133,7 +131,6 @@
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Способ оплаты премии">
-            <!-- <el-text class="kuAddLabel">Способ оплаты премии</el-text> -->
             <el-select v-model="store.newPay_method" size="small" clearable placeholder="Выберите способ оплаты"
               style="width: 300px">
               <el-option label="Оплата" value="Оплата"></el-option>
@@ -166,7 +163,6 @@ watch(
     options.value = dataEntity.map((item) => ({
       label: item.name,
       value: item.entity_id,
-      // value: item.external_code,
     }));
   }
 );
@@ -174,7 +170,6 @@ onMounted(async () => {
   try {
     await store.fetchKuEntity({
       entity_id: "",
-      // external_code: "",
       name: "",
     });
   } catch (error) {
@@ -187,7 +182,6 @@ onMounted(async () => {
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
 watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-  // options2.value = vendors.map(item => ({ label: item.external_code, value: item.external_code }));
   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
 });
 
@@ -237,10 +231,6 @@ const onVendorChange = async () => {
       await store.fetchAllBrandsForIncluded();
       await store.getProductFromExcludedWithFilter();
       await store.getInvoicesFromAPIWithFilter();
-      // store.setFilterValue8('vendor_id', store.newVendorId);
-      // store.setFilterValue7('vendor_id', store.newVendorId);
-      // await store.fetchAllProducersForExcluded();
-      // await store.fetchAllBrandsForExcluded();
     } catch (error) {
       console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
     }
@@ -251,74 +241,6 @@ const onVendorChange = async () => {
 
 
 };
-
-// const options2 = ref<Array<{ label: string; value: string }>>([]);
-
-// // watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-// //   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
-// // });
-
-// watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-//   const uniqueVendors = Array.from(new Set(vendors.map(item => item.vendor_id)));
-//   options2.value = uniqueVendors.map(label => ({ label, value: label }));
-// });
-// const onEntityChange = async () => {
-//   store.dataVendor = [];
-//   store.setFilterValue6('entity_id', store.entityId);
-//   if (store.entityId) { // Проверка, что выбрана торговая маркка
-//     useKuAddStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
-//     console.log('Выполнен запрос на получение данных производителей.');
-//   } else {
-//     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-//     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
-//   }
-// };
-// const onEntityChange = async () => {
-//   store.newEntityName = ""; // Сбрасываем название компании перед загрузкой новых данных
-//   store.dataVendorId = [];
-
-//   // Проверяем, что выбран только один код компании
-//   if (store.newEntityId && store.newEntityId.length > 0) {
-//     const selectedEntity = options.value.find(option => option.value === store.newEntityId);
-//     if (selectedEntity) {
-//       store.newEntityName = selectedEntity.label;
-//     }
-//   }
-//   //фильтр в поставщике
-//   store.setFilterValue6('entity_id', store.newEntityId);
-//   if (store.newEntityId) { // Проверка, что выбрана торговая маркка
-//     useKuAddStore().fetchAllVendorsIdForEntity(); // Выполнить запрос с фильтром по производителям
-//     console.log('Выполнен запрос на получение данных поставщиков.');
-//   } else {
-//     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-//   }
-// };
-// const onVendorChange = async () => {
-//   store.newVendorName = "";
-//   if (store.newVendorId && store.newVendorId.length > 0) {
-//     store.setFilterValue6('vendor_id', store.newVendorId);
-//     store.getVendorFromAPIWithFilter()
-
-//   }
-//   try {
-//     console.log("поставщик:", store.newVendorId);
-//     store.setFilterValue3('vendor_id', store.newVendorId);
-//     store.setFilterValue4('vendor_id', store.newVendorId);
-//     store.setFilterValue5('vendor_id', store.newVendorId);
-//     await store.getProductFromIncludedWithFilter();
-//     await store.fetchAllProducersForInclided();
-//     await store.fetchAllBrandsForIncluded();
-//     store.setFilterValue8('vendor_id', store.newVendorId);
-//     store.setFilterValue7('vendor_id', store.newVendorId);
-//     store.setFilterValue9('vendor_id', store.newVendorId);
-//     await store.getProductFromExcludedWithFilter();
-//     await store.fetchAllProducersForExcluded();
-//     await store.fetchAllBrandsForExcluded();
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
-//   }
-// };
-
 
 // Проверка полей формы
 const dateStartValidation = ref<"error" | "success" | "validating" | undefined>('success');

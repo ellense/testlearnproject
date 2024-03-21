@@ -8,7 +8,7 @@
             <el-table-column property="vendor_id" label="Идентификатор" width="200" sortable show-overflow-tooltip />
             <el-table-column property="vendor_name" label="Наименование" width="500" sortable show-overflow-tooltip />
             <el-table-column property="invoice_date" type="date" label="Дата" sortable show-overflow-tooltip />
-            <el-table-column property="products_amount" label="Сумма" show-overflow-tooltip />
+            <el-table-column property="product_amount" label="Сумма" show-overflow-tooltip />
         </el-table>
         <el-dialog v-model="store.dialogFormExInvoiceVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
     close-on-press-escape draggable>
@@ -21,7 +21,7 @@
             <el-table-column property="vendor_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
             <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
             <el-table-column property="invoice_date" type="date" label="Дата" sortable show-overflow-tooltip />
-            <el-table-column property="products_amount" label="Сумма" show-overflow-tooltip />
+            <el-table-column property="product_amount" label="Сумма" show-overflow-tooltip />
       </el-table>
     </el-scrollbar>
     <div v-if="pagination?.count" class="pagination">
@@ -100,7 +100,7 @@ const AddExInvoice = () => {
         invoice_name: row.invoice_name,
         invoice_number: row.invoice_number,
         invoice_date: new Date(row.invoice_date),
-        products_amount: row.products_amount,
+        product_amount: row.product_amount,
         docid: row.docid,
 
     });

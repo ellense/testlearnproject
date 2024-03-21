@@ -1,7 +1,6 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <!-- :disabled="isCreateButtonDisabled"  :title="disableButtonCreateTooltip"-->
       <el-button type="primary" plain @click="redirectToCreatePage" size="small" 
        >Создать
         КУ</el-button>
@@ -19,10 +18,6 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <!-- <el-button type="success" plain @click="ApproveKu()" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip">Утвердить</el-button>
-      <el-button type="danger" plain @click="CancelKu()" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip">Отменить</el-button> -->
       <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonTooltip" size="small">Удалить</el-button>
 

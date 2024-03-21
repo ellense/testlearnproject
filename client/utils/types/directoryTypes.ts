@@ -1,18 +1,18 @@
 import type { ElTree } from 'element-plus'
 // юр.лица
 export interface IEntity {
-  // external_code: string;
-  // director_name: string;
-  // urastic_name: string;
-  // name: string;
-  // urastic_address: string;
-  // merge_id: string;
   entity_id: string;
-  directorname: string;
-  urasticname: string;
+  director_name: string;
+  urastic_name: string;
   name: string;
-  urasticaddress: string;
-  mergeid: string;
+  urastic_address: string;
+  merge_id: string;
+  // entity_id: string;
+  // directorname: string;
+  // urasticname: string;
+  // name: string;
+  // urasticaddress: string;
+  // mergeid: string;
 }
 export interface EntityStore {
   dataEntity: IEntity[],
@@ -39,22 +39,22 @@ export interface EntityId {
 
 //поставщик
 export interface IVendor {
-  // external_code: string
-  // name: string
-  // urastic_name: string
-  // director_name: string
-  // urastic_adress: string
-  // inn_kpp: string
-  // entity_key: string
-  // entity_name: string
   vendor_id: string
   name: string
-  urasticname: string
-  directorname: string
-  urasticadress: string
+  urastic_name: string
+  director_name: string
+  urastic_adress: string
   inn_kpp: string
   entity_id: string
   entity_name: string
+  // vendor_id: string
+  // name: string
+  // urasticname: string
+  // directorname: string
+  // urasticadress: string
+  // inn_kpp: string
+  // entity_id: string
+  // entity_name: string
 }
 export interface VendorStore {
   dataVendor: IVendor[] | null
@@ -122,7 +122,7 @@ export interface IInvoice {
   invoice_name: string;
   invoice_number: string;
   invoice_date: Date | string;
-  products_amount: number | null
+  product_amount: number | null
 }
 
 
@@ -483,7 +483,7 @@ export interface IExInvoiceForKu {
   invoice_name: string;
   invoice_number: string;
   invoice_date: Date | string;
-  products_amount: number | null
+  product_amount: number | null
   docid: string
 }
 export interface IExInvoiceForKuPost {
@@ -602,7 +602,7 @@ export interface GraphicForExcelReportInvoice {
   purch_number: string;
   purch_date: Date | string;
   invoicestatus: string;
-  products_amount: number | null;
+  product_amount: number | null;
 }
 export interface GraphicForExcelReportProduct {
   product_id: string;

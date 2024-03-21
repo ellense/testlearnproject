@@ -23,8 +23,7 @@
 import { localizedExcelTableLabel } from "~/composables/localizedExcelTable";
 import { storeToRefs } from "pinia";
 import { useReportStore } from "~~/stores/reportStore";
-import type { GraphicForExcelReportInvoice, IGraphicInfo, } from "~/utils/types/directoryTypes";
-import { useKuStore } from "~/stores/kuStore";
+import type { GraphicForExcelReportInvoice } from "~/utils/types/directoryTypes";
 import { excel, type Range } from "~/composables/excel";
 import { dayjs } from "element-plus";
 const { utils, writeFile, getBorderCell, getColumnById } = excel;
@@ -79,7 +78,7 @@ const columnTable: ColumnTable[] = [
     width: 100,
   },
   {
-    field: "products_amount",
+    field: "product_amount",
     label: "Сумма без НДС",
     type: "number",
     width: 150,
@@ -89,15 +88,6 @@ const columnTable: ColumnTable[] = [
   },
 ];
 
-// const tableDataReport = ref<IGraphicInfo[]>(getGraphicInfo.value);
-
-// watch(getGraphicInfo, (value) => {
-//   tableDataReport.value = value || [];
-//   console.log("Новые данные получены из хранилища:", tableDataReport.value);
-// });
-
-
-
 const tableDataReport = ref<GraphicForExcelReportInvoice[]>(getInvoiceInfo.value);
 
 watch(getInvoiceInfo, (value) => {
@@ -105,13 +95,6 @@ watch(getInvoiceInfo, (value) => {
   console.log("Новые данные invoices получены из хранилища:", tableDataReport.value);
 });
 
-// onMounted(async () => {
-//   try {
-//     await useReportStore().getInvoiceDetailForGraphicFromAPIWithFilter();
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
 
 function exportAsExcel() {
   const dataSheet: CellObject[][] = [];

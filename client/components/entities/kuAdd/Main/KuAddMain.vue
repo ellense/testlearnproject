@@ -13,7 +13,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import type { TabsPaneContext } from 'element-plus'
-import VueResizable from 'vue-resizable'
+// import VueResizable from 'vue-resizable'
 const activeName = ref('first')
 
 const handleClick = (tab: TabsPaneContext, event: Event) => {

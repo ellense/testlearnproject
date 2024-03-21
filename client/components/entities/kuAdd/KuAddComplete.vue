@@ -1,13 +1,9 @@
 <template>
-  <!-- <el-scrollbar height="calc(100vh - 120px) !important"> -->
   <EntitiesKuAddMain />
-
   <div class="button_bottom">
     <el-button @click="addClose()">Отменить</el-button>
     <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
   </div>
-
-  <!-- </el-scrollbar> -->
 </template>
 
 <script lang="ts" setup>
@@ -65,14 +61,11 @@ const addItemAndSendToBackend = async () => {
   try {
     // Создаем объект newItem для отправки на бэкенд
     const newItem = {
-      // entity_key: store.newEntityId,
-      // vendor_key: store.newVendorId,
       entity_id: store.newEntityId,
       vendor_id: store.newVendorId,
       period: store.newType,
       date_start: dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
       date_end: dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
-      // status_ku: "Создано",
       status: "Создано",
       description: store.newDescription,
       contract: store.newContract,
@@ -80,7 +73,6 @@ const addItemAndSendToBackend = async () => {
       docu_account: store.newDocu_account,
       docu_name: store.newDocu_name,
       docu_number: store.newDocu_number,
-
       docu_date: dayjs(store.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
       docu_subject: store.newDocu_subject,
       tax: store.newTax,
@@ -88,7 +80,6 @@ const addItemAndSendToBackend = async () => {
       negative_turnover: store.newNegative_turnover,
       ku_type: store.newKu_type,
       pay_method: store.newPay_method,
-
     };
 
     // Отправляем запрос на создание нового элемента на бэкенд
@@ -232,9 +223,6 @@ const addClose = () => {
 </script>
 
 <style scoped>
-/* .el-scrollbar__view{
-height: 100%;
-} */
 .button_bottom {
   margin: 20px 10px 0 0;
   display: flex;

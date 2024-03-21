@@ -61,7 +61,7 @@ const handleSizeChange = async (val: number) => {
 
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterExInvoice('page', page);
+  useKuAddStore().setFilterProductEx('page', page);
   useKuAddStore().getProductFromExcludedWithFilter(page);
 };
 

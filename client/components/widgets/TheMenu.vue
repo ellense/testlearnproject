@@ -1,7 +1,7 @@
 <template>
   <el-aside width="210px">
     <el-scrollbar height="calc(100vh - 60px)">
-      <el-menu style="font-size: 12px" active-color="#689EFF">
+      <el-menu active-color="#689EFF">
         <el-divider content-position="left" style=" color: #337ecc;">КУ поставщиков</el-divider>
         <nuxt-link to="/ku">
           <el-menu-item index="1">
@@ -61,7 +61,7 @@
             <span>Юридические лица</span>
           </el-menu-item>
         </nuxt-link>
-        
+
         <nuxt-link to="/vendor">
           <el-menu-item index="8">
             <el-icon>
@@ -97,9 +97,9 @@
                 <el-dropdown-item>Выйти</el-dropdown-item>
               </el-dropdown-menu>
             </template>
-          </el-dropdown> -->
-          <el-popconfirm :title="'Выйти из ЛК?'" :confirm-button-text="'Да'" :cancel-button-text="'Нет'" :hide-icon="true"
-            width="200px" @confirm="logOut()">
+</el-dropdown> -->
+          <el-popconfirm :title="'Выйти из ЛК?'" :confirm-button-text="'Да'" :cancel-button-text="'Нет'"
+            :hide-icon="true" width="200px" @confirm="logOut()">
             <template #reference>
               <div class="main-menu__logout-button">
                 <span>Выход</span>
@@ -143,16 +143,14 @@ const logOut = () => useAuthStore().logout();
 }
 
 .el-menu-item {
-  height: 40px;
+  height: 30px;
 }
 
 .el-text {
-  margin-left: 30px;
+  margin-left: 20px;
 }
 
 .main-menu__logout-button {
   width: 100%;
 }
-
-
 </style>

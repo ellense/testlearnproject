@@ -1,11 +1,9 @@
 <template>
   <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" style="border: none">
-    <!--  для обратной сортировки в el-table :default-sort="{prop: 'graph_id', order: 'descending'}" -->
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 208px)" border v-loading="loading"
       @selection-change="useGraphicStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick" stripe>
       <el-table-column fixed type="selection" width="40" />
-      <!-- <el-table-column type="index" label="ID" sortable width="80" show-overflow-tooltip /> -->
       <el-table-column fixed property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо">
         <el-table-column property="entity_id" label="Код" width="80" sortable show-overflow-tooltip />
@@ -28,8 +26,8 @@
       <el-table-column property="date_start" type="date" label="Начальная дата" width="105" sortable
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" label="Конечная дата" width="105" sortable show-overflow-tooltip />
-      <el-table-column property="date_calc" type="date" label="Дата начисления" width="105" sortable show-overflow-tooltip />
-      <el-table-column property="" type="date" label="Дата расчета" width="105" sortable show-overflow-tooltip />
+      <el-table-column property="date_calc" type="date" label="Дата начисления" width="120" sortable show-overflow-tooltip />
+      <el-table-column property="" type="date" label="Дата и время расчета" width="105" sortable show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
       <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
@@ -65,6 +63,7 @@ const loading = ref()
 const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseEvent) => {
   if (column.property === 'sum_approved') {
     if (row.status === 'Утверждено') {
+      useGraphicStore().editApproved = row.sum_approved;
       useGraphicStore().selectedRowEditApproved = row;
       useGraphicStore().dialogFormEditApprovedVisible = true;
       console.log('Вы нажали на ячейку столбца "Утверждено"');

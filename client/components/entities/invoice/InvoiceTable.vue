@@ -13,7 +13,7 @@
         <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column property="invoice_date" type="date" label="Дата" sortable show-overflow-tooltip />
-      <el-table-column property="products_amount" label="Сумма" show-overflow-tooltip />
+      <el-table-column property="product_amount" label="Сумма" show-overflow-tooltip />
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">

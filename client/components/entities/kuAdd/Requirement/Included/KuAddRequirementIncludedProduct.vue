@@ -60,7 +60,7 @@ const handleSizeChange = async (val: number) => {
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterValue3('page', page);
+  useKuAddStore().setFilterProductInRequirement('page', page);
   useKuAddStore().getProductFromIncludedWithFilter(page);
 };
 

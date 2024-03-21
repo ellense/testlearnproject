@@ -1,14 +1,11 @@
 <template>
   <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" width="750px"
-    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal close-on-press-escape
-    draggable>
+    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
+    close-on-press-escape draggable>
     <div class="selectCategory">
       <div>
         <div class="custom-label">Категория</div>
-        <!-- <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
-          :render-after-expand="false" style="width: 500px" class="tree_U" :props="defaultProps" ref="treeRef"
-          node-key="classifier_code" @change="getCheckedKeys" /> -->
-          <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
+        <el-tree-select v-model="value" :data="treeData" filterable clearable placeholder="Выберите категорию"
           :render-after-expand="false" style="width: 500px" class="tree_U" :props="defaultProps" ref="treeRef"
           node-key="classifier_code" @change="getCheckedKeys" />
       </div>
@@ -43,8 +40,6 @@
         </el-select-v2>
       </div>
     </div>
-
-
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="useKuAddStore().dialogFormCategoryInVisible = false">Отменить</el-button>
@@ -76,12 +71,12 @@ watch(() => store.brandIncluded, (brands: IBrand[]) => {
 
 const onProducerChange = async () => {
   store.valueBrand_nameIn = "";
-  store.setFilterValue5('producer_name', store.valueProducer_nameIn);
+  store.setFilterBrand('producer_name', store.valueProducer_nameIn);
   if (store.valueProducer_nameIn) { // Проверка, что выбрана торговая маркка
     useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
-    useKuAddStore().setFilterValue5('producer_name', undefined); // Сбросить фильтр
+    useKuAddStore().setFilterBrand('producer_name', undefined); // Сбросить фильтр
     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
     useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
     console.log('Выполнен запрос на получение всех данных производителей.');
@@ -109,8 +104,8 @@ let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
   store.valueBrand_nameIn = "";
   store.valueProducer_nameIn = "";
-  useKuAddStore().setFilterValue4("l4", []);
-  useKuAddStore().setFilterValue5('producer_name', undefined);
+  useKuAddStore().setFilterProducer("l4", []);
+  useKuAddStore().setFilterBrand('producer_name', undefined);
   console.log('Отмеченные ключи:', checkedKeys);
 
   if (checkedKeys && checkedKeys.length > 0) {
@@ -122,9 +117,9 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
     if (selectedCategory) {
       selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории для отправки в условия
     }
-    useKuAddStore().setFilterValue4("l4", selectedCategoryKey);
-    useKuAddStore().setFilterValue5("l4", selectedCategoryKey);
-   
+    useKuAddStore().setFilterProducer("l4", selectedCategoryKey);
+    useKuAddStore().setFilterBrand("l4", selectedCategoryKey);
+
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
       useKuAddStore().fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
       useKuAddStore().fetchAllBrandsForIncluded();
@@ -163,22 +158,20 @@ const AddCategoryItem = async () => {
       producer: store.valueProducer_nameIn,
       brand: store.valueBrand_nameIn,
     });
-    console.log("store.tableDataRequirementКАТЕГОРИЯ", store.tableDataInRequirement);
+    console.log("вкл таблица КАТЕГОРИЯ", store.tableDataInRequirement);
 
     useKuAddStore().dialogFormCategoryInVisible = false;
     value.value = "";
     store.valueProducer_nameIn = "";
     store.valueBrand_nameIn = "";
-    useKuAddStore().removeFilterCategory("vendor_id")
-    useKuAddStore().setFilterValue4("l4", []);
-    useKuAddStore().setFilterValue5('producer_name', undefined);
-    // await store.fetchAllProducersForInclided();
-    // await store.fetchAllBrandsForIncluded();
+    useKuAddStore().setFilterProducer("l4", []);
+    useKuAddStore().setFilterBrand('producer_name', undefined);
+    await store.fetchAllProducersForInclided();
+    await store.fetchAllBrandsForIncluded();
   } else {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }
 };
-
 
 </script>
 

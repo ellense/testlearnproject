@@ -1,6 +1,5 @@
 import { defineStore } from "pinia";
-import type { EntityId, GetAllInvoices, IVendorId, InvoiceStore } from "~/utils/types/directoryTypes";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import type { EntityId, GetAllInvoices, InvoiceStore } from "~/utils/types/directoryTypes";
 export const useInvoiceStore = defineStore("InvoiceStore", {
   state: (): InvoiceStore => ({
     dataInvoice: [],

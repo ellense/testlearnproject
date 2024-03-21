@@ -18,7 +18,6 @@ import type {
     GetAllCategory,
     GetAllInvoicesForKu,
 } from "~/utils/types/directoryTypes";
-import useStore from "element-plus/es/components/table/src/store/index.mjs";
 
 export const useKuAddStore = defineStore("KuAddStore", {
     state: (): IKuAddStore => ({
@@ -277,23 +276,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 console.error("Произошла ошибка при получении данных категорий", error);
             }
         },
-        // async fetchData() {
-        //     try {
-        //         const result = await CATEGORY.getCategory2({ 
-        //             vendor_id: this.$state.newVendorId 
-        //         });
-        //         if (Array.isArray(result)) {
-        //             this.$state.treeData = this.buildTree(result, '0');
-        //             console.log("treeData из стора", this.$state.treeData);
-        //             // this.treeRef && this.treeRef.updateKeyChildren(data.classifier_code, this.treeData);
-        //         } else {
-        //             this.treeData = [];
-        //             console.error("Данные не получены или не являются массивом");
-        //         }
-        //     } catch (error) {
-        //         console.error("Произошла ошибка при получении данных категорий", error);
-        //     }
-        // },
+       
         //получение данных о производителе с фильтром
         async fetchAllProducersForInclided() {
             try {
@@ -455,7 +438,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         >(field: T, value: U) {
             this.$state.filterProductExcluded[field] = value
         },
-
+////////////////////////////////////////////////////////////////////////////////////
         //получение накладных
         async getInvoicesFromAPIWithFilter(page?: number) {
             console.log('Выполняется запрос искл.накладных с фильтрацией...');

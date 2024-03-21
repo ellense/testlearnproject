@@ -16,11 +16,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  --el-header-height: 45px;
 }
 
 h1 {
   color: #337ecc;
-  font-size: 20px;
+  font-size: 18px;
 }
 </style>

@@ -1,15 +1,15 @@
 <template>
-    <el-dialog v-model="useKuStore().dialogFormEditApprovedVisible" title='Измените значение "Утверждено"'
+    <el-dialog v-model="useGraphicStore().dialogFormEditApprovedVisible" title='Измените значение "Утверждено"'
         close-on-click-modal close-on-press-escape draggable style="width: 20%;">
         <form>
             <el-form-item>
-                <el-input v-model="useKuStore().editApproved" clearable @input="" placeholder="Введите новое значение"
-                    style="width: 100%" />
+                <el-input v-model="useGraphicStore().editApproved" clearable @input=""
+                    placeholder="Введите новое значение" style="width: 100%" />
             </el-form-item>
         </form>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="useKuStore().dialogFormEditApprovedVisible = false">Отмена</el-button>
+                <el-button @click="useGraphicStore().dialogFormEditApprovedVisible = false">Отмена</el-button>
                 <el-button @click="editApproved()">Сохранить</el-button>
             </span>
         </template>
@@ -18,29 +18,11 @@
 
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
-import { storeToRefs } from "pinia";
-import { useKuStore } from "~~/stores/kuStore";
-
-// const percentValidation = ref<"error" | "success" | "validating" | undefined>('success');
-// const percentError = ref<string | undefined>('');
-
-// // Функция проверки процента
-// const validateInput = () => {
-//     const percent = parseFloat(String(useKuStore().editApproved));
-//     if (isNaN(percent) || percent < 1 || percent > 100) {
-//         percentValidation.value = 'error';
-//         percentError.value = 'Введите корректное число';
-//     } else {
-//         percentValidation.value = undefined;
-//         percentError.value = undefined;
-//     }
-// };
-
-// watch(() => useKuStore().editApproved, validateInput);
+import { useGraphicStore } from "~~/stores/graphicStore";
 
 //изменение поля утверждено
 const editApproved = async () => {
-    const selectedRows = useKuStore().selectedRowEditApproved
+    const selectedRows = useGraphicStore().selectedRowEditApproved
     console.log("selectedRows поле", selectedRows)
     const data = {
         graph_id: selectedRows.graph_id,
@@ -55,16 +37,16 @@ const editApproved = async () => {
         percent: selectedRows.percent,
         sum_calc: selectedRows.sum_calc,
         sum_bonus: selectedRows.sum_bonus,
-        sum_approved: useKuStore().editApproved,
+        sum_approved: useGraphicStore().editApproved,
     };
 
     try {
         const response = await GRAPHIC.updateGraphic(data);
         console.log("Поле успешно обновлено:", response);
-        useKuStore().dialogFormEditApprovedVisible = false;
+        useGraphicStore().dialogFormEditApprovedVisible = false;
         ElMessage.success("Поле успешно изменено");
-        await useKuStore().getGraphicsFromAPIWithFilter();
-        useKuStore().editApproved = null;
+        await useGraphicStore().getGraphicsFromAPIWithFilter();
+        useGraphicStore().editApproved = null;
     } catch (error) {
         console.error("Ошибка при обновлении поля:", error);
         ElMessage.error("Ошибка при изменении поля");

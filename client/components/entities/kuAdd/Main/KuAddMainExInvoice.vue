@@ -12,7 +12,7 @@
         <el-table-column property="vendor_name" label="Наименование" width="500" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column property="invoice_date" type="date" label="Дата" width="140" sortable show-overflow-tooltip />
-      <el-table-column property="products_amount" label="Сумма" width="120" show-overflow-tooltip />
+      <el-table-column property="product_amount" label="Сумма" width="120" show-overflow-tooltip />
       <el-table-column property="docid" label="Документ" show-overflow-tooltip />
     </el-table>
     <el-dialog v-model="store.dialogFormExInvoiceVisible" title="Выбор исключенных накладных для КУ"
@@ -23,8 +23,8 @@
         <div class="directoryBar_filter">
           <el-input v-model="searchQuery" placeholder="Фильтр по номеру накладной" clearable
             style="max-width: 300px; min-width: 100px; width: 200px;" size="small"></el-input>
-            <el-date-picker v-model="dateRange" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
-        end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange" />
+          <el-date-picker v-model="dateRange" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
+            end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange" />
         </div>
       </div>
       <el-scrollbar class="scrollTableFiltres">
@@ -34,13 +34,9 @@
           <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
           <el-table-column property="invoice_number" label="Номер" width="150" sortable show-overflow-tooltip />
           <el-table-column property="invoice_name" label="Наименование" width="150" sortable show-overflow-tooltip />
-          <!-- <el-table-column label="Поставщик">
-            <el-table-column property="vendor_id" label="Код" width="130" sortable show-overflow-tooltip />
-            <el-table-column property="vendor_name" label="Наименование" width="190" sortable show-overflow-tooltip />
-          </el-table-column> -->
           <el-table-column property="invoice_date" type="date" label="Дата" width="100" sortable
             show-overflow-tooltip />
-          <el-table-column property="products_amount" label="Сумма" width="100" show-overflow-tooltip />
+          <el-table-column property="product_amount" label="Сумма" width="100" show-overflow-tooltip />
           <el-table-column property="docid" label="Документ" show-overflow-tooltip />
         </el-table>
       </el-scrollbar>
@@ -103,27 +99,10 @@ const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
   store.performSearchOfInvoice(newValue);
 });
-//по дате фильтр
+
 //для фильтрации по дате
 const dateRange = ref()
-
 const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');// Функция для форматирования даты в формат "YYYY-MM-DD"
-
-// const changeDateRange = (newDateRange: Date[]) => {
-//   const [startDate, endDate] = newDateRange;
-//   if (!startDate || !endDate) {
-//     // Если даты не выбраны (то есть сброшены), сбрасываем фильтр
-//     store.removeFilterExInvoice("start_date");
-//     store.removeFilterExInvoice("end_date");
-//   } else {
-//     // Иначе, форматируем даты и устанавливаем их в фильтр
-//     const startFormatted = formatDate(startDate);
-//     const endFormatted = formatDate(endDate);
-//     store.setFilterExInvoice('start_date', startFormatted);
-//     store.setFilterExInvoice('end_date', endFormatted);
-//   }
-//   store.getInvoicesFromAPIWithFilter();
-// };
 const changeDateRange = (newDateRange: Date[]) => {
   if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
     const [startDate, endDate] = newDateRange;
@@ -146,7 +125,6 @@ const changeDateRange = (newDateRange: Date[]) => {
     store.getInvoicesFromAPIWithFilter(); // Вызовите метод хранилища для загрузки данных без учета фильтрации по датам
   }
 };
-
 
 //для очистки выбора
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -173,7 +151,7 @@ const AddExInvoice = () => {
       invoice_name: row.invoice_name,
       invoice_number: row.invoice_number,
       invoice_date: dayjs(row.invoice_date).format("DD.MM.YYYY"),
-      products_amount: row.products_amount,
+      product_amount: row.product_amount,
       docid: row.docid,
     });
   });

@@ -1,7 +1,7 @@
 <template>
   <el-dialog v-model="useKuAddStore().dialogFormCategoryExVisible" width="750px"
-    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal close-on-press-escape
-    draggable>
+    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
+    close-on-press-escape draggable>
     <div class="selectCategory">
       <div>
         <div class="custom-label">Категория</div>
@@ -40,8 +40,6 @@
         </el-select-v2>
       </div>
     </div>
-
-
     <template #footer>
       <span class="dialog-footer">
         <el-button @click="useKuAddStore().dialogFormCategoryExVisible = false">Отменить</el-button>
@@ -73,12 +71,12 @@ watch(() => store.brandExcluded, (brands: IBrand[]) => {
 
 const onProducerChange = async () => {
   store.valueBrand_nameEx = "";
-  store.setFilterValue5('producer_name', store.valueProducer_nameEx);
+  store.setFilterBrand('producer_name', store.valueProducer_nameEx);
   if (store.valueProducer_nameEx) { // Проверка, что выбрана торговая маркка
     useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
-    useKuAddStore().setFilterValue5('producer_name', undefined); // Сбросить фильтр
+    useKuAddStore().setFilterBrand('producer_name', undefined); // Сбросить фильтр
     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandExcluded);
     useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
     console.log('Выполнен запрос на получение всех данных производителей.');
@@ -88,7 +86,7 @@ const onProducerChange = async () => {
 //дерево
 const value = ref()
 const treeData = ref<ITree[]>([]);
-const treeRef = ref<InstanceType<typeof ElTree>>()
+const treeRef = ref<InstanceType<typeof ElTree>>();
 
 const defaultProps = {
   children: 'children',
@@ -96,62 +94,18 @@ const defaultProps = {
   isLeaf: 'isLeaf',
 };
 
-const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
-  const parentNode = nodes.filter(node => node.parent_code === parentCode);
-  if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
-
-  return parentNode.map(node => {
-    const children = buildTree(nodes, node.classifier_code.toString());
-    if (children.length) {
-      node.children = children;
-    }
-    return node;
-  });
-};
-
-const fetchData = async (data: ITree) => {
-  // try {
-  //   const result = await CATEGORY.getCategory2(
-  //     vendor_id: store.vendorName,
-  //   );
-  //   if (Array.isArray(result)) {
-  //     treeData.value = buildTree(result, '0');
-  //     console.log("treeData", treeData.value);
-  //     treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
-  //   } else {
-  //     treeData.value = [];
-  //     console.error("Данные не получены или не являются массивом");
-  //   }
-  // } catch (error) {
-  //   console.error("Произошла ошибка при получении данных категорий", error);
-  // }
-};
-
-// Вызов функции fetchData при монтировании компонента
-// onMounted(async () => {
-//   try {
-//     console.log("Before API call");
-//     await fetchData({
-//       name: "string",
-//       classifier_code: 1,
-//       children: [],
-//       parent_code: "",
-//     });
-//     console.log("After API call");
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
+// Обновляем данные treeData после получения данных
+watch(() => store.treeData, (newTreeData: ITree[]) => {
+  treeData.value = newTreeData;
+});
 
 //изменение поля дерева
 let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
-  store.valueBrand_nameEx = "";
-  store.valueProducer_nameEx = "";
-  useKuAddStore().setFilterValue4("l4", []);
-  useKuAddStore().setFilterValue5('producer_name', undefined);
-  await store.fetchAllProducersForInclided();
-  await store.fetchAllBrandsForIncluded();
+  store.valueBrand_nameIn = "";
+  store.valueProducer_nameIn = "";
+  useKuAddStore().setFilterProducer("l4", []);
+  useKuAddStore().setFilterBrand('producer_name', undefined);
   console.log('Отмеченные ключи:', checkedKeys);
 
   if (checkedKeys && checkedKeys.length > 0) {
@@ -163,9 +117,9 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
     if (selectedCategory) {
       selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории для отправки в условия
     }
-    useKuAddStore().setFilterValue4("l4", selectedCategoryKey);
-    useKuAddStore().setFilterValue5("l4", selectedCategoryKey);
-   
+    useKuAddStore().setFilterProducer("l4", selectedCategoryKey);
+    useKuAddStore().setFilterBrand("l4", selectedCategoryKey);
+
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
       useKuAddStore().fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
       useKuAddStore().fetchAllBrandsForIncluded();
@@ -204,27 +158,20 @@ const AddCategoryItem = async () => {
       producer: store.valueProducer_nameEx,
       brand: store.valueBrand_nameEx,
     });
-    console.log("store.tableDataRequirementКАТЕГОРИЯ", store.tableDataExRequirement);
+    console.log("искл таблица КАТЕГОРИЯ", store.tableDataExRequirement);
 
     useKuAddStore().dialogFormCategoryExVisible = false;
     value.value = "";
     store.valueProducer_nameEx = "";
     store.valueBrand_nameEx = "";
-    await fetchData({
-      name: "string",
-      classifier_code: 1,
-      children: [],
-      parent_code: "",
-    });
-    useKuAddStore().setFilterValue4("l4", []);
-    useKuAddStore().setFilterValue5('producer_name', undefined);
+    useKuAddStore().setFilterProducer("l4", []);
+    useKuAddStore().setFilterBrand('producer_name', undefined);
     await store.fetchAllProducersForInclided();
     await store.fetchAllBrandsForIncluded();
   } else {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }
 };
-
 
 </script>
 
