@@ -41,15 +41,19 @@ export const useProductStore = defineStore("ProductStore", {
       this.$state.countRowTable = count;
     },
 
-    async getProductFromAPIWithFilter(page?: number) {
+    async getProductFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
       this.setFilterValue('page', page);
       this.setFilterValue('search', this.$state.search);
       this.setFilterValue('categories_l4', this.$state.filterValue.categories_l4);
+      this.setFilterValue('sort_by', sort_by); 
+      this.setFilterValue('sort_order', sort_order); 
       await PRODUCT.getProductsList({
         page_size: this.$state.countRowTable,
         page,
         search: this.$state.search,
-        categories_l4: this.$state.filterValue.categories_l4
+        categories_l4: this.$state.filterValue.categories_l4,
+        sort_by,
+        sort_order,
       })
         .then((product) => {
           this.$state.product = product.results;

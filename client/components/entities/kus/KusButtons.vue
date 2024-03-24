@@ -22,13 +22,13 @@
         :title="disableButtonTooltip" size="small">Удалить</el-button>
 
     </div>
-    <div class="directoryBar_filter">
+    <!-- <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity" size="small">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
       <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -57,12 +57,12 @@ const { filterKuValue } = storeToRefs(useKuStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
-const LegalEntity = ref<string[]>(filterKuValue.value.entity_ids || []);
+const LegalEntity = ref<string[]>(filterKuValue.value.entity_id || []);
 const LegalEntityList = ref<string[]>(legalEntity.value);
 
 const changeLegalEntity = () => {
   useKuStore().pagination = null;
-  useKuStore().setFilterValue('entity_ids', LegalEntity.value);
+  useKuStore().setFilterValue('entity_id', LegalEntity.value);
   console.log('shopLegalEntity.value:', LegalEntity.value);
 
   toggleTriggerFilter();

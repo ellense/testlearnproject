@@ -60,14 +60,18 @@ export const useVendorStore = defineStore("VendorStore", {
     },
 
     //получение поставщиков
-    async getVendorFromAPIWithFilter(page?: number) {
+    async getVendorFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
       this.setFilterValue('page', page);
       this.setFilterValue('search', this.$state.search);
+      this.setFilterValue('sort_by', sort_by);
+      this.setFilterValue('sort_order', sort_order); 
       await VENDOR.getVendorsForEntityInVendor({
         page_size: this.$state.countRowTable,
         page,
         entity_ids: this.$state.filterValue?.entity_ids || [],
         search: this.$state.search,
+        sort_by,
+        sort_order,
       })
         .then((dataVendor) => {
           this.$state.dataVendor = dataVendor.results;

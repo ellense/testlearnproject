@@ -1,8 +1,9 @@
 <template>
   <EntitiesProductBar />
 <div class="product">
-  <EntitiesProductTree/>
   <EntitiesProductProductsTable />
+  <EntitiesProductTree/>
+  
 </div>
 </template>
 

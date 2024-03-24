@@ -101,6 +101,8 @@ export interface GetAllVendorsForEntityInVendor {
   page_size?: number
   page?: number
   search?: string;
+  sort_by?: string;
+  sort_order?: string;
 }
 export interface GetAllVendorsForEntityReturnData extends Pagination {
   resultsId: IVendorId[];
@@ -131,7 +133,7 @@ export interface GetAllInvoices {
   page?: number;
   entity_id?: string[];
   search?: string;
-  start_date?:  string,
+  start_date?: string,
   end_date?: string,
 }
 
@@ -243,6 +245,8 @@ export interface IKuStore {
   search: string;
   //
   legalEntity: string[]
+  filterVendorId: string[]
+  filterEntityId: string[]
   //параметры для фильтров при запросах
   filterKuValue: GetAllKus
 }
@@ -420,8 +424,13 @@ export interface IKuIdStore {
 export interface GetAllKus {
   page_size?: number;
   page?: number;
-  entity_ids?: string[];
+  entity_id?: string[];
+  vendor_id?: string[];
+  status?: string[];
+  graph_exists?: string[];
   search?: string;
+  sort_by?: string;
+  sort_order?: string;
 }
 export interface GetAllKu_Id {
   page_size?: number;
@@ -651,6 +660,8 @@ export interface GetAllProducts {
   search?: string;
   categories_l4?: string[];
   vendor_id?: string;
+  sort_by?: string;
+  sort_order?: string;
 }
 export interface ProductStore {
   product: IProduct[];

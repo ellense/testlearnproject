@@ -5,6 +5,7 @@
   <!-- <EntitiesInvoiceTest/> -->
   <EntitiesInvoiceBar />
   <EntitiesInvoiceTable />
+  <EntitiesInvoiceTesttable/>
   
 </template>
 

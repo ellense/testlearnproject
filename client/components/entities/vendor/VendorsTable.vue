@@ -1,26 +1,16 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" v-loading="loading" border>
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" v-loading="loading" border @sort-change="handleSortChange">
       <el-table-column label="Номер" prop="vendor_id" width="140" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
       <el-table-column prop="urastic_name" label="Полное наименование" width="300" show-overflow-tooltip sortable />
       <el-table-column label="Юридическое лицо">
         <el-table-column prop="entity_id" label="Идентификатор" width="160" show-overflow-tooltip sortable />
-        <el-table-column prop="entity_name" label="Наименование" width="190" show-overflow-tooltip sortable />
+        <el-table-column prop="entity_name" label="Наименование" width="190" show-overflow-tooltip  />
       </el-table-column>
-      <el-table-column prop="director_name" label="Директор" width="170" show-overflow-tooltip sortable />
+      <el-table-column prop="director_name" label="Директор" width="170" show-overflow-tooltip  />
       <el-table-column prop="inn_kpp" label="ИНН/КПП" width="200" show-overflow-tooltip />
-      <el-table-column prop="urastic_adress" label="Адрес" show-overflow-tooltip sortable />
-      <!-- <el-table-column label="Номер" prop="vendor_id" width="140" show-overflow-tooltip sortable />
-      <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
-      <el-table-column prop="urasticname" label="Полное наименование" width="300" show-overflow-tooltip sortable />
-      <el-table-column label="Юридическое лицо">
-        <el-table-column prop="entity_id" label="Идентификатор" width="160" show-overflow-tooltip sortable />
-        <el-table-column prop="entity_name" label="Наименование" width="190" show-overflow-tooltip sortable />
-      </el-table-column>
-      <el-table-column prop="directorname" label="Директор" width="170" show-overflow-tooltip sortable />
-      <el-table-column prop="innkpp" label="ИНН/КПП" width="200" show-overflow-tooltip />
-      <el-table-column prop="urasticadress" label="Адрес" show-overflow-tooltip sortable /> -->
+      <el-table-column prop="urastic_adress" label="Адрес" show-overflow-tooltip  />
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
@@ -53,6 +43,18 @@ const paginationChange = (page: number) => {
   try {
     useVendorStore().setFilterValue('page', page);
     useVendorStore().getVendorFromAPIWithFilter(page);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+};
+
+
+const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+  try {
+    const sortField = prop; // поле, по которому сортируем
+    const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", sortField,",", sortOrder, ")");
+    await useVendorStore().getVendorFromAPIWithFilter(undefined, sortField, sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

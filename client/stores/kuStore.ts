@@ -5,6 +5,7 @@ import type {
   IKuStore,
   EntityId,
   GetAllKus,
+  IVendorId,
 } from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
@@ -21,9 +22,10 @@ export const useKuStore = defineStore("KuStore", {
     legalEntity: [],
     //поиски
     search: "",
+    filterEntityId: [],
+    filterVendorId: [],
     //параметры для фильтров при запросах
     filterKuValue: {
-      entity_ids: []
     },
   }),
 
@@ -57,15 +59,21 @@ export const useKuStore = defineStore("KuStore", {
     },
 
     //получение КУ с фильтром
-    async getKuFromAPIWithFilter(page?: number) {
-      console.log('Выполняется запрос ку с фильтрацией...');
+    async getKuFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
       this.setFilterValue('page', page);
       this.setFilterValue('search', this.$state.search);
+      this.setFilterValue('sort_by', sort_by);
+      this.setFilterValue('sort_order', sort_order); 
       await KU.getKuList({
         page_size: this.$state.countRowTable,
         page,
-        entity_ids: this.$state.filterKuValue?.entity_ids || [],
+        entity_id: this.$state.filterKuValue?.entity_id || [],
+        vendor_id: this.$state.filterKuValue?.vendor_id || [],
+        status: this.$state.filterKuValue?.status || [],
+        graph_exists: this.$state.filterKuValue?.graph_exists,
         search: this.$state.search,
+        sort_by,
+        sort_order,
       })
         .then((tableData) => {
           console.log('Получены данные ку:', tableData);
@@ -87,7 +95,6 @@ export const useKuStore = defineStore("KuStore", {
       T extends keyof GetAllKus,
       U extends GetAllKus[T],
     >(field: T, value: U) {
-      console.log('Устанавливается значение фильтра ку:', field, value);
       this.$state.filterKuValue[field] = value
     },
 
@@ -101,14 +108,12 @@ export const useKuStore = defineStore("KuStore", {
       }
     },
     setSearchQueryKu(query: string) {
-      console.log('Устанавливается запрос поиска ку:', query);
       this.$state.search = query;
     },
 
 
     //получения юр лица для фильтра в ку
     getLegalEntityFilterForKuFromApi() {
-      console.log('Запрос данных о юридических лицах...');
       ENTITY.getEntityById()
         .then((legalEntity) => {
           console.log('Получены данные о юридических лицах:', legalEntity);
@@ -117,11 +122,10 @@ export const useKuStore = defineStore("KuStore", {
         .catch((e) => console.error('Ошибка при получении данных о юридических лицах:', e));
     },
     setLegalEntity(data: EntityId[]) {
-      console.log('Устанавливаются данные о юридических лицах:', data);
       this.$state.legalEntity = data.map(
-        // (legalEntity) => legalEntity.external_code
         (legalEntity) => legalEntity.entity_id
       )
     },
+    
   }
 });

@@ -1,5 +1,5 @@
 <template>
-    <vue-resizable minWidth=300 maxWidth=900 width="800px" active="[ 'r']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 175px);
+    <vue-resizable minWidth=300 maxWidth=900 width="800px" active="[ 'l']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 175px);
   border-radius: 2px; ">
         <h3>Категории товаров:</h3>
         <el-scrollbar class="scrollTree">

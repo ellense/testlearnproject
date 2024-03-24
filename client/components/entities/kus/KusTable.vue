@@ -1,42 +1,118 @@
 <template>
   <el-scrollbar class="scrollTable" style="border: none">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
-      height="calc(100vh - 208px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe border
-      cellspacing="0" cellpadding="0">
+      height="calc(100vh - 208px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe
+      :border="true" @sort-change="handleSortChange" cellspacing="0" cellpadding="0">
       <el-table-column type="selection" width="40" fixed />
       <el-table-column property="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
       <el-table-column property="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
       <el-table-column property="description" label="Описание" width="250" show-overflow-tooltip />
+
       <el-table-column label="Юридическое лицо">
+        <template #header>
+          <div class="column-header" :style="{ color: LegalEntity.length > 0 ? '#409EFF' : 'inherit' }">
+            Юридическое лицо
+            <el-popover placement="bottom-end" :width="325" trigger="click">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
+                size="small">
+                <el-option v-for="item in optionsLegalEntity" :key="item" :label="item" :value="item" />
+              </el-select>
+            </el-popover>
+          </div>
+        </template>
         <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик">
+        <template #header>
+          <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
+            Поставщик
+            <el-popover placement="bottom-end" :width="325" trigger="click">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="3" :options="optionsVendor" style="width: 300px" placeholder="Фильтр по поставщику"
+                @change="onVendorChange" size="small">
+                <template #default="{ item }" class="selectVendorInKuAdd">
+                  <span style="margin-right: 8px">{{ item.label }}</span>
+                </template>
+              </el-select-v2>
+            </el-popover>
+          </div>
+        </template>
         <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
-        <el-table-column property="vendor_name" label="Наименование" width="250" sortable show-overflow-tooltip />
+        <el-table-column property="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
       <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="110"
         show-overflow-tooltip />
       <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110"
         show-overflow-tooltip />
-      <el-table-column prop="graph_exists" label="График расчета" width="80" align="center" fixed="right">
+      <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
+        <template #header>
+          <div class="column-header" :style="{ color: Graph.length > 0 ? '#409EFF' : 'inherit' }">
+            График
+            <el-popover placement="bottom-end" :width="175" trigger="click">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-select-v2 v-model="Graph" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="2" :options="optionsGraph" style="width: 150px" placeholder="Фильтр по графику"
+                @change="onGraphChange" size="small">
+                <template #default="{ item }" class="selectVendorInKuAdd">
+                  <span style="margin-right: 8px">{{ item.label }}</span>
+                </template>
+              </el-select-v2>
+            </el-popover>
+          </div>
+        </template>
         <template #default="scope4">
-          <el-icon v-if="scope4.row.graph_exists" name="check"><Select style="color: #55940e;" /></el-icon>
+          <el-icon v-if="scope4.row.graph_exists" name="check"><Select /></el-icon>
           <el-icon v-else name="close">
-            <SemiSelect style="color: #8a8a8a;" />
           </el-icon>
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="Статус" :filters="[
-      { text: 'Действует', value: 'Действует' },
-      { text: 'Создано', value: 'Создано' },
-      { text: 'Закрыто', value: 'Закрыто' },
-      { text: 'Отменено', value: 'Отменено' },
-    ]" :filter-method="filterStatus" filter-placement="bottom-end" fixed="right">
+
+
+      <el-table-column prop="status" label="Статус" fixed="right">
+
+        <template #header>
+          <div class="column-header" :style="{ color: Status.length > 0 ? '#409EFF' : 'inherit' }">
+            Статус
+            <el-popover placement="bottom-end" :width="325" trigger="click">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-select-v2 v-model="Status" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="2" :options="optionsStatus" style="width: 300px" placeholder="Фильтр по статусу КУ"
+                @change="onStatusChange" size="small">
+                <template #default="{ item }" class="selectVendorInKuAdd">
+                  <span style="margin-right: 8px">{{ item.label }}</span>
+                </template>
+              </el-select-v2>
+            </el-popover>
+          </div>
+        </template>
+
         <template #default="scope3">
           <span :style="{ color: getStatusColor(scope3.row.status) }">{{ scope3.row.status }}</span>
         </template>
       </el-table-column>
+
+
+
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count" class="pagination">
@@ -44,19 +120,22 @@
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" size="small" />
   </div>
+
 </template>
 
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
-import { Select, SemiSelect } from '@element-plus/icons-vue'
+import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IKuList } from "~/utils/types/directoryTypes";
+import type { IEntityIdAndName, IKuList, IVendorId } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-
+import { useKuAddStore } from "~~/stores/kuAddStore";
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuStore()
 );
+const storeKuAdd = useKuAddStore();
+const visible = ref(false)
 const tableData = ref<IKuList[]>(getKu.value);
 
 const loading = ref()
@@ -97,6 +176,16 @@ watch(getKu, (value) => {
 });
 
 
+const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+  try {
+    const sortField = prop; // поле, по которому сортируем
+    const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", sortField, ",", sortOrder, ")");
+    await useKuStore().getKuFromAPIWithFilter(undefined, sortField, sortOrder);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+};
 
 onMounted(async () => {
   try {
@@ -139,4 +228,84 @@ const getStatusColor = (status: string) => {
   }
 }
 
+//для фильтрации
+const { legalEntity } = storeToRefs(useKuStore());
+const { filterKuValue } = storeToRefs(useKuStore())
+const triggerFilter = ref<boolean>(true);
+const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
+
+//фильтр юр лица
+const LegalEntity = ref<string[]>(filterKuValue.value.entity_id || []);
+const optionsLegalEntity = ref<string[]>(legalEntity.value);
+
+
+const changeLegalEntity = () => {
+  useKuStore().pagination = null;
+  useKuStore().setFilterValue('entity_id', LegalEntity.value);
+  console.log('shopLegalEntity.value:', LegalEntity.value);
+
+  toggleTriggerFilter();
+};
+
+watch(legalEntity, (value) => {
+  optionsLegalEntity.value = value;
+});
+
+//фильтр поставщика
+const Vendor = ref<string[]>(filterKuValue.value.vendor_id || []);
+const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
+
+watch(() => storeKuAdd.dataVendorId, (vendors: IVendorId[]) => {
+  optionsVendor.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+});
+onMounted(async () => {
+  try {
+    await storeKuAdd.fetchAllVendorIdForEntity();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных поставщика", error);
+  }
+});
+const onVendorChange = async () => {
+  useKuStore().setFilterValue('vendor_id', Vendor.value);
+  toggleTriggerFilter();
+};
+
+//фильтр по статусу
+const Status = ref<string[]>(filterKuValue.value.status || []);
+const optionsStatus = ref<Array<{ label: string; value: string }>>([
+  { label: 'Действует', value: 'Действует' },
+  { label: 'Создано', value: 'Создано' },
+  { label: 'Закрыто', value: 'Закрыто' },
+  { label: 'Отменено', value: 'Отменено' }
+]);
+const onStatusChange = async () => {
+  useKuStore().setFilterValue('status', Status.value);
+  toggleTriggerFilter();
+};
+
+//фильтр по графику
+const Graph = ref<string[]>(filterKuValue.value.graph_exists || []);
+const optionsGraph = ref<Array<{ label: string; value: string }>>([
+  { label: 'Есть', value: 'True' },
+  { label: 'Нет', value: 'False' },
+]);
+const onGraphChange = async () => {
+  useKuStore().setFilterValue('graph_exists', Graph.value);
+  toggleTriggerFilter();
+};
+
+
+watch(triggerFilter, () => {
+  useKuStore().getKuFromAPIWithFilter();
+});
 </script>
+<style scoped>
+.column-header {
+  display: flex;
+  align-items: center;
+}
+
+.column-header .el-button {
+  margin-left: 5px;
+}
+</style>
