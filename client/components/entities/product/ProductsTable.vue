@@ -1,19 +1,19 @@
 <template>
-  <vue-resizable minWidth=300 maxWidth=1100 width="900px" active="[ 'r']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 175px);
+  <vue-resizable minWidth=500 maxWidth=1350 width="1200px" active="[ 'r']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 130px);
   border-radius: 2px; ">
   <div>
     <!-- <el-scrollbar class="scrollTableProduct"> -->
       
-      <el-table :data="tableData" height="calc(100vh - 175px)" style="width: 100%; " v-loading="loading" :border="true" @sort-change="handleSortChange">
+      <el-table :data="tableData" height="calc(100vh - 130px)" style="width: 100%; " v-loading="loading" :border="true" @sort-change="handleSortChange">
         <el-table-column prop="itemid" label="Номер" width="90" show-overflow-tooltip sortable />
-        <el-table-column prop="name" label="Наименование" width="400" show-overflow-tooltip sortable/>
-        <el-table-column prop="classifier_name" label="Категория" width="300" show-overflow-tooltip />
+        <el-table-column prop="name" label="Наименование" width="450" show-overflow-tooltip sortable/>
+        <el-table-column prop="classifier_name" label="Категория" width="400" show-overflow-tooltip />
         <el-table-column prop="brand_name" label="Бренд" show-overflow-tooltip />
       </el-table>
     
     <!-- </el-scrollbar> -->
     <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-      <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+      <el-pagination v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
         :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
         @size-change="handleSizeChange" @current-change="paginationChange" />
     </div>

@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="calc(100vh - 560px)">
+  <el-scrollbar height="calc(100vh - 480px)">
     <el-button size="small" round @click="addRow" class="buttonAdd">Добавить</el-button>
     <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 615px)"
       empty-text="Добавьте условия">

@@ -1,6 +1,6 @@
 <template>
   <div class="directoryBar">
-    <h2>Юридические лица</h2>
+    <h3>Юридические лица</h3>
     <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;" :prefix-icon="Search" size="small"></el-input>
   </div>
 </template>

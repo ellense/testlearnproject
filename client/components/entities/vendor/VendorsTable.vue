@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 185px)" v-loading="loading" border @sort-change="handleSortChange">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange">
       <el-table-column label="Номер" prop="vendor_id" width="140" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
       <el-table-column prop="urastic_name" label="Полное наименование" width="300" show-overflow-tooltip sortable />
@@ -14,7 +14,7 @@
     </el-table>
   </el-scrollbar>
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
-    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+    <el-pagination v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>

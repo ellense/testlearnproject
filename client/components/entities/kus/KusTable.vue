@@ -1,8 +1,8 @@
 <template>
-  <el-scrollbar class="scrollTable" style="border: none">
+  <div class="scrollTable">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
-      height="calc(100vh - 208px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe
-      :border="true" @sort-change="handleSortChange" cellspacing="0" cellpadding="0">
+      height="calc(100vh - 130px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe
+      :border="true" @sort-change="handleSortChange">
       <el-table-column type="selection" width="40" fixed />
       <el-table-column property="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
       <el-table-column property="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
@@ -52,10 +52,40 @@
         <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="date_start" type="date" sortable label="Начальная дата" width="110"
-        show-overflow-tooltip />
+      <el-table-column property="date_start" type="date" sortable  width="130"
+        show-overflow-tooltip >
+        <template #header>
+          <div class="column-header":style="{ color: dateRange.length > 0 ? '#409EFF' : 'inherit' }" >
+            Начальная дата
+            <el-popover placement="bottom-end" :width="400" trigger="click">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-date-picker v-model="dateRange" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
+        end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange" />
+            </el-popover>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110"
-        show-overflow-tooltip />
+        show-overflow-tooltip >
+        <template #header>
+          <div class="column-header" :style="{ color: dateRange2.length > 0 ? '#409EFF' : 'inherit' }">
+            Конечная дата
+            <el-popover placement="bottom-end" :width="400" trigger="click">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-date-picker v-model="dateRange2" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
+        end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange2" />
+            </el-popover>
+          </div>
+        </template>
+      </el-table-column>
       <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
         <template #header>
           <div class="column-header" :style="{ color: Graph.length > 0 ? '#409EFF' : 'inherit' }">
@@ -82,10 +112,7 @@
           </el-icon>
         </template>
       </el-table-column>
-
-
       <el-table-column prop="status" label="Статус" fixed="right">
-
         <template #header>
           <div class="column-header" :style="{ color: Status.length > 0 ? '#409EFF' : 'inherit' }">
             Статус
@@ -105,22 +132,17 @@
             </el-popover>
           </div>
         </template>
-
         <template #default="scope3">
           <span :style="{ color: getStatusColor(scope3.row.status) }">{{ scope3.row.status }}</span>
         </template>
       </el-table-column>
-
-
-
     </el-table>
-  </el-scrollbar>
+  </div>
   <div v-if="pagination?.count" class="pagination">
-    <el-pagination v-model:pageSize="pageSize" :page-sizes="[50, 100, 300, 500]"
+    <el-pagination v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" size="small" />
   </div>
-
 </template>
 
 <script lang="ts" setup>
@@ -131,6 +153,7 @@ import type { IEntityIdAndName, IKuList, IVendorId } from "~/utils/types/directo
 import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuStore()
 );
@@ -198,21 +221,6 @@ onMounted(async () => {
   }
 });
 
-//фильтры в таблице
-const filterGraphic = (value: boolean, row: IKuList) => {
-  // return row.graph_exists === value
-  const graphExistsString = row.graph_exists.toString();
-  return graphExistsString === value.toString();
-}
-
-const filterPeriod = (value: string, row: IKuList) => {
-  return row.period === value
-}
-
-const filterStatus = (value: string, row: IKuList) => {
-  return row.status === value
-}
-
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'Действует':
@@ -228,25 +236,24 @@ const getStatusColor = (status: string) => {
   }
 }
 
-//для фильтрации
+//для общей фильтрации
 const { legalEntity } = storeToRefs(useKuStore());
 const { filterKuValue } = storeToRefs(useKuStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
+watch(triggerFilter, () => {
+  useKuStore().getKuFromAPIWithFilter();
+});
 
 //фильтр юр лица
 const LegalEntity = ref<string[]>(filterKuValue.value.entity_id || []);
 const optionsLegalEntity = ref<string[]>(legalEntity.value);
-
-
 const changeLegalEntity = () => {
   useKuStore().pagination = null;
   useKuStore().setFilterValue('entity_id', LegalEntity.value);
   console.log('shopLegalEntity.value:', LegalEntity.value);
-
   toggleTriggerFilter();
 };
-
 watch(legalEntity, (value) => {
   optionsLegalEntity.value = value;
 });
@@ -254,7 +261,6 @@ watch(legalEntity, (value) => {
 //фильтр поставщика
 const Vendor = ref<string[]>(filterKuValue.value.vendor_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-
 watch(() => storeKuAdd.dataVendorId, (vendors: IVendorId[]) => {
   optionsVendor.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
 });
@@ -294,10 +300,53 @@ const onGraphChange = async () => {
   toggleTriggerFilter();
 };
 
+//для фильтрации по начальной и конечной дате
+const dateRange = ref('')
+const dateRange2 = ref('')
+const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');// Функция для форматирования даты в формат "YYYY-MM-DD"
+const changeDateRange = (newDateRange: Date[]) => {
+  if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
+    const [startDate, endDate] = newDateRange;
+    if (!startDate || !endDate) {
+      // Если даты не выбраны (то есть сброшены), сбрасываем фильтр
+      useKuStore().removeFilterValue('date_start_s');
+      useKuStore().removeFilterValue('date_start_e');
+    } else {
+      // Иначе, форматируем даты и устанавливаем их в фильтр
+      const startFormatted = formatDate(startDate);
+      const endFormatted = formatDate(endDate);
+      useKuStore().setFilterValue('date_start_s', startFormatted);
+      useKuStore().setFilterValue('date_start_e', endFormatted);
+    }
+    toggleTriggerFilter(); 
+  } else {
+    // Если даты не выбраны, сбрасываем фильтр
+    useKuStore().removeFilterValue('date_start_s');
+    useKuStore().removeFilterValue('date_start_e');
+    toggleTriggerFilter();
+  }
+};
+const changeDateRange2 = (newDateRange: Date[]) => {
+  if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
+    const [startDate, endDate] = newDateRange;
+    if (!startDate || !endDate) {
+      useKuStore().removeFilterValue('date_end_s');
+      useKuStore().removeFilterValue('date_end_e');
+    } else {
+      const startFormatted = formatDate(startDate);
+      const endFormatted = formatDate(endDate);
+      useKuStore().setFilterValue('date_end_s', startFormatted);
+      useKuStore().setFilterValue('date_end_e', endFormatted);
+    }
+    toggleTriggerFilter(); 
+  } else {
+    useKuStore().removeFilterValue('date_end_s');
+    useKuStore().removeFilterValue('date_end_e');
+    toggleTriggerFilter();
+  }
+};
 
-watch(triggerFilter, () => {
-  useKuStore().getKuFromAPIWithFilter();
-});
+
 </script>
 <style scoped>
 .column-header {

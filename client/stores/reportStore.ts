@@ -4,6 +4,7 @@ export const useReportStore = defineStore("ReportStore", {
   state: (): ReportStore => ({
     dialogFormReportInvoice: false,
     dialogFormReportProduct: false,
+    dialogFormReportActInvoice: false,
     pagination: null,
     countRowTable: 800,
     graphic: [],

@@ -7,12 +7,6 @@ export interface IEntity {
   name: string;
   urastic_address: string;
   merge_id: string;
-  // entity_id: string;
-  // directorname: string;
-  // urasticname: string;
-  // name: string;
-  // urasticaddress: string;
-  // mergeid: string;
 }
 export interface EntityStore {
   dataEntity: IEntity[],
@@ -23,7 +17,6 @@ export interface GetAllEntities {
   search?: string;
 }
 export interface IEntityIdAndName {
-  // external_code: string;
   entity_id: string;
   name: string;
 }
@@ -32,7 +25,6 @@ export interface IEntityIdAndNameForKu {
   entity_name: string;
 }
 export interface EntityId {
-  // external_code: string;
   entity_id: string;
 }
 
@@ -47,14 +39,6 @@ export interface IVendor {
   inn_kpp: string
   entity_id: string
   entity_name: string
-  // vendor_id: string
-  // name: string
-  // urasticname: string
-  // directorname: string
-  // urasticadress: string
-  // inn_kpp: string
-  // entity_id: string
-  // entity_name: string
 }
 export interface VendorStore {
   dataVendor: IVendor[] | null
@@ -75,14 +59,12 @@ export interface GetAllVendorsReturnData extends Pagination {
   results: IVendor[]
 }
 export interface IVendorId {
-  // external_code: string
   vendor_id: string
 }
 export interface IVendorName {
   name: string
 }
 export interface IVendorIdAndName {
-  // external_code: string
   vendor_id: string
   name: string;
 }
@@ -428,6 +410,10 @@ export interface GetAllKus {
   vendor_id?: string[];
   status?: string[];
   graph_exists?: string[];
+  date_start_s?: string,
+  date_start_e?: string,
+  date_end_s?: string,
+  date_end_e?: string,
   search?: string;
   sort_by?: string;
   sort_order?: string;
@@ -637,6 +623,7 @@ export interface GetAllProductsForGraphicReturnData extends Pagination {
 export interface ReportStore {
   dialogFormReportInvoice: boolean
   dialogFormReportProduct: boolean
+  dialogFormReportActInvoice: boolean
   pagination: Pagination | null;
   countRowTable: number;
   graphic: IGraphicInfo[]

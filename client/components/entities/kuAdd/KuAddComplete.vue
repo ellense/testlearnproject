@@ -1,8 +1,8 @@
 <template>
   <EntitiesKuAddMain />
   <div class="button_bottom">
-    <el-button @click="addClose()">Отменить</el-button>
-    <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading">Создать</el-button>
+    <el-button @click="addClose()" size="small">Отменить</el-button>
+    <el-button type="primary" @click="addItemAndSendToBackend()" :loading="loading" size="small">Создать</el-button>
   </div>
 </template>
 

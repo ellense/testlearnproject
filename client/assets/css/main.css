@@ -11,10 +11,10 @@ a {
 
 /* скролл внутри таблицы без заголовка */
 .scrollTable {
-  margin: 5px 10px 0 0;
-  border: 1px solid var(--el-border-color);
-  border-radius: 2px;
-  height: calc(100vh - 165px);
+  margin-right: 10px;
+}
+.pagination {
+  padding: 10px !important;
 }
 .scrollTableRequirement {
   margin: 10px 10px 0 0;
@@ -79,7 +79,7 @@ h1 {
   justify-content: space-between;
   align-items: center;
   height: 40px;
-  margin: 5px 10px 0 0;
+  margin: 0 10px 0 0;
 }
 
 .directoryBar_filter {
@@ -115,8 +115,14 @@ h1 {
   cursor: wait; /* Установка курсора в виде элемента загрузки */
 }
 
+.el-divider--vertical{
+  height: 2em !important;
+  color: #000 !important;
+}
+
 .cell {
   font-size: 12px;
+  color: #5c5b5b;
 }
 
 .el-table .el-table__cell {
@@ -138,15 +144,18 @@ h1 {
 /* .el-select-dropdown__list .el-vl__window{
   width: 100%;
 } */
-.el-tabs--border-card > .el-tabs__content {
-  padding: 0 5px 15px 15px !important;
-}
+
 .el-tabs__item {
   font-weight: 600 !important;
+  height: 30px !important;
+  font-size: 13px !important;
 }
 .el-tabs {
   --el-tabs-header-height: 35px;
 }
 .buttonAdd {
   margin-top: 15px;
+}
+h3{
+  font-size: 15px;
 }

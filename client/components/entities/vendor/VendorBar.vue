@@ -1,6 +1,6 @@
 <template>
   <div class="directoryBar">
-    <h2>Поставщики</h2>
+    <h3>Поставщики</h3>
     <div class="directoryBar_filter">
       <el-select v-model="shopLegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу" style="max-width: 400px; min-width: 100px; width: 300px;"

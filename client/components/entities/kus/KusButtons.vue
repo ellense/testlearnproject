@@ -1,6 +1,8 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
+      <h3>Коммерческие условия поставщиков</h3>
+      <el-divider direction="vertical" />
       <el-button type="primary" plain @click="redirectToCreatePage" size="small" 
        >Создать
         КУ</el-button>
@@ -216,4 +218,5 @@ const disableButtonCreateTooltip = computed(() => {
 
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

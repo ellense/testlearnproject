@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="calc(100vh - 560px)">
+  <el-scrollbar height="calc(100vh - 480px)">
     <form>
       <div class="kuAddMain">
         <div class="kuAddMainCol">

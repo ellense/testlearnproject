@@ -1,7 +1,7 @@
 <template>
   <div class="toolbarAdd"></div>
   <el-scrollbar class="scrollTable" style="border: none">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 208px)" :border="true" v-loading="loading"
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" :border="true" v-loading="loading"
       @selection-change="useGraphicStore().handleSelectionChange2" @cell-dblclick="handleCellDblClick" stripe>
       <el-table-column fixed type="selection" width="40" />
       <el-table-column fixed property="ku_id" label="Koд КУ" width="100" sortable show-overflow-tooltip />
@@ -48,7 +48,7 @@
     </el-table>
   </el-scrollbar>
   <div class="pagination">
-    <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" :page-sizes="[ 50, 100, 300, 500]"
+    <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" small :page-sizes="[ 50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" />
   </div>

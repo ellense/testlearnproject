@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top: 20px;">
+    <div style="margin-top: 10px;">
 <el-tabs  v-model="activeName" class="demo-tabs" @tab-click="handleClick">
     <el-tab-pane label="Включенные условия" name="first"><EntitiesKuAddRequirementIncluded/></el-tab-pane>
     <el-tab-pane label="Исключенные условия" name="second"><EntitiesKuAddRequirementExcluded/></el-tab-pane>
@@ -19,8 +19,9 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 </script>
 <style>
 .demo-tabs>.el-tabs__content {
-    padding: 0 10px 10px 10px !important;
+    padding: 0 !important;
     color: #3b3c3f;
     min-height: 100px;
 }
+
 </style>

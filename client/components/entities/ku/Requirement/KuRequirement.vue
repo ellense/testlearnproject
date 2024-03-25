@@ -1,5 +1,5 @@
 <template>
-    <div style="margin-top: 20px;">
+    <div style="margin-top: 10px;">
 <el-tabs  v-model="activeName" class="demo-tabs" @tab-click="handleClick">
     <el-tab-pane label="Включенные условия" name="first"><EntitiesKuRequirementIncluded/></el-tab-pane>
     <el-tab-pane label="Исключенные условия" name="second"><EntitiesKuRequirementExcluded/></el-tab-pane>

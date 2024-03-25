@@ -1,8 +1,8 @@
 <template>
   <div class="directoryBar">
-    <h2>Товары</h2>
+    <h3>Товары</h3>
     <div class="directoryBar_filter">
-      <el-input v-model="searchQuery" placeholder="Поиск по номеру и наименованию" style="max-width: 400px; min-width: 100px; width: 300px;"
+      <el-input v-model="searchQuery" placeholder="Поиск по номеру и наименованию товара" style="max-width: 400px; min-width: 100px; width: 300px;"
         :prefix-icon="Search" size="small"></el-input>
     </div>
   </div>

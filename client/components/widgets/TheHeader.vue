@@ -21,6 +21,6 @@
 
 h1 {
   color: #337ecc;
-  font-size: 18px;
+  font-size: 17px;
 }
 </style>

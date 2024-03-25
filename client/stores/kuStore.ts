@@ -71,6 +71,10 @@ export const useKuStore = defineStore("KuStore", {
         vendor_id: this.$state.filterKuValue?.vendor_id || [],
         status: this.$state.filterKuValue?.status || [],
         graph_exists: this.$state.filterKuValue?.graph_exists,
+        date_start_s: this.$state.filterKuValue?.date_start_s,
+        date_start_e: this.$state.filterKuValue?.date_start_e,
+        date_end_s: this.$state.filterKuValue?.date_end_s,
+        date_end_e: this.$state.filterKuValue?.date_end_e,
         search: this.$state.search,
         sort_by,
         sort_order,
@@ -96,6 +100,11 @@ export const useKuStore = defineStore("KuStore", {
       U extends GetAllKus[T],
     >(field: T, value: U) {
       this.$state.filterKuValue[field] = value
+    },
+    removeFilterValue<T extends keyof GetAllKus>(field: T) {
+      if (this.$state.filterKuValue) {
+        delete this.$state.filterKuValue[field]
+      }
     },
 
     //для поиска в ку

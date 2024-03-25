@@ -1,6 +1,6 @@
 <template>
   <div class="directoryBar">
-    <h2>Накладные поставок</h2>
+    <h3>Накладные поставок</h3>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юридическому лицу"

@@ -1,6 +1,5 @@
 <template>
-    <el-scrollbar height="calc(100vh - 60px)"> 
-      <h2>Графики расчетов</h2>
+    <el-scrollbar height="calc(100vh - 45px)"> 
       <FeaturesGraphic/>
     </el-scrollbar>
   </template>

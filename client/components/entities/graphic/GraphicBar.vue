@@ -1,6 +1,8 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
+      <h3>Графики расчетов</h3>
+      <el-divider direction="vertical" />
       <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonDeleteTooltip" size="small">Удалить</el-button>
       <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
@@ -15,23 +17,23 @@
                 накладным</el-button></el-dropdown-item>
             <el-dropdown-item><el-button @click="createReportProduct()" link size="small">Акт сверки взаиморасчетов с поставщиками по
                 товарам</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="" link size="small">Акт предоставления вознаграждения</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="renderDoc()" link size="small">Акт предоставления вознаграждения</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
     </div>
-    <div class="directoryBar_filter">
+    <!-- <div class="directoryBar_filter">
       <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="2"
         placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu" size="small">
         <el-option v-for="item in KuList" :key="item" :label="item" :value="item" size="small"/>
       </el-select>
-      <!-- <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
+      <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
         :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 200px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
-      </el-select> -->
+      </el-select>
 
       <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -109,6 +111,12 @@ const createReportProduct = async () => {
   useReportStore().fetchAllProducts(selectedRows[0])
 
 }
+const createReportActInvoice = async () => {
+  useReportStore().dialogFormReportActInvoice = true
+  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+  console.log("selectedRows[0]:", selectedRows[0])
+
+}
 
 //утверждение графика
 const ApproveGraphic = async () => {
@@ -169,6 +177,63 @@ const disableButtonTooltip = computed(() => {
 const disableButtonDeleteTooltip = computed(() => {
   return useGraphicStore().multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';
 });
+
+
+
+//для АКТА ПРЕДОСТАВЛЕНИЯ ВОЗНАГРАЖДЕНИЯ
+import Docxtemplater from "docxtemplater";
+import PizZip from "pizzip";
+import PizZipUtils from "pizzip/utils/index.js";
+import { saveAs } from "file-saver";
+
+function loadFile(url: string, callback: (error: any, content: any) => void) {
+  PizZipUtils.getBinaryContent(url, callback);
+}
+
+const renderDoc = () => {
+  loadFile("/templates/templateOfAct.docx", (error, content) => {
+    if (error) {
+      throw error;
+    }
+    const zip = new PizZip(content);
+    const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+    doc.render({
+      vendor_name: "АО ууу",
+      counterparty_post: "директора",
+      counterparty_name: "Силюк В.Р.",
+      counterparty_docu: "документа",
+      entity_name: "ООО группа",
+      entity_post: "директора",
+      entity_fio: "Сараевой Е.П.",
+      entity_docu : "устава",
+      date_start: "02.02.2024",
+      date_end: "02.03.2024",
+      sum_calc: "20000",
+      percent: "10",
+      sum_bonus: "2000",
+      inn_kpp: "734736756",
+      urastic_adress: "москва",
+      account: "877976",
+      bank_name: "сбербанк",
+      bank_bik: "сбербанк",
+      corr_account: "у75464558",
+      inn_kpp2: "6546758",
+      urastic_adress2: "Томск",
+      account2: "5685685",
+      bank_name2: "ВТБ",
+      bank_bik2: "5845",
+      corr_account2: "56365865",
+    });
+    
+    const out = doc.getZip().generate({
+      type: "blob",
+      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    });
+    saveAs(out, "Акт предоставления вознаграждения.docx");
+  });
+};
 </script>
 
-<style scoped></style>
+<style scoped>
+
+</style>

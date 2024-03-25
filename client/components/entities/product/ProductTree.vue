@@ -1,17 +1,19 @@
 <template>
-    <vue-resizable minWidth=300 maxWidth=900 width="800px" active="[ 'l']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 175px);
-  border-radius: 2px; ">
+    <!-- <vue-resizable minWidth=300 maxWidth=900 width="800px" active="[ 'l']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 140px);
+  border-radius: 2px; "> -->
+    <div class="Tree">
         <h3>Категории товаров:</h3>
         <el-scrollbar class="scrollTree">
-            <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
+            <el-tree :data="treeData" :props="defaultProps"  show-checkbox ref="treeRef" node-key="classifier_code"
                 @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node v-loading="loading" />
         </el-scrollbar>
-    </vue-resizable>
+    </div>
+    <!-- </vue-resizable> -->
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-import VueResizable from 'vue-resizable'
+// import VueResizable from 'vue-resizable'
 import type { ElTree } from 'element-plus'
 import { storeToRefs } from "pinia";
 import type { ITree } from '~/utils/types/directoryTypes';
@@ -111,11 +113,20 @@ const defaultProps = {
 <style scoped>
 .scrollTree {
     padding-right: 15px;
-    height: calc(100vh - 250px);
+    height: calc(100vh - 180px);
 }
 
 h3 {
     display: flex;
     justify-content: center;
+}
+
+.Tree {
+    margin-left: 10px;
+    /* border: 1px solid var(--el-border-color); */
+    height: calc(100vh - 130px);
+    min-width: 250px;
+    max-width: 700px;
+    /* border-radius: 2px; */
 }
 </style>
