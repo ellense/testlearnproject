@@ -52,45 +52,45 @@
         <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="date_start" type="date" sortable  width="130"
-        show-overflow-tooltip >
+      <el-table-column width="120" show-overflow-tooltip>
         <template #header>
-          <div class="column-header":style="{ color: dateRange.length > 0 ? '#409EFF' : 'inherit' }" >
+          <div class="column-header" :style="{ color: dateRange ? '#409EFF' : 'inherit' }">
             Начальная дата
-            <el-popover placement="bottom-end" :width="400" trigger="click">
+            <el-popover placement="bottom-end" :width="400" :visible="popoverVisible">
               <template #reference>
-                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                <el-button style="background-color: transparent; border:none; padding: 10px" @click="popoverVisible = !popoverVisible"><el-icon>
                     <Filter />
                   </el-icon></el-button>
               </template>
               <el-date-picker v-model="dateRange" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
-        end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange" />
+                end-placeholder="Окончание"  size="small" @change="changeDateRange" />
             </el-popover>
           </div>
         </template>
+        <el-table-column property="date_start" type="date" sortable width="120" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="date_end" type="date" sortable label="Конечная дата" width="110"
-        show-overflow-tooltip >
+      <el-table-column width="110" show-overflow-tooltip>
         <template #header>
-          <div class="column-header" :style="{ color: dateRange2.length > 0 ? '#409EFF' : 'inherit' }">
+          <div class="column-header" :style="{ color: dateRange2 ? '#409EFF' : 'inherit' }">
             Конечная дата
-            <el-popover placement="bottom-end" :width="400" trigger="click">
+            <el-popover placement="bottom-end" :width="400" :visible="popoverVisible2" >
               <template #reference>
-                <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
+                <el-button style="background-color: transparent; border:none; padding: 10px" @click="popoverVisible2 = !popoverVisible2"><el-icon>
                     <Filter />
                   </el-icon></el-button>
               </template>
               <el-date-picker v-model="dateRange2" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
-        end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange2" />
+                end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange2" />
             </el-popover>
           </div>
         </template>
+        <el-table-column property="date_end" type="date" sortable width="110" show-overflow-tooltip />
       </el-table-column>
       <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
         <template #header>
           <div class="column-header" :style="{ color: Graph.length > 0 ? '#409EFF' : 'inherit' }">
             График
-            <el-popover placement="bottom-end" :width="175" trigger="click">
+            <el-popover placement="bottom-end" :width="220" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -103,6 +103,7 @@
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
               </el-select-v2>
+              <el-button :icon="Select" size="small" type="success" plain style="margin-left: 5px" />
             </el-popover>
           </div>
         </template>
@@ -116,19 +117,20 @@
         <template #header>
           <div class="column-header" :style="{ color: Status.length > 0 ? '#409EFF' : 'inherit' }">
             Статус
-            <el-popover placement="bottom-end" :width="325" trigger="click">
-              <template #reference>
+            <el-popover placement="bottom-end" :width="370" trigger="click" >
+              <template #reference hide-on-click="false">
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
                   </el-icon></el-button>
               </template>
               <el-select-v2 v-model="Status" multiple clearable filterable collapse-tags collapse-tags-tooltip
                 :max-collapse-tags="2" :options="optionsStatus" style="width: 300px" placeholder="Фильтр по статусу КУ"
-                @change="onStatusChange" size="small">
+                 size="small" @change="onStatusChange">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
               </el-select-v2>
+              <el-button @click="onStatusChange()" :icon="Select" size="small" type="success" plain style="margin-left: 5px" />
             </el-popover>
           </div>
         </template>
@@ -143,9 +145,17 @@
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" size="small" />
   </div>
+  <!-- <div class="cell">
+    Код КУ
+    <span class="caret-wrapper">
+      <i class="sort-caret ascending"></i>
+      <i class="sort-caret descending"></i>
+    </span>
+  </div> -->
 </template>
 
 <script lang="ts" setup>
+import { Search } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
 import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
@@ -301,9 +311,25 @@ const onGraphChange = async () => {
 };
 
 //для фильтрации по начальной и конечной дате
-const dateRange = ref('')
-const dateRange2 = ref('')
+const popoverVisible = ref(false);
+const popoverVisible2 = ref(false);
+const togglePopover = () => {
+  popoverVisible.value = !popoverVisible.value;
+};
+const togglePopover2 = () => {
+  popoverVisible2.value = !popoverVisible2.value;
+};
+const closePopover = () => {
+  popoverVisible.value = false;
+};
+
+const closePopover2 = () => {
+  popoverVisible2.value = false;
+};
+const dateRange = ref()
+const dateRange2 = ref()
 const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');// Функция для форматирования даты в формат "YYYY-MM-DD"
+
 const changeDateRange = (newDateRange: Date[]) => {
   if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
     const [startDate, endDate] = newDateRange;
@@ -318,14 +344,17 @@ const changeDateRange = (newDateRange: Date[]) => {
       useKuStore().setFilterValue('date_start_s', startFormatted);
       useKuStore().setFilterValue('date_start_e', endFormatted);
     }
-    toggleTriggerFilter(); 
+    toggleTriggerFilter();
+    closePopover()
   } else {
     // Если даты не выбраны, сбрасываем фильтр
     useKuStore().removeFilterValue('date_start_s');
     useKuStore().removeFilterValue('date_start_e');
     toggleTriggerFilter();
+    closePopover()
   }
 };
+
 const changeDateRange2 = (newDateRange: Date[]) => {
   if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
     const [startDate, endDate] = newDateRange;
@@ -338,11 +367,13 @@ const changeDateRange2 = (newDateRange: Date[]) => {
       useKuStore().setFilterValue('date_end_s', startFormatted);
       useKuStore().setFilterValue('date_end_e', endFormatted);
     }
-    toggleTriggerFilter(); 
+    toggleTriggerFilter();
+    closePopover2()
   } else {
     useKuStore().removeFilterValue('date_end_s');
     useKuStore().removeFilterValue('date_end_e');
     toggleTriggerFilter();
+    closePopover2()
   }
 };
 
