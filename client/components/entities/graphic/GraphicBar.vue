@@ -13,11 +13,14 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="createReportInvoice()" link size="small">Акт сверки взаиморасчетов с поставщиками по
+            <el-dropdown-item><el-button @click="createReportInvoice()" link size="small">Акт сверки взаиморасчетов с
+                поставщиками по
                 накладным</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="createReportProduct()" link size="small">Акт сверки взаиморасчетов с поставщиками по
+            <el-dropdown-item><el-button @click="createReportProduct()" link size="small">Акт сверки взаиморасчетов с
+                поставщиками по
                 товарам</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="renderDoc()" link size="small">Акт предоставления вознаграждения</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="renderDoc()" link size="small">Акт предоставления
+                вознаграждения</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -31,7 +34,6 @@
         :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 200px" @change="changeLegalEntity">
         <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
       </el-select>
-
       <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
     </div> -->
   </div>
@@ -183,6 +185,7 @@ const disableButtonDeleteTooltip = computed(() => {
 //для АКТА ПРЕДОСТАВЛЕНИЯ ВОЗНАГРАЖДЕНИЯ
 import Docxtemplater from "docxtemplater";
 import PizZip from "pizzip";
+import { dayjs } from "element-plus";
 import PizZipUtils from "pizzip/utils/index.js";
 import { saveAs } from "file-saver";
 
@@ -190,50 +193,112 @@ function loadFile(url: string, callback: (error: any, content: any) => void) {
   PizZipUtils.getBinaryContent(url, callback);
 }
 
-const renderDoc = () => {
-  loadFile("/templates/templateOfAct.docx", (error, content) => {
-    if (error) {
-      throw error;
+// const renderDoc = () => {
+//   const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+//   console.log("selectedRows[0]:", selectedRows[0])
+//   useReportStore().getGraphicDetailFromApi(selectedRows[0])
+//   loadFile("/templates/templateOfAct.docx", (error, content) => {
+//     if (error) {
+//       throw error;
+//     }
+//     const zip = new PizZip(content);
+//     const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+//     const graphic = useReportStore().graphic[0];
+//     if (graphic) {
+//       doc.render({
+//         vendor_name: useReportStore().graphic[0].vendor_name,
+//         counterparty_post: "директора",
+//         counterparty_name: "Силюк В.Р.",
+//         counterparty_docu: "документа",
+//         entity_name: "ООО группа",
+//         entity_post: "директора",
+//         entity_fio: "Сараевой Е.П.",
+//         entity_docu: "устава",
+//         date_start: useReportStore().graphic[0].date_start,
+//         date_end: useReportStore().graphic[0].date_end,
+//         sum_calc: useReportStore().graphic[0].sum_calc,
+//         percent: useReportStore().graphic[0].percent,
+//         sum_bonus: useReportStore().graphic[0].sum_bonus,
+//         inn_kpp: "734736756",
+//         urastic_adress: "москва",
+//         account: "877976",
+//         bank_name: "сбербанк",
+//         bank_bik: "сбербанк",
+//         corr_account: "у75464558",
+//         inn_kpp2: "6546758",
+//         urastic_adress2: "Томск",
+//         account2: "5685685",
+//         bank_name2: "ВТБ",
+//         bank_bik2: "5845",
+//         corr_account2: "56365865",
+//       });
+//     } else {
+//       console.error("Ошибка: данные не загружены");
+//     }
+
+//     const out = doc.getZip().generate({
+//       type: "blob",
+//       mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+//     });
+//     saveAs(out, "Акт предоставления вознаграждения.docx");
+//   });
+// };
+const renderDoc = async () => {
+  try {
+    const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+    console.log("selectedRows[0]:", selectedRows[0])
+    await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
+
+    const graphic = useReportStore().graphic[0];
+    if (!graphic) {
+      console.error("Ошибка: данные не загружены");
+      return;
     }
-    const zip = new PizZip(content);
-    const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-    doc.render({
-      vendor_name: "АО ууу",
-      counterparty_post: "директора",
-      counterparty_name: "Силюк В.Р.",
-      counterparty_docu: "документа",
-      entity_name: "ООО группа",
-      entity_post: "директора",
-      entity_fio: "Сараевой Е.П.",
-      entity_docu : "устава",
-      date_start: "02.02.2024",
-      date_end: "02.03.2024",
-      sum_calc: "20000",
-      percent: "10",
-      sum_bonus: "2000",
-      inn_kpp: "734736756",
-      urastic_adress: "москва",
-      account: "877976",
-      bank_name: "сбербанк",
-      bank_bik: "сбербанк",
-      corr_account: "у75464558",
-      inn_kpp2: "6546758",
-      urastic_adress2: "Томск",
-      account2: "5685685",
-      bank_name2: "ВТБ",
-      bank_bik2: "5845",
-      corr_account2: "56365865",
+
+    loadFile("/templates/templateOfAct.docx", async (error, content) => {
+      if (error) {
+        throw error;
+      }
+      const zip = new PizZip(content);
+      const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+      doc.render({
+        vendor_name: useReportStore().graphic[0].vendor_name,
+        counterparty_post: "директора",
+        counterparty_name: "Силюк В.Р.",
+        counterparty_docu: "документа",
+        entity_name: "ООО группа",
+        entity_post: "директора",
+        entity_fio: "Сараевой Е.П.",
+        entity_docu: "устава",
+        date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
+        date_end:  dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
+        sum_calc: useReportStore().graphic[0].sum_calc,
+        percent: useReportStore().graphic[0].percent,
+        sum_bonus: useReportStore().graphic[0].sum_bonus,
+        inn_kpp: "734736756",
+        urastic_adress: "москва",
+        account: "877976",
+        bank_name: "сбербанк",
+        bank_bik: "сбербанк",
+        corr_account: "у75464558",
+        inn_kpp2: "6546758",
+        urastic_adress2: "Томск",
+        account2: "5685685",
+        bank_name2: "ВТБ",
+        bank_bik2: "5845",
+        corr_account2: "56365865",
+      });
+
+      const out = doc.getZip().generate({
+        type: "blob",
+        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+      });
+      saveAs(out, "Акт предоставления вознаграждения.docx");
     });
-    
-    const out = doc.getZip().generate({
-      type: "blob",
-      mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    });
-    saveAs(out, "Акт предоставления вознаграждения.docx");
-  });
+  } catch (error) {
+    console.error("Произошла ошибка:", error);
+  }
 };
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

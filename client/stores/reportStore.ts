@@ -35,6 +35,19 @@ export const useReportStore = defineStore("ReportStore", {
       }
     },
 
+    async getKuDetailFromApi(grapId: number | null) {
+      try {
+        const results = await GRAPHIC.getInfoGraphic({
+          graph_id: grapId,
+        });
+        this.$state.ku = [results];
+        console.log("успешно получили данные график_айди", results);
+        console.log("добавили данные в graphic[] ", this.$state.graphic);
+      } catch (error) {
+        console.error("Ошибка при получении данных график_айди:", error);
+      }
+    },
+
     setFilterValueInvoices<
       T extends keyof GetAllInvoicesAndProductForGraphic,
       U extends GetAllInvoicesAndProductForGraphic[T],

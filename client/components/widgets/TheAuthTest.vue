@@ -34,7 +34,7 @@ const router = useRouter();
 
 const form = reactive<AuthApiData>({
   username: "admin",
-  password: "1234",
+  password: "admin",
 });
 
 const login = () => {
