@@ -2,7 +2,7 @@
     <el-scrollbar height="calc(100vh - 480px)">
         <el-button size="small" round @click="store.dialogFormManagersVisible = true"
             class="buttonAdd">Добавить</el-button>
-        <el-table :data="tableData2" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 615px)"
+        <el-table :data="tableData2" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 555px)"
             empty-text="Добавьте категорийных менеджеров">
             <el-table-column property="group" label="Группа категорийных менеджеров" width="300"
                 show-overflow-tooltip />

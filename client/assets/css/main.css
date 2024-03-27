@@ -123,6 +123,7 @@ h1 {
 .cell {
   font-size: 12px;
   color: #5c5b5b;
+  padding: 0 8px !important;
 }
 
 .el-table .el-table__cell {

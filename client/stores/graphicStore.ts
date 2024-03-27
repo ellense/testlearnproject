@@ -46,13 +46,12 @@ export const useGraphicStore = defineStore("GraphicStore", {
     countRowTable: 50,
     countRowTable2: 950,
     //
-    legalEntity2: [],
+    legalEntity: [],
     //поиски
     searchGraphic: "",
     //параметры для фильтров при запросах
     KuParams: [],
     filterGraphicValue: {
-      entity_ids: [], ku_id: []
     },
   }),
 
@@ -86,15 +85,28 @@ export const useGraphicStore = defineStore("GraphicStore", {
     },
 
     //получение данных графика с фильтром
-    async getGraphicsFromAPIWithFilter(page?: number) {
-      this.setFilterValue2('page', page);
-      this.setFilterValue2('search', this.$state.searchGraphic);
+    async getGraphicsFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
+      this.setFilterValue('page', page);
+      this.setFilterValue('search', this.$state.searchGraphic);
+      this.setFilterValue('sort_by', sort_by);
+      this.setFilterValue('sort_order', sort_order);
       await GRAPHIC.getGraphic({
         page_size: this.$state.countRowTable,
         page,
-        entity_ids: this.$state.filterGraphicValue?.entity_ids || [],
         ku_id: this.$state.filterGraphicValue?.ku_id || [],
+        entity_id: this.$state.filterGraphicValue?.entity_id || [],
+        vendor_id: this.$state.filterGraphicValue?.vendor_id || [],
+        status: this.$state.filterGraphicValue?.status || [],
+        period: this.$state.filterGraphicValue?.period || [],
+        date_start_s: this.$state.filterGraphicValue?.date_start_s,
+        date_start_e: this.$state.filterGraphicValue?.date_start_e,
+        date_end_s: this.$state.filterGraphicValue?.date_end_s,
+        date_end_e: this.$state.filterGraphicValue?.date_end_e,
+        date_calc_s: this.$state.filterGraphicValue?.date_calc_s,
+        date_calc_e: this.$state.filterGraphicValue?.date_calc_e,
         search: this.$state.searchGraphic,
+        sort_by,
+        sort_order,
       })
         .then((dataGraphic) => {
           console.log('Получены данные графика:', dataGraphic);
@@ -111,11 +123,16 @@ export const useGraphicStore = defineStore("GraphicStore", {
         });
     },
 
-    setFilterValue2<
+    setFilterValue<
       T extends keyof GetAllGraphic,
       U extends GetAllGraphic[T],
     >(field: T, value: U) {
       this.$state.filterGraphicValue[field] = value
+    },
+    removeFilterValue<T extends keyof GetAllGraphic>(field: T) {
+      if (this.$state.filterGraphicValue) {
+        delete this.$state.filterGraphicValue[field]
+      }
     },
 
     //для поиска в графике
@@ -136,16 +153,15 @@ export const useGraphicStore = defineStore("GraphicStore", {
     //получения юр лица для фильтра в графике
     getLegalEntityFilterForGraphicFromApi() {
       ENTITY.getEntityById()
-        .then((legalEntity2) => {
-          console.log('Получены данные о юридических лицах:', legalEntity2);
-          this.setLegalEntity2(legalEntity2);
+        .then((legalEntity) => {
+          console.log('Получены данные о юридических лицах:', legalEntity);
+          this.setLegalEntity(legalEntity);
         })
         .catch((e) => console.error('Ошибка при получении данных о юридических лицах:', e));
     },
-    setLegalEntity2(data: EntityId[]) {
-      this.$state.legalEntity2 = data.map(
-        // (legalEntity2) => legalEntity2.external_code
-        (legalEntity2) => legalEntity2.entity_id
+    setLegalEntity(data: EntityId[]) {
+      this.$state.legalEntity = data.map(
+        (legalEntity) => legalEntity.entity_id
       )
     },
 

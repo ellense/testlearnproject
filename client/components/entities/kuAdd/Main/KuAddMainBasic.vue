@@ -103,7 +103,8 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Дата договора">
+          <el-form-item :validate-status="docuDateValidation" :error="docuDateError" label-width="170"
+            label="Дата договора">
             <el-date-picker v-model="store.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
               value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
@@ -147,12 +148,9 @@
 import { ref } from "vue";
 import dayjs from "dayjs";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import { useInvoiceStore } from "~~/stores/invoiceStore";
 import type {
   IEntityIdAndName,
-  ITree,
   IVendorId,
-  IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 const store = useKuAddStore();
 //вывод данных юридического лица
@@ -247,6 +245,8 @@ const dateStartValidation = ref<"error" | "success" | "validating" | undefined>(
 const dateStartError = ref<string | undefined>('');
 const dateEndValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const dateEndError = ref<string | undefined>('');
+  const docuDateValidation = ref<"error" | "success" | "validating" | undefined>('success');
+const docuDateError = ref<string | undefined>('');
 const percentValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const percentError = ref<string | undefined>('');
 
@@ -295,6 +295,18 @@ const validateDateEnd = () => {
   }
 };
 
+const validateDocuDate = () => {
+  if (!store.newDocu_date) {
+    // Если поле не заполнено
+    docuDateValidation.value = 'error';
+    docuDateError.value = 'Пожалуйста, укажите дату договора.';
+  } else {
+    docuDateValidation.value = 'success'; // Может быть 'error', 'validating' или undefined
+    docuDateError.value = undefined; // Сообщение об ошибке обнуляется
+  }
+};
+
+watch(() => store.newDocu_date, validateDocuDate);
 
 watch(() => store.newDateStart, validateDateStart);
 watch(() => store.newDateEnd, validateDateEnd);

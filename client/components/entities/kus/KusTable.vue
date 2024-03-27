@@ -2,8 +2,8 @@
   <div class="scrollTable">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
       height="calc(100vh - 130px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe
-      :border="true" @sort-change="handleSortChange">
-      <el-table-column type="selection" width="40" fixed />
+      :border="true" @sort-change="handleSortChange" >
+      <el-table-column type="selection" width="30" fixed />
       <el-table-column property="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
       <el-table-column property="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
       <el-table-column property="description" label="Описание" width="250" show-overflow-tooltip />
@@ -12,7 +12,7 @@
         <template #header>
           <div class="column-header" :style="{ color: LegalEntity.length > 0 ? '#409EFF' : 'inherit' }">
             Юридическое лицо
-            <el-popover placement="bottom-end" :width="325" trigger="click">
+            <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -33,7 +33,7 @@
         <template #header>
           <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
             Поставщик
-            <el-popover placement="bottom-end" :width="325" trigger="click">
+            <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -52,11 +52,11 @@
         <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column width="120" show-overflow-tooltip>
+      <el-table-column>
         <template #header>
           <div class="column-header" :style="{ color: dateRange ? '#409EFF' : 'inherit' }">
             Начальная дата
-            <el-popover placement="bottom-end" :width="400" :visible="popoverVisible">
+            <el-popover placement="bottom" :width="400" :visible="popoverVisible">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px" @click="popoverVisible = !popoverVisible"><el-icon>
                     <Filter />
@@ -67,13 +67,13 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_start" type="date" sortable width="120" show-overflow-tooltip />
+        <el-table-column property="date_start" type="date" sortable width="90" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column width="110" show-overflow-tooltip>
+      <el-table-column >
         <template #header>
           <div class="column-header" :style="{ color: dateRange2 ? '#409EFF' : 'inherit' }">
             Конечная дата
-            <el-popover placement="bottom-end" :width="400" :visible="popoverVisible2" >
+            <el-popover placement="bottom" :width="400" :visible="popoverVisible2" >
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px" @click="popoverVisible2 = !popoverVisible2"><el-icon>
                     <Filter />
@@ -84,13 +84,13 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_end" type="date" sortable width="110" show-overflow-tooltip />
+        <el-table-column property="date_end" type="date" sortable width="90" show-overflow-tooltip />
       </el-table-column>
       <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
         <template #header>
           <div class="column-header" :style="{ color: Graph.length > 0 ? '#409EFF' : 'inherit' }">
             График
-            <el-popover placement="bottom-end" :width="220" trigger="click">
+            <el-popover placement="bottom-end" :width="175" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -102,8 +102,7 @@
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
-              </el-select-v2>
-              <el-button :icon="Select" size="small" type="success" plain style="margin-left: 5px" />
+              </el-select-v2>            
             </el-popover>
           </div>
         </template>
@@ -117,7 +116,7 @@
         <template #header>
           <div class="column-header" :style="{ color: Status.length > 0 ? '#409EFF' : 'inherit' }">
             Статус
-            <el-popover placement="bottom-end" :width="370" trigger="click" >
+            <el-popover placement="bottom-end" :width="325" trigger="click" >
               <template #reference hide-on-click="false">
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -129,8 +128,7 @@
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
-              </el-select-v2>
-              <el-button @click="onStatusChange()" :icon="Select" size="small" type="success" plain style="margin-left: 5px" />
+              </el-select-v2>             
             </el-popover>
           </div>
         </template>
@@ -178,6 +176,7 @@ const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
   useKuIdStore().getKuRequirementDetailFromApi(kuId)
+  useKuIdStore().fetchKuRequirementBonus(kuId)
 
 
   router.push({ path: `/ku/${kuId}` });
@@ -380,12 +379,12 @@ const changeDateRange2 = (newDateRange: Date[]) => {
 
 </script>
 <style scoped>
-.column-header {
+/* .column-header {
   display: flex;
   align-items: center;
 }
 
 .column-header .el-button {
   margin-left: 5px;
-}
+} */
 </style>

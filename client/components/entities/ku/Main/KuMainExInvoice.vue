@@ -1,6 +1,7 @@
 <template>
-    <el-scrollbar height="calc(100vh - 560px)">
-        <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd">Добавить</el-button>
+    <el-scrollbar height="calc(100vh - 480px)">
+      <div>В разработке...</div> 
+        <!-- <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd">Добавить</el-button>
         <el-table :data="tableData2" border style="width: 100%; margin-top: 15px;" height="calc(100vh - 615px)" empty-text="Добавьте исключенные накладные">
             <el-table-column prop="invoice_id" label="ID" width="100" sortable show-overflow-tooltip />
             <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
@@ -35,7 +36,7 @@
         <el-button @click="AddExInvoice()">Сохранить</el-button>
       </span>
     </template>
-  </el-dialog>
+  </el-dialog> -->
     </el-scrollbar>
 </template>
 

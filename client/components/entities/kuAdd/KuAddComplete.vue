@@ -31,6 +31,8 @@ const isFormValid = () => {
   const isNewDateStartValid = !isEmpty(store.newDateStart);
   const isNewDateEndValid = !isEmpty(store.newDateEnd);
   const isVendorNameValid = !isEmpty(store.newVendorId);
+  const isNewDocu_dateValid = !isEmpty(store.newDocu_date);
+
 
   // Возвращаем результат общей проверки
   return (
@@ -38,7 +40,8 @@ const isFormValid = () => {
     isNewTypeValid &&
     isNewDateStartValid &&
     isNewDateEndValid &&
-    isVendorNameValid
+    isVendorNameValid &&
+    isNewDocu_dateValid
   );
 };
 
@@ -46,7 +49,7 @@ const isFormValid = () => {
 const addItemAndSendToBackend = async () => {
   // Проверяем валидность формы
   if (!isFormValid()) {
-    ElMessage.error('Не все поля заполнены корректно.');
+    ElMessage.error('Не все поля заполнены корректно. Заполните: Код компании, код поставщика, период, начальная дата, конечная дата, дата договора ');
     return;
   }
   // Проверяем наличие хотя бы одного условия по товарам

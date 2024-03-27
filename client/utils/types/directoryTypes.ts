@@ -1,11 +1,24 @@
 import type { ElTree } from 'element-plus'
-// юр.лица
+////////////////////////////////// юр.лица //////////////////////////////////////////
 export interface IEntity {
   entity_id: string;
   director_name: string;
   urastic_name: string;
   name: string;
   urastic_address: string;
+  merge_id: string;
+}
+export interface IEntityFull {
+  entity_id: string;
+  director_name: string;
+  urastic_name: string;
+  name: string;
+  urastic_address: string;
+  inn_kpp: string;
+  bank_name: string;
+  account: string;
+  corr_account: string;
+  bank_bink: string;
   merge_id: string;
 }
 export interface EntityStore {
@@ -29,7 +42,7 @@ export interface EntityId {
 }
 
 
-//поставщик
+///////////////////////////////////// поставщик /////////////////////////////////
 export interface IVendor {
   vendor_id: string
   name: string
@@ -37,6 +50,21 @@ export interface IVendor {
   director_name: string
   urastic_adress: string
   inn_kpp: string
+  entity_id: string
+  entity_name: string
+}
+export interface IVendorFull {
+  vendor_id: string
+  name: string
+  urastic_name: string
+  director_name: string
+  urastic_adress: string
+  inn_kpp: string
+  account: string
+  bank_name: string
+  bank_bik: string
+  corr_account: string
+  dir_party: number | null
   entity_id: string
   entity_name: string
 }
@@ -96,7 +124,7 @@ export interface GetAllVendorsForEntityInVendorReturnData extends Pagination {
 }
 
 
-//накладные
+////////////////////////////// накладные /////////////////////////////////////
 export interface IInvoice {
   invoice_id: number | null;
   entity_id: string;
@@ -135,7 +163,7 @@ export interface GetAllInvoicesReturnData extends Pagination {
   results: IInvoice[];
 }
 
-// КУ
+////////////////////////////////////// КУ ///////////////////////////////////////
 export interface IKuList {
   ku_id: string;
   entity_id: string;
@@ -163,7 +191,10 @@ export interface IKuList {
 }
 export interface IKuId {
   ku_id: string;
+
 }
+
+
 export interface IKuPost {
   // entity_key: string;
   // vendor_key: string;
@@ -428,7 +459,7 @@ export interface GetAllKusReturnData extends Pagination {
 export interface GetAllKu_IdReturnData extends Pagination {
   results: IKuId[];
 }
-
+////////////////////////////////////// Вкладки КУ ///////////////////////////////////
 //Условия
 export interface IIncludedRequirement {
   item_type: string;
@@ -469,6 +500,15 @@ export interface IPercentPost {
   percent_sum: number | null;
   ku_key_id: string;
 }
+export interface GetParamPercent {
+  ku_id?: string;
+  page_size?: number;
+  page?: number;
+}
+export interface GetPersentReturnData extends Pagination {
+  results: IPercent[];
+}
+
 
 //искл. накладные
 export interface IExInvoiceForKu {
@@ -497,6 +537,7 @@ export interface GetAllInvoicesForKu {
 export interface GetAllInvoicesForKuReturnData extends Pagination {
   results: IExInvoiceForKu[];
 }
+
 //кат. менеджеры
 export interface IManagerForKu {
   group: string;
@@ -508,6 +549,16 @@ export interface IManagerForKuPost {
   group: string;
   discription: string;
 }
+
+//должностные лица
+export interface IOfficialForKu {
+  counterparty_name: string;
+  counterparty_post: string;
+  counterparty_docu: string;
+  entity_name: string;
+  entity_post: string;
+  entity_docu: string;
+}
 export interface IOfficialForKuPost {
   ku_id: string
   counterparty_name: string;
@@ -517,7 +568,8 @@ export interface IOfficialForKuPost {
   entity_post: string;
   entity_docu: string;
 }
-// График
+
+///////////////////////////////// График////////////////////////////////////
 export interface IGraphic {
   graph_id: number | null;
   ku_id: string;
@@ -535,7 +587,6 @@ export interface IGraphic {
   sum_approved: number | null;
   status: string
 }
-
 export interface IGraphicStore {
   //селекты для множественного выбора
   multipleSelectionGraphic: IGraphic[];
@@ -557,13 +608,15 @@ export interface IGraphicStore {
   editApproved: number | null;
   selectedRowEditApproved: IGraphic;
   //
-  legalEntity2: string[]
+  legalEntity: string[]
   //параметры для фильтров при запросах
   KuParams: string[]
   filterGraphicValue: GetAllGraphic
 }
 export interface IGraphicInfo {
   graph_id: number | null;
+  entity_id: string;
+  entity_name: string;
   ku_id: string;
   vendor_id: string;
   vendor_name: string;
@@ -583,14 +636,46 @@ export interface IGraphicId {
 export interface GetAllGraphic {
   page_size?: number;
   page?: number;
-  entity_ids?: string[];
   ku_id?: string[];
+  entity_id?: string[];
+  vendor_id?: string[];
+  status?: string[];
+  period?: string[]
+  date_start_s?: string,
+  date_start_e?: string,
+  date_end_s?: string,
+  date_end_e?: string,
+  date_calc_s?: string,
+  date_calc_e?: string,
   search?: string;
+  sort_by?: string;
+  sort_order?: string;
 }
 export interface GetAllGraphicsReturnData extends Pagination {
   results: IGraphic[];
 }
 
+
+//////////////////////////////// Акты ///////////////////////////////////////
+export interface ReportStore {
+  dialogFormReportInvoice: boolean
+  dialogFormReportProduct: boolean
+  dialogFormReportActInvoice: boolean
+  pagination: Pagination | null;
+  countRowTable: number;
+  graphic: IGraphicInfo[]
+  invoices: GraphicForExcelReportInvoice[]
+  products: GraphicForExcelReportProduct[]
+  kuid: string
+  vendorid: string
+  entityid: string
+  vendor: IVendorFull
+  entity: IEntityFull
+  official: IOfficialForKu[]
+  getGraphicDone: boolean
+  printReportToggle: boolean
+  filterValueInvoice: GetAllInvoicesAndProductForGraphic
+}
 export interface GraphicForExcelReportInvoice {
   invoice_number: string;
   invoice_date: Date | string;
@@ -606,8 +691,6 @@ export interface GraphicForExcelReportProduct {
   product_name: string;
   category_name: string;
   producer_name: string;
-
-
 }
 export interface GetAllInvoicesAndProductForGraphic {
   page_size?: number;
@@ -620,21 +703,8 @@ export interface GetAllInvoicesForGraphicReturnData extends Pagination {
 export interface GetAllProductsForGraphicReturnData extends Pagination {
   results: GraphicForExcelReportProduct[];
 }
-export interface ReportStore {
-  dialogFormReportInvoice: boolean
-  dialogFormReportProduct: boolean
-  dialogFormReportActInvoice: boolean
-  pagination: Pagination | null;
-  countRowTable: number;
-  graphic: IGraphicInfo[]
-  invoices: GraphicForExcelReportInvoice[]
-  products: GraphicForExcelReportProduct[]
-  getGraphicDone: boolean
-  printReportToggle: boolean
-  filterValueInvoice: GetAllInvoicesAndProductForGraphic
-}
 
-// Товары
+////////////////////////////////////// Товары /////////////////////////////////
 export interface IProduct {
   itemid: string;
   classifier_name: string;
@@ -661,7 +731,7 @@ export interface GetAllProductsReturnData extends Pagination {
   results: IProduct[];
 }
 
-// Профиль
+//////////////////////////////////////// Профиль //////////////////////////////
 export interface IProfile {
   id: number;
   last_name: string;
@@ -672,7 +742,7 @@ export interface IProfile {
 
 
 
-// Производитель
+///////////////////////////////////// Производитель /////////////////////////////
 export interface IProducer {
   producer_name: string;
 }
@@ -687,7 +757,7 @@ export interface GetAllProducersReturnData extends Pagination {
   results: IProducer[];
 }
 
-//Бренд
+//////////////////////////////////////// Бренд ///////////////////////////////////
 export interface IBrand {
   brand_name: string;
 }
@@ -702,7 +772,7 @@ export interface GetAllBrandsReturnData extends Pagination {
   results: IBrand[];
 }
 
-//дерево категорий
+////////////////////////////////////////////дерево категорий ////////////////////////////////////
 export interface ITree {
   name: string;
   classifier_code: number; // Лучше использовать string, если коды могут содержать не только числа
@@ -715,7 +785,7 @@ export interface GetAllCategory {
   vendor_id?: string;
 }
 
-//общие
+////////////////////////////////////////////// общие ////////////////////////////////////////////////
 export interface Pagination {
   count: number;
   next: string | null;

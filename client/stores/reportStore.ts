@@ -1,4 +1,4 @@
-import type { GetAllInvoicesAndProductForGraphic, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, ReportStore } from "~/utils/types/directoryTypes";
+import type { GetAllInvoicesAndProductForGraphic, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, IVendorFull, ReportStore } from "~/utils/types/directoryTypes";
 
 export const useReportStore = defineStore("ReportStore", {
   state: (): ReportStore => ({
@@ -10,6 +10,39 @@ export const useReportStore = defineStore("ReportStore", {
     graphic: [],
     invoices: [],
     products: [],
+    kuid: "",
+    vendorid: "",
+    entityid: "",
+    vendor: 
+    {
+      vendor_id: "",
+      name: "",
+      urastic_name: "",
+      director_name: "",
+      urastic_adress: "",
+      inn_kpp: "",
+      account: "",
+      bank_name: "",
+      bank_bik: "",
+      corr_account: "",
+      dir_party: null,
+      entity_id: "",
+      entity_name: "",
+    },
+    entity: {
+      entity_id: "",
+      name: "",
+      urastic_name: "",
+      director_name: "",
+      urastic_address: "",
+      inn_kpp: "",
+      account: "",
+      bank_name: "",
+      bank_bink: "",
+      corr_account: "",
+      merge_id: "",
+    },
+    official: [],
     getGraphicDone: true,
     printReportToggle: false,
     filterValueInvoice: {}
@@ -28,23 +61,64 @@ export const useReportStore = defineStore("ReportStore", {
           graph_id: grapId,
         });
         this.$state.graphic = [results];
+        this.$state.kuid = results.ku_id;
+        this.$state.vendorid = results.vendor_id;
+        this.$state.entityid = results.entity_id;
         console.log("успешно получили данные график_айди", results);
         console.log("добавили данные в graphic[] ", this.$state.graphic);
+        console.log("номер ку графика, поставщик, юр.лицо ", this.$state.kuid, ",", this.$state.vendorid, ",", this.$state.entityid);
       } catch (error) {
         console.error("Ошибка при получении данных график_айди:", error);
       }
     },
 
-    async getKuDetailFromApi(grapId: number | null) {
+    async getKuOfficialDetailFromApi(kuId: string) {
       try {
-        const results = await GRAPHIC.getInfoGraphic({
-          graph_id: grapId,
+        const results = await KU.getKuOfficial({
+          ku_id: kuId,
         });
-        this.$state.ku = [results];
-        console.log("успешно получили данные график_айди", results);
-        console.log("добавили данные в graphic[] ", this.$state.graphic);
+        this.$state.official = results;
+        console.log("успешно получили данные должн лиц", results);
+        console.log("добавили данные в official ", this.$state.official);
       } catch (error) {
         console.error("Ошибка при получении данных график_айди:", error);
+      }
+    },
+    // async getVendorDetailFromApi(vendorId: string) {
+    //   try {
+    //     const results = await VENDOR.getVendorDetail({
+    //       vendor_id: vendorId,
+    //     });
+    //     this.$state.vendor = results;
+    //     console.log("успешно получили данные вендорафулл", results);
+    //     console.log("добавили данные в vendor ", this.$state.vendor);
+    //   } catch (error) {
+    //     console.error("Ошибка при получении данных вендорафулл:", error);
+    //   }
+    // },
+    async getVendorDetailFromApi(vendorId: string) {
+      try {
+        const result = await VENDOR.getVendorDetail({
+          vendor_id: vendorId,
+        });
+        // Учитывая, что результат находится в свойстве results массива
+        this.$state.vendor = result;
+        console.log("успешно получили данные вендорафулл", result);
+        console.log("добавили данные в vendor ", this.$state.vendor);
+      } catch (error) {
+        console.error("Ошибка при получении данных вендорафулл:", error);
+      }
+    },
+    async getEntityDetailFromApi(entityId: string) {
+      try {
+        const results = await ENTITY.getEntityDetail({
+          entity_id: entityId,
+        });
+        this.$state.entity = results;
+        console.log("успешно получили данные энтитифулл", results);
+        console.log("добавили данные в entity ", this.$state.entity);
+      } catch (error) {
+        console.error("Ошибка при получении данных энтитифулл:", error);
       }
     },
 

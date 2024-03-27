@@ -20,8 +20,19 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
 }
 </script>
 <style>
+.el-divider__text {
+    font-size: 13px;
+}
+
 .demo-tabs>.el-tabs__content {
     padding: 10px;
     color: #3b3c3f;
+    
+}
+.el-tabs--border-card {
+    height: calc(100vh - 140px);
+}
+.el-tabs--border-card>.el-tabs__content {
+    padding: 0 10px 10px 10px !important;
 }
 </style>

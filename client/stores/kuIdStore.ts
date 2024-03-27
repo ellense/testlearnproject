@@ -4,7 +4,8 @@ import dayjs from "dayjs";
 import type {
     IProduct,
     IKuIdStore,
-    GetAllVendorsForEntity
+    GetAllVendorsForEntity,
+    IKuId
 } from "~/utils/types/directoryTypes";
 
 export const useKuIdStore = defineStore("KuIdStore", {
@@ -74,7 +75,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         disableButtons: false,
         //пагинация в таблицах
         pagination: null,
-        countRowTable: 20,
+        countRowTable: 100,
         //
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
@@ -161,6 +162,38 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 console.error("Ошибка при получении данных условий:", error);
             }
         },
+        // async fetchKuRequirementBonus(kuId: string) {
+        //     console.log('Выполняется запрос на получение данных...');
+        //     try {
+        //       const response = await KU.getKuRequirementBonus({ku_id: kuId});
+        //       console.log('условия бонуса:', response.results);
+        //       // После успешного получения данных из API, вы можете сохранить их в tableDataPercent
+        //       this.tableDataPercent = response.results;
+        //       console.log('tableDataPercent:', this.tableDataPercent);
+        //     } catch (error) {
+        //       console.error('Ошибка при получении данных:', error);
+        //       // Обработка ошибки при получении данных
+        //     }
+        //   },
+          async fetchKuRequirementBonus(ku_id?: string, page?: number,) {
+            await KU.getKuRequirementBonus({ ku_id,page_size: this.$state.countRowTable,
+                page,
+            })
+              .then((tableData) => {
+                console.log('Получены данные бонуса:', tableData);
+                this.$state.tableDataPercent = tableData.results;
+                console.log('tableDataPercent:', this.$state.tableDataPercent);
+                this.$state.pagination = {
+                    count: tableData.count,
+                    previous: tableData.previous,
+                    next: tableData.next,
+                  };
+              })
+              .catch((error) => {
+                console.error('Ошибка при получении данных бонуса:', error);
+                return Promise.reject(error);
+              });
+          },
         // async getKuRequirementDetailFromApi(kuId: string) {
         //     try {
         //         const results = await KU.getInfoRequirements({
@@ -186,7 +219,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.tableDataInRequirement.length = 0;
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
-
             // Сбрасываем флаги видимости диалоговых окон
             this.dialogFormExInvoiceVisible = false;
             this.dialogFormProductInVisible = false;

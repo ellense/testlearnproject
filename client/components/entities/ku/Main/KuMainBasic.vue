@@ -1,13 +1,13 @@
 <template>
-  <el-scrollbar height="calc(100vh - 560px)">
+  <el-scrollbar height="calc(100vh - 480px)">
     <form>
       <div class="kuAddMain">
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
           <el-form-item label-width="130" label="Код компании">
             <!-- <el-text class="kuAddLabel">Код компании</el-text> -->
-            <el-select v-model="store.kuIdEntityId" size="small" placeholder="Выберите код компании" clearable filterable
-              style="width: 300px" @change="onEntityChange">
+            <el-select v-model="store.kuIdEntityId" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" @change="onEntityChange">
               <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="
@@ -25,17 +25,18 @@
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
-            <el-input  v-model="store.kuIdDescription" size="small" placeholder="Введите описание" style="width: 300px">
+            <el-input v-model="store.kuIdDescription" size="small" placeholder="Введите описание" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
             <div>
-              <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2" :disabled="!store.kuIdEntityId"
-               style="width: 300px" :title="disableSelectVendorTooltip" placeholder="Выберите код компании" @change="onVendorChange" >
-              <template #default="{ item }" class="selectVendorInKuAdd">
-                <span style="margin-right: 8px">{{ item.label }}</span>
-              </template>
-            </el-select-v2>
+              <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2"
+                :disabled="!store.kuIdEntityId" style="width: 300px" :title="disableSelectVendorTooltip"
+                placeholder="Выберите код компании" @change="onVendorChange">
+                <template #default="{ item }" class="selectVendorInKuAdd">
+                  <span style="margin-right: 8px">{{ item.label }}</span>
+                </template>
+              </el-select-v2>
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Статус премии">
@@ -47,7 +48,8 @@
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Тип товаров">
-            <el-select v-model="store.kuIdProduct_type" size="small" clearable placeholder="Выберите тип товаров" style="width: 300px">
+            <el-select v-model="store.kuIdProduct_type" size="small" clearable placeholder="Выберите тип товаров"
+              style="width: 300px">
               <el-option label="Продовольственные" value="Продовольственные"></el-option>
               <el-option label="Непродовольственные" value="Непродовольственные"></el-option>
             </el-select>
@@ -67,13 +69,12 @@
           <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
             label-width="170" label="Начальная дата">
             <el-date-picker v-model="store.kuIdDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-               clearable el-rowrable placeholder="Выберите начальную дату"
-              @change="validateDateStart"></el-date-picker>
+              clearable el-rowrable placeholder="Выберите начальную дату" @change="validateDateStart"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
             label="Конечная дата">
             <el-date-picker v-model="store.kuIdDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY"  clearable
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY" clearable
               @change="validateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
@@ -82,22 +83,25 @@
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Номер счета">
-            <el-input v-model="store.kuIdDocu_account" size="small" placeholder="Введите номер счета" style="width: 300px">
+            <el-input v-model="store.kuIdDocu_account" size="small" placeholder="Введите номер счета"
+              style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Название договора">
-            <el-select v-model="store.kuIdDocu_name" size="small" clearable placeholder="Выберите название договора" style="width: 300px">
+            <el-select v-model="store.kuIdDocu_name" size="small" clearable placeholder="Выберите название договора"
+              style="width: 300px">
               <el-option label="Договор премий" value="Договор премий"></el-option>
               <el-option label="Договор услуг" value="Договор услуг"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Номер договора">
-            <el-input v-model="store.kuIdDocu_number" size="small" placeholder="Введите номер договора" style="width: 300px">
+            <el-input v-model="store.kuIdDocu_number" size="small" placeholder="Введите номер договора"
+              style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Дата договора">
-            <el-date-picker v-model="store.kuIdDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY" clearable
-               placeholder="Выберите дату договора"></el-date-picker>
+            <el-date-picker v-model="store.kuIdDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
+              clearable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
             <el-input v-model="store.kuIdDocu_subject" style="width: 300px" :rows="4" size="small" type="textarea"
@@ -116,13 +120,15 @@
             <el-checkbox v-model="store.kuIdNegative_turnover" label="Отрицательный товарооборот" size="small" />
           </el-form-item>
           <el-form-item label-width="170" label="Тип коммерческого условия">
-            <el-select v-model="store.kuIdKu_type" size="small" clearable placeholder="Выберите тип КУ" style="width: 300px">
+            <el-select v-model="store.kuIdKu_type" size="small" clearable placeholder="Выберите тип КУ"
+              style="width: 300px">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
               <el-option label="Услуга" value="Услуга"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Способ оплаты премии">
-            <el-select v-model="store.kuIdPay_method" size="small" clearable placeholder="Выберите способ оплаты" style="width: 300px">
+            <el-select v-model="store.kuIdPay_method" size="small" clearable placeholder="Выберите способ оплаты"
+              style="width: 300px">
               <el-option label="Оплата" value="Оплата"></el-option>
               <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
             </el-select>
@@ -141,9 +147,7 @@ import { useKuIdStore } from "~~/stores/kuIdStore";
 
 import type {
   IEntityIdAndName,
-  ITree,
   IVendorId,
-  IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 const store = useKuIdStore();
 const store2 = useKuAddStore();
@@ -174,7 +178,7 @@ onMounted(async () => {
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
 watch(() => store2.dataVendorId, (vendors: IVendorId[]) => {
-    options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+  options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
 });
 
 const onEntityChange = async () => {
@@ -187,14 +191,17 @@ const onEntityChange = async () => {
     }
   }
   //для поставщика
-    store2.dataVendorId = [];
-    store2.setFilterValue6('entity_id', store.kuIdEntityId);
-    if (store.kuIdEntityId) { // Проверка, что выбрана торговая маркка
-        useKuAddStore().fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
-        console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
-    } else {
-        useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-    }
+  store2.dataVendorId = [];
+  store.kuIdVendorName = "";
+  store2.setFilterValue6('entity_id', store.kuIdEntityId);
+  if (store.kuIdEntityId) { // Проверка, что выбрана торговая маркка
+    useKuAddStore().fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
+    console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
+  } else {
+    useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
+    useKuAddStore().removeFilterExInvoice("vendor_id")
+    useKuAddStore().tableDataExInvoiceAll.length = 0
+  }
 };
 
 const onVendorChange = async () => {
@@ -202,33 +209,28 @@ const onVendorChange = async () => {
   if (store.kuIdVendorId && store.kuIdVendorId.length > 0) {
     store2.setFilterValue6('vendor_id', store.kuIdVendorId);
     store2.getVendorNameFromAPIWithFilter()
-  }
+
     try {
-        console.log("поставщик:", store.kuIdVendorId);
-        store2.setFilterValue3('vendor_id', store.kuIdVendorId);
-        store2.setFilterValue4('vendor_id', store.kuIdVendorId);
-        store2.setFilterValue5('vendor_id', store.kuIdVendorId);
-        // store2.setFilterCategory('vendor_id', store.kuIdVendorId);
-        // await store2.fetchData();
-  //       try {
-  //   console.log("Before API call");
-  //   await store2.fetchData();
-  //   console.log("After API call");
-  // } catch (error) {
-  //   console.error("Ошибка при загрузке данных", error);
-  // }
-        await store2.getProductFromIncludedWithFilter();
-        await store2.fetchAllProducersForInclided();
-        await store2.fetchAllBrandsForIncluded();
-        // store2.setFilterValue8('vendor_id', store.kuIdVendorId);
-        // store2.setFilterValue7('vendor_id', store.kuIdVendorId);
-        store2.setFilterValue9('vendor_id', store.kuIdVendorId);
-        await store2.getProductFromExcludedWithFilter();
-        // await store2.fetchAllProducersForExcluded();
-        // await store2.fetchAllBrandsForExcluded();
+      console.log("поставщик:", store.kuIdVendorId);
+      store2.setFilterProductInRequirement('vendor_id', store.kuIdVendorId);
+      store2.setFilterProducer('vendor_id', store.kuIdVendorId);
+      store2.setFilterBrand('vendor_id', store.kuIdVendorId);
+      store2.setFilterExInvoice('vendor_id', store.kuIdVendorId);
+      store2.setFilterCategory('vendor_id', store.kuIdVendorId);
+      store2.setFilterExInvoice('vendor_id', store.kuIdVendorId);
+      await store2.fetchCategories();
+      await store2.getProductFromIncludedWithFilter();
+      await store2.fetchAllProducersForInclided();
+      await store2.fetchAllBrandsForIncluded();
+      await store2.getProductFromExcludedWithFilter();
+      await store2.getInvoicesFromAPIWithFilter();
     } catch (error) {
-        console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+      console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
     }
+  } else {
+    useKuAddStore().removeFilterExInvoice("vendor_id")
+    useKuAddStore().tableDataExInvoiceAll.length = 0
+  }
 };
 
 // const options2 = ref<Array<{ label: string; value: string }>>([]);
@@ -304,8 +306,6 @@ const dateStartValidation = ref<"error" | "success" | "validating" | undefined>(
 const dateStartError = ref<string | undefined>('');
 const dateEndValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const dateEndError = ref<string | undefined>('');
-const percentValidation = ref<"error" | "success" | "validating" | undefined>('success');
-const percentError = ref<string | undefined>('');
 
 // Периоды и их соответствующие минимальные разницы в днях
 const periods: Record<string, number> = {

@@ -28,6 +28,8 @@ const editApproved = async () => {
         graph_id: selectedRows.graph_id,
         ku_id: selectedRows.ku_id,
         status: selectedRows.status,
+        entity_id: selectedRows.entity_id,
+        entity_name: selectedRows.entity_name,
         vendor_name: selectedRows.vendor_name,
         vendor_id: selectedRows.vendor_id,
         period: selectedRows.period,

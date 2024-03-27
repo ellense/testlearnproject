@@ -82,6 +82,7 @@ export const useKuStore = defineStore("KuStore", {
         .then((tableData) => {
           console.log('Получены данные ку:', tableData);
           this.$state.tableData = tableData.results;
+          console.log('tableData:', this.$state.tableData);
           this.$state.pagination = {
             count: tableData.count,
             previous: tableData.previous,

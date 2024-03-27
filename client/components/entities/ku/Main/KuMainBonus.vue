@@ -1,7 +1,7 @@
 <template>
-  <el-scrollbar height="calc(100vh - 560px)">
+  <el-scrollbar height="calc(100vh - 480px)">
     <el-button size="small" round @click="addRow" class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 615px)" empty-text="Добавьте условия">
+    <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 555px)" empty-text="Добавьте условия бонуса">
       <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
         <template #default="{ row }">
           <el-checkbox v-model="row.fix" @change="onFixChange(row)"></el-checkbox>
@@ -9,12 +9,12 @@
       </el-table-column>
       <el-table-column prop="criterion" label="Критерий в руб." width="200">
         <template #default="{ row }">
-          <el-input v-model="row.criterion" @change="onCriteriaChange(row)"></el-input>
+          <el-input v-model="row.criterion" @change="onCriteriaChange(row)" clearable size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column prop="percent_sum" label="Процент/Сумма за период" width="200">
         <template #default="{ row }">
-          <el-input v-model="row.percent_sum" style="border: none !important" @change="onPercentSummaChange(row)"></el-input>
+          <el-input v-model="row.percent_sum" style="border: none !important" @change="onPercentSummaChange(row)" clearable size="small"></el-input>
         </template>
       </el-table-column>
       <el-table-column fixed="right" label="Операция">
@@ -31,7 +31,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import type { IPercent } from '~/utils/types/directoryTypes';
-import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 const store = useKuIdStore();
 

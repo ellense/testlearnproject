@@ -50,44 +50,44 @@ watch(searchQuery, (newValue: string) => {
   useGraphicStore().performSearchGraphic(newValue);
 });
 
-//для фильтрации 
-const { filterGraphicValue, legalEntity2, KuParams } = storeToRefs(useGraphicStore())
-const triggerFilter = ref<boolean>(true);
-const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
+// //для фильтрации 
+// const { filterGraphicValue, legalEntity, KuParams } = storeToRefs(useGraphicStore())
+// const triggerFilter = ref<boolean>(true);
+// const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
-//для фильтрации по юр лицам
-const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_ids || []);
-const LegalEntityList = ref<string[]>(legalEntity2.value);
+// //для фильтрации по юр лицам
+// const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
+// const LegalEntityList = ref<string[]>(legalEntity.value);
 
-const changeLegalEntity = () => {
-  useGraphicStore().pagination = null;
-  useGraphicStore().setFilterValue2('entity_ids', LegalEntity.value);
-  console.log('shopLegalEntity.value:', LegalEntity.value);
+// const changeLegalEntity = () => {
+//   useGraphicStore().pagination = null;
+//   useGraphicStore().setFilterValue('entity_id', LegalEntity.value);
+//   console.log('shopLegalEntity.value:', LegalEntity.value);
 
-  toggleTriggerFilter();
-};
+//   toggleTriggerFilter();
+// };
 
-watch(legalEntity2, (value) => {
-  LegalEntityList.value = value;
-});
+// watch(legalEntity, (value) => {
+//   LegalEntityList.value = value;
+// });
 
-//для фильтрации по ку
-const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
-const KuList = ref<string[]>(KuParams.value);
+// //для фильтрации по ку
+// const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
+// const KuList = ref<string[]>(KuParams.value);
 
-const changeKu = () => {
-  useGraphicStore().pagination = null;
-  useGraphicStore().setFilterValue2('ku_id', Ku.value);
-  toggleTriggerFilter();
-};
+// const changeKu = () => {
+//   useGraphicStore().pagination = null;
+//   useGraphicStore().setFilterValue('ku_id', Ku.value);
+//   toggleTriggerFilter();
+// };
 
-watch(KuParams, (value) => {
-  KuList.value = value;
-});
-//для фильтрации
-watch(triggerFilter, () => {
-  useGraphicStore().getGraphicsFromAPIWithFilter();
-});
+// watch(KuParams, (value) => {
+//   KuList.value = value;
+// });
+// //для фильтрации
+// watch(triggerFilter, () => {
+//   useGraphicStore().getGraphicsFromAPIWithFilter();
+// });
 
 onMounted(() => {
   useGraphicStore().getLegalEntityFilterForGraphicFromApi();
@@ -113,12 +113,7 @@ const createReportProduct = async () => {
   useReportStore().fetchAllProducts(selectedRows[0])
 
 }
-const createReportActInvoice = async () => {
-  useReportStore().dialogFormReportActInvoice = true
-  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
-  console.log("selectedRows[0]:", selectedRows[0])
 
-}
 
 //утверждение графика
 const ApproveGraphic = async () => {
@@ -128,6 +123,8 @@ const ApproveGraphic = async () => {
     graph_id: selectedRows[0].graph_id,
     ku_id: selectedRows[0].ku_id,
     status: "Утверждено",
+    entity_id: selectedRows[0].entity_id,
+    entity_name: selectedRows[0].entity_name,
     vendor_name: selectedRows[0].vendor_name,
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
@@ -193,108 +190,73 @@ function loadFile(url: string, callback: (error: any, content: any) => void) {
   PizZipUtils.getBinaryContent(url, callback);
 }
 
-// const renderDoc = () => {
-//   const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
-//   console.log("selectedRows[0]:", selectedRows[0])
-//   useReportStore().getGraphicDetailFromApi(selectedRows[0])
-//   loadFile("/templates/templateOfAct.docx", (error, content) => {
-//     if (error) {
-//       throw error;
-//     }
-//     const zip = new PizZip(content);
-//     const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-//     const graphic = useReportStore().graphic[0];
-//     if (graphic) {
-//       doc.render({
-//         vendor_name: useReportStore().graphic[0].vendor_name,
-//         counterparty_post: "директора",
-//         counterparty_name: "Силюк В.Р.",
-//         counterparty_docu: "документа",
-//         entity_name: "ООО группа",
-//         entity_post: "директора",
-//         entity_fio: "Сараевой Е.П.",
-//         entity_docu: "устава",
-//         date_start: useReportStore().graphic[0].date_start,
-//         date_end: useReportStore().graphic[0].date_end,
-//         sum_calc: useReportStore().graphic[0].sum_calc,
-//         percent: useReportStore().graphic[0].percent,
-//         sum_bonus: useReportStore().graphic[0].sum_bonus,
-//         inn_kpp: "734736756",
-//         urastic_adress: "москва",
-//         account: "877976",
-//         bank_name: "сбербанк",
-//         bank_bik: "сбербанк",
-//         corr_account: "у75464558",
-//         inn_kpp2: "6546758",
-//         urastic_adress2: "Томск",
-//         account2: "5685685",
-//         bank_name2: "ВТБ",
-//         bank_bik2: "5845",
-//         corr_account2: "56365865",
-//       });
-//     } else {
-//       console.error("Ошибка: данные не загружены");
-//     }
 
-//     const out = doc.getZip().generate({
-//       type: "blob",
-//       mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-//     });
-//     saveAs(out, "Акт предоставления вознаграждения.docx");
-//   });
-// };
 const renderDoc = async () => {
   try {
     const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
     console.log("selectedRows[0]:", selectedRows[0])
     await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
-
+    // await useReportStore().getKuOfficialDetailFromApi(useReportStore().kuid)
+    await useReportStore().getVendorDetailFromApi(useReportStore().vendorid)
+    await useReportStore().getEntityDetailFromApi(useReportStore().entityid)
+    console.log("inn_kpp", useReportStore().vendor.inn_kpp,)
+    console.log("urastic_adress2", useReportStore().entity.urastic_address,)
+    console.log("bank_bik2", useReportStore().entity.bank_bink,)
     const graphic = useReportStore().graphic[0];
     if (!graphic) {
       console.error("Ошибка: данные не загружены");
       return;
     }
+    if (useReportStore().vendor && useReportStore().entity) {
+      console.log("inn_kpp", useReportStore().vendor.inn_kpp);
+      console.log("urastic_adress2", useReportStore().entity.urastic_address);
+      console.log("bank_bik2", useReportStore().entity.bank_bink);
+      loadFile("/templates/templateOfAct.docx", async (error, content) => {
+        if (error) {
+          throw error;
+        }
+        const zip = new PizZip(content);
+        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+        doc.render({
+          vendor_name: useReportStore().graphic[0].vendor_name,
+          counterparty_post: "директора", //useReportStore().official[0].counterparty_post
+          counterparty_name: "Силюк В.Р.",//useReportStore().official[0].counterparty_name
+          counterparty_docu: "документа",//useReportStore().official[0].counterparty_docu
+          entity_name: useReportStore().graphic[0].entity_name,
+          entity_post: "директора",//useReportStore().official[0].entity_post
+          entity_fio: "Сараевой Е.П.",//useReportStore().official[0].entity_fio
+          entity_docu: "устава",//useReportStore().official[0].entity_docu
 
-    loadFile("/templates/templateOfAct.docx", async (error, content) => {
-      if (error) {
-        throw error;
-      }
-      const zip = new PizZip(content);
-      const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-      doc.render({
-        vendor_name: useReportStore().graphic[0].vendor_name,
-        counterparty_post: "директора",
-        counterparty_name: "Силюк В.Р.",
-        counterparty_docu: "документа",
-        entity_name: "ООО группа",
-        entity_post: "директора",
-        entity_fio: "Сараевой Е.П.",
-        entity_docu: "устава",
-        date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
-        date_end:  dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
-        sum_calc: useReportStore().graphic[0].sum_calc,
-        percent: useReportStore().graphic[0].percent,
-        sum_bonus: useReportStore().graphic[0].sum_bonus,
-        inn_kpp: "734736756",
-        urastic_adress: "москва",
-        account: "877976",
-        bank_name: "сбербанк",
-        bank_bik: "сбербанк",
-        corr_account: "у75464558",
-        inn_kpp2: "6546758",
-        urastic_adress2: "Томск",
-        account2: "5685685",
-        bank_name2: "ВТБ",
-        bank_bik2: "5845",
-        corr_account2: "56365865",
-      });
+          date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
+          date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
+          sum_calc: useReportStore().graphic[0].sum_calc,
+          percent: useReportStore().graphic[0].percent,
+          sum_bonus: useReportStore().graphic[0].sum_bonus,
 
-      const out = doc.getZip().generate({
-        type: "blob",
-        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          inn_kpp: useReportStore().vendor.inn_kpp,
+          urastic_adress: useReportStore().vendor.urastic_adress,
+          account: useReportStore().vendor.account,
+          bank_name: useReportStore().vendor.bank_name,
+          bank_bik: useReportStore().vendor.bank_bik,
+          corr_account: useReportStore().vendor.corr_account,
+
+          inn_kpp2: useReportStore().entity.inn_kpp,
+          urastic_adress2: useReportStore().entity.urastic_address,
+          account2: useReportStore().entity.account,
+          bank_name2: useReportStore().entity.bank_name,
+          bank_bik2: useReportStore().entity.bank_bink,
+          corr_account2: useReportStore().entity.corr_account,
+        });
+
+        const out = doc.getZip().generate({
+          type: "blob",
+          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        });
+        saveAs(out, "Акт предоставления вознаграждения.docx");
       });
-      saveAs(out, "Акт предоставления вознаграждения.docx");
-    });
+    } else {
+      console.log("Данные вендора или энтити ещё не загружены");
+    }
   } catch (error) {
     console.error("Произошла ошибка:", error);
   }

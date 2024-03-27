@@ -1,14 +1,12 @@
 <template>
-  <el-scrollbar height="calc(100vh - 120px) !important">
     <EntitiesKuMain />
 
     <div class="button_bottom">
-      <el-button @click="addClose()">Отменить</el-button>
-      <el-button type="primary" @click="changeKuToBackend()" :loading="loading" :disabled="isEditButtonDisabled"
+      <el-button @click="addClose()" size="small">Отменить</el-button>
+      <el-button type="primary" @click="changeKuToBackend()" :loading="loading" size="small" :disabled="isEditButtonDisabled"
                 :title="disableButtonEditTooltip">Изменить</el-button>
     </div>
 
-  </el-scrollbar>
 </template>
 
 <script lang="ts" setup>
@@ -35,6 +33,7 @@ const isFormValid = () => {
   const isNewDateStartValid = !isEmpty(store.kuIdDateStart);
   const isNewDateEndValid = !isEmpty(store.kuIdDateEnd);
   const isVendorNameValid = !isEmpty(store.kuIdVendorId);
+  const isNewDocu_dateValid = !isEmpty(store.kuIdDocu_date);
 
   // Возвращаем результат общей проверки
   return (
@@ -42,7 +41,8 @@ const isFormValid = () => {
     isNewTypeValid &&
     isNewDateStartValid &&
     isNewDateEndValid &&
-    isVendorNameValid
+    isVendorNameValid &&
+    isNewDocu_dateValid
   );
 };
 
@@ -148,10 +148,11 @@ const changeKuToBackend = async () => {
 </script>
 
 <style scoped>
-/* .el-scrollbar__view{
-height: 100%;
-} */
-
+.button_bottom {
+  margin: 20px 10px 0 0;
+  display: flex;
+  justify-content: flex-start;
+}
 
 .loading-cursor {
   cursor: wait;
