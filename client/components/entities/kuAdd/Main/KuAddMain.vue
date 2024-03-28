@@ -1,5 +1,5 @@
 <template>
-    <el-tabs v-model="activeName" type="border-card" style="margin-right: 10px;">
+    <el-tabs v-model="activeName" type="border-card" style="margin-right: 10px; height: 85vh;">
         <!-- <vue-resizable  minHeight=300 maxHeight=1500 active="[ 'b']" style="border-bottom: 1px solid var(--el-border-color); height: calc(100vh - 560px);"> -->
         <el-tab-pane label="Основное" name="first"><EntitiesKuAddMainBasic/></el-tab-pane>
         <el-tab-pane label="Условия бонуса" name="second"><EntitiesKuAddMainBonus/></el-tab-pane>

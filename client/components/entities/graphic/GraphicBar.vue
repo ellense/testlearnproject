@@ -196,6 +196,8 @@ const renderDoc = async () => {
     const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
     console.log("selectedRows[0]:", selectedRows[0])
     await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
+    console.log("useReportStore().graphic[0].ku_id", useReportStore().graphic[0].ku_id)
+    await useReportStore().getKuOfficialDetailFromApi(useReportStore().graphic[0].ku_id)
     // await useReportStore().getKuOfficialDetailFromApi(useReportStore().kuid)
     await useReportStore().getVendorDetailFromApi(useReportStore().vendorid)
     await useReportStore().getEntityDetailFromApi(useReportStore().entityid)
@@ -218,14 +220,14 @@ const renderDoc = async () => {
         const zip = new PizZip(content);
         const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
         doc.render({
-          vendor_name: useReportStore().graphic[0].vendor_name,
-          counterparty_post: "директора", //useReportStore().official[0].counterparty_post
-          counterparty_name: "Силюк В.Р.",//useReportStore().official[0].counterparty_name
-          counterparty_docu: "документа",//useReportStore().official[0].counterparty_docu
-          entity_name: useReportStore().graphic[0].entity_name,
-          entity_post: "директора",//useReportStore().official[0].entity_post
-          entity_fio: "Сараевой Е.П.",//useReportStore().official[0].entity_fio
-          entity_docu: "устава",//useReportStore().official[0].entity_docu
+          vendor_name: useReportStore().vendor.urastic_name,
+          counterparty_post: useReportStore().official[0].counterparty_post, //useReportStore().official[0].counterparty_post
+          counterparty_name:  useReportStore().official[0].counterparty_name,//useReportStore().official[0].counterparty_name
+          counterparty_docu: useReportStore().official[0].counterparty_docu,//useReportStore().official[0].counterparty_docu
+          entity_name: useReportStore().entity.urastic_name,
+          entity_post: useReportStore().official[0].entity_post,//useReportStore().official[0].entity_post
+          entity_fio: useReportStore().official[0].entity_name,//useReportStore().official[0].entity_fio
+          entity_docu: useReportStore().official[0].entity_docu,//useReportStore().official[0].entity_docu
 
           date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
           date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),

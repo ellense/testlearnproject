@@ -1,8 +1,8 @@
 <template>
-  <el-scrollbar height="calc(100vh - 480px)">
+  <el-scrollbar height="45vh">
     <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true"
       class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 15px;" height="calc(100vh - 555px)"
+    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
@@ -152,7 +152,7 @@ const AddExInvoice = () => {
       invoice_number: row.invoice_number,
       invoice_date: dayjs(row.invoice_date).format("DD.MM.YYYY"),
       product_amount: row.product_amount,
-      docid: row.docid,
+      doc_id: row.doc_id,
     });
   });
   console.log("искл.Накладные", useKuAddStore().tableDataExInvoiceSelect);

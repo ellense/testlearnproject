@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="calc(100vh - 480px)">
+  <el-scrollbar height="calc(100vh - 520px)">
     <el-button size="small" round @click="addRow" class="buttonAdd">Добавить</el-button>
     <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 555px)" empty-text="Добавьте условия бонуса">
       <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
@@ -30,27 +30,19 @@
   
 <script lang="ts" setup>
 import { ref } from 'vue';
+import { storeToRefs } from "pinia";
 import type { IPercent } from '~/utils/types/directoryTypes';
 import { useKuIdStore } from "~~/stores/kuIdStore";
+const { getPercent } = storeToRefs(
+  useKuIdStore()
+);
 const store = useKuIdStore();
 
-const tableData = ref(store.tableDataPercent);
-// const route = useRoute();
-// const kuId = ref(route.params.kuId);
-// // const bonuses = ref([]);
+const tableData = ref<IPercent[]>(getPercent.value);
+  watch(getPercent, (value) => {
+  tableData.value = value || [];
+});
 
-// const fetchBonuses = async () => {
-//   try {
-//     const response = await KU.getKuRequirementBonus({ ku_id: kuId.value }); // Передайте kuId в запрос
-//     tableData.value = response;
-//   } catch (error) {
-//     console.error('Error fetching bonuses:', error);
-//   }
-// };
-
-// onMounted(() => {
-//   fetchBonuses();
-// });
 //добавление сложного процента
 const addRow = () => {
   tableData.value.push({ criterion: null, percent_sum: null, fix: false });

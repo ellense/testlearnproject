@@ -30,7 +30,7 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     
 }
 .el-tabs--border-card {
-    height: calc(100vh - 140px);
+    height: calc(100vh - 100px);
 }
 .el-tabs--border-card>.el-tabs__content {
     padding: 0 10px 10px 10px !important;

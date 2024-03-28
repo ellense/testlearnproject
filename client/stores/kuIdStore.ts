@@ -86,6 +86,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
 
     getters: {
         getKuRequirement: (state) => state.tableDataInRequirement,
+        getPercent: (state) => state.tableDataPercent,
+        getIExInvoiceForKu: (state) => state.tableDataExInvoiceSelect,
     },
 
     actions: {
@@ -95,6 +97,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         handleSelectionChangeProduct(val: IProduct[]) {
             this.multipleSelectionProduct = val;
         },
+        //получение ku_id
         async getKuDetailFromApi(kuId: string) {
             try {
                 const results = await KU.getInfoKu({
@@ -150,37 +153,26 @@ export const useKuIdStore = defineStore("KuIdStore", {
         setSearchProductEx(query: string) {
             this.$state.searchProductExcluded = query;
         },
+        //получение вкл. условий ku_id
         async getKuRequirementDetailFromApi(kuId: string) {
             try {
                 const results = await KU.getInfoRequirements({
                     ku_id: kuId,
                 });
                 this.$state.tableDataInRequirement = results
-                console.log("полученная таблица условий ку:", this.tableDataInRequirement)
+                console.log("полученная таблица условий ку_айди:", this.tableDataInRequirement)
                 console.log("успешно получили данные условий:", results);
             } catch (error) {
-                console.error("Ошибка при получении данных условий:", error);
+                console.error("Ошибка при получении данных условий ку_айди:", error);
             }
         },
-        // async fetchKuRequirementBonus(kuId: string) {
-        //     console.log('Выполняется запрос на получение данных...');
-        //     try {
-        //       const response = await KU.getKuRequirementBonus({ku_id: kuId});
-        //       console.log('условия бонуса:', response.results);
-        //       // После успешного получения данных из API, вы можете сохранить их в tableDataPercent
-        //       this.tableDataPercent = response.results;
-        //       console.log('tableDataPercent:', this.tableDataPercent);
-        //     } catch (error) {
-        //       console.error('Ошибка при получении данных:', error);
-        //       // Обработка ошибки при получении данных
-        //     }
-        //   },
-          async fetchKuRequirementBonus(ku_id?: string, page?: number,) {
+        //получение бонуса ku_id
+          async fetchBonusForKuId(ku_id?: string, page?: number) {
             await KU.getKuRequirementBonus({ ku_id,page_size: this.$state.countRowTable,
                 page,
             })
               .then((tableData) => {
-                console.log('Получены данные бонуса:', tableData);
+                console.log('Получены данные бонуса ку_айди:', tableData);
                 this.$state.tableDataPercent = tableData.results;
                 console.log('tableDataPercent:', this.$state.tableDataPercent);
                 this.$state.pagination = {
@@ -190,7 +182,27 @@ export const useKuIdStore = defineStore("KuIdStore", {
                   };
               })
               .catch((error) => {
-                console.error('Ошибка при получении данных бонуса:', error);
+                console.error('Ошибка при получении данных бонуса ку_айди:', error);
+                return Promise.reject(error);
+              });
+          },
+          //получение искл. накладных ku_id
+          async fetchExInvoiceForKuId(ku_id?: string, page?: number) {
+            await KU.getKuExInvoiceForKuId({ ku_id,page_size: this.$state.countRowTable,
+                page,
+            })
+              .then((tableData) => {
+                console.log('Получены данные искл накладных ку_айди:', tableData);
+                this.$state.tableDataExInvoiceSelect = tableData.results;
+                console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
+                this.$state.pagination = {
+                    count: tableData.count,
+                    previous: tableData.previous,
+                    next: tableData.next,
+                  };
+              })
+              .catch((error) => {
+                console.error('Ошибка при получении данных искл накладных ку_айди:', error);
                 return Promise.reject(error);
               });
           },

@@ -1,4 +1,4 @@
-import type { GetAllInvoicesAndProductForGraphic, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, IVendorFull, ReportStore } from "~/utils/types/directoryTypes";
+import type { GetAllInvoicesAndProductForGraphic, GetParamOfficial, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, IVendorFull, ReportStore } from "~/utils/types/directoryTypes";
 
 export const useReportStore = defineStore("ReportStore", {
   state: (): ReportStore => ({
@@ -13,7 +13,7 @@ export const useReportStore = defineStore("ReportStore", {
     kuid: "",
     vendorid: "",
     entityid: "",
-    vendor: 
+    vendor:
     {
       vendor_id: "",
       name: "",
@@ -45,7 +45,9 @@ export const useReportStore = defineStore("ReportStore", {
     official: [],
     getGraphicDone: true,
     printReportToggle: false,
-    filterValueInvoice: {}
+    filterValueInvoice: {},
+    filterValueOfficial: {},
+    //пагинация в таблицах
   }),
 
   getters: {
@@ -55,6 +57,7 @@ export const useReportStore = defineStore("ReportStore", {
   },
 
   actions: {
+    //получение графика детеил для 1,2,3 актов
     async getGraphicDetailFromApi(grapId: number | null) {
       try {
         const results = await GRAPHIC.getInfoGraphic({
@@ -71,31 +74,36 @@ export const useReportStore = defineStore("ReportStore", {
         console.error("Ошибка при получении данных график_айди:", error);
       }
     },
-
-    async getKuOfficialDetailFromApi(kuId: string) {
-      try {
-        const results = await KU.getKuOfficial({
-          ku_id: kuId,
+    //получение должн. лиц для 3 акта
+    async getKuOfficialDetailFromApi(ku_id?: string, page?: number) {
+      this.setFilterValueOfficial('ku_id', ku_id);
+      await KU.getKuOfficial({
+        ku_id,
+        page_size: this.$state.countRowTable,
+        page,
+      })
+        .then((tableData) => {
+          console.log('Получены данные должн. лиц:', tableData);
+          this.$state.official = tableData.results;
+          console.log('official:', this.$state.official);
+          this.$state.pagination = {
+            count: tableData.count,
+            previous: tableData.previous,
+            next: tableData.next,
+          };
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении данных должн. лиц:', error);
+          return Promise.reject(error);
         });
-        this.$state.official = results;
-        console.log("успешно получили данные должн лиц", results);
-        console.log("добавили данные в official ", this.$state.official);
-      } catch (error) {
-        console.error("Ошибка при получении данных график_айди:", error);
-      }
     },
-    // async getVendorDetailFromApi(vendorId: string) {
-    //   try {
-    //     const results = await VENDOR.getVendorDetail({
-    //       vendor_id: vendorId,
-    //     });
-    //     this.$state.vendor = results;
-    //     console.log("успешно получили данные вендорафулл", results);
-    //     console.log("добавили данные в vendor ", this.$state.vendor);
-    //   } catch (error) {
-    //     console.error("Ошибка при получении данных вендорафулл:", error);
-    //   }
-    // },
+    setFilterValueOfficial<
+      T extends keyof GetParamOfficial,
+      U extends GetParamOfficial[T],
+    >(field: T, value: U) {
+      this.$state.filterValueOfficial[field] = value
+    },
+    //получение поставщиков детеил для 3 акта
     async getVendorDetailFromApi(vendorId: string) {
       try {
         const result = await VENDOR.getVendorDetail({
@@ -109,6 +117,7 @@ export const useReportStore = defineStore("ReportStore", {
         console.error("Ошибка при получении данных вендорафулл:", error);
       }
     },
+    //получение юр. лиц детеил для 3 акта
     async getEntityDetailFromApi(entityId: string) {
       try {
         const results = await ENTITY.getEntityDetail({
@@ -122,36 +131,7 @@ export const useReportStore = defineStore("ReportStore", {
       }
     },
 
-    setFilterValueInvoices<
-      T extends keyof GetAllInvoicesAndProductForGraphic,
-      U extends GetAllInvoicesAndProductForGraphic[T],
-    >(field: T, value: U) {
-      this.$state.filterValueInvoice[field] = value
-    },
-
-    // async getInvoiceDetailForGraphicFromAPIWithFilter(graph_id?: number | null, page?: number) {
-    //     this.setFilterValueInvoices('graph_id', graph_id);
-    //     this.setFilterValueInvoices('page', page);
-    //     await GRAPHIC.getInfoInvoicesForGraphic({
-    //         graph_id,
-    //         page_size: this.$state.countRowTable,
-    //         page,
-    //     })
-    //         .then((invoices) => {
-    //             console.log('успешно получили данные invoice for grapgic', invoices);
-    //             this.$state.invoices = invoices.results;
-    //             console.log("добавили данные в invoices[] ", this.$state.invoices);
-    //             this.$state.pagination = {
-    //                 count: invoices.count,
-    //                 previous: invoices.previous,
-    //                 next: invoices.next,
-    //               };
-    //         })
-    //         .catch((error) => {
-    //             console.error('Ошибка при получении данных invoice for grapgic:', error);
-    //             return Promise.reject(error);
-    //         });
-    // },
+    //получение всех накладных по фильтру для 1 акта
     async fetchAllInvoices(graph_id?: number | null,) {
       try {
         let allInvoices: GraphicForExcelReportInvoice[] = [];
@@ -177,6 +157,13 @@ export const useReportStore = defineStore("ReportStore", {
         return Promise.reject(error);
       }
     },
+    setFilterValueInvoices<
+      T extends keyof GetAllInvoicesAndProductForGraphic,
+      U extends GetAllInvoicesAndProductForGraphic[T],
+    >(field: T, value: U) {
+      this.$state.filterValueInvoice[field] = value
+    },
+    //получение всех товаров по фильтру для 2 акта
     async fetchAllProducts(graph_id?: number | null,) {
       try {
         let allProducts: GraphicForExcelReportProduct[] = [];
@@ -202,57 +189,5 @@ export const useReportStore = defineStore("ReportStore", {
         return Promise.reject(error);
       }
     },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // async getInvoiceDetailForGraphicFromApi(grapId: number | null) {
-    //     try {
-    //         const results = await GRAPHIC.getInfoInvoicesForGraphic({
-    //             graph_id: grapId,
-    //         });
-    //         this.$state.invoices = [results];
-    //         console.log("успешно получили данные invoice for grapgic", results);
-    //         console.log("добавили данные в invoices[] ", this.$state.graphic);
-    //     } catch (error) {
-    //         console.error("Ошибка при получении данных invoice for grapgic:", error);
-    //     }
-    // },
-
-
-
-
-    // async getGraphicsFromAPIWithFilter(page?: number) {
-    //     this.setFilterValue2('page', page);
-    //     this.setFilterValue2('search', this.$state.search2);
-    //     await GRAPHIC.getGraphic({
-    //         page_size: this.$state.countRowTable,
-    //         page,
-    //         entity_id: this.$state.filterGraphicValue?.entity_id || [],
-    //         ku_id: this.$state.filterGraphicValue?.ku_id || [],
-    //         search: this.$state.search2,
-    //     })
-    //         .then((dataGraphic) => {
-    //             this.$state.dataGraphic = dataGraphic.results;
-    //             this.$state.pagination = {
-    //                 count: dataGraphic.count,
-    //                 previous: dataGraphic.previous,
-    //                 next: dataGraphic.next,
-    //             };
-    //         })
-    //         .catch((error) => Promise.reject(error));
-    // },
-
   }
 })

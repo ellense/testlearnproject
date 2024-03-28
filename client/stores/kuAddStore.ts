@@ -16,7 +16,7 @@ import type {
     IExInvoiceForKu,
     ITree,
     GetAllCategory,
-    GetAllInvoicesForKu,
+    GetParamExInvoicesForKu,
 } from "~/utils/types/directoryTypes";
 
 export const useKuAddStore = defineStore("KuAddStore", {
@@ -466,12 +466,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 });
         },
         setFilterExInvoice<
-            T extends keyof GetAllInvoicesForKu,
-            U extends GetAllInvoicesForKu[T],
+            T extends keyof GetParamExInvoicesForKu,
+            U extends GetParamExInvoicesForKu[T],
         >(field: T, value: U) {
             this.$state.filterExInvoice[field] = value
         },
-        removeFilterExInvoice<T extends keyof GetAllInvoicesForKu>(field: T) {
+        removeFilterExInvoice<T extends keyof GetParamExInvoicesForKu>(field: T) {
             if (this.$state.filterExInvoice) {
                 delete this.$state.filterExInvoice[field]
             }

@@ -40,18 +40,18 @@ import type {
   IKuUpdate,
   IIncludedRequirement,
   GetAllCategory,
-  IPercent,
   IPercentPost,
   IExInvoiceForKuPost,
-  GetAllInvoicesForKu,
-  GetAllInvoicesForKuReturnData,
   IManagerForKuPost,
   IOfficialForKuPost,
-  IOfficialForKu,
   IEntityFull,
   IVendorFull,
   GetPersentReturnData,
   GetParamPercent,
+  GetParamOfficial,
+  GetAllOfficialReturnData,
+  GetParamExInvoicesForKu,
+  GetExInvoicesForKuReturnData,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -130,17 +130,19 @@ export const KU = {
     $Post("api/excluded_venddoc/", { data, isBearer: false }),
   getKuRequirementBonus: (params: GetParamPercent): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
+  getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
+    $Get(`api/excluded_venddoc_create/`, { params, isBearer: false }),
   getInfoRequirements: (params: IKuId): Promise<IIncludedRequirement[]> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
     $Post("api/manager_create/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
     $Post("api/official_create/", { data, isBearer: false }),
-  getKuOfficial: (params: IKuId): Promise<IOfficialForKu[]> =>
-    $Get(`api/bonus_condition/`, { params, isBearer: false }),
+  getKuOfficial: (params: GetParamOfficial): Promise<GetAllOfficialReturnData> =>
+    $Get(`api/official_create/`, { params, isBearer: false }),
   getInvoicesList: (
-    params?: GetAllInvoicesForKu
-  ): Promise<GetAllInvoicesForKuReturnData> =>
+    params?: GetParamExInvoicesForKu
+  ): Promise<GetExInvoicesForKuReturnData> =>
     $Get("api/vend_doc_list", { params, isBearer: false }),
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graph_list/", { params, isBearer: false }),

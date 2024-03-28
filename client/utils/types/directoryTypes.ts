@@ -357,7 +357,7 @@ export interface IKuAddStore {
   filterBrandIncluded: GetAllBrands
   filterBrandExcluded: GetAllBrands
   filterVendorValue: GetAllVendorsForEntity
-  filterExInvoice: GetAllInvoicesForKu
+  filterExInvoice: GetParamExInvoicesForKu
 }
 
 export interface IKuIdStore {
@@ -519,13 +519,13 @@ export interface IExInvoiceForKu {
   invoice_number: string;
   invoice_date: Date | string;
   product_amount: number | null
-  docid: string
+  doc_id: string
 }
 export interface IExInvoiceForKuPost {
   ku_id: string;
   doc_id: string;
 }
-export interface GetAllInvoicesForKu {
+export interface GetParamExInvoicesForKu {
   page_size?: number;
   page?: number;
   searchNumber?: string;
@@ -533,8 +533,9 @@ export interface GetAllInvoicesForKu {
   vendor_id?: string;
   start_date?: string,
   end_date?: string,
+  ku_id?: string,
 }
-export interface GetAllInvoicesForKuReturnData extends Pagination {
+export interface GetExInvoicesForKuReturnData extends Pagination {
   results: IExInvoiceForKu[];
 }
 
@@ -568,7 +569,14 @@ export interface IOfficialForKuPost {
   entity_post: string;
   entity_docu: string;
 }
-
+export interface GetParamOfficial {
+  page_size?: number;
+  page?: number;
+  ku_id?: string;
+}
+export interface GetAllOfficialReturnData extends Pagination {
+  results: IOfficialForKu[];
+}
 ///////////////////////////////// График////////////////////////////////////
 export interface IGraphic {
   graph_id: number | null;
@@ -675,6 +683,7 @@ export interface ReportStore {
   getGraphicDone: boolean
   printReportToggle: boolean
   filterValueInvoice: GetAllInvoicesAndProductForGraphic
+  filterValueOfficial: GetParamOfficial
 }
 export interface GraphicForExcelReportInvoice {
   invoice_number: string;

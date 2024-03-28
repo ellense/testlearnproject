@@ -175,9 +175,9 @@ const loading = ref()
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
-  useKuIdStore().getKuRequirementDetailFromApi(kuId)
-  useKuIdStore().fetchKuRequirementBonus(kuId)
-
+  // useKuIdStore().getKuRequirementDetailFromApi(kuId)
+  useKuIdStore().fetchBonusForKuId(kuId)
+  useKuIdStore().fetchExInvoiceForKuId(kuId)
 
   router.push({ path: `/ku/${kuId}` });
 };
