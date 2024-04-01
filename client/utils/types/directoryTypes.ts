@@ -302,6 +302,8 @@ export interface IKuAddStore {
   valueCategory_nameEx: string
   valueProducer_nameEx: string;
   valueBrand_nameEx: string;
+  valueProducer_nameContract: string;
+  valueBrand_nameContract: string;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
   multipleSelectionExInvoice: IExInvoiceForKu[]
@@ -334,6 +336,7 @@ export interface IKuAddStore {
   dialogFormCategoryInVisible: boolean
   dialogFormProductExVisible: boolean
   dialogFormCategoryExVisible: boolean
+  dialogFormContractVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   disableButtonsExcluded: boolean
@@ -474,7 +477,7 @@ export interface IRequirement {
   producer: string;
   brand: string;
 }
-export interface GetRequirementReturnData extends Pagination{
+export interface GetRequirementReturnData extends Pagination {
   results: IRequirement[];
 }
 
@@ -489,21 +492,23 @@ export interface IRequirementPost {
 
 //контракт
 export interface IContract {
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
+  producer_code: string;
+  producer_name: string;
+  brand_code: string;
+  brand_name: string;
+  use_producer: boolean;
+  use_brand: boolean;
+}
+export interface IContractPost {
+  vendor_name: string;
+  ku_type: string;
+  provider_list: string[];
+  brand_list: string[];
+}
+export interface IContractPromise {
+  name: string;
 }
 
-export interface IContractPost {
-  ku_id: string;
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
-}
 
 //сложный процент
 export interface IPercent {

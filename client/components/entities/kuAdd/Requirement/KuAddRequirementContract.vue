@@ -1,27 +1,30 @@
 <template>
     <div>
-        <el-button size="small" round @click="">Добавить</el-button>
-        <el-button size="small" type="primary" round plain @click="">Cформировать поле контакт</el-button>
+        <el-button size="small" round @click="store.dialogFormContractVisible = true">Добавить</el-button>
+        <el-button size="small" type="primary" round plain @click="FormContract()">Cформировать поле контакт</el-button>
     </div>
-    <el-scrollbar class="scrollTableRequirement">
+    <div class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:26vh" height="26vh" :data="tableData" border
-            empty-text="">
-            <el-table-column  label="Производитель"  show-overflow-tooltip>
-                <el-table-column property="item_type" label="Код" width="150" show-overflow-tooltip />
-                <el-table-column property="item_code" label="наименование" width="300" />
+            empty-text="" align="center">
+            <el-table-column label="Производитель" align="center">
+                <el-table-column property="producer_code" label="Код" width="200" show-overflow-tooltip
+                    align="center" />
+                <el-table-column property="producer_name" label="Наименование" width="500" align="center" />
             </el-table-column>
-            <el-table-column  label="Торговая марка"  show-overflow-tooltip>
-                <el-table-column property="item_type" label="Код" width="150" show-overflow-tooltip />
-                <el-table-column property="item_code" label="наименование" width="300" />
+            <el-table-column label="Торговая марка" align="center">
+                <el-table-column property="brand_code" label="Код" width="200" show-overflow-tooltip />
+                <el-table-column property="brand_name" label="Наименование" width="500" />
             </el-table-column>
-            <el-table-column prop="fix" label="Использовать производителя" width="100" align="center">
-        <template #default="{ row }">
-          <el-checkbox v-model="row.fix" @change="onFixChange(row)"></el-checkbox>
-        </template>
-      </el-table-column>
-            <el-table-column property="item_name" label="Наименование" width="300" show-overflow-tooltip />
-            <el-table-column property="producer" label="Производитель" width="300" show-overflow-tooltip />
-            <el-table-column property="brand" label="Торговая марка" width="300" show-overflow-tooltip />
+            <!-- <el-table-column prop="use_producer" label="Использовать производителя" width="120" align="center">
+                <template #default="{ row }">
+                    <el-checkbox v-model="row.use_producer" @change="onUseProducerChange(row)"></el-checkbox>
+                </template>
+            </el-table-column>
+            <el-table-column prop="use_brand" label="Использовать торговую марку" width="120" align="center">
+                <template #default="{ row }">
+                    <el-checkbox v-model="row.use_brand" @change="onUseBrandChange(row)"></el-checkbox>
+                </template>
+            </el-table-column> -->
             <el-table-column fixed="right" label="Операция">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
@@ -29,18 +32,142 @@
                 </template>
             </el-table-column>
         </el-table>
-    </el-scrollbar>
+    </div>
+    <el-dialog v-model="useKuAddStore().dialogFormContractVisible" width="530px"
+        title="Выбор производителя и торговой марки для наименования контракта" close-on-click-modal
+        close-on-press-escape draggable>
+        <div class="selectCategory">
+            <div>
+                <div class="custom-label">Производитель</div>
+                <el-select-v2 v-model="store.valueProducer_nameContract" clearable filterable style="width: 500px; "
+                    placeholder="Выберите производителя" :options="options2" @change="onProducerChange">
+                    <template #option="{ option }">
+                        <span>{{ option.label }}</span>
+                        <span style="
+              margin-left: 10px;
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            ">{{ option.value }}</span>
+                    </template>
+                </el-select-v2>
+            </div>
+            <div>
+                <div class="custom-label">Торговая марка</div>
+                <el-select-v2 v-model="store.valueBrand_nameContract" clearable filterable style="width: 500px"
+                    placeholder="Выберите торговую марку" :options="options3">
+                    <template #option="{ option }">
+                        <span>{{ option.label }}</span>
+                        <span style="
+              margin-left: 10px;
+              float: right;
+              color: var(--el-text-color-secondary);
+              font-size: 13px;
+            ">{{ option.value }}</span>
+                    </template>
+                </el-select-v2>
+            </div>
+        </div>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="store.dialogFormContractVisible = false">Отменить</el-button>
+                <el-button @click="addRow()">Сохранить</el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import type { IBrand, IContract, IProducer } from "~/utils/types/directoryTypes";
 
 const store = useKuAddStore();
 const tableData = ref(store.tableDataContract);
+//добавление строк
+const addRow = async () => {
+    if (store.valueProducer_nameContract || store.valueBrand_nameContract) {
+        console.log("производитель", store.valueProducer_nameIn);
+        console.log("марка", store.valueBrand_nameContract);
+
+        // Используем сохраненное значение selectedCategoryName
+        useKuAddStore().tableDataContract.push({
+            producer_code: "",
+            brand_code: "",
+            use_producer: false,
+            use_brand: false,
+            producer_name: store.valueProducer_nameContract,
+            brand_name: store.valueBrand_nameContract,
+        });
+        console.log("строка таблицы контркта", store.tableDataContract);
+
+        useKuAddStore().dialogFormContractVisible = false;
+        store.valueBrand_nameContract = "";
+        store.valueProducer_nameContract = "";
+        useKuAddStore().setFilterBrand('producer_name', undefined);
+        await store.fetchAllProducersForInclided();
+        await store.fetchAllBrandsForIncluded();
+    } else {
+        ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
+    }
+};
 //удаление строк
 const deleteRow = (index: number) => {
     store.tableDataContract.splice(index, 1);
 }
+
+const onUseProducerChange = (row: IContract) => {
+    const rowIndex = tableData.value.findIndex(item => item === row);
+    store.tableDataContract[rowIndex].use_producer = row.use_producer;
+    console.log("данные tableDataContract в хранилище изменены:", store.tableDataContract)
+};
+const onUseBrandChange = (row: IContract) => {
+    const rowIndex = tableData.value.findIndex(item => item === row);
+    store.tableDataContract[rowIndex].use_brand = row.use_brand;
+    console.log("данные tableDataContract в хранилище изменены:", store.tableDataContract)
+};
+
+const options2 = ref<Array<{ label: string; value: string }>>([]);
+const options3 = ref<Array<{ label: string; value: string }>>([]);
+
+watch(() => store.producerIncluded, (producers: IProducer[]) => {
+    const uniqueProducers = Array.from(new Set(producers.map(item => item.producer_name)));
+    options2.value = uniqueProducers.map(label => ({ label, value: label }));
+});
+
+watch(() => store.brandIncluded, (brands: IBrand[]) => {
+    const uniqueBrands = Array.from(new Set(brands.map(item => item.brand_name)));
+    options3.value = uniqueBrands.map(label => ({ label, value: label }));
+});
+
+const onProducerChange = async () => {
+    store.valueBrand_nameContract = "";
+    store.setFilterBrand('producer_name', store.valueProducer_nameContract);
+    if (store.valueProducer_nameContract) { // Проверка, что выбрана торговая маркка
+        useKuAddStore().fetchAllBrandsForIncluded();
+    } else {
+        useKuAddStore().setFilterBrand('producer_name', undefined); // Сбросить фильтр
+        useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
+    }
+};
+const FormContract = async () => {
+    const newItem = {
+        vendor_name: store.newVendorId,
+        ku_type: store.newKu_type,
+        provider_list: store.tableDataContract.map(item => item.producer_name),
+        brand_list: store.tableDataContract.map(item => item.brand_name),
+    }
+    await store.createKuContract(newItem)
+}
 </script>
+
+<style scoped>
+.selectCategory {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 700px;
+    margin: 20px 0 20px 0;
+}
+</style>

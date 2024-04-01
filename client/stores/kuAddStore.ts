@@ -17,6 +17,7 @@ import type {
     ITree,
     GetAllCategory,
     GetParamExInvoicesForKu,
+    IContractPost,
 } from "~/utils/types/directoryTypes";
 
 export const useKuAddStore = defineStore("KuAddStore", {
@@ -57,6 +58,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
         valueCategory_nameEx: "",
         valueProducer_nameEx: "",
         valueBrand_nameEx: "",
+        valueProducer_nameContract: "",
+        valueBrand_nameContract: "",
         //селекты для множественного выбора
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
@@ -89,6 +92,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         dialogFormCategoryInVisible: false,
         dialogFormProductExVisible: false,
         dialogFormCategoryExVisible: false,
+        dialogFormContractVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableButtonsExcluded: false,
@@ -553,6 +557,16 @@ export const useKuAddStore = defineStore("KuAddStore", {
             // Сбрасываем значения поисковых строк
             this.searchProductIncluded = '';
             this.searchProductExcluded = '';
-        }
+        },
+        async createKuContract(newItem:IContractPost ) {
+            try {
+              const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+              console.log("Экземпляр успешно отправлен на бэкенд:", response);
+              this.newContract = response.name; // сохраняем имя в состоянии хранилища
+            } catch (error) {
+              console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+              // Можно обработать ошибку здесь, если нужно
+            }
+          },
     }
 });

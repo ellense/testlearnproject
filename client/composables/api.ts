@@ -52,6 +52,9 @@ import type {
   GetParamKuId,
   IRequirementPost,
   GetRequirementReturnData,
+  IContract,
+  IContractPost,
+  IContractPromise,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -132,6 +135,8 @@ export const KU = {
     $Post("api/manager_create/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
     $Post("api/official_create/", { data, isBearer: false }),
+  postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
+    $Post("api/name_contact_create/", { data, isBearer: false }),
 
   getKuInRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
