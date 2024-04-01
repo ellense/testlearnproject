@@ -143,13 +143,6 @@
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
       @size-change="handleSizeChange" @current-change="paginationChange" size="small" />
   </div>
-  <!-- <div class="cell">
-    Код КУ
-    <span class="caret-wrapper">
-      <i class="sort-caret ascending"></i>
-      <i class="sort-caret descending"></i>
-    </span>
-  </div> -->
 </template>
 
 <script lang="ts" setup>
@@ -175,7 +168,8 @@ const loading = ref()
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   useKuIdStore().getKuDetailFromApi(kuId)
-  // useKuIdStore().getKuRequirementDetailFromApi(kuId)
+  useKuIdStore().fetchInRequirementForKuId(kuId)
+  useKuIdStore().fetchExRequirementForKuId(kuId)
   useKuIdStore().fetchBonusForKuId(kuId)
   useKuIdStore().fetchExInvoiceForKuId(kuId)
 

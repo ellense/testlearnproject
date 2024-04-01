@@ -1,7 +1,7 @@
 <template>
-  <el-scrollbar height="calc(100vh - 520px)">
+  <el-scrollbar height="45vh">
     <el-button size="small" round @click="addRow" class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData" border style="width: 700px; margin-top: 15px;" height="calc(100vh - 555px)" empty-text="Добавьте условия бонуса">
+    <el-table :data="tableData" border style="width: 700px; margin-top: 10px;" height="40vh" empty-text="Добавьте условия бонуса">
       <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
         <template #default="{ row }">
           <el-checkbox v-model="row.fix" @change="onFixChange(row)"></el-checkbox>

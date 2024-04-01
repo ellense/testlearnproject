@@ -1,8 +1,8 @@
 <template>
-<el-scrollbar height="calc(100vh - 520px)">
+  <el-scrollbar height="45vh">
     <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true"
       class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 15px;" height="calc(100vh - 555px)"
+    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <!-- <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
@@ -141,7 +141,7 @@ const toggleSelection = (rows?: IExInvoiceForKu[]) => {
   }
 }
 const tableData2 = ref<IExInvoiceForKu[]>(getIExInvoiceForKu.value);
-  watch(getIExInvoiceForKu, (value) => {
+watch(getIExInvoiceForKu, (value) => {
   tableData2.value = value || [];
 });
 // const tableData2 = ref(store.tableDataExInvoiceSelect);
@@ -151,17 +151,17 @@ const AddExInvoice = () => {
 
   selectedRows.forEach(row => {
     store.tableDataExInvoiceSelect.push({
-        invoice_id: row.invoice_id,
-        vendor_id: row.vendor_id,
-        vendor_name: row.vendor_name,
-        invoice_name: row.invoice_name,
-        invoice_number: row.invoice_number,
-        invoice_date: new Date(row.invoice_date),
-        product_amount: row.product_amount,
-        doc_id: row.doc_id,
+      invoice_id: row.invoice_id,
+      vendor_id: row.vendor_id,
+      vendor_name: row.vendor_name,
+      invoice_name: row.invoice_name,
+      invoice_number: row.invoice_number,
+      invoice_date: new Date(row.invoice_date),
+      product_amount: row.product_amount,
+      doc_id: row.doc_id,
 
     });
-    console.log("искл.Накладные",useKuAddStore().tableDataExInvoiceSelect);
+    console.log("искл.Накладные", useKuAddStore().tableDataExInvoiceSelect);
   });
   toggleSelection()
   store.dialogFormExInvoiceVisible = false;

@@ -5,8 +5,8 @@
       <el-input v-model="searchProductExKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
-      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="useKuAddStore().handleSelectionChange3"
-        ref="multipleTableRef" v-loading="loading">
+      <el-table style="width: 100%" height="300" :data="tableData"
+        @selection-change="useKuAddStore().handleSelectionChange3" ref="multipleTableRef" v-loading="loading">
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="300" show-overflow-tooltip />
@@ -16,8 +16,8 @@
     </el-scrollbar>
     <div v-if="pagination?.count" class="pagination">
       <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-      @size-change="handleSizeChange" @current-change="paginationChange" />
+        :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
+        @size-change="handleSizeChange" @current-change="paginationChange" />
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -95,22 +95,9 @@ const AddProductItem = () => {
       producer: "",
       brand: "",
     });
-    console.log("исклПРОДУКТЫ",useKuAddStore().tableDataExRequirement);
+    console.log("исклПРОДУКТЫ", useKuAddStore().tableDataExRequirement);
   });
   toggleSelection()
   kuStore.dialogFormProductExVisible = false;
 };
-
-// //монтирование данных в таблицу
-// onMounted(async () => {
-//   try {
-//     loading.value = true; 
-//     await useKuAddStore().getProductFromExcludedWithFilter();
-//     loading.value = false;
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//     loading.value = false;
-//   }
-// });
-
 </script>

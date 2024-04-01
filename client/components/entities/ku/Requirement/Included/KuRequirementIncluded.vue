@@ -10,7 +10,7 @@
             категории</el-button>
     </div>
     <el-scrollbar class="scrollTableRequirement">
-        <el-table style="width: 100%; min-height:100px;" height="calc(100vh - 945px)" :data="kuRequirementList" border
+        <el-table style="width: 100%; height:26vh;" height="26vh" :data="tableData" border
             empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"
@@ -20,9 +20,8 @@
             <el-table-column property="brand" label="Торговая марка" width="300" show-overflow-tooltip />
             <el-table-column fixed="right" label="Операция">
                 <template #default="scope">
-                    <el-button link type="danger" size="small" @click.prevent="deleteRow(scope.$index)">
-                        Удалить
-                    </el-button>
+                    <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+                        style="width: 125px; height: 100%;">Удалить</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -30,34 +29,21 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import type { Action, ElTree } from 'element-plus'
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import type { Action } from 'element-plus'
+import { Delete } from '@element-plus/icons-vue'
+import { storeToRefs } from "pinia";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import type { IIncludedRequirement } from "~/utils/types/directoryTypes";
-
-const { getKuRequirement } = storeToRefs(
-    useKuIdStore()
+import type { IRequirement } from "~/utils/types/directoryTypes";
+const { getKuInRequirement } = storeToRefs(
+  useKuIdStore()
 );
+
 const store = useKuIdStore();
-const kuRequirementList = ref(store.tableDataInRequirement);
-// // const kuRequirementList = ref<IIncludedRequirement[]>(getKuRequirement.value);
-//     watch(() => getKuRequirement.value, (newValue) => {
-//     console.log("getKuRequirement changed:", newValue);
-//     kuRequirementList.value = newValue || [];
-//     console.log("kuRequirementList:", kuRequirementList.value);
-// });
-
-
-// onMounted(async () => {
-//   try {
-//     console.log("store.ku_id",store.ku_id)
-//     await store.getKuRequirementDetailFromApi(store.ku_id);
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных условий куайди", error);
-//   }
-// });
+const tableData = ref<IRequirement[]>(getKuInRequirement.value);
+  watch(getKuInRequirement, (value) => {
+  tableData.value = value || [];
+});
 //добавление условия "все"
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {

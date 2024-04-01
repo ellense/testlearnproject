@@ -220,7 +220,7 @@ export interface IKuPost {
   pay_method: string;
 }
 export interface IKuPost2 {
-  requirements: IIncludedRequirement[];
+  requirements: IRequirement[];
 }
 export interface IKuPostGraphic {
   ku_id: string;
@@ -314,8 +314,9 @@ export interface IKuAddStore {
   producerExcluded: IProducer[];
   productIncluded: IProduct[];
   productExcluded: IProduct[];
-  tableDataInRequirement: IIncludedRequirement[];
-  tableDataExRequirement: IExcludedRequirement[];
+  tableDataInRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement[];
+  tableDataContract: IContract[]
   tableDataPercent: IPercent[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
@@ -368,8 +369,8 @@ export interface IKuIdStore {
   producerExcluded: IProducer[];
   productIncluded: IProduct[];
   productExcluded: IProduct[];
-  tableDataInRequirement: IIncludedRequirement[];
-  tableDataExRequirement: IExcludedRequirement[];
+  tableDataInRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement[];
   tableDataPercent: IPercent[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
@@ -460,32 +461,48 @@ export interface GetAllKu_IdReturnData extends Pagination {
   results: IKuId[];
 }
 ////////////////////////////////////// Вкладки КУ ///////////////////////////////////
+export interface GetParamKuId {
+  ku_id?: string;
+  page_size?: number;
+  page?: number;
+}
 //Условия
-export interface IIncludedRequirement {
+export interface IRequirement {
   item_type: string;
   item_code: string;
   item_name: string;
   producer: string;
   brand: string;
 }
-export interface IExcludedRequirement {
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
+export interface GetRequirementReturnData extends Pagination{
+  results: IRequirement[];
 }
-export interface IRequirementPost2 {
-  ku_id: string;
-  item_type: string;
-  item_code: string;
-  item_name: string;
-  producer: string;
-  brand: string;
-}
+
 export interface IRequirementPost {
   ku_id: string;
-  requirements: IIncludedRequirement[]
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+
+//контракт
+export interface IContract {
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+
+export interface IContractPost {
+  ku_id: string;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
 }
 
 //сложный процент
@@ -500,11 +517,7 @@ export interface IPercentPost {
   percent_sum: number | null;
   ku_key_id: string;
 }
-export interface GetParamPercent {
-  ku_id?: string;
-  page_size?: number;
-  page?: number;
-}
+
 export interface GetPersentReturnData extends Pagination {
   results: IPercent[];
 }
@@ -568,11 +581,6 @@ export interface IOfficialForKuPost {
   entity_name: string;
   entity_post: string;
   entity_docu: string;
-}
-export interface GetParamOfficial {
-  page_size?: number;
-  page?: number;
-  ku_id?: string;
 }
 export interface GetAllOfficialReturnData extends Pagination {
   results: IOfficialForKu[];
@@ -683,7 +691,7 @@ export interface ReportStore {
   getGraphicDone: boolean
   printReportToggle: boolean
   filterValueInvoice: GetAllInvoicesAndProductForGraphic
-  filterValueOfficial: GetParamOfficial
+  filterValueOfficial: GetParamKuId
 }
 export interface GraphicForExcelReportInvoice {
   invoice_number: string;

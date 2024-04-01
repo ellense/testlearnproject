@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" width="750px"
+  <el-dialog v-model="store.dialogFormCategoryInVisible" width="530px"
     title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal close-on-press-escape
     draggable>
     <div class="selectCategory">
@@ -11,7 +11,7 @@
       </div>
       <div>
         <div class="custom-label">Производитель</div>
-        <el-select-v2 v-model="store.valueProducer_nameIn" clearable filterable style="width: 500px; "
+        <el-select-v2 v-model="store2.valueProducer_nameIn" clearable filterable style="width: 500px; "
           placeholder="Выберите производителя" :options="options2" @change="onProducerChange">
           <template #option="{ option }">
             <span>{{ option.label }}</span>
@@ -26,7 +26,7 @@
       </div>
       <div>
         <div class="custom-label">Торговая марка</div>
-        <el-select-v2 v-model="store.valueBrand_nameIn" clearable filterable style="width: 500px"
+        <el-select-v2 v-model="store2.valueBrand_nameIn" clearable filterable style="width: 500px"
           placeholder="Выберите торговую марку" :options="options3">
           <template #option="{ option }">
             <span>{{ option.label }}</span>
@@ -44,53 +44,45 @@
 
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="useKuAddStore().dialogFormCategoryInVisible = false">Отменить</el-button>
+        <el-button @click="store.dialogFormCategoryInVisible = false">Отменить</el-button>
         <el-button @click="AddCategoryItem()">Сохранить</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useKuAddStore } from '~~/stores/kuAddStore';
+import { useKuIdStore } from "~~/stores/kuIdStore";
 import type { ElTree } from 'element-plus'
 import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
 
-const store = useKuAddStore();
+const store = useKuIdStore();
+const store2 = useKuAddStore();
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 const options3 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(() => store.producerIncluded, (producers: IProducer[]) => {
+watch(() => store2.producerIncluded, (producers: IProducer[]) => {
   const uniqueProducers = Array.from(new Set(producers.map(item => item.producer_name)));
   options2.value = uniqueProducers.map(label => ({ label, value: label }));
 });
 
-watch(() => store.brandIncluded, (brands: IBrand[]) => {
+watch(() => store2.brandIncluded, (brands: IBrand[]) => {
   const uniqueBrands = Array.from(new Set(brands.map(item => item.brand_name)));
   options3.value = uniqueBrands.map(label => ({ label, value: label }));
 });
 
-// onMounted(async () => {
-//   try {
-//     await store.fetchAllProducersForInclided();
-//     await store.fetchAllBrandsForIncluded();
-
-//   } catch (error) {
-//     console.error('Ошибка при загрузке данных производителя и бренда', error);
-//   }
-// });
-
 const onProducerChange = async () => {
-  store.valueBrand_nameIn = "";
-  store.setFilterValue5('producer_name', store.valueProducer_nameIn);
-  if (store.valueProducer_nameIn) { // Проверка, что выбрана торговая маркка
-    useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
+  store2.valueBrand_nameIn = "";
+  store2.setFilterBrand('producer_name', store2.valueProducer_nameIn);
+  if (store2.valueProducer_nameIn) { // Проверка, что выбрана торговая маркка
+    store2.fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
-    useKuAddStore().setFilterValue5('producer_name', undefined); // Сбросить фильтр
-    console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
-    useKuAddStore().fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
+    store2.setFilterBrand('producer_name', undefined); // Сбросить фильтр
+    console.log('Сброшен фильтр производителей:', store2.filterBrandIncluded);
+    store2.fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
     console.log('Выполнен запрос на получение всех данных производителей.');
   }
 };
@@ -106,62 +98,15 @@ const defaultProps = {
   isLeaf: 'isLeaf',
 };
 
-const buildTree = (nodes: ITree[], parentCode: string | null = null): ITree[] => {
-  const parentNode = nodes.filter(node => node.parent_code === parentCode);
-  if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
-
-  return parentNode.map(node => {
-    const children = buildTree(nodes, node.classifier_code.toString());
-    if (children.length) {
-      node.children = children;
-    }
-    return node;
-  });
-};
-
-const fetchData = async (data: ITree) => {
-  // try {
-  //   const result = await CATEGORY.getCategory2(
-  //     vendor_id: store.vendorName,
-  //   );
-  //   if (Array.isArray(result)) {
-  //     treeData.value = buildTree(result, '0');
-  //     console.log("treeData", treeData.value);
-  //     treeRef.value && treeRef.value.updateKeyChildren(data.classifier_code, treeData.value);
-  //   } else {
-  //     treeData.value = [];
-  //     console.error("Данные не получены или не являются массивом");
-  //   }
-  // } catch (error) {
-  //   console.error("Произошла ошибка при получении данных категорий", error);
-  // }
-};
-
-// Вызов функции fetchData при монтировании компонента
-// onMounted(async () => {
-//   try {
-//     console.log("Before API call");
-//     await fetchData({
-//       name: "string",
-//       classifier_code: 1,
-//       children: [],
-//       parent_code: "",
-//     });
-//     console.log("After API call");
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// });
-
 //изменение поля дерева
 let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
-  store.valueBrand_nameIn = "";
-  store.valueProducer_nameIn = "";
-  useKuAddStore().setFilterValue4("l4", []);
-  useKuAddStore().setFilterValue5('producer_name', undefined);
-  await store.fetchAllProducersForInclided();
-  await store.fetchAllBrandsForIncluded();
+  store2.valueBrand_nameIn = "";
+  store2.valueProducer_nameIn = "";
+  store2.setFilterProducer("l4", []);
+  store2.setFilterBrand('producer_name', undefined);
+  await store2.fetchAllProducersForInclided();
+  await store2.fetchAllBrandsForIncluded();
   console.log('Отмеченные ключи:', checkedKeys);
 
   if (checkedKeys && checkedKeys.length > 0) {
@@ -173,12 +118,12 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
     if (selectedCategory) {
       selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории для отправки в условия
     }
-    useKuAddStore().setFilterValue4("l4", selectedCategoryKey);
-    useKuAddStore().setFilterValue5("l4", selectedCategoryKey);
+    store2.setFilterProducer("l4", selectedCategoryKey);
+    store2.setFilterBrand("l4", selectedCategoryKey);
    
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
-      useKuAddStore().fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
-      useKuAddStore().fetchAllBrandsForIncluded();
+      store2.fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
+      store2.fetchAllBrandsForIncluded();
       console.log('Выполнены запросы по фильтру категории.');
     }
   }
@@ -202,34 +147,29 @@ const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
 
 //добавление условий по категории
 const AddCategoryItem = async () => {
-  if (store.valueProducer_nameIn || value.value || store.valueBrand_nameIn) {
-    console.log("valueProducer_name", store.valueProducer_nameIn);
-    console.log("valueBrand_name", store.valueBrand_nameIn);
+  if (store2.valueProducer_nameIn || value.value || store2.valueBrand_nameIn) {
+    console.log("valueProducer_name", store2.valueProducer_nameIn);
+    console.log("valueBrand_name", store2.valueBrand_nameIn);
 
     // Используем сохраненное значение selectedCategoryName
-    useKuAddStore().tableDataInRequirement.push({
+    store.tableDataInRequirement.push({
       item_type: "Категория",
       item_code: value.value,
       item_name: selectedCategoryName, // Передаем имя выбранной категории
-      producer: store.valueProducer_nameIn,
-      brand: store.valueBrand_nameIn,
+      producer: store2.valueProducer_nameIn,
+      brand: store2.valueBrand_nameIn,
     });
     console.log("store.tableDataRequirementКАТЕГОРИЯ", store.tableDataInRequirement);
 
-    useKuAddStore().dialogFormCategoryInVisible = false;
+    store.dialogFormCategoryInVisible = false;
     value.value = "";
-    store.valueProducer_nameIn = "";
-    store.valueBrand_nameIn = "";
-    await fetchData({
-      name: "string",
-      classifier_code: 1,
-      children: [],
-      parent_code: "",
-    });
-    useKuAddStore().setFilterValue4("l4", []);
-    useKuAddStore().setFilterValue5('producer_name', undefined);
-    await store.fetchAllProducersForInclided();
-    await store.fetchAllBrandsForIncluded();
+    store2.valueProducer_nameIn = "";
+    store2.valueBrand_nameIn = "";
+    selectedCategoryName = ''
+    store2.setFilterProducer("l4", []);
+    store2.setFilterBrand('producer_name', undefined);
+    await store2.fetchAllProducersForInclided();
+    await store2.fetchAllBrandsForIncluded();
   } else {
     ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
   }

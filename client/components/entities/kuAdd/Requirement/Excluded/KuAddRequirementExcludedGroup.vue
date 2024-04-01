@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="useKuAddStore().dialogFormCategoryExVisible" width="750px"
+  <el-dialog v-model="useKuAddStore().dialogFormCategoryExVisible" style="width: 530px;"
     title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="selectCategory">
@@ -48,8 +48,9 @@
     </template>
   </el-dialog>
 </template>
+
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useKuAddStore } from '~~/stores/kuAddStore';
 import type { ElTree } from 'element-plus'
 import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
@@ -164,6 +165,7 @@ const AddCategoryItem = async () => {
     value.value = "";
     store.valueProducer_nameEx = "";
     store.valueBrand_nameEx = "";
+    selectedCategoryName = ''
     useKuAddStore().setFilterProducer("l4", []);
     useKuAddStore().setFilterBrand('producer_name', undefined);
     await store.fetchAllProducersForInclided();

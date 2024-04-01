@@ -1,5 +1,5 @@
 <template>
-    <el-scrollbar height="calc(100vh - 520px)">
+    <el-scrollbar height="45vh">
        <div>В разработке...</div> 
     </el-scrollbar>
 </template>

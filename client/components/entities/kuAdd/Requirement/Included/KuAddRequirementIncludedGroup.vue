@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" width="750px"
+  <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" width="530px"
     title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="selectCategory">
@@ -164,6 +164,7 @@ const AddCategoryItem = async () => {
     value.value = "";
     store.valueProducer_nameIn = "";
     store.valueBrand_nameIn = "";
+    selectedCategoryName = ''
     useKuAddStore().setFilterProducer("l4", []);
     useKuAddStore().setFilterBrand('producer_name', undefined);
     await store.fetchAllProducersForInclided();

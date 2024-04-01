@@ -1,11 +1,11 @@
 <template>
-  <el-dialog v-model="kuStore.dialogFormProductInVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
+  <el-dialog v-model="store.dialogFormProductInVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="buttonBar_search">
       <el-input v-model="searchProductInKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
-      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="useKuAddStore().handleSelectionChange3"
+      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="store2.handleSelectionChange3"
         ref="multipleTableRef" v-loading="loading">
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
@@ -21,7 +21,7 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="kuStore.dialogFormProductInVisible = false">Отмена</el-button>
+        <el-button @click="store.dialogFormProductInVisible = false">Отмена</el-button>
         <el-button @click="AddProductItem()">Сохранить</el-button>
       </span>
     </template>
@@ -31,13 +31,14 @@
 <script setup lang="ts">
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
-import { ref, onMounted, watch } from "vue";
+import { ref, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import { useKuIdStore } from "~~/stores/kuIdStore";
 
-const kuStore = useKuIdStore();
+const store = useKuIdStore();
+const store2 = useKuAddStore();
 const { getProductIn, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
@@ -52,23 +53,23 @@ watch(getProductIn, (value) => {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuAddStore().setCountRowTable(val);
+  store2.setCountRowTable(val);
   try {
-    await useKuAddStore().getProductFromIncludedWithFilter();
+    await store2.getProductFromIncludedWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных вкл.прдуктов", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterValue3('page', page);
-  useKuAddStore().getProductFromIncludedWithFilter(page);
+  store2.setFilterProductInRequirement('page', page);
+  store2.getProductFromIncludedWithFilter(page);
 };
 
 //поиск
 const searchProductInKu = ref('');
 watch(searchProductInKu, (newValue: string) => {
-  useKuAddStore().performSearchProductIn(newValue);
+  store2.performSearchProductIn(newValue);
 });
 
 //для очистки выбора
@@ -85,32 +86,19 @@ const toggleSelection = (rows?: IProduct[]) => {
 
 //добавление условий
 const AddProductItem = () => {
-  const selectedRows = useKuAddStore().multipleSelectionProduct;
+  const selectedRows = store2.multipleSelectionProduct;
 
   selectedRows.forEach(row => {
-    useKuAddStore().tableDataInRequirement.push({
+    store.tableDataInRequirement.push({
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,
       producer: "",
       brand: "",
     });
-    console.log("store.tableDataRequirementПРОДУКТЫ",useKuAddStore().tableDataInRequirement);
+    console.log("store.tableDataRequirementПРОДУКТЫ",store.tableDataInRequirement);
   });
   toggleSelection()
-  kuStore.dialogFormProductInVisible = false;
+  store.dialogFormProductInVisible = false;
 };
-
-// //монтирование данных в таблицу
-// onMounted(async () => {
-//   try {
-//     loading.value = true; 
-//     await useKuAddStore().getProductFromIncludedWithFilter();
-//     loading.value = false;
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//     loading.value = false;
-//   }
-// });
-
 </script>

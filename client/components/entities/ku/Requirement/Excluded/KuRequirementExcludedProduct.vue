@@ -1,12 +1,12 @@
 <template>
-  <el-dialog v-model="kuStore.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
+  <el-dialog v-model="store.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="buttonBar_search">
       <el-input v-model="searchProductExKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
-      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="useKuAddStore().handleSelectionChange3"
-        ref="multipleTableRef" v-loading="loading">
+      <el-table style="width: 100%" height="300" :data="tableData"
+        @selection-change="store2.handleSelectionChange3" ref="multipleTableRef" v-loading="loading">
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="300" show-overflow-tooltip />
@@ -15,13 +15,13 @@
       </el-table>
     </el-scrollbar>
     <div v-if="pagination?.count" class="pagination">
-      <el-pagination v-model:pageSize="pageSize" :page-sizes="[20, 50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-      @size-change="handleSizeChange" @current-change="paginationChange" />
+      <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
+        :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
+        @size-change="handleSizeChange" @current-change="paginationChange" />
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="kuStore.dialogFormProductExVisible = false">Отмена</el-button>
+        <el-button @click="store.dialogFormProductExVisible = false">Отмена</el-button>
         <el-button @click="AddProductItem()">Сохранить</el-button>
       </span>
     </template>
@@ -34,9 +34,12 @@ import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
 
-const kuStore = useKuAddStore();
+
+const store = useKuIdStore();
+const store2 = useKuAddStore();
 const { getProductEx, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
@@ -51,23 +54,23 @@ watch(getProductEx, (value) => {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuAddStore().setCountRowTable(val);
+  store2.setCountRowTable(val);
   try {
-    await useKuAddStore().getProductFromExcludedWithFilter();
+    await store2.getProductFromExcludedWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных искл.продуктов", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterValue9('page', page);
-  useKuAddStore().getProductFromExcludedWithFilter(page);
+  store2.setFilterProductEx('page', page);
+  store2.getProductFromExcludedWithFilter(page);
 };
 
 //поиск
 const searchProductExKu = ref('');
 watch(searchProductExKu, (newValue: string) => {
-  useKuAddStore().performSearchProductEx(newValue);
+  store2.performSearchProductEx(newValue);
 });
 
 //для очистки выбора
@@ -87,29 +90,16 @@ const AddProductItem = () => {
   const selectedRows = useKuAddStore().multipleSelectionProduct;
 
   selectedRows.forEach(row => {
-    useKuAddStore().tableDataExRequirement.push({
+    store.tableDataExRequirement.push({
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,
       producer: "",
       brand: "",
     });
-    console.log("исклПРОДУКТЫ",useKuAddStore().tableDataExRequirement);
+    console.log("исклПРОДУКТЫ", store.tableDataExRequirement);
   });
   toggleSelection()
-  kuStore.dialogFormProductExVisible = false;
+  store.dialogFormProductExVisible = false;
 };
-
-// //монтирование данных в таблицу
-// onMounted(async () => {
-//   try {
-//     loading.value = true; 
-//     await useKuAddStore().getProductFromExcludedWithFilter();
-//     loading.value = false;
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//     loading.value = false;
-//   }
-// });
-
 </script>

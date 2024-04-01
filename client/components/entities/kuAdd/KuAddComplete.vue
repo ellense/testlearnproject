@@ -147,7 +147,7 @@ const addItemAndSendToBackend = async () => {
 
     const ExcludedInvoicesArray = store.tableDataExInvoiceSelect.map(item => ({
       ku_id: response.ku_id,
-      doc_id: item.docid,
+      doc_id: item.doc_id,
     }));
     // Отправляем каждый объект из массива на бэкенд и проверяем успешность каждого запроса
     const response4 = await Promise.all(ExcludedInvoicesArray.map(async newItem => {
