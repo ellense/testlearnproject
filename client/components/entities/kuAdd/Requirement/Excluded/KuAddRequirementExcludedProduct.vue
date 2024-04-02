@@ -2,7 +2,7 @@
   <el-dialog v-model="kuStore.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="buttonBar_search">
-      <el-input v-model="searchProductExKu" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+      <el-input v-model="searchProductExKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
       <el-table style="width: 100%" height="300" :data="tableData"

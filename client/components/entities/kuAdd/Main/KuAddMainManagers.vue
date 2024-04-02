@@ -9,15 +9,15 @@
             <el-table-column property="discription" label="Описание" width="400" sortable show-overflow-tooltip />
         </el-table>
         <el-dialog v-model="store.dialogFormManagersVisible" title="Выбор исключенных накладных для КУ"
-            close-on-click-modal close-on-press-escape draggable>
+            close-on-click-modal close-on-press-escape draggable width="715px">
             <el-scrollbar class="scrollTableFiltres">
-                <el-table style="width: 740px" height="300" :data="tableData" border
+                <el-table style="width: 680px" height="300" :data="tableData" border
                     @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef"
                     v-loading="loading">
-                    <el-table-column type="selection" width="40" />
+                    <el-table-column type="selection" width="30" />
                     <el-table-column property="group" label="Группа категорийных менеджеров" width="300"
                         show-overflow-tooltip />
-                    <el-table-column property="discription" label="Описание" width="400"
+                    <el-table-column property="discription" label="Описание" width="350"
                         show-overflow-tooltip />
                 </el-table>
             </el-scrollbar>

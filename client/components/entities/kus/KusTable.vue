@@ -172,6 +172,7 @@ const rowDblclick = async (kuId: string) => {
   useKuIdStore().fetchExRequirementForKuId(kuId)
   useKuIdStore().fetchBonusForKuId(kuId)
   useKuIdStore().fetchExInvoiceForKuId(kuId)
+  useKuIdStore().fetchOfficialForKuId(kuId)
 
   router.push({ path: `/ku/${kuId}` });
 };

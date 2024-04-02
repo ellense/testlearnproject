@@ -7,28 +7,19 @@ import type {
 
 export const useKuIdStore = defineStore("KuIdStore", {
     state: (): IKuIdStore => ({
-        brandIncluded: [],
-        brandExcluded: [],
-        producerIncluded: [],
-        producerExcluded: [],
-        productIncluded: [],
-        productExcluded: [],
         tableDataInRequirement: [],
         tableDataExRequirement: [],
         tableDataPercent: [],
         tableDataExInvoiceAll: [],
         tableDataExInvoiceSelect: [],
-        dataEntity: [],
-        dataVendorId: [],
-        dataVendorName: [],
-        treeData: [],
-        treeRef: null,
+        tableDataManagerSelect: [],
         //v-model диалоговых форм
         dialogFormExInvoiceVisible: false,
         dialogFormProductInVisible: false,
         dialogFormCategoryInVisible: false,
         dialogFormProductExVisible: false,
         dialogFormCategoryExVisible: false,
+        dialogFormManagersVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableButtonsExcluded: false,
@@ -59,14 +50,12 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdNegative_turnover: false,
         kuIdKu_type: "",
         kuIdPay_method: "",
-        kuIdCategory_idIn: "",
-        kuIdCategory_nameIn: "",
-        kuIdProducer_nameIn: "",
-        kuIdBrand_nameIn: "",
-        kuIdCategory_idEx: "",
-        kuIdCategory_nameEx: "",
-        kuIdProducer_nameEx: "",
-        kuIdBrand_nameEx: "",
+        kuIdFIOСounteragent: "",
+        kuIdPostСounteragent: "",
+        kuIdDocСounteragent: "",
+        kuIdFIOEntity: "",
+        kuIdPostEntity: "",
+        kuIdDocEntity: "",
 
         //дизэйбл
         disableButtons: false,
@@ -117,12 +106,12 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.kuIdDocu_name = results.docu_name;
                 this.$state.kuIdDocu_number = results.docu_number;
                 this.$state.kuIdDocu_date = new Date(results.docu_date)
-                this.$state.kuIdDocu_subject= results.docu_subject;
-                this.$state.kuIdTax= results.tax;
-                this.$state.kuIdExclude_return= results.exclude_return;
-                this.$state.kuIdNegative_turnover= results.negative_turnover;
-                this.$state.kuIdKu_type= results.ku_type;
-                this.$state.kuIdPay_method= results.pay_method;
+                this.$state.kuIdDocu_subject = results.docu_subject;
+                this.$state.kuIdTax = results.tax;
+                this.$state.kuIdExclude_return = results.exclude_return;
+                this.$state.kuIdNegative_turnover = results.negative_turnover;
+                this.$state.kuIdKu_type = results.ku_type;
+                this.$state.kuIdPay_method = results.pay_method;
 
                 console.log("успешно получили данные ку_айди", results);
             } catch (error) {
@@ -152,103 +141,112 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.$state.searchProductExcluded = query;
         },
         async fetchInRequirementForKuId(ku_id?: string, page?: number) {
-            await KU.getKuInRequirements({ ku_id,page_size: this.$state.countRowTable,
+            await KU.getKuInRequirements({
+                ku_id, page_size: this.$state.countRowTable,
                 page,
             })
-              .then((tableData) => {
-                console.log('Получены данные вкл условий ку_айди:', tableData);
-                this.$state.tableDataInRequirement = tableData.results;
-                console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
-                this.$state.pagination = {
-                    count: tableData.count,
-                    previous: tableData.previous,
-                    next: tableData.next,
-                  };
-              })
-              .catch((error) => {
-                console.error('Ошибка при получении данных вкл условий ку_айди:', error);
-                return Promise.reject(error);
-              });
-          },
-          async fetchExRequirementForKuId(ku_id?: string, page?: number) {
-            await KU.getKuExRequirements({ ku_id,page_size: this.$state.countRowTable,
+                .then((tableData) => {
+                    console.log('Получены данные вкл условий ку_айди:', tableData);
+                    this.$state.tableDataInRequirement = tableData.results;
+                    console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных вкл условий ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
+        async fetchExRequirementForKuId(ku_id?: string, page?: number) {
+            await KU.getKuExRequirements({
+                ku_id, page_size: this.$state.countRowTable,
                 page,
             })
-              .then((tableData) => {
-                console.log('Получены данные искл условий ку_айди:', tableData);
-                this.$state.tableDataExRequirement = tableData.results;
-                console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
-                this.$state.pagination = {
-                    count: tableData.count,
-                    previous: tableData.previous,
-                    next: tableData.next,
-                  };
-              })
-              .catch((error) => {
-                console.error('Ошибка при получении данных искл условий ку_айди:', error);
-                return Promise.reject(error);
-              });
-          },
+                .then((tableData) => {
+                    console.log('Получены данные искл условий ку_айди:', tableData);
+                    this.$state.tableDataExRequirement = tableData.results;
+                    console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных искл условий ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
         //получение бонуса ku_id
-          async fetchBonusForKuId(ku_id?: string, page?: number) {
-            await KU.getKuRequirementBonus({ ku_id,page_size: this.$state.countRowTable,
+        async fetchBonusForKuId(ku_id?: string, page?: number) {
+            await KU.getKuRequirementBonus({
+                ku_id, page_size: this.$state.countRowTable,
                 page,
             })
-              .then((tableData) => {
-                console.log('Получены данные бонуса ку_айди:', tableData);
-                this.$state.tableDataPercent = tableData.results;
-                console.log('tableDataPercent:', this.$state.tableDataPercent);
-                this.$state.pagination = {
-                    count: tableData.count,
-                    previous: tableData.previous,
-                    next: tableData.next,
-                  };
-              })
-              .catch((error) => {
-                console.error('Ошибка при получении данных бонуса ку_айди:', error);
-                return Promise.reject(error);
-              });
-          },
-          //получение искл. накладных ku_id
-          async fetchExInvoiceForKuId(ku_id?: string, page?: number) {
-            await KU.getKuExInvoiceForKuId({ ku_id,page_size: this.$state.countRowTable,
+                .then((tableData) => {
+                    console.log('Получены данные бонуса ку_айди:', tableData);
+                    this.$state.tableDataPercent = tableData.results;
+                    console.log('tableDataPercent:', this.$state.tableDataPercent);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных бонуса ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
+        //получение искл. накладных ku_id
+        async fetchExInvoiceForKuId(ku_id?: string, page?: number) {
+            await KU.getKuExInvoiceForKuId({
+                ku_id, page_size: this.$state.countRowTable,
                 page,
             })
-              .then((tableData) => {
-                console.log('Получены данные искл накладных ку_айди:', tableData);
-                this.$state.tableDataExInvoiceSelect = tableData.results;
-                console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
-                this.$state.pagination = {
-                    count: tableData.count,
-                    previous: tableData.previous,
-                    next: tableData.next,
-                  };
-              })
-              .catch((error) => {
-                console.error('Ошибка при получении данных искл накладных ку_айди:', error);
-                return Promise.reject(error);
-              });
-          },
-        // async getKuRequirementDetailFromApi(kuId: string) {
-        //     try {
-        //         const results = await KU.getInfoRequirements({
-        //             ku_id: kuId,
-        //         });
-
-        //         // Очищаем массив перед добавлением новых данных
-        //         this.$state.tableDataInRequirement = [];
-
-        //         // Перебираем полученные результаты и добавляем их в массив
-        //         for (const item of results) {
-        //             this.$state.tableDataInRequirement.push(item);
-        //         }
-
-        //         console.log("полученная таблица условий ку:", this.tableDataInRequirement);
-        //         console.log("успешно получили данные условий:", results);
-        //     } catch (error) {
-        //         console.error("Ошибка при получении данных условий:", error);
-        //     }
-        // },
+                .then((tableData) => {
+                    console.log('Получены данные искл накладных ку_айди:', tableData);
+                    this.$state.tableDataExInvoiceSelect = tableData.results;
+                    console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных искл накладных ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
+        //получение долж. лиц ku_id
+        async fetchOfficialForKuId(ku_id?: string, page?: number) {
+            await KU.getKuOfficial({
+                ku_id, page_size: this.$state.countRowTable,
+                page,
+            })
+                .then((tableData) => {
+                    console.log('Получены данные долж. лиц ку_айди:', tableData);
+                    this.$state.kuIdFIOСounteragent = tableData.results[0].counterparty_name;
+                    this.$state.kuIdPostСounteragent = tableData.results[0].counterparty_post;
+                    this.$state.kuIdDocСounteragent = tableData.results[0].counterparty_docu;
+                    this.$state.kuIdFIOEntity = tableData.results[0].entity_name;
+                    this.$state.kuIdPostEntity = tableData.results[0].entity_post;
+                    this.$state.kuIdDocEntity = tableData.results[0].entity_docu;
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных долж. лиц ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
         clearData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;
@@ -293,15 +291,12 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdNegative_turnover = false;
             this.kuIdKu_type = '';
             this.kuIdPay_method = '';
-            this.kuIdCategory_idIn = '';
-            this.kuIdCategory_nameIn = '';
-            this.kuIdProducer_nameIn = '';
-            this.kuIdBrand_nameIn = '';
-            this.kuIdCategory_idEx = '';
-            this.kuIdCategory_nameEx = '';
-            this.kuIdProducer_nameEx = '';
-            this.kuIdBrand_nameEx = '';
-
+            this.kuIdFIOСounteragent = '';
+            this.kuIdPostСounteragent = '';
+            this.kuIdDocСounteragent = '';
+            this.kuIdFIOEntity = '';
+            this.kuIdPostEntity = '';
+            this.kuIdDocEntity = '';
             // Сбрасываем флаг дизейбла кнопок
             this.disableButtons = false;
         }

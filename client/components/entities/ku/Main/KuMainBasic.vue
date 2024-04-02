@@ -209,7 +209,6 @@ const onVendorChange = async () => {
   if (store.kuIdVendorId && store.kuIdVendorId.length > 0) {
     store2.setFilterValue6('vendor_id', store.kuIdVendorId);
     store2.getVendorNameFromAPIWithFilter()
-
     try {
       console.log("поставщик:", store.kuIdVendorId);
       store2.setFilterProductInRequirement('vendor_id', store.kuIdVendorId);
@@ -232,74 +231,9 @@ const onVendorChange = async () => {
     useKuAddStore().tableDataExInvoiceAll.length = 0
   }
 };
+const onTypeChange = async () => {
 
-// const options2 = ref<Array<{ label: string; value: string }>>([]);
-
-// // watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-// //   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
-// // });
-
-// watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-//   const uniqueVendors = Array.from(new Set(vendors.map(item => item.vendor_id)));
-//   options2.value = uniqueVendors.map(label => ({ label, value: label }));
-// });
-// const onEntityChange = async () => {
-//   store.dataVendor = [];
-//   store.setFilterValue6('entity_id', store.entityId);
-//   if (store.entityId) { // Проверка, что выбрана торговая маркка
-//     useKuAddStore().fetchAllVendorsListForEntity(); // Выполнить запрос с фильтром по производителям
-//     console.log('Выполнен запрос на получение данных производителей.');
-//   } else {
-//     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-//     console.log('Сброшен фильтр производителей:', useKuAddStore().filterBrandIncluded);
-//   }
-// };
-// const onEntityChange = async () => {
-//   store.newEntityName = ""; // Сбрасываем название компании перед загрузкой новых данных
-//   store.dataVendorId = [];
-
-//   // Проверяем, что выбран только один код компании
-//   if (store.newEntityId && store.newEntityId.length > 0) {
-//     const selectedEntity = options.value.find(option => option.value === store.newEntityId);
-//     if (selectedEntity) {
-//       store.newEntityName = selectedEntity.label;
-//     }
-//   }
-//   //фильтр в поставщике
-//   store.setFilterValue6('entity_id', store.newEntityId);
-//   if (store.newEntityId) { // Проверка, что выбрана торговая маркка
-//     useKuAddStore().fetchAllVendorsIdForEntity(); // Выполнить запрос с фильтром по производителям
-//     console.log('Выполнен запрос на получение данных поставщиков.');
-//   } else {
-//     useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-//   }
-// };
-// const onVendorChange = async () => {
-//   store.newVendorName = "";
-//   if (store.newVendorId && store.newVendorId.length > 0) {
-//     store.setFilterValue6('vendor_id', store.newVendorId);
-//     store.getVendorFromAPIWithFilter()
-
-//   }
-//   try {
-//     console.log("поставщик:", store.newVendorId);
-//     store.setFilterValue3('vendor_id', store.newVendorId);
-//     store.setFilterValue4('vendor_id', store.newVendorId);
-//     store.setFilterValue5('vendor_id', store.newVendorId);
-//     await store.getProductFromIncludedWithFilter();
-//     await store.fetchAllProducersForInclided();
-//     await store.fetchAllBrandsForIncluded();
-//     store.setFilterValue8('vendor_id', store.newVendorId);
-//     store.setFilterValue7('vendor_id', store.newVendorId);
-//     store.setFilterValue9('vendor_id', store.newVendorId);
-//     await store.getProductFromExcludedWithFilter();
-//     await store.fetchAllProducersForExcluded();
-//     await store.fetchAllBrandsForExcluded();
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
-//   }
-// };
-
+}
 
 // Проверка полей формы
 const dateStartValidation = ref<"error" | "success" | "validating" | undefined>('success');
@@ -356,28 +290,6 @@ const validateDateEnd = () => {
 watch(() => store.kuIdDateStart, validateDateStart);
 watch(() => store.kuIdDateEnd, validateDateEnd);
 
-// Функция сброса дат при изменении периода
-const resetDatesOnPeriodChange = () => {
-
-  store.kuIdDateStart = "";
-  store.kuIdDateEnd = "";
-};
-// Функция сброса поставщика
-const resetVendorOnEntityChange = () => {
-  store.kuIdVendorId = "";
-};
-// Обработчик изменения выбранного периода
-watch(() => store.kuIdType, (newValue, oldValue) => {
-  if (oldValue !== newValue) {
-    resetDatesOnPeriodChange();
-  }
-});
-// Обработчик изменения выбранного юр.лица
-watch(() => store.kuIdEntityId, (newValue, oldValue) => {
-  if (oldValue !== newValue) {
-    resetVendorOnEntityChange();
-  }
-});
 
 
 const disableSelectVendorTooltip = computed(() => {

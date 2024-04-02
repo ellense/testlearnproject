@@ -366,28 +366,30 @@ export interface IKuAddStore {
 
 export interface IKuIdStore {
   //данные таблиц
-  brandIncluded: IBrand[];
-  brandExcluded: IBrand[];
-  producerIncluded: IProducer[];
-  producerExcluded: IProducer[];
-  productIncluded: IProduct[];
-  productExcluded: IProduct[];
+  // brandIncluded: IBrand[];
+  // brandExcluded: IBrand[];
+  // producerIncluded: IProducer[];
+  // producerExcluded: IProducer[];
+  // productIncluded: IProduct[];
+  // productExcluded: IProduct[];
   tableDataInRequirement: IRequirement[];
   tableDataExRequirement: IRequirement[];
   tableDataPercent: IPercent[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
-  dataEntity: IEntityIdAndName[];
-  dataVendorId: IVendorId[];
-  dataVendorName: IVendorName[];
-  treeData: ITree[],
-  treeRef: typeof ElTree | null,
+  tableDataManagerSelect: IManagerForKu[]
+  // dataEntity: IEntityIdAndName[];
+  // dataVendorId: IVendorId[];
+  // dataVendorName: IVendorName[];
+  // treeData: ITree[],
+  // treeRef: typeof ElTree | null,
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
   dialogFormProductInVisible: boolean
   dialogFormCategoryInVisible: boolean
   dialogFormProductExVisible: boolean
   dialogFormCategoryExVisible: boolean
+  dialogFormManagersVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   disableButtonsExcluded: boolean
@@ -418,14 +420,12 @@ export interface IKuIdStore {
   kuIdNegative_turnover: boolean
   kuIdKu_type: string;
   kuIdPay_method: string;
-  kuIdCategory_idIn: string;
-  kuIdCategory_nameIn: string;
-  kuIdProducer_nameIn: string;
-  kuIdBrand_nameIn: string;
-  kuIdCategory_idEx: string;
-  kuIdCategory_nameEx: string;
-  kuIdProducer_nameEx: string;
-  kuIdBrand_nameEx: string;
+  kuIdFIOСounteragent: string;
+  kuIdPostСounteragent:string;
+  kuIdDocСounteragent: string;
+  kuIdFIOEntity: string;
+  kuIdPostEntity: string;
+  kuIdDocEntity: string;
   //дизэйбл
   disableButtons: boolean
   //пагинация в таблицах

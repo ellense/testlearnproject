@@ -327,7 +327,7 @@ const postBonusRequirements = async (response: IKuList, dataArray: any) => {
   const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
     ku_key_id: response.ku_id,
     fix: item.fix,
-    criterion: item.criterion,
+    criterion: item.criterion !== null ? item.criterion : 0,
     percent_sum: item.percent_sum,
   }));
 
