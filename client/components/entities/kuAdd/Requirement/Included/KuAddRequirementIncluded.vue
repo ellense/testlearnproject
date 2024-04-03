@@ -43,6 +43,7 @@ const kuRequirementList = ref(store.tableDataInRequirement);
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {
         store.tableDataInRequirement.push({
+            
             item_type: "Все",
             item_code: "",
             item_name: "",

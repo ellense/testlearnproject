@@ -28,7 +28,7 @@
         <template #header>
           <div class="column-header" :style="{ color: LegalEntity.length > 0 ? '#409EFF' : 'inherit' }">
             Юридическое лицо
-            <!-- <el-popover placement="bottom" :width="325" trigger="click">
+            <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -39,7 +39,7 @@
     size="small">
     <el-option v-for="item in optionsLegalEntity" :key="item" :label="item" :value="item" />
   </el-select>
-  </el-popover> -->
+  </el-popover>
           </div>
         </template>
         <el-table-column property="entity_id" label="Код" width="70" sortable show-overflow-tooltip />
@@ -145,10 +145,27 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_calc" type="date" sortable width="110" show-overflow-tooltip />
+        <el-table-column property="date_accrual" type="date" sortable width="110" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="" type="date" label="Дата и время расчета" width="105" sortable
-        show-overflow-tooltip />
+      <el-table-column>
+        <template #header>
+          <div class="column-header" :style="{ color: dateRange4 ? '#409EFF' : 'inherit' }" style="display: flex;
+  align-items: center;">
+            Дата и время расчета
+            <!-- <el-popover placement="bottom" :width="400" :visible="popoverVisible4">
+              <template #reference>
+                <el-button style="background-color: transparent; border:none; padding: 10px"
+                  @click="popoverVisible4 = !popoverVisible4"><el-icon>
+                    <Filter />
+                  </el-icon></el-button>
+              </template>
+              <el-date-picker v-model="dateRange4" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
+                end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange4" />
+            </el-popover> -->
+          </div>
+        </template>
+      <el-table-column property="date_calc" width="105" sortable show-overflow-tooltip />
+      </el-table-column>
       <el-table-column fixed="right" property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
       <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
@@ -349,6 +366,7 @@ const onStatusChange = async () => {
 const popoverVisible = ref(false);
 const popoverVisible2 = ref(false);
 const popoverVisible3 = ref(false);
+const popoverVisible4 = ref(false);
 const togglePopover = () => {
   popoverVisible.value = !popoverVisible.value;
 };
@@ -365,9 +383,13 @@ const closePopover2 = () => {
 const closePopover3 = () => {
   popoverVisible3.value = false;
 };
+const closePopover4 = () => {
+  popoverVisible3.value = false;
+};
 const dateRange = ref()
 const dateRange2 = ref()
 const dateRange3 = ref()
+const dateRange4 = ref()
 const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');// Функция для форматирования даты в формат "YYYY-MM-DD"
 
 const changeDateRange = (newDateRange: Date[]) => {
@@ -417,6 +439,27 @@ const changeDateRange2 = (newDateRange: Date[]) => {
   }
 };
 const changeDateRange3 = (newDateRange: Date[]) => {
+  if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
+    const [startDate, endDate] = newDateRange;
+    if (!startDate || !endDate) {
+      useGraphicStore().removeFilterValue('date_accrual_s');
+      useGraphicStore().removeFilterValue('date_accrual_e');
+    } else {
+      const startFormatted = formatDate(startDate);
+      const endFormatted = formatDate(endDate);
+      useGraphicStore().setFilterValue('date_accrual_s', startFormatted);
+      useGraphicStore().setFilterValue('date_accrual_e', endFormatted);
+    }
+    toggleTriggerFilter();
+    closePopover3()
+  } else {
+    useGraphicStore().removeFilterValue('date_accrual_s');
+    useGraphicStore().removeFilterValue('date_accrual_e');
+    toggleTriggerFilter();
+    closePopover3()
+  }
+};
+const changeDateRange4 = (newDateRange: Date[]) => {
   if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {
     const [startDate, endDate] = newDateRange;
     if (!startDate || !endDate) {

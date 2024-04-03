@@ -366,23 +366,13 @@ export interface IKuAddStore {
 
 export interface IKuIdStore {
   //данные таблиц
-  // brandIncluded: IBrand[];
-  // brandExcluded: IBrand[];
-  // producerIncluded: IProducer[];
-  // producerExcluded: IProducer[];
-  // productIncluded: IProduct[];
-  // productExcluded: IProduct[];
   tableDataInRequirement: IRequirement[];
+  tableDataInRequirementOrigin: IRequirementOrigin[];
   tableDataExRequirement: IRequirement[];
   tableDataPercent: IPercent[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
   tableDataManagerSelect: IManagerForKu[]
-  // dataEntity: IEntityIdAndName[];
-  // dataVendorId: IVendorId[];
-  // dataVendorName: IVendorName[];
-  // treeData: ITree[],
-  // treeRef: typeof ElTree | null,
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
   dialogFormProductInVisible: boolean
@@ -471,12 +461,25 @@ export interface GetParamKuId {
 }
 //Условия
 export interface IRequirement {
+  in_prod_id: number | null;
   item_type: string;
   item_code: string;
   item_name: string;
   producer: string;
   brand: string;
 }
+export interface IRequirementOrigin {
+  in_prod_id: number | null;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IRequirementId {
+  in_prod_id: number | null;
+}
+
 export interface GetRequirementReturnData extends Pagination {
   results: IRequirement[];
 }
@@ -602,6 +605,7 @@ export interface IGraphic {
   date_start: Date | string;
   date_end: Date | string;
   date_calc: Date | string;
+  date_accrual: Date | string;
   percent: number | null;
   sum_calc: number | null;
   sum_bonus: number | null;
@@ -668,6 +672,8 @@ export interface GetAllGraphic {
   date_end_e?: string,
   date_calc_s?: string,
   date_calc_e?: string,
+  date_accrual_s?: string,
+  date_accrual_e?: string,
   search?: string;
   sort_by?: string;
   sort_order?: string;

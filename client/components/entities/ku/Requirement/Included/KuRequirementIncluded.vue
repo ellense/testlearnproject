@@ -48,6 +48,7 @@ const tableData = ref<IRequirement[]>(getKuInRequirement.value);
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {
         store.tableDataInRequirement.push({
+            in_prod_id: null,
             item_type: "Все",
             item_code: "",
             item_name: "",
@@ -64,6 +65,7 @@ const onAddItem = () => {
                 if (action === 'confirm') { // Проверяем, что пользователь подтвердил удаление
                     store.tableDataInRequirement.length = 0;// Очищаем массив
                     store.tableDataInRequirement.push({
+                        in_prod_id: null,
                         item_type: "Все",
                         item_code: "",
                         item_name: "",
@@ -95,6 +97,8 @@ const dialogOpenCategory = () => {
 const deleteRow = (index: number) => {
     store.tableDataInRequirement.splice(index, 1);
     store.disableButtonsIncluded = false;
+    console.log('tableDataInRequirement:', store.tableDataInRequirement);
+    console.log('tableDataInRequirementOrigin:', store.tableDataInRequirementOrigin);
 }
 
 const disableButtonTooltip = computed(() => {

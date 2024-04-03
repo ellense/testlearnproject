@@ -55,6 +55,7 @@ import type {
   IContract,
   IContractPost,
   IContractPromise,
+  IRequirementId,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -149,6 +150,9 @@ export const KU = {
   getKuOfficial: (params: GetParamKuId): Promise<GetAllOfficialReturnData> =>
     $Get(`api/official_create/`, { params, isBearer: false }),
 
+
+  deleteInRequirement: (data: IRequirementId) =>
+    $Delete(`api/included_condition_detail/${data.in_prod_id}/`, { data, isBearer: false }),
   getInvoicesList: (
     params?: GetParamExInvoicesForKu
   ): Promise<GetExInvoicesForKuReturnData> =>

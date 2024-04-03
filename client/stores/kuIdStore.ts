@@ -8,6 +8,7 @@ import type {
 export const useKuIdStore = defineStore("KuIdStore", {
     state: (): IKuIdStore => ({
         tableDataInRequirement: [],
+        tableDataInRequirementOrigin: [],
         tableDataExRequirement: [],
         tableDataPercent: [],
         tableDataExInvoiceAll: [],
@@ -148,7 +149,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные вкл условий ку_айди:', tableData);
                     this.$state.tableDataInRequirement = tableData.results;
+                    this.$state.tableDataInRequirementOrigin = this.$state.tableDataInRequirement.slice();
                     console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
+                    console.log('tableDataInRequirementOrigin:', this.$state.tableDataInRequirementOrigin);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,

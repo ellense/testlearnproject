@@ -3,8 +3,8 @@
         close-on-click-modal close-on-press-escape draggable style="width: 20%;">
         <form>
             <el-form-item>
-                <el-input v-model="useGraphicStore().editApproved" clearable @input=""
-                    placeholder="Введите новое значение" style="width: 100%" />
+                <el-input v-model="useGraphicStore().editApproved" clearable 
+                    placeholder="Введите новое значение" style="width: 100%"  />
             </el-form-item>
         </form>
         <template #footer>
