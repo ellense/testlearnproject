@@ -209,7 +209,7 @@
     });
     ws["!cols"] = colsInfo; // размеры колонок
     utils.book_append_sheet(wb, ws, "Акт с поставщиком по товарам");
-    writeFile(wb, "Акт сверки взаиморасчетов с поставщиком по товарам.xlsx");
+    writeFile(wb, "Акт сверки взаиморасчетов с "+ graphicData.vendor_name + " по товарам " + graphicData.ku_id + ".xlsx");
   }
   
   </script>

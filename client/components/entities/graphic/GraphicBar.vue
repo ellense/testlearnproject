@@ -222,13 +222,13 @@ const renderDoc = async () => {
         const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
         doc.render({
           vendor_name: useReportStore().vendor.urastic_name,
-          counterparty_post: useReportStore().official[0].counterparty_post, //useReportStore().official[0].counterparty_post
-          counterparty_name:  useReportStore().official[0].counterparty_name,//useReportStore().official[0].counterparty_name
-          counterparty_docu: useReportStore().official[0].counterparty_docu,//useReportStore().official[0].counterparty_docu
+          counterparty_post: useReportStore().official[0].counterparty_post,
+          counterparty_name:  useReportStore().official[0].counterparty_name,
+          counterparty_docu: useReportStore().official[0].counterparty_docu,
           entity_name: useReportStore().entity.urastic_name,
-          entity_post: useReportStore().official[0].entity_post,//useReportStore().official[0].entity_post
-          entity_fio: useReportStore().official[0].entity_name,//useReportStore().official[0].entity_fio
-          entity_docu: useReportStore().official[0].entity_docu,//useReportStore().official[0].entity_docu
+          entity_post: useReportStore().official[0].entity_post,
+          entity_fio: useReportStore().official[0].entity_name,
+          entity_docu: useReportStore().official[0].entity_docu,
 
           date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
           date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
@@ -257,7 +257,7 @@ const renderDoc = async () => {
           type: "blob",
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         });
-        saveAs(out, "Акт предоставления вознаграждения.docx");
+        saveAs(out, "Акт предоставления вознаграждения по " + useReportStore().kuid + " поставщика " + useReportStore().vendor.urastic_name + ".docx");
       });
     } else {
       console.log("Данные вендора или энтити ещё не загружены");

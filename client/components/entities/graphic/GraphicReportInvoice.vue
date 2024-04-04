@@ -215,7 +215,7 @@ function exportAsExcel() {
   });
   ws["!cols"] = colsInfo; // размеры колонок
   utils.book_append_sheet(wb, ws, "Акт с поставщиком по накладным");
-  writeFile(wb, "Акт сверки взаиморасчетов с поставщиком по накладным.xlsx");
+  writeFile(wb, "Акт сверки взаиморасчетов с "+ graphicData.vendor_name + " по накладным " + graphicData.ku_id + ".xlsx");
 }
 
 </script>
