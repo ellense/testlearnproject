@@ -29,7 +29,7 @@
       </div>
       <el-scrollbar class="scrollTableFiltres">
         <el-table style="width: 100%" height="300" :data="tableData"
-          @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
+          @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading" stripe>
           <el-table-column type="selection" width="40" />
           <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
           <el-table-column property="invoice_number" label="Номер" width="150" sortable show-overflow-tooltip />

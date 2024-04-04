@@ -90,6 +90,7 @@ const AddProductItem = () => {
 
   selectedRows.forEach(row => {
     store.tableDataInRequirement.push({
+      in_prod_id: null,
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,

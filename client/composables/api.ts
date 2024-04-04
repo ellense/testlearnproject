@@ -56,6 +56,7 @@ import type {
   IContractPost,
   IContractPromise,
   IRequirementId,
+  IGraphicNumerals,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -176,7 +177,8 @@ export const GRAPHIC = {
     $Get("api/included_invoice_list/", { params, isBearer: false }),
   getInfoProductsForGraphic: (params: GetAllInvoicesAndProductForGraphic): Promise<GetAllProductsForGraphicReturnData> =>
     $Get("api/included_product_list/", { params, isBearer: false }),
-
+  getNumeralsGraphic: (data: IGraphicId): Promise<IGraphicNumerals> =>
+    $Get(`api/graph_words/${data.graph_id}/`, { data, isBearer: false }),
 };
 
 export const PRODUCER = {

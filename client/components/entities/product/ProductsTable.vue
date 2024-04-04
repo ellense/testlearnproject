@@ -4,7 +4,7 @@
   <div>
     <!-- <el-scrollbar class="scrollTableProduct"> -->
       
-      <el-table :data="tableData" height="calc(100vh - 130px)" style="width: 100%; " v-loading="loading" :border="true" @sort-change="handleSortChange">
+      <el-table :data="tableData" height="calc(100vh - 130px)" style="width: 100%; " v-loading="loading" :border="true" @sort-change="handleSortChange" stripe>
         <el-table-column prop="itemid" label="Номер" width="90" show-overflow-tooltip sortable />
         <el-table-column prop="name" label="Наименование" width="450" show-overflow-tooltip sortable/>
         <el-table-column prop="classifier_name" label="Категория" width="400" show-overflow-tooltip />

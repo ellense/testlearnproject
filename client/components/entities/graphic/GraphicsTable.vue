@@ -300,7 +300,7 @@ watch(triggerFilter, () => {
 });
 
 //фильтр ку
-const Ku = ref<string[]>(filterGraphicValue.value.entity_id || []);
+const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
 const optionsKu = ref<string[]>(KuParams.value);
 const changeKu = () => {
   useGraphicStore().pagination = null;

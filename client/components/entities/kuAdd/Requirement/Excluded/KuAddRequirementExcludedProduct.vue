@@ -6,7 +6,7 @@
     </div>
     <el-scrollbar class="scrollTableFiltres">
       <el-table style="width: 100%" height="300" :data="tableData"
-        @selection-change="useKuAddStore().handleSelectionChange3" ref="multipleTableRef" v-loading="loading">
+        @selection-change="useKuAddStore().handleSelectionChange3" ref="multipleTableRef" v-loading="loading" stripe>
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="300" show-overflow-tooltip />
@@ -89,6 +89,7 @@ const AddProductItem = () => {
 
   selectedRows.forEach(row => {
     useKuAddStore().tableDataExRequirement.push({
+      in_prod_id: null,
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,

@@ -4,6 +4,7 @@
     <el-button @click="addClose()" size="small">Отменить</el-button>
     <el-progress :percentage="progress" v-if="progress !== 100" size="small" />
     <el-button type="primary" @click="createKU()" :loading="loading" size="small">Создать</el-button>
+    <el-button plain @click="open"> уведомление </el-button>
   </div>
 </template>
 
@@ -12,6 +13,33 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuStore } from "~~/stores/kuStore";
 import dayjs from "dayjs";
 import type { IExInvoiceForKuPost, IKuList, IManagerForKuPost, IOfficialForKuPost } from "~/utils/types/directoryTypes";
+
+
+
+
+
+
+import { ElNotification } from 'element-plus'
+
+const open = () => {
+  ElNotification({
+    title: 'HTML String',
+    dangerouslyUseHTMLString: true,
+    message: '<strong>This is <i>HTML</i> string</strong>',
+    showClose: false,
+  })
+}
+
+
+
+
+
+
+
+
+
+
+
 
 const store = useKuAddStore();
 const router = useRouter();
@@ -305,12 +333,12 @@ const createNewItem = () => {
 
 const postRequirements = async (response: IKuList, dataArray: any, postFunction: any) => {
   const requirementsArray = dataArray.map((item: { item_type: any; item_code: any; item_name: any; producer: any; brand: any; }) => ({
-    ku_id: response.ku_id, 
-      item_type: item.item_type,
-      item_code: item.item_code,
-      item_name: item.item_name,
-      producer: item.producer,
-      brand: item.brand,
+    ku_id: response.ku_id,
+    item_type: item.item_type,
+    item_code: item.item_code,
+    item_name: item.item_name,
+    producer: item.producer,
+    brand: item.brand,
   }));
 
   return await Promise.all(requirementsArray.map(async (newItem: any) => {
@@ -331,7 +359,7 @@ const postBonusRequirements = async (response: IKuList, dataArray: any) => {
     percent_sum: item.percent_sum,
   }));
 
-  return await Promise.all(requirementsArray.map(async (newItem: any)  => {
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
     try {
       return await KU.postKuRequirementBonus(newItem);
     } catch (error) {
@@ -341,7 +369,7 @@ const postBonusRequirements = async (response: IKuList, dataArray: any) => {
   }));
 };
 
-const postManagerItems = async (response:IKuList, dataArray: any, postFunction: any) => {
+const postManagerItems = async (response: IKuList, dataArray: any, postFunction: any) => {
   const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
     ku_id: response.ku_id,
     group: item.group,
@@ -377,12 +405,12 @@ const postItems = async (response: IKuList, dataArray: any, postFunction: any) =
 const createOfficialArray = (response: IKuList) => {
   return {
     ku_id: response.ku_id,
-      counterparty_name: store.newOfFIOСounteragent,
-      counterparty_post: store.newOfPostСounteragent,
-      counterparty_docu: store.newOfDocСounteragent,
-      entity_name: store.newOfFIOEntity,
-      entity_post: store.newOfPostEntity,
-      entity_docu: store.newOfDocEntity,
+    counterparty_name: store.newOfFIOСounteragent,
+    counterparty_post: store.newOfPostСounteragent,
+    counterparty_docu: store.newOfDocСounteragent,
+    entity_name: store.newOfFIOEntity,
+    entity_post: store.newOfPostEntity,
+    entity_docu: store.newOfDocEntity,
   };
 };
 

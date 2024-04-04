@@ -43,6 +43,7 @@ export const useReportStore = defineStore("ReportStore", {
       merge_id: "",
     },
     official: [],
+    numerals: "",
     getGraphicDone: true,
     printReportToggle: false,
     filterValueInvoice: {},
@@ -70,6 +71,18 @@ export const useReportStore = defineStore("ReportStore", {
         console.log("успешно получили данные график_айди", results);
         console.log("добавили данные в graphic[] ", this.$state.graphic);
         console.log("номер ку графика, поставщик, юр.лицо ", this.$state.kuid, ",", this.$state.vendorid, ",", this.$state.entityid);
+      } catch (error) {
+        console.error("Ошибка при получении данных график_айди:", error);
+      }
+    },
+    async getNumeralsGraphFromApi(grapId: number | null) {
+      try {
+        const results = await GRAPHIC.getNumeralsGraphic({
+          graph_id: grapId,
+        });
+        this.$state.numerals = results.sum_calc_words;
+        console.log("успешно получили данные числительных", results);
+        console.log("добавили данные в numerals ", this.$state.numerals);
       } catch (error) {
         console.error("Ошибка при получении данных график_айди:", error);
       }

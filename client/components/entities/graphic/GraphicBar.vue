@@ -196,6 +196,7 @@ const renderDoc = async () => {
     const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
     console.log("selectedRows[0]:", selectedRows[0])
     await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
+    await useReportStore().getNumeralsGraphFromApi(selectedRows[0]);
     console.log("useReportStore().graphic[0].ku_id", useReportStore().graphic[0].ku_id)
     await useReportStore().getKuOfficialDetailFromApi(useReportStore().graphic[0].ku_id)
     // await useReportStore().getKuOfficialDetailFromApi(useReportStore().kuid)
@@ -248,6 +249,8 @@ const renderDoc = async () => {
           bank_name2: useReportStore().entity.bank_name,
           bank_bik2: useReportStore().entity.bank_bink,
           corr_account2: useReportStore().entity.corr_account,
+
+          numerals: useReportStore().numerals,
         });
 
         const out = doc.getZip().generate({

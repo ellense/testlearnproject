@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange">
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange" stripe>
       <el-table-column label="Номер" prop="vendor_id" width="140" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
       <el-table-column prop="urastic_name" label="Полное наименование" width="300" show-overflow-tooltip sortable />

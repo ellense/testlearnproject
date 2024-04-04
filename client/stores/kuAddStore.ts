@@ -224,11 +224,16 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 })
                 .catch((error) => Promise.reject(error));
         },
-        setFilterValue6<
+        setFilterVendor<
             T extends keyof GetAllVendorsForEntity,
             U extends GetAllVendorsForEntity[T],
         >(field: T, value: U) {
             this.$state.filterVendorValue[field] = value
+        },
+        removeFilterVendor<T extends keyof GetAllVendorsForEntity>(field: T) {
+            if (this.$state.filterVendorValue) {
+                delete this.$state.filterVendorValue[field]
+            }
         },
 
 
@@ -557,7 +562,11 @@ export const useKuAddStore = defineStore("KuAddStore", {
             // Сбрасываем значения поисковых строк
             this.searchProductIncluded = '';
             this.searchProductExcluded = '';
+
+            // очищение фильтров
+            this.removeFilterVendor('entity_id');
         },
+        //создание контракта
         async createKuContract(newItem:IContractPost ) {
             try {
               const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API

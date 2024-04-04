@@ -58,28 +58,7 @@
           </el-form-item>
         </div>
         <div class="kuAddMainCol">
-          <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
-          <el-form-item label-width="170" label="Тип периода">
-            <el-select v-model="store.newType" size="small" clearable placeholder="Выберите тип периода"
-              style="width: 300px">
-              <el-option label="Месяц" value="Месяц"></el-option>
-              <el-option label="Квартал" value="Квартал"></el-option>
-              <el-option label="Полгода" value="Полгода"></el-option>
-              <el-option label="Год" value="Год"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
-            label-width="170" label="Начальная дата">
-            <el-date-picker v-model="store.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
-              @change="validateDateStart"></el-date-picker>
-          </el-form-item>
-          <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
-            label="Конечная дата">
-            <el-date-picker v-model="store.newDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
-              @change="validateDateEnd"></el-date-picker>
-          </el-form-item>
+          
 
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
           <el-form-item label-width="170" label="Наименование поставщика">
@@ -114,6 +93,28 @@
           </el-form-item>
         </div>
         <div class="kuAddMainCol">
+          <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
+          <el-form-item label-width="170" label="Тип периода">
+            <el-select v-model="store.newType" size="small" clearable placeholder="Выберите тип периода"
+              style="width: 300px">
+              <el-option label="Месяц" value="Месяц"></el-option>
+              <el-option label="Квартал" value="Квартал"></el-option>
+              <el-option label="Полгода" value="Полгода"></el-option>
+              <el-option label="Год" value="Год"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
+            label-width="170" label="Начальная дата">
+            <el-date-picker v-model="store.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
+              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
+              @change="validateDateStart"></el-date-picker>
+          </el-form-item>
+          <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
+            label="Конечная дата">
+            <el-date-picker v-model="store.newDateEnd" style="width: 300px" size="small"
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
+              @change="validateDateEnd"></el-date-picker>
+          </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
           <el-form-item>
             <el-checkbox v-model="store.newTax" label="База премии включает налог" size="small" />
@@ -197,14 +198,14 @@ const onEntityChange = async () => {
   store.dataVendorId = [];
   store.newVendorName = "";
 
-  store.setFilterValue6('entity_id', store.newEntityId);
+  store.setFilterVendor('entity_id', store.newEntityId);
   if (store.newEntityId) { // Проверка, что выбрано юр. лицо
     useKuAddStore().fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
   } else {
-    useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-    useKuAddStore().removeFilterExInvoice("vendor_id")
-    useKuAddStore().tableDataExInvoiceAll.length = 0
+    store.setFilterVendor('entity_id', undefined); // Сбросить фильтр
+    store.removeFilterExInvoice("vendor_id")
+    store.tableDataExInvoiceAll.length = 0
   }
   // useKuAddStore().removeFilterExInvoice("vendor_id")
 };
@@ -212,7 +213,7 @@ const onEntityChange = async () => {
 const onVendorChange = async () => {
   store.newVendorName = "";
   if (store.newVendorId && store.newVendorId.length > 0) {
-    store.setFilterValue6('vendor_id', store.newVendorId);
+    store.setFilterVendor('vendor_id', store.newVendorId);
     store.getVendorNameFromAPIWithFilter()
 
     try {

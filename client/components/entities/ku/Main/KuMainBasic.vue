@@ -193,21 +193,21 @@ const onEntityChange = async () => {
   //для поставщика
   store2.dataVendorId = [];
   store.kuIdVendorName = "";
-  store2.setFilterValue6('entity_id', store.kuIdEntityId);
+  store2.setFilterVendor('entity_id', store.kuIdEntityId);
   if (store.kuIdEntityId) { // Проверка, что выбрана торговая маркка
     useKuAddStore().fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
   } else {
-    useKuAddStore().setFilterValue6('entity_id', undefined); // Сбросить фильтр
-    useKuAddStore().removeFilterExInvoice("vendor_id")
-    useKuAddStore().tableDataExInvoiceAll.length = 0
+    store2.setFilterVendor('entity_id', undefined); // Сбросить фильтр
+    store2.removeFilterExInvoice("vendor_id")
+    store2.tableDataExInvoiceAll.length = 0
   }
 };
 
 const onVendorChange = async () => {
   store.kuIdVendorName = "";
   if (store.kuIdVendorId && store.kuIdVendorId.length > 0) {
-    store2.setFilterValue6('vendor_id', store.kuIdVendorId);
+    store2.setFilterVendor('vendor_id', store.kuIdVendorId);
     store2.getVendorNameFromAPIWithFilter()
     try {
       console.log("поставщик:", store.kuIdVendorId);
