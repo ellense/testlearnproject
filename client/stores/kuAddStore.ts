@@ -50,14 +50,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
         newOfFIOEntity: "",
         newOfPostEntity: "",
         newOfDocEntity: "",
-        valueCategory_idIn: "",
-        valueCategory_nameIn: "",
-        valueProducer_nameIn: "",
-        valueBrand_nameIn: "",
-        valueCategory_idEx: "",
-        valueCategory_nameEx: "",
-        valueProducer_nameEx: "",
-        valueBrand_nameEx: "",
         valueProducer_nameContract: "",
         valueBrand_nameContract: "",
         //селекты для множественного выбора
@@ -97,7 +89,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         disableButtonsIncluded: false,
         disableButtonsExcluded: false,
         //
-        searchExInvoiceNumber: "",
+        
         vendorFilter: "",
         vendors: [],
         //пагинация в таблицах
@@ -105,6 +97,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         countRowTable: 100,
         countRowTable2: 950,
         //поиски
+        searchExInvoiceNumber: "",
         searchProductIncluded: "",
         searchProductExcluded: "",
         //параметры для фильтров при запросах
@@ -510,9 +503,10 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.tableDataPercent.length = 0;
             this.tableDataExInvoiceSelect.length = 0;
             this.tableDataManagerSelect.length = 0;
+            this.tableDataContract.length = 0;
             // Значения v-model при создании
             this.newType = '',
-                this.newEntityId = '';
+            this.newEntityId = '';
             this.newEntityName = '';
             this.newVendorId = '';
             this.newVendorName = '';
@@ -532,14 +526,14 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.newNegative_turnover = false;
             this.newKu_type = '';
             this.newPay_method = '';
-            this.valueCategory_idIn = '';
-            this.valueCategory_nameIn = '';
-            this.valueProducer_nameIn = '';
-            this.valueBrand_nameIn = '';
-            this.valueCategory_idEx = '';
-            this.valueCategory_nameEx = '';
-            this.valueProducer_nameEx = '';
-            this.valueBrand_nameEx = '';
+            this.newOfFIOСounteragent = '';
+            this.newOfPostСounteragent = '';
+            this.newOfDocСounteragent = '';
+            this.newOfFIOEntity = '';
+            this.newOfPostEntity = '';
+            this.newOfDocEntity = '';
+            this.valueProducer_nameContract = '';
+            this.valueBrand_nameContract = '';
 
             // Селекты для множественного выбора
             this.multipleSelectionProduct = [];
@@ -554,12 +548,14 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.dialogFormProductExVisible = false;
             this.dialogFormCategoryExVisible = false;
             this.dialogFormManagersVisible = false;
+            this.dialogFormContractVisible = false;
 
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
             this.disableButtonsExcluded = false;
 
             // Сбрасываем значения поисковых строк
+            this.searchExInvoiceNumber = '';
             this.searchProductIncluded = '';
             this.searchProductExcluded = '';
 

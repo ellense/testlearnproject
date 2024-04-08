@@ -3,8 +3,7 @@
     <div class="directoryBar_filter">
       <h3>Коммерческие условия поставщиков</h3>
       <el-divider direction="vertical" />
-      <el-button type="primary" plain @click="redirectToCreatePage" size="small" 
-       >Создать
+      <el-button type="primary" plain @click="redirectToCreatePage" size="small">Создать
         КУ</el-button>
       <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip" style="margin: 0;" size="small">Создать
@@ -15,8 +14,12 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="ApproveKu()" link type="success" size="small">Утвердить</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="CancelKu()" link type="danger" size="small">Отменить</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="ApproveKu()" link type="success"
+                size="small">Утверждено</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="CancelKu()" link type="danger"
+                size="small">Отменено</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="СreatedKu()" link type="info"
+                size="small">Создано</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -24,13 +27,6 @@
         :title="disableButtonTooltip" size="small">Удалить</el-button>
 
     </div>
-    <!-- <div class="directoryBar_filter">
-      <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-        :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity" size="small">
-        <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
-    </div> -->
   </div>
 </template>
 
@@ -98,26 +94,55 @@ const isDeleteButtonDisabled = computed(() => {
 });
 
 // Функция удаления выбранных строк
+// const deleteKu = async () => {
+//   const selectedRows = store.multipleSelection.map((row) => row.ku_id);
+
+//   try {
+//     for (const ku_id of selectedRows) {
+//       const results = await KU.deleteKu({ ku_id });
+//       console.log("КУ успешно удалилось", results);
+//       store.tableData = store.tableData.filter(
+//         (row) => !selectedRows.includes(row.ku_id)
+//       );
+//       store.multipleSelection = [];
+//     }
+//     if (selectedRows.length == 1)
+//       ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
+//     else ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
+//   } catch (error) {
+//     console.error("Ошибка при удалении ку:", error);
+//     ElMessage.error("Ошибка при удалении коммерческого условия");
+//   }
+
+// };
 const deleteKu = async () => {
   const selectedRows = store.multipleSelection.map((row) => row.ku_id);
 
   try {
     for (const ku_id of selectedRows) {
-      const results = await KU.deleteKu({ ku_id });
-      console.log("успешно удалилось", results);
-      store.tableData = store.tableData.filter(
-        (row) => !selectedRows.includes(row.ku_id)
-      );
-      store.multipleSelection = [];
+      const kuDetails = await KU.getInfoKu({ ku_id }); // Получаем детали КУ
+      if (kuDetails.status !== 'Создано') {
+        // Если статус не равен "Создано", выводим сообщение об ошибке и пропускаем удаление
+        const message = `В статусе "${kuDetails.status}" удалить КУ невозможно`;
+        console.error(message);
+        ElMessage.error(message);
+        return;
+      } else {
+        const results = await KU.deleteKu({ ku_id });
+        console.log("КУ успешно удалено", results);
+        store.tableData = store.tableData.filter(
+          (row) => !selectedRows.includes(row.ku_id)
+        );
+        store.multipleSelection = [];
+      }
     }
     if (selectedRows.length == 1)
       ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
-    else ElMessage.success(`Успешно удалено: ${selectedRows.join(", ")}`);
+    else ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
   } catch (error) {
-    console.error("Ошибка при удалении строк:", error);
+    console.error("Ошибка при удалении ку:", error);
     ElMessage.error("Ошибка при удалении коммерческого условия");
   }
-
 };
 
 const CancelKu = async () => {
@@ -168,6 +193,28 @@ const ApproveKu = async () => {
   }
 };
 
+//статус создано 
+const СreatedKu = async () => {
+  const selectedRows = store.multipleSelection
+  const data = {
+    ku_id: selectedRows[0].ku_id,
+    status: "Создано",
+    entity_id: selectedRows[0].entity_id,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: selectedRows[0].date_start,
+    date_end: selectedRows[0].date_end
+  };
+
+  try {
+    const response = await KU.updateKu(data);
+    console.log("Статус успешно обновлен:", response);
+    await useKuStore().getKuFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса:", error);
+  }
+};
+
 //создание графика
 const addGraphic = async () => {
   const selectedRows = store.multipleSelection
@@ -183,7 +230,7 @@ const addGraphic = async () => {
     date_start: selectedRows[0].date_start,
     date_end: selectedRows[0].date_end,
     status: selectedRows[0].status,
-    graph_exists:selectedRows[0].graph_exists,
+    graph_exists: selectedRows[0].graph_exists,
   };
   loading.value = true;
   try {
@@ -218,5 +265,4 @@ const disableButtonCreateTooltip = computed(() => {
 
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

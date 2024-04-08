@@ -293,15 +293,6 @@ export interface IKuAddStore {
   newOfFIOEntity: string;
   newOfPostEntity: string;
   newOfDocEntity: string;
-
-  valueCategory_idIn: string
-  valueCategory_nameIn: string
-  valueProducer_nameIn: string;
-  valueBrand_nameIn: string;
-  valueCategory_idEx: string
-  valueCategory_nameEx: string
-  valueProducer_nameEx: string;
-  valueBrand_nameEx: string;
   valueProducer_nameContract: string;
   valueBrand_nameContract: string;
   //селекты для множественного выбора
@@ -373,6 +364,7 @@ export interface IKuIdStore {
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
   tableDataManagerSelect: IManagerForKu[]
+  tableDataContract: IContract[],
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
   dialogFormProductInVisible: boolean
@@ -424,6 +416,7 @@ export interface IKuIdStore {
   //
   multipleSelectionProduct: IProduct[];
   multipleSelectionExInvoice: IExInvoiceForKu[]
+  multipleSelectionManager: IManagerForKu[]
   multipleTableRef: Ref | null;
   filterVendorValue: GetAllVendorsForEntity
 }

@@ -27,7 +27,7 @@
           </div>
         </template>
         <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
-        <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
+        <el-table-column property="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик">
         <template #header>
@@ -67,7 +67,11 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_start" type="date" sortable width="90" show-overflow-tooltip />
+        <el-table-column property="date_start" type="date" sortable width="90" show-overflow-tooltip>
+          <template #default="{ row }">
+            <span>{{ formatOkDate(row.date_start) }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column >
         <template #header>
@@ -84,7 +88,11 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_end" type="date" sortable width="90" show-overflow-tooltip />
+        <el-table-column property="date_end" type="date" sortable width="90" show-overflow-tooltip>
+          <template #default="{ row }">
+            <span>{{ formatOkDate(row.date_end) }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
         <template #header>
@@ -224,6 +232,10 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных ку3", error);
   }
 });
+
+const formatOkDate = (dateTime: any) => {
+  return dayjs(dateTime).format('DD.MM.YYYY'); 
+};
 
 const getStatusColor = (status: string) => {
   switch (status) {

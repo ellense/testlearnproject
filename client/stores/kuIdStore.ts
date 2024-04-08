@@ -14,6 +14,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         tableDataExInvoiceAll: [],
         tableDataExInvoiceSelect: [],
         tableDataManagerSelect: [],
+        tableDataContract: [],
         //v-model диалоговых форм
         dialogFormExInvoiceVisible: false,
         dialogFormProductInVisible: false,
@@ -66,6 +67,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         //
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
+        multipleSelectionManager: [],
         multipleTableRef: null,
         filterVendorValue: {},
 
@@ -253,15 +255,19 @@ export const useKuIdStore = defineStore("KuIdStore", {
         clearData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;
+            this.tableDataInRequirementOrigin.length = 0;
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
+            this.tableDataExInvoiceSelect.length = 0;
+            this.tableDataManagerSelect.length = 0;
+            this.tableDataContract.length = 0;
             // Сбрасываем флаги видимости диалоговых окон
             this.dialogFormExInvoiceVisible = false;
             this.dialogFormProductInVisible = false;
             this.dialogFormCategoryInVisible = false;
             this.dialogFormProductExVisible = false;
             this.dialogFormCategoryExVisible = false;
-
+            this.dialogFormManagersVisible = false;
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
             this.disableButtonsExcluded = false;
@@ -302,6 +308,11 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdDocEntity = '';
             // Сбрасываем флаг дизейбла кнопок
             this.disableButtons = false;
+
+            this.multipleSelectionProduct = [];
+            this.multipleSelectionExInvoice = [];
+            this.multipleSelectionManager = [];
+            this.multipleTableRef = null;
         }
     },
 

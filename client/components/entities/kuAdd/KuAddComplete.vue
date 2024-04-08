@@ -13,7 +13,64 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuStore } from "~~/stores/kuStore";
 import dayjs from "dayjs";
 import type { IExInvoiceForKuPost, IKuList, IManagerForKuPost, IOfficialForKuPost } from "~/utils/types/directoryTypes";
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+
+import { onBeforeRouteLeave } from 'vue-router'
+import { ElMessageBox } from 'element-plus'
+import { ref } from 'vue'
+
+const clearDataBeforeLeave = () => {
+  store.clearNewData()
+}
+
+// Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
+onBeforeRouteLeave((to, from, next) => {
+  if (store.tableDataInRequirement.length > 0 ||
+    store.tableDataExRequirement.length > 0 ||
+    store.tableDataPercent.length > 0 ||
+    store.tableDataExInvoiceSelect.length > 0 ||
+    store.tableDataManagerSelect.length > 0 ||
+    store.tableDataContract.length > 0 ||
+    store.newType !== '' ||
+    store.newEntityId !== '' ||
+    store.newEntityName !== '' ||
+    store.newVendorId !== '' ||
+    store.newVendorName !== '' ||
+    store.newDateStart !== '' ||
+    store.newDateEnd !== '' ||
+    store.newDateActual !== '' ||
+    store.newDescription !== '' ||
+    store.newContract !== '' ||
+    store.newProduct_type !== '' ||
+    store.newDocu_account !== '' ||
+    store.newDocu_name !== '' ||
+    store.newDocu_number !== '' ||
+    store.newDocu_date !== '' ||
+    store.newDocu_subject !== '' ||
+    store.newKu_type !== '' ||
+    store.newPay_method !== '' ||
+    store.newOfFIOСounteragent !== '' ||
+    store.newOfPostСounteragent !== '' ||
+    store.newOfDocСounteragent !== '' ||
+    store.newOfFIOEntity !== '' ||
+    store.newOfDocEntity !== '' ||
+    store.valueProducer_nameContract !== '' ||
+    store.valueBrand_nameContract !== '') {
+    ElMessageBox.alert('Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.', 'Предупреждение', {
+
+      type: 'warning'
+    }).then(() => {
+      clearDataBeforeLeave()
+      next()
+    }).catch(() => {
+      next(false)
+    })
+  } else {
+    next()
+  }
+})
 
 
 
@@ -42,7 +99,7 @@ const open = () => {
 
 
 const store = useKuAddStore();
-const router = useRouter();
+
 const loading = ref(false);
 const progress = ref(0);
 
@@ -615,8 +672,60 @@ const handleError = () => {
 
 //отменить
 const addClose = () => {
-  router.push("ku");
-  store.clearNewData()
+  if (
+    // Проверяем наличие несохраненных данных
+    store.tableDataInRequirement.length > 0 ||
+    store.tableDataExRequirement.length > 0 ||
+    store.tableDataPercent.length > 0 ||
+    store.tableDataExInvoiceSelect.length > 0 ||
+    store.tableDataManagerSelect.length > 0 ||
+    store.newType !== '' ||
+    store.newEntityId !== '' ||
+    store.newEntityName !== '' ||
+    store.newVendorId !== '' ||
+    store.newVendorName !== '' ||
+    store.newDateStart !== '' ||
+    store.newDateEnd !== '' ||
+    store.newDateActual !== '' ||
+    store.newDescription !== '' ||
+    store.newContract !== '' ||
+    store.newProduct_type !== '' ||
+    store.newDocu_account !== '' ||
+    store.newDocu_name !== '' ||
+    store.newDocu_number !== '' ||
+    store.newDocu_date !== '' ||
+    store.newDocu_subject !== '' ||
+    store.newKu_type !== '' ||
+    store.newPay_method !== '' ||
+    store.newOfFIOСounteragent !== '' ||
+    store.newOfPostСounteragent !== '' ||
+    store.newOfDocСounteragent !== '' ||
+    store.newOfFIOEntity !== '' ||
+    store.newOfDocEntity !== '' ||
+    store.valueProducer_nameContract !== '' ||
+    store.valueBrand_nameContract !== ''
+  ) {
+    // Если есть несохраненные данные, показываем диалоговое окно для подтверждения от пользователя
+    ElMessageBox.alert(
+      'Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.',
+      'Предупреждение',
+      {
+        type: 'warning',
+        confirmButtonText: 'OK',
+        cancelButtonText: 'Отмена',
+      }
+    ).then(() => {
+      // Если пользователь подтвердил, переходим на другую страницу и очищаем данные
+      router.push("ku");
+      store.clearNewData();
+    }).catch(() => {
+      // Если пользователь отменил, ничего не делаем
+    });
+  } else {
+    // Если нет несохраненных данных, просто переходим на другую страницу и очищаем данные
+    router.push("ku");
+    store.clearNewData();
+  }
 };
 </script>
 

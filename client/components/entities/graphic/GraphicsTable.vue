@@ -34,15 +34,15 @@
                     <Filter />
                   </el-icon></el-button>
               </template>
-  <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-    :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
-    size="small">
-    <el-option v-for="item in optionsLegalEntity" :key="item" :label="item" :value="item" />
-  </el-select>
-  </el-popover>
+              <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
+                size="small">
+                <el-option v-for="item in optionsLegalEntity" :key="item" :label="item" :value="item" />
+              </el-select>
+            </el-popover>
           </div>
         </template>
-        <el-table-column property="entity_id" label="Код" width="70" sortable show-overflow-tooltip />
+        <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик">
@@ -66,7 +66,7 @@
           </div>
         </template>
         <el-table-column property="vendor_id" label="Код" width="120" sortable show-overflow-tooltip />
-        <el-table-column property="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
+        <el-table-column property="vendor_name" label="Наименование" width="200" show-overflow-tooltip />
       </el-table-column>
       <el-table-column prop="period" width="105">
         <template #header>
@@ -108,7 +108,11 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_start" type="date" sortable width="90" show-overflow-tooltip />
+        <el-table-column prop="date_start" width="85" sortable show-overflow-tooltip>
+          <template #default="{ row }">
+            <span>{{ formatOkDate(row.date_start) }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column>
         <template #header>
@@ -126,13 +130,17 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_end" type="date" sortable width="90" show-overflow-tooltip />
+        <el-table-column property="date_end"  sortable width="85" show-overflow-tooltip >
+          <template #default="{ row }">
+            <span>{{ formatOkDate(row.date_end) }}</span>
+          </template>
+          </el-table-column>
       </el-table-column>
       <el-table-column>
         <template #header>
           <div class="column-header" :style="{ color: dateRange3 ? '#409EFF' : 'inherit' }" style="display: flex;
   align-items: center;">
-            Дата начисления
+            Начисления дата
             <el-popover placement="bottom" :width="400" :visible="popoverVisible3">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"
@@ -145,7 +153,11 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_accrual" type="date" sortable width="110" show-overflow-tooltip />
+        <el-table-column property="date_accrual" sortable width="85" show-overflow-tooltip >
+          <template #default="{ row }">
+            <span>{{ formatOkDate(row.date_accrual) }}</span>
+          </template>
+        </el-table-column>
       </el-table-column>
       <el-table-column>
         <template #header>
@@ -159,17 +171,21 @@
                     <Filter />
                   </el-icon></el-button>
               </template>
-              <el-date-picker v-model="dateRange4" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
-                end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange4" />
-            </el-popover> -->
+  <el-date-picker v-model="dateRange4" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
+    end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange4" />
+  </el-popover> -->
           </div>
         </template>
-      <el-table-column property="date_calc" width="105" sortable show-overflow-tooltip />
+        <el-table-column property="date_calc" width="130" sortable show-overflow-tooltip >
+          <template #default="{ row }">
+            <span>{{ formatOkDateTime(row.date_calc) }}</span>
+          </template>
+          </el-table-column>
       </el-table-column>
-      <el-table-column fixed="right" property="sum_calc" label="База расчета" width="120" show-overflow-tooltip />
+      <el-table-column fixed="right" property="sum_calc" label="База расчета" width="100" show-overflow-tooltip />
       <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
-      <el-table-column fixed="right" prop="sum_approved" label="Утверждено" width="110" show-overflow-tooltip>
+      <el-table-column fixed="right" prop="sum_approved" label="Утверждено" width="100" show-overflow-tooltip>
         <template #default="scope">
           {{ scope.row.sum_approved }}
         </template>
@@ -289,7 +305,13 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных", error);
   }
 });
-
+//форматы дат в таблице
+const formatOkDateTime = (dateTime: any) => {
+  return dayjs(dateTime).format('DD.MM.YYYY HH:mm:ss'); 
+};
+const formatOkDate = (dateTime: any) => {
+  return dayjs(dateTime).format('DD.MM.YYYY'); 
+};
 
 //для общей фильтрации
 const { filterGraphicValue, legalEntity, KuParams } = storeToRefs(useGraphicStore())

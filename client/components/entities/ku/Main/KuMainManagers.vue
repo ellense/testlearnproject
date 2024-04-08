@@ -87,7 +87,7 @@ const tableData2 = ref(store.tableDataManagerSelect);
 
 //добавление условий
 const AddManagers = () => {
-  const selectedRows = store2.multipleSelectionManager;
+  const selectedRows = store.multipleSelectionManager;
 
   selectedRows.forEach(row => {
     store.tableDataManagerSelect.push({
