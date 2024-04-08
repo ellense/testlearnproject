@@ -2,7 +2,7 @@
   <EntitiesKuMain />
 
   <div class="button_bottom">
-    <el-button @click="addClose()" size="small">Отменить</el-button>
+    <el-button @click="addClose()" size="small">Назад</el-button>
     <el-button type="primary" @click="changeKuToBackend()" :loading="loading" size="small"
       :disabled="isEditButtonDisabled" :title="disableButtonEditTooltip">Изменить</el-button>
   </div>
@@ -13,6 +13,7 @@
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import dayjs from "dayjs";
 import type { IKuList } from "~/utils/types/directoryTypes";
+import { ElMessage } from 'element-plus'
 
 const store = useKuIdStore();
 const router = useRouter();
@@ -59,13 +60,18 @@ const isEditButtonDisabled = computed(() => {
 
 const disableButtonEditTooltip = computed(() => {
   return store.kuIdStatus !== 'Создано'
-    ? 'Вы можете изменить только КУ в статусе "создано".'
+    ? 'Вы можете изменить только КУ в статусе "Создано".'
     : "";
 });
 const changeKuToBackend = async () => {
   try {
     if (!isFormValid()) {
-      ElMessage.error('Не все поля заполнены корректно. Заполните: Код компании, код поставщика, период, начальная дата, конечная дата, дата договора ');
+      ElMessage({
+        showClose: true,
+        message: 'Не все поля заполнены корректно. Заполните: Код компании, код поставщика, период, начальная дата, конечная дата, дата договора.',
+        duration: 10000,
+        type: 'error',
+      })
       return;
     }
     if (store.tableDataInRequirement.length === 0) {
@@ -79,7 +85,7 @@ const changeKuToBackend = async () => {
 
     const response = await KU.postKu(newItem);
     deleteInRequirement()
-    const responses = await postRequirements(response, store.tableDataInRequirement, KU.postKuInRequirement);
+    const responses = await postRequirements(response, store.tableDataInRequirement, KU.postKuInRequirementChange);
 
     // const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirement);
     // progress.value = 30;

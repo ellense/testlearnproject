@@ -52,11 +52,10 @@ import type {
   GetParamKuId,
   IRequirementPost,
   GetRequirementReturnData,
-  IContract,
   IContractPost,
   IContractPromise,
   IRequirementId,
-  IGraphicNumerals,
+  IGraphicNumeralsAndSumQty,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -139,6 +138,8 @@ export const KU = {
     $Post("api/official_create/", { data, isBearer: false }),
   postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
     $Post("api/name_contact_create/", { data, isBearer: false }),
+  postKuInRequirementChange: (data: IRequirementPost): Promise<IRequirementPost> =>
+    $Post("api/included_condition_list/", { data, isBearer: false }),
 
   getKuInRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
@@ -177,7 +178,7 @@ export const GRAPHIC = {
     $Get("api/included_invoice_list/", { params, isBearer: false }),
   getInfoProductsForGraphic: (params: GetAllInvoicesAndProductForGraphic): Promise<GetAllProductsForGraphicReturnData> =>
     $Get("api/included_product_list/", { params, isBearer: false }),
-  getNumeralsGraphic: (data: IGraphicId): Promise<IGraphicNumerals> =>
+  getNumeralsGraphic: (data: IGraphicId): Promise<IGraphicNumeralsAndSumQty> =>
     $Get(`api/graph_words/${data.graph_id}/`, { data, isBearer: false }),
 };
 

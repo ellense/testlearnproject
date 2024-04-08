@@ -2,7 +2,7 @@
   <EntitiesKuAddMain />
   <div class="button_bottom">
     <el-button @click="addClose()" size="small">Отменить</el-button>
-    <el-progress :percentage="progress" v-if="progress !== 100" size="small" />
+    <el-progress type="dashboard" :color="colors" :percentage="progress" v-if="progress !== 100" size="small" />
     <el-button type="primary" @click="createKU()" :loading="loading" size="small">Создать</el-button>
     <el-button plain @click="open"> уведомление </el-button>
   </div>
@@ -75,16 +75,28 @@ onBeforeRouteLeave((to, from, next) => {
 
 
 
-
+const colors = [
+  { color: '#f56c6c', percentage: 20 },
+  { color: '#e6a23c', percentage: 40 },
+  { color: '#5cb87a', percentage: 60 },
+  { color: '#1989fa', percentage: 80 },
+  { color: '#6f7ad3', percentage: 100 },
+]
 import { ElNotification } from 'element-plus'
 
 const open = () => {
   ElNotification({
-    title: 'HTML String',
+    title: 'Cоздание КУ',
     dangerouslyUseHTMLString: true,
-    message: '<strong>This is <i>HTML</i> string</strong>',
+    message: '<el-progress :percentage="progress" v-if="progress !== 100" size="small" />',
     showClose: false,
   })
+  ElMessage({
+    message: 'Коммерческое условие успешно создано.',
+    duration: 5000,
+    type: 'success',
+  })
+  // <strong>This is <i>HTML</i> string</strong>
 }
 
 
@@ -323,7 +335,12 @@ const isFormValid = () => {
 const createKU = async () => {
   try {
     if (!isFormValid()) {
-      ElMessage.error('Не все поля заполнены корректно. Заполните: Код компании, код поставщика, период, начальная дата, конечная дата, дата договора ');
+      ElMessage({
+        showClose: true,
+        message: 'Не все поля заполнены корректно. Заполните: Код компании, код поставщика, период, начальная дата, конечная дата, дата договора.',
+        duration: 10000,
+        type: 'error',
+      })
       return;
     }
     if (store.tableDataInRequirement.length === 0) {
@@ -332,6 +349,7 @@ const createKU = async () => {
     }
 
     loading.value = true;
+    open()
 
     const newItem = createNewItem();
 
@@ -482,6 +500,11 @@ const handleSuccess = (response: IKuList, responses: any[], response2: any[], re
   useKuStore().getKuFromAPIWithFilter();
   router.push("ku");
   ElMessage.success("Коммерческое условие успешно создано.");
+  ElMessage({
+    message: 'Коммерческое условие успешно создано.',
+    duration: 5000,
+    type: 'success',
+  })
 };
 
 const handleError = () => {

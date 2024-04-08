@@ -160,3 +160,7 @@ h1 {
 h3{
   font-size: 15px;
 }
+.el-form-item__label {
+  font-size: 12px !important;
+
+}

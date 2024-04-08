@@ -78,9 +78,11 @@ export const useKuIdStore = defineStore("KuIdStore", {
         getKuExRequirement: (state) => state.tableDataExRequirement,
         getPercent: (state) => state.tableDataPercent,
         getIExInvoiceForKu: (state) => state.tableDataExInvoiceSelect,
+
     },
 
     actions: {
+
         setKuIdVendorName(name: string) {
             this.kuIdVendorName = name;
         },

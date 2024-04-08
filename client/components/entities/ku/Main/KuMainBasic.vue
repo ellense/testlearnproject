@@ -1,13 +1,13 @@
 <template>
   <el-scrollbar height="45vh">
-    <form>
+    <el-form label-position="left">
       <div class="kuAddMain">
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
           <el-form-item label-width="130" label="Код компании">
             <!-- <el-text class="kuAddLabel">Код компании</el-text> -->
-            <el-select v-model="store.kuIdEntityId" size="small" placeholder="Выберите код компании" clearable
-              filterable style="width: 300px" @change="onEntityChange">
+            <el-select v-model="store.kuIdEntityId" size="small"  clearable
+              filterable style="width: 300px" @change="onEntityChange" :disabled="isEditButtonDisabled">
               <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
                 <span style="float: left">{{ item.label }}</span>
                 <span style="
@@ -20,19 +20,19 @@
             </el-select>
           </el-form-item>
           <el-form-item label-width="130" label="Название компании">
-            <el-input v-model="store.kuIdEntityName" size="small" style="width: 300px">
+            <el-input v-model="store.kuIdEntityName" size="small" style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
-            <el-input v-model="store.kuIdDescription" size="small" placeholder="Введите описание" style="width: 300px">
+            <el-input v-model="store.kuIdDescription" size="small"  style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
             <div>
               <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2"
                 :disabled="!store.kuIdEntityId" style="width: 300px" :title="disableSelectVendorTooltip"
-                placeholder="Выберите код компании" @change="onVendorChange">
+                 @change="onVendorChange" >
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
@@ -40,26 +40,59 @@
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Статус премии">
-            <el-input v-model="store.kuIdStatus" size="small" placeholder="Введите контракт" style="width: 300px">
+            <el-input v-model="store.kuIdStatus" size="small"  style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Контракт">
-            <el-input v-model="store.kuIdContract" size="small" placeholder="Введите контракт" style="width: 300px">
+            <el-input v-model="store.kuIdContract" size="small"  style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Тип товаров">
-            <el-select v-model="store.kuIdProduct_type" size="small" clearable placeholder="Выберите тип товаров"
-              style="width: 300px">
+            <el-select v-model="store.kuIdProduct_type" size="small" clearable
+              style="width: 300px" :disabled="isEditButtonDisabled" placeholder=''>
               <el-option label="Продовольственные" value="Продовольственные"></el-option>
               <el-option label="Непродовольственные" value="Непродовольственные"></el-option>
             </el-select>
           </el-form-item>
         </div>
         <div class="kuAddMainCol">
+          
+          <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
+          <el-form-item label-width="170" label="Наименование поставщика">
+            <el-input v-model="store.kuIdVendorName" size="small" style="width: 300px" :disabled="isEditButtonDisabled">
+            </el-input>
+          </el-form-item>
+          <el-form-item label-width="170" label="Номер счета">
+            <el-input v-model="store.kuIdDocu_account" size="small" 
+              style="width: 300px" :disabled="isEditButtonDisabled">
+            </el-input>
+          </el-form-item>
+          <el-form-item label-width="170" label="Название договора">
+            <el-select v-model="store.kuIdDocu_name" size="small" clearable 
+              style="width: 300px" :disabled="isEditButtonDisabled">
+              <el-option label="Договор премий" value="Договор премий"></el-option>
+              <el-option label="Договор услуг" value="Договор услуг"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label-width="170" label="Номер договора">
+            <el-input v-model="store.kuIdDocu_number" size="small" 
+              style="width: 300px" :disabled="isEditButtonDisabled">
+            </el-input>
+          </el-form-item>
+          <el-form-item label-width="170" label="Дата договора">
+            <el-date-picker v-model="store.kuIdDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
+              clearable  :disabled="isEditButtonDisabled"></el-date-picker>
+          </el-form-item>
+          <el-form-item label-width="170" label="Предмет договора">
+            <el-input v-model="store.kuIdDocu_subject" style="width: 300px" :rows="4" size="small" type="textarea"
+               :disabled="isEditButtonDisabled"/>
+          </el-form-item>
+        </div>
+        <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
           <el-form-item label-width="170" label="Тип периода">
-            <el-select v-model="store.kuIdType" size="small" clearable placeholder="Выберите тип периода"
-              style="width: 300px">
+            <el-select v-model="store.kuIdType" size="small" clearable 
+              style="width: 300px" :disabled="isEditButtonDisabled">
               <el-option label="Месяц" value="Месяц"></el-option>
               <el-option label="Квартал" value="Квартал"></el-option>
               <el-option label="Полгода" value="Полгода"></el-option>
@@ -69,73 +102,41 @@
           <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
             label-width="170" label="Начальная дата">
             <el-date-picker v-model="store.kuIdDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-              clearable el-rowrable placeholder="Выберите начальную дату" @change="validateDateStart"></el-date-picker>
+              clearable el-rowrable  @change="validateDateStart" :disabled="isEditButtonDisabled"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
             label="Конечная дата">
             <el-date-picker v-model="store.kuIdDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY" clearable
-              @change="validateDateEnd"></el-date-picker>
+               format="DD.MM.YYYY" clearable
+              @change="validateDateEnd" :disabled="isEditButtonDisabled"></el-date-picker>
           </el-form-item>
-          <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
-          <el-form-item label-width="170" label="Наименование поставщика">
-            <el-input v-model="store.kuIdVendorName" size="small" style="width: 300px">
-            </el-input>
-          </el-form-item>
-          <el-form-item label-width="170" label="Номер счета">
-            <el-input v-model="store.kuIdDocu_account" size="small" placeholder="Введите номер счета"
-              style="width: 300px">
-            </el-input>
-          </el-form-item>
-          <el-form-item label-width="170" label="Название договора">
-            <el-select v-model="store.kuIdDocu_name" size="small" clearable placeholder="Выберите название договора"
-              style="width: 300px">
-              <el-option label="Договор премий" value="Договор премий"></el-option>
-              <el-option label="Договор услуг" value="Договор услуг"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label-width="170" label="Номер договора">
-            <el-input v-model="store.kuIdDocu_number" size="small" placeholder="Введите номер договора"
-              style="width: 300px">
-            </el-input>
-          </el-form-item>
-          <el-form-item label-width="170" label="Дата договора">
-            <el-date-picker v-model="store.kuIdDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
-              clearable placeholder="Выберите дату договора"></el-date-picker>
-          </el-form-item>
-          <el-form-item label-width="170" label="Предмет договора">
-            <el-input v-model="store.kuIdDocu_subject" style="width: 300px" :rows="4" size="small" type="textarea"
-              placeholder="Введите предмет договора" />
-          </el-form-item>
-        </div>
-        <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
           <el-form-item>
-            <el-checkbox v-model="store.kuIdTax" label="База премии включает налог" size="small" />
+            <el-checkbox v-model="store.kuIdTax" label="База премии включает налог" size="small" :disabled="isEditButtonDisabled" />
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="store.kuIdExclude_return" label="Исключать возвраты из расчета" size="small" />
+            <el-checkbox v-model="store.kuIdExclude_return" label="Исключать возвраты из расчета" size="small" :disabled="isEditButtonDisabled"/>
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="store.kuIdNegative_turnover" label="Отрицательный товарооборот" size="small" />
+            <el-checkbox v-model="store.kuIdNegative_turnover" label="Отрицательный товарооборот" size="small" :disabled="isEditButtonDisabled"/>
           </el-form-item>
           <el-form-item label-width="170" label="Тип коммерческого условия">
-            <el-select v-model="store.kuIdKu_type" size="small" clearable placeholder="Выберите тип КУ"
-              style="width: 300px">
+            <el-select v-model="store.kuIdKu_type" size="small" clearable 
+              style="width: 300px" :disabled="isEditButtonDisabled">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
               <el-option label="Услуга" value="Услуга"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Способ оплаты премии">
-            <el-select v-model="store.kuIdPay_method" size="small" clearable placeholder="Выберите способ оплаты"
-              style="width: 300px">
+            <el-select v-model="store.kuIdPay_method" size="small" clearable 
+              style="width: 300px" :disabled="isEditButtonDisabled">
               <el-option label="Оплата" value="Оплата"></el-option>
               <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
             </el-select>
           </el-form-item>
         </div>
       </div>
-    </form>
+    </el-form>
   </el-scrollbar>
 </template>
 
@@ -144,13 +145,16 @@ import { ref } from "vue";
 import dayjs from "dayjs";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-
 import type {
   IEntityIdAndName,
   IVendorId,
 } from "~/utils/types/directoryTypes";
+
 const store = useKuIdStore();
 const store2 = useKuAddStore();
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
 //вывод данных юридического лица
 const options = ref<Array<{ label: string; value: string }>>([]);
 watch(
@@ -315,9 +319,5 @@ const disableSelectVendorTooltip = computed(() => {
   margin: 2px;
 }
 
-.kuAddLabel {
-  margin-right: 10px;
-  font-size: 13px;
-  color: #1f1f1f;
-}
+
 </style>

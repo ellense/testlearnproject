@@ -14,7 +14,6 @@
     "@nuxt/devtools": "latest",
     "@types/file-saver": "^2.0.7",
     "@types/filesaver": "^0.0.30",
-    "element-plus": "^2.3.14",
     "nuxt": "^3.7.3"
   },
   "dependencies": {
@@ -22,6 +21,7 @@
     "@pinia/nuxt": "^0.4.11",
     "axios": "^1.6.2",
     "docxtemplater": "^3.46.1",
+    "element-plus": "^2.6.3",
     "file-saver": "^2.0.5",
     "pinia": "^2.1.6",
     "pizzip": "^3.1.6",

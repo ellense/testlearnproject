@@ -44,6 +44,7 @@ export const useReportStore = defineStore("ReportStore", {
     },
     official: [],
     numerals: "",
+    sumQty: null,
     getGraphicDone: true,
     printReportToggle: false,
     filterValueInvoice: {},
@@ -81,6 +82,7 @@ export const useReportStore = defineStore("ReportStore", {
           graph_id: grapId,
         });
         this.$state.numerals = results.sum_calc_words;
+        this.$state.sumQty = results.total_qty
         console.log("успешно получили данные числительных", results);
         console.log("добавили данные в numerals ", this.$state.numerals);
       } catch (error) {

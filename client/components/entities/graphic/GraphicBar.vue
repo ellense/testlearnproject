@@ -251,6 +251,7 @@ const renderDoc = async () => {
           corr_account2: useReportStore().entity.corr_account,
 
           numerals: useReportStore().numerals,
+          sumQty: useReportStore().sumQty
         });
 
         const out = doc.getZip().generate({

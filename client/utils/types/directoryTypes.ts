@@ -693,13 +693,16 @@ export interface ReportStore {
   entity: IEntityFull
   official: IOfficialForKu[]
   numerals: string
+  sumQty: number | null
   getGraphicDone: boolean
   printReportToggle: boolean
   filterValueInvoice: GetAllInvoicesAndProductForGraphic
   filterValueOfficial: GetParamKuId
 }
-export interface IGraphicNumerals {
+export interface IGraphicNumeralsAndSumQty {
   sum_calc_words: string;
+  total_qty: number | null;
+
 }
 export interface GraphicForExcelReportInvoice {
   invoice_number: string;

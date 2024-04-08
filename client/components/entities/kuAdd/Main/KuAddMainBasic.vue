@@ -1,6 +1,6 @@
 <template>
   <el-scrollbar height="45vh">
-    <form>
+    <el-form label-position="left">
       <div class="kuAddMain">
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
@@ -107,13 +107,13 @@
             label-width="170" label="Начальная дата">
             <el-date-picker v-model="store.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
               value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
-              @change="validateDateStart"></el-date-picker>
+              @change="onChangeAndValidateDateStart"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
             label="Конечная дата">
             <el-date-picker v-model="store.newDateEnd" style="width: 300px" size="small"
               placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
-              @change="validateDateEnd"></el-date-picker>
+              @change="onChangeAndValidateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
           <el-form-item>
@@ -141,7 +141,7 @@
           </el-form-item>
         </div>
       </div>
-    </form>
+    </el-form>
   </el-scrollbar>
 </template>
 
@@ -221,7 +221,6 @@ const onVendorChange = async () => {
       store.setFilterProductInRequirement('vendor_id', store.newVendorId);
       store.setFilterProducer('vendor_id', store.newVendorId);
       store.setFilterBrand('vendor_id', store.newVendorId);
-      store.setFilterExInvoice('vendor_id', store.newVendorId);
       store.setFilterCategory('vendor_id', store.newVendorId);
       store.setFilterExInvoice('vendor_id', store.newVendorId);
       await store.fetchCategories();
@@ -246,10 +245,8 @@ const dateStartValidation = ref<"error" | "success" | "validating" | undefined>(
 const dateStartError = ref<string | undefined>('');
 const dateEndValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const dateEndError = ref<string | undefined>('');
-  const docuDateValidation = ref<"error" | "success" | "validating" | undefined>('success');
+const docuDateValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const docuDateError = ref<string | undefined>('');
-const percentValidation = ref<"error" | "success" | "validating" | undefined>('success');
-const percentError = ref<string | undefined>('');
 
 // Периоды и их соответствующие минимальные разницы в днях
 const periods: Record<string, number> = {
@@ -260,7 +257,9 @@ const periods: Record<string, number> = {
 };
 
 // Функция проверки даты начала
-const validateDateStart = () => {
+const onChangeAndValidateDateStart = async () => {
+  store.setFilterExInvoice('start_date', dayjs(store.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"));
+  await store.getInvoicesFromAPIWithFilter();
   const startDate = dayjs(store.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(store.newDateEnd, 'DD.MM.YYYY');
 
@@ -279,7 +278,9 @@ const validateDateStart = () => {
 };
 
 // Функция проверки даты окончания
-const validateDateEnd = () => {
+const onChangeAndValidateDateEnd = async () => {
+  store.setFilterExInvoice('end_date', dayjs(store.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"));
+  await store.getInvoicesFromAPIWithFilter();
   const startDate = dayjs(store.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(store.newDateEnd, 'DD.MM.YYYY');
   // Проверка на минимальную разницу в зависимости от выбранного периода
@@ -309,8 +310,8 @@ const validateDocuDate = () => {
 
 watch(() => store.newDocu_date, validateDocuDate);
 
-watch(() => store.newDateStart, validateDateStart);
-watch(() => store.newDateEnd, validateDateEnd);
+// watch(() => store.newDateStart, onChangeAndValidateDateStart);
+// watch(() => store.newDateEnd, onChangeAndValidateDateEnd);
 
 // Функция сброса дат при изменении периода
 const resetDatesOnPeriodChange = () => {
@@ -361,9 +362,5 @@ const disableSelectVendorTooltip = computed(() => {
   margin: 2px;
 }
 
-.kuAddLabel {
-  margin-right: 10px;
-  font-size: 13px;
-  color: #1f1f1f;
-}
+
 </style>
