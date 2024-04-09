@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar height="45vh">
-    <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true"
-      class="buttonAdd">Добавить</el-button>
+    <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd"
+      :disabled="isEditButtonDisabled">Добавить</el-button>
     <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <!-- <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
@@ -9,11 +9,17 @@
       <el-table-column property="invoice_name" label="Наименование" width="200" sortable show-overflow-tooltip />
       <el-table-column label="Поставщик">
         <el-table-column property="vendor_id" label="Код" width="200" sortable show-overflow-tooltip />
-        <el-table-column property="vendor_name" label="Наименование" width="500" sortable show-overflow-tooltip />
+        <el-table-column property="vendor_name" label="Наименование" width="300" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column property="invoice_date" type="date" label="Дата" width="140" sortable show-overflow-tooltip />
       <el-table-column property="product_amount" label="Сумма" width="120" show-overflow-tooltip /> -->
-      <el-table-column property="doc_id" label="Документ" show-overflow-tooltip />
+      <el-table-column property="doc_id" label="Документ" width="300"show-overflow-tooltip />
+      <el-table-column label="Операция" align="center">
+        <template #default="scope">
+          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+           :disabled="isEditButtonDisabled">Удалить</el-button>
+        </template>
+      </el-table-column>
     </el-table>
     <el-dialog v-model="store.dialogFormExInvoiceVisible" title="Выбор исключенных накладных для КУ"
       close-on-click-modal close-on-press-escape draggable>
@@ -37,7 +43,7 @@
           <el-table-column property="invoice_date" type="date" label="Дата" width="100" sortable
             show-overflow-tooltip />
           <el-table-column property="product_amount" label="Сумма" width="100" show-overflow-tooltip />
-          <el-table-column property="docid" label="Документ" show-overflow-tooltip />
+          <el-table-column property="doc_id" label="Документ" show-overflow-tooltip />
         </el-table>
       </el-scrollbar>
       <div v-if="pagination?.count" class="pagination">
@@ -62,8 +68,11 @@ import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
-
+import { Delete } from '@element-plus/icons-vue'
 const store = useKuIdStore();
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
 const kuStore = useKuAddStore();
 const { getExInvoiceAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
@@ -144,7 +153,7 @@ const tableData2 = ref<IExInvoiceForKu[]>(getIExInvoiceForKu.value);
 watch(getIExInvoiceForKu, (value) => {
   tableData2.value = value || [];
 });
-// const tableData2 = ref(store.tableDataExInvoiceSelect);
+
 //добавление условий
 const AddExInvoice = () => {
   const selectedRows = store.multipleSelectionExInvoice;
@@ -166,6 +175,10 @@ const AddExInvoice = () => {
   toggleSelection()
   store.dialogFormExInvoiceVisible = false;
 };
+//удаление искл. накладных
+const deleteRow = (index: number) => {
+  store.tableDataExInvoiceSelect.splice(index, 1);
+}
 </script>
 
 <style scoped></style>

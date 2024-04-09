@@ -56,6 +56,9 @@ import type {
   IContractPromise,
   IRequirementId,
   IGraphicNumeralsAndSumQty,
+  IRequirementId2,
+  GetRequirementReturnData2,
+  IOfficialForKu,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -123,7 +126,7 @@ export const KU = {
     $Put(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
-
+//отправление
   postKuInRequirement: (data: IRequirementPost): Promise<IRequirementPost> =>
     $Post("api/included_condition_create/", { data, isBearer: false }),
   postKuExRequirement: (data: IRequirementPost): Promise<IRequirementPost> =>
@@ -140,10 +143,12 @@ export const KU = {
     $Post("api/name_contact_create/", { data, isBearer: false }),
   postKuInRequirementChange: (data: IRequirementPost): Promise<IRequirementPost> =>
     $Post("api/included_condition_list/", { data, isBearer: false }),
-
+  postKuExRequirementChange: (data: IRequirementPost): Promise<IRequirementPost> =>
+    $Post("api/excluded_condition_list/", { data, isBearer: false }),
+//получение
   getKuInRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
-  getKuExRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData> =>
+  getKuExRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData2> =>
     $Get(`api/excluded_condition_list/`, { params, isBearer: false }),
   getKuRequirementBonus: (params: GetParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
@@ -151,14 +156,24 @@ export const KU = {
     $Get(`api/excluded_venddoc_create/`, { params, isBearer: false }),
   getKuOfficial: (params: GetParamKuId): Promise<GetAllOfficialReturnData> =>
     $Get(`api/official_create/`, { params, isBearer: false }),
-
-
-  deleteInRequirement: (data: IRequirementId) =>
-    $Delete(`api/included_condition_detail/${data.in_prod_id}/`, { data, isBearer: false }),
   getInvoicesList: (
     params?: GetParamExInvoicesForKu
   ): Promise<GetExInvoicesForKuReturnData> =>
     $Get("api/vend_doc_list", { params, isBearer: false }),
+// для редактирования
+  deleteInRequirement: (data: IRequirementId) =>
+    $Delete(`api/included_condition_detail/${data.in_prod_id}/`, { data, isBearer: false }),
+  deleteExRequirement: (data: IRequirementId2) =>
+    $Delete(`api/excluded_condition_detail/${data.id}/`, { data, isBearer: false }),
+  deleteRequirementBonus: (data: IRequirementId2) =>
+    $Delete(`api/bonus_condition_detail/${data.id}/`, { data, isBearer: false }),
+  deleteExInvoiceForKuId: (data: IRequirementId2) =>
+    $Delete(`api/excluded_venddoc_detail/${data.id}/`, { data, isBearer: false }),
+  deleteManager: (data: IRequirementId2) =>
+    $Delete(`api/manager_detail/${data.id}/`, { data, isBearer: false }),
+  updateOfficial: (data: IOfficialForKu) =>
+    $Put(`api/official_detail/${data.id}/`, { data, isBearer: false }),
+
   deleteGraphRow: (params: IKuDeleteGraph) =>
     $Delete("api/graph_list/", { params, isBearer: false }),
 };

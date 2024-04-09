@@ -10,10 +10,14 @@ export const useKuIdStore = defineStore("KuIdStore", {
         tableDataInRequirement: [],
         tableDataInRequirementOrigin: [],
         tableDataExRequirement: [],
+        tableDataExRequirementOrigin: [],
         tableDataPercent: [],
+        tableDataPercentOrigin: [],
         tableDataExInvoiceAll: [],
         tableDataExInvoiceSelect: [],
+        tableDataExInvoiceSelectOrigin: [],
         tableDataManagerSelect: [],
+        tableDataManagerSelectOrigin: [],
         tableDataContract: [],
         //v-model диалоговых форм
         dialogFormExInvoiceVisible: false,
@@ -52,6 +56,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdNegative_turnover: false,
         kuIdKu_type: "",
         kuIdPay_method: "",
+        officialId: null,
         kuIdFIOСounteragent: "",
         kuIdPostСounteragent: "",
         kuIdDocСounteragent: "",
@@ -175,7 +180,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные искл условий ку_айди:', tableData);
                     this.$state.tableDataExRequirement = tableData.results;
+                    this.$state.tableDataExRequirementOrigin = this.$state.tableDataExRequirement.slice();
                     console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
+                    console.log('tableDataExRequirementOrigin:', this.$state.tableDataExRequirementOrigin);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -196,7 +203,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные бонуса ку_айди:', tableData);
                     this.$state.tableDataPercent = tableData.results;
+                    this.$state.tableDataPercentOrigin = this.$state.tableDataPercent.slice();
                     console.log('tableDataPercent:', this.$state.tableDataPercent);
+                    console.log('tableDataPercentOrigin:', this.$state.tableDataPercentOrigin);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -217,7 +226,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные искл накладных ку_айди:', tableData);
                     this.$state.tableDataExInvoiceSelect = tableData.results;
+                    this.$state.tableDataExInvoiceSelectOrigin = this.$state.tableDataExInvoiceSelect.slice();
                     console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
+                    console.log('tableDataExInvoiceSelectOrigin:', this.$state.tableDataExInvoiceSelectOrigin);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -237,6 +248,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
             })
                 .then((tableData) => {
                     console.log('Получены данные долж. лиц ку_айди:', tableData);
+                    this.$state.officialId = tableData.results[0].id;
                     this.$state.kuIdFIOСounteragent = tableData.results[0].counterparty_name;
                     this.$state.kuIdPostСounteragent = tableData.results[0].counterparty_post;
                     this.$state.kuIdDocСounteragent = tableData.results[0].counterparty_docu;

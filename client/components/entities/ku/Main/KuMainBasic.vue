@@ -31,7 +31,7 @@
           <el-form-item label-width="130" label="Код поставщика">
             <div>
               <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2"
-                :disabled="!store.kuIdEntityId" style="width: 300px" :title="disableSelectVendorTooltip"
+                :disabled="isButtonDisabled" style="width: 300px" :title="disableSelectVendorTooltip"
                  @change="onVendorChange" >
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
@@ -67,9 +67,9 @@
               style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Название договора">
+          <el-form-item label-width="170" label="Название договора" >
             <el-select v-model="store.kuIdDocu_name" size="small" clearable 
-              style="width: 300px" :disabled="isEditButtonDisabled">
+              style="width: 300px" :disabled="isEditButtonDisabled" placeholder="">
               <el-option label="Договор премий" value="Договор премий"></el-option>
               <el-option label="Договор услуг" value="Договор услуг"></el-option>
             </el-select>
@@ -92,7 +92,7 @@
           <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
           <el-form-item label-width="170" label="Тип периода">
             <el-select v-model="store.kuIdType" size="small" clearable 
-              style="width: 300px" :disabled="isEditButtonDisabled">
+              style="width: 300px" :disabled="isEditButtonDisabled" placeholder=''>
               <el-option label="Месяц" value="Месяц"></el-option>
               <el-option label="Квартал" value="Квартал"></el-option>
               <el-option label="Полгода" value="Полгода"></el-option>
@@ -122,14 +122,14 @@
           </el-form-item>
           <el-form-item label-width="170" label="Тип коммерческого условия">
             <el-select v-model="store.kuIdKu_type" size="small" clearable 
-              style="width: 300px" :disabled="isEditButtonDisabled">
+              style="width: 300px" :disabled="isEditButtonDisabled" placeholder="">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
               <el-option label="Услуга" value="Услуга"></el-option>
             </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Способ оплаты премии">
             <el-select v-model="store.kuIdPay_method" size="small" clearable 
-              style="width: 300px" :disabled="isEditButtonDisabled">
+              style="width: 300px" :disabled="isEditButtonDisabled" placeholder="">
               <el-option label="Оплата" value="Оплата"></el-option>
               <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
             </el-select>
@@ -155,6 +155,10 @@ const store2 = useKuAddStore();
 const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
 });
+
+const isButtonDisabled = () => {
+  return !store.kuIdEntityId && isEditButtonDisabled.value;
+};
 //вывод данных юридического лица
 const options = ref<Array<{ label: string; value: string }>>([]);
 watch(

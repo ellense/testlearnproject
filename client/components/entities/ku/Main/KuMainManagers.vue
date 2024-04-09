@@ -1,39 +1,42 @@
 <template>
-    <el-scrollbar height="45vh">
-        <el-button size="small" round @click="store.dialogFormManagersVisible = true"
-            class="buttonAdd">Добавить</el-button>
-        <el-table :data="tableData2" border style="width: 700px; margin-top: 10px;" height="40vh"
-            empty-text="Добавьте категорийных менеджеров">
-            <el-table-column property="group" label="Группа категорийных менеджеров" width="300"
-                show-overflow-tooltip />
-            <el-table-column property="discription" label="Описание" width="400" sortable show-overflow-tooltip />
+  <el-scrollbar height="45vh">
+    <el-button size="small" round @click="store.dialogFormManagersVisible = true" class="buttonAdd"
+      :disabled="isEditButtonDisabled">Добавить</el-button>
+    <el-table :data="tableData2" border style="width: 820px; margin-top: 10px;" height="40vh"
+      empty-text="Добавьте категорийных менеджеров">
+      <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
+      <el-table-column property="discription" label="Описание" width="400" sortable show-overflow-tooltip />
+      <el-table-column label="Операция" align="center">
+        <template #default="scope">
+          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+             :disabled="isEditButtonDisabled">Удалить</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-dialog v-model="store.dialogFormManagersVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
+      close-on-press-escape draggable width="715px">
+      <el-scrollbar class="scrollTableFiltres">
+        <el-table style="width: 680px" height="300" :data="tableData" border
+          @selection-change="store2.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
+          <el-table-column type="selection" width="30" />
+          <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
+          <el-table-column property="discription" label="Описание" width="350" show-overflow-tooltip />
+
         </el-table>
-        <el-dialog v-model="store.dialogFormManagersVisible" title="Выбор исключенных накладных для КУ"
-            close-on-click-modal close-on-press-escape draggable width="715px">
-            <el-scrollbar class="scrollTableFiltres">
-                <el-table style="width: 680px" height="300" :data="tableData" border
-                    @selection-change="store2.handleSelectionChangeExInvoice" ref="multipleTableRef"
-                    v-loading="loading">
-                    <el-table-column type="selection" width="30" />
-                    <el-table-column property="group" label="Группа категорийных менеджеров" width="300"
-                        show-overflow-tooltip />
-                    <el-table-column property="discription" label="Описание" width="350"
-                        show-overflow-tooltip />
-                </el-table>
-            </el-scrollbar>
-            <div v-if="pagination?.count" class="pagination">
-                <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-                    :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-                    @size-change="handleSizeChange" @current-change="paginationChange" />
-            </div>
-            <template #footer>
-                <span class="dialog-footer">
-                    <el-button @click="store.dialogFormManagersVisible = false">Отмена</el-button>
-                    <el-button @click="AddManagers()">Сохранить</el-button>
-                </span>
-            </template>
-        </el-dialog>
-    </el-scrollbar>
+      </el-scrollbar>
+      <div v-if="pagination?.count" class="pagination">
+        <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
+          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
+          @size-change="handleSizeChange" @current-change="paginationChange" />
+      </div>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="store.dialogFormManagersVisible = false">Отмена</el-button>
+          <el-button @click="AddManagers()">Сохранить</el-button>
+        </span>
+      </template>
+    </el-dialog>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts">
@@ -42,12 +45,15 @@ import type { IManagerForKu } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
-
+import { Delete } from '@element-plus/icons-vue'
 const store = useKuIdStore();
 const store2 = useKuAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
 const tableData = ref<IManagerForKu[]>(getManagerAll.value);
 
 const loading = ref()
@@ -68,8 +74,8 @@ const handleSizeChange = async (val: number) => {
 };
 //пагинация
 const paginationChange = (page: number) => {
-// store2.setFilterExInvoice('page', page);
-//   store2.getProductFromExcludedWithFilter(page);
+  // store2.setFilterExInvoice('page', page);
+  //   store2.getProductFromExcludedWithFilter(page);
 };
 
 //для очистки выбора
@@ -91,16 +97,18 @@ const AddManagers = () => {
 
   selectedRows.forEach(row => {
     store.tableDataManagerSelect.push({
-        group: row.group,
-        discription: row.discription,
+      group: row.group,
+      discription: row.discription,
     });
   });
   console.log("менеджеры", store.tableDataManagerSelect);
   toggleSelection()
   store.dialogFormManagersVisible = false;
 };
+//удаление менеджеров
+const deleteRow = (index: number) => {
+  store.tableDataManagerSelect.splice(index, 1);
+}
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

@@ -11,6 +11,7 @@
 
 <script lang="ts" setup>
 import { useKuIdStore } from "~~/stores/kuIdStore";
+import { useKuStore } from "~~/stores/kuStore";
 import dayjs from "dayjs";
 import type { IKuList } from "~/utils/types/directoryTypes";
 import { ElMessage } from 'element-plus'
@@ -81,25 +82,25 @@ const changeKuToBackend = async () => {
 
     loading.value = true;
 
-    const newItem = createNewItem();
 
-    const response = await KU.postKu(newItem);
+
+    const response = await KU.updateKu(createNewItem());
     deleteInRequirement()
     const responses = await postRequirements(response, store.tableDataInRequirement, KU.postKuInRequirementChange);
+    deleteExRequirement()
+    const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirementChange);
+deleteRequirementBonus()
+    const response3 = await postBonusRequirements(response, store.tableDataPercent);
+    deleteExInvoice()
+     const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
+     deleteManager()
+     const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
 
-    // const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirement);
-    // progress.value = 30;
-    // const response3 = await postBonusRequirements(response, store.tableDataPercent);
-    // progress.value = 40;
-    // const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
-    // progress.value = 50;
-    // const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
-    // progress.value = 60;
-    // const response6 = await KU.postKuOfficial(createOfficialArray(response));
-    // progress.value = 70;
+     const response6 = await KU.updateOfficial(createOfficialArray());
+
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses);
+      handleSuccess(response, responses, response2, response3,response4,response5,response6,);
 
     }
   } catch (error) {
@@ -136,7 +137,7 @@ const createNewItem = () => {
   };
 };
 
-const postRequirements = async (response: IKuList, dataArray: any, postFunction: any) => {
+const postRequirements = async (response: any, dataArray: any, postFunction: any) => {
   const requirementsArray = dataArray.map((item: { item_type: any; item_code: any; item_name: any; producer: any; brand: any; }) => ({
     ku_id: response.ku_id,
     item_type: item.item_type,
@@ -156,78 +157,79 @@ const postRequirements = async (response: IKuList, dataArray: any, postFunction:
   }));
 };
 
-// const postBonusRequirements = async (response: IKuList, dataArray: any) => {
-//   const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
-//     ku_key_id: response.ku_id,
-//     fix: item.fix,
-//     criterion: item.criterion !== null ? item.criterion : 0,
-//     percent_sum: item.percent_sum,
-//   }));
+const postBonusRequirements = async (response: any, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
+    ku_key_id: response.ku_id,
+    fix: item.fix,
+    criterion: item.criterion !== null ? item.criterion : 0,
+    percent_sum: item.percent_sum,
+  }));
 
-//   return await Promise.all(requirementsArray.map(async (newItem: any)  => {
-//     try {
-//       return await KU.postKuRequirementBonus(newItem);
-//     } catch (error) {
-//       console.error("Ошибка при отправке бонуса на бэкенд:", error);
-//       return null;
-//     }
-//   }));
-// };
+  return await Promise.all(requirementsArray.map(async (newItem: any)  => {
+    try {
+      return await KU.postKuRequirementBonus(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке бонуса на бэкенд:", error);
+      return null;
+    }
+  }));
+};
 
-// const postManagerItems = async (response:IKuList, dataArray: any, postFunction: any) => {
-//   const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
-//     ku_id: response.ku_id,
-//     group: item.group,
-//     discription: item.discription
-//   }));
+const postManagerItems = async (response:any, dataArray: any, postFunction: any) => {
+  const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
+    ku_id: response.ku_id,
+    group: item.group,
+    discription: item.discription
+  }));
 
-//   return await Promise.all(itemsArray.map(async (newItem: any) => {
-//     try {
-//       return await postFunction(newItem);
-//     } catch (error) {
-//       console.error("Ошибка при отправке данных на бэкенд:", error);
-//       return null;
-//     }
-//   }));
-// };
+  return await Promise.all(itemsArray.map(async (newItem: any) => {
+    try {
+      return await postFunction(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке данных на бэкенд:", error);
+      return null;
+    }
+  }));
+};
 
-// const postItems = async (response: IKuList, dataArray: any, postFunction: any) => {
-//   const itemsArray = dataArray.map((item: { doc_id: any; }) => ({
-//     ku_id: response.ku_id,
-//     doc_id: item.doc_id,
-//   }));
+const postItems = async (response: any, dataArray: any, postFunction: any) => {
+  const itemsArray = dataArray.map((item: { doc_id: any; }) => ({
+    ku_id: response.ku_id,
+    doc_id: item.doc_id,
+  }));
 
-//   return await Promise.all(itemsArray.map(async (newItem: any) => {
-//     try {
-//       return await postFunction(newItem);
-//     } catch (error) {
-//       console.error("Ошибка при отправке данных на бэкенд:", error);
-//       return null;
-//     }
-//   }));
-// };
+  return await Promise.all(itemsArray.map(async (newItem: any) => {
+    try {
+      return await postFunction(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке данных на бэкенд:", error);
+      return null;
+    }
+  }));
+};
 
-// const createOfficialArray = (response: IKuList) => {
-//   return {
-//     ku_id: response.ku_id,
-//       counterparty_name: store.newOfFIOСounteragent,
-//       counterparty_post: store.newOfPostСounteragent,
-//       counterparty_docu: store.newOfDocСounteragent,
-//       entity_name: store.newOfFIOEntity,
-//       entity_post: store.newOfPostEntity,
-//       entity_docu: store.newOfDocEntity,
-//   };
-// };
+const createOfficialArray = () => {
+  return {
+    id: store.officialId,
+    ku_id: store.ku_id,
+      counterparty_name: store.kuIdFIOСounteragent,
+      counterparty_post: store.kuIdPostСounteragent,
+      counterparty_docu: store.kuIdDocСounteragent,
+      entity_name: store.kuIdFIOEntity,
+      entity_post: store.kuIdPostEntity,
+      entity_docu: store.kuIdDocEntity,
+  };
+};
 
-const handleSuccess = (response: IKuList, responses: any[]) => {
+const handleSuccess = (response: any, responses: any[], response2: any[], response3: any,response4: any, response5: any,response6: any) => {
   console.log("Экземпляр успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
-  // console.log("исклУсловия успешно отправлены на бэкенд:", response2);
-  // console.log("бонус успешно отправлены на бэкенд:", response3);
-  // console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
-  // console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
-  // console.log("Должн. лица успешно отправлены на бэкенд:", response6);
-  // useKuStore().getKuFromAPIWithFilter();
+  console.log("исклУсловия успешно отправлены на бэкенд:", response2);
+  console.log("бонус успешно отправлены на бэкенд:", response3);
+  console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
+  console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
+  console.log("Должн. лица успешно отправлены на бэкенд:", response6);
+  useKuStore().getKuFromAPIWithFilter();
   router.push({ path: "/" });
   ElMessage.success("Коммерческое условие успешно изменено.");
   store.clearData()
@@ -308,22 +310,79 @@ const handleSuccess = (response: IKuList, responses: any[]) => {
 
 // }
 
-//удаление графиков
+//удаление вкл условий
 const deleteInRequirement = () => {
   const selectedRows = store.tableDataInRequirementOrigin.map((row) => row.in_prod_id);
+  console.log("SSSselectedRows", selectedRows);
   const deletePromises = selectedRows.map(async (in_prod_id) => {
     try {
       const results = await KU.deleteInRequirement({ in_prod_id });
-      console.log("успешно удалилось!!!!!!!!!!!!", results);
+      console.log("успешно удалилось вкл !!!!!!!!!!!!", results);
       return results;
     } catch (error) {
       console.error("Ошибка при удалении строки:", error);
-      throw error; // Пробрасываем ошибку вверх
+      throw error; 
     }
   });
 
   return Promise.all(deletePromises);
 };
+//удаление вкл условий
+const deleteExRequirement = () => {
+  const selectedRows = store.tableDataExRequirementOrigin.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KU.deleteExRequirement({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+//удаление бонусов
+const deleteRequirementBonus = () => {
+  const selectedRows = store.tableDataPercentOrigin.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KU.deleteRequirementBonus({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+//удаление искл накладных
+const deleteExInvoice = () => {
+  const selectedRows = store.tableDataExInvoiceSelectOrigin.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KU.deleteExInvoiceForKuId({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+const deleteManager = () => {
+  const selectedRows = store.tableDataManagerSelectOrigin.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KU.deleteManager({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+
 </script>
 
 <style scoped>

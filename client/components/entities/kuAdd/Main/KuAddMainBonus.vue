@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar height="45vh">
     <el-button size="small" round @click="addRow" class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData" border style="width: 700px; margin-top: 10px;" height="40vh"
+    <el-table :data="tableData" border style="width: 720px; margin-top: 10px;" height="40vh"
       empty-text="Добавьте условия бонуса">
       <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
         <template #default="{ row }">
@@ -19,10 +19,10 @@
             clearable size="small"></el-input>
         </template>
       </el-table-column>
-      <el-table-column fixed="right" label="Операция" align="center">
+      <el-table-column label="Операция" align="center">
         <template #default="scope">
-          <el-button plain type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
-            style="width: 100%; height: 100%;"></el-button>
+          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+            >Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -34,6 +34,7 @@ import { ref } from 'vue';
 import type { IPercent } from '~/utils/types/directoryTypes';
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { Delete } from '@element-plus/icons-vue'
+
 const store = useKuAddStore();
 
 const tableData = ref(store.tableDataPercent);

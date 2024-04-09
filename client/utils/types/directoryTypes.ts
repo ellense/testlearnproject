@@ -196,15 +196,12 @@ export interface IKuId {
 
 
 export interface IKuPost {
-  // entity_key: string;
-  // vendor_key: string;
   entity_id: string;
   vendor_id: string;
   period: string;
   date_start: Date | string;
   date_end: Date | string;
   status: string;
-  // status_ku: string;
   description: string;
   contract: string;
   product_type: string;
@@ -240,6 +237,19 @@ export interface IKuUpdate {
   period: string;
   date_start: Date | string;
   date_end: Date | string;
+  description: string;
+  contract: string;
+  product_type: string;
+  docu_account: string;
+  docu_name: string;
+  docu_number: string;
+  docu_date: Date | string;
+  docu_subject: string;
+  tax: boolean;
+  exclude_return: boolean;
+  negative_turnover: boolean;
+  ku_type: string;
+  pay_method: string;
 }
 export interface IKuDeleteGraph {
   ku_id: string;
@@ -359,11 +369,15 @@ export interface IKuIdStore {
   //данные таблиц
   tableDataInRequirement: IRequirement[];
   tableDataInRequirementOrigin: IRequirementOrigin[];
-  tableDataExRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement2[];
+  tableDataExRequirementOrigin: IRequirementOrigin2[];
   tableDataPercent: IPercent[];
+  tableDataPercentOrigin: IPercentOrigin[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
+  tableDataExInvoiceSelectOrigin: IExInvoiceForKuOrigin[]
   tableDataManagerSelect: IManagerForKu[]
+  tableDataManagerSelectOrigin: IManagerForKuOrigin[]
   tableDataContract: IContract[],
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
@@ -402,6 +416,7 @@ export interface IKuIdStore {
   kuIdNegative_turnover: boolean
   kuIdKu_type: string;
   kuIdPay_method: string;
+  officialId: number | null
   kuIdFIOСounteragent: string;
   kuIdPostСounteragent:string;
   kuIdDocСounteragent: string;
@@ -461,8 +476,24 @@ export interface IRequirement {
   producer: string;
   brand: string;
 }
+export interface IRequirement2 {
+  id: number | null;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
 export interface IRequirementOrigin {
   in_prod_id: number | null;
+  item_type: string;
+  item_code: string;
+  item_name: string;
+  producer: string;
+  brand: string;
+}
+export interface IRequirementOrigin2 {
+  id: number | null;
   item_type: string;
   item_code: string;
   item_name: string;
@@ -472,9 +503,15 @@ export interface IRequirementOrigin {
 export interface IRequirementId {
   in_prod_id: number | null;
 }
+export interface IRequirementId2 {
+  id: number | null;
+}
 
 export interface GetRequirementReturnData extends Pagination {
   results: IRequirement[];
+}
+export interface GetRequirementReturnData2 extends Pagination {
+  results: IRequirement2[];
 }
 
 export interface IRequirementPost {
@@ -508,6 +545,13 @@ export interface IContractPromise {
 
 //сложный процент
 export interface IPercent {
+  id: number | null;
+  fix: boolean;
+  criterion: number | null;
+  percent_sum: number | null;
+}
+export interface IPercentOrigin {
+  id: number | null;
   fix: boolean;
   criterion: number | null;
   percent_sum: number | null;
@@ -526,6 +570,18 @@ export interface GetPersentReturnData extends Pagination {
 
 //искл. накладные
 export interface IExInvoiceForKu {
+  id: number | null;
+  invoice_id: number | null;
+  vendor_id: string;
+  vendor_name: string;
+  invoice_name: string;
+  invoice_number: string;
+  invoice_date: Date | string;
+  product_amount: number | null
+  doc_id: string
+}
+export interface IExInvoiceForKuOrigin {
+  id: number | null;
   invoice_id: number | null;
   vendor_id: string;
   vendor_name: string;
@@ -555,6 +611,12 @@ export interface GetExInvoicesForKuReturnData extends Pagination {
 
 //кат. менеджеры
 export interface IManagerForKu {
+  id: number | null;
+  group: string;
+  discription: string;
+}
+export interface IManagerForKuOrigin {
+  id: number | null;
   group: string;
   discription: string;
 }
@@ -567,6 +629,7 @@ export interface IManagerForKuPost {
 
 //должностные лица
 export interface IOfficialForKu {
+  id: number | null;
   counterparty_name: string;
   counterparty_post: string;
   counterparty_docu: string;
