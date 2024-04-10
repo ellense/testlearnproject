@@ -1,15 +1,12 @@
 <template>
     <div>
-        <el-button size="small"  round @click="dialogOpenProduct()" :disabled="isButtonDisabled"
-            :title="disableButtonTooltip">+ Условие по
+        <el-button size="small" round @click="dialogOpenProduct()" :disabled="isEditButtonDisabled">+ Условие по
             товарам</el-button>
-        <el-button size="small" round @click="dialogOpenCategory()" :disabled="isButtonDisabled"
-            :title="disableButtonTooltip">+ Условие по
+        <el-button size="small" round @click="dialogOpenCategory()" :disabled="isEditButtonDisabled">+ Условие по
             категории</el-button>
     </div>
     <el-scrollbar class="scrollTableRequirement">
-        <el-table style="width: 100%; height:26vh" height="26vh" :data="tableData" border
-            empty-text="Добавьте условия">
+        <el-table style="width: 100%; height:26vh" height="26vh" :data="tableData" border empty-text="Добавьте условия">
             <el-table-column property="item_type" label="Тип номенклатуры" width="150" show-overflow-tooltip />
             <el-table-column property="item_code" label="Связь с номенклатурой / категорией" width="300"
                 show-overflow-tooltip />
@@ -30,24 +27,20 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import type { IRequirement } from "~/utils/types/directoryTypes";
+import type { IRequirement, IRequirement2 } from "~/utils/types/directoryTypes";
 const { getKuExRequirement } = storeToRefs(
-  useKuIdStore()
+    useKuIdStore()
 );
 
 const isEditButtonDisabled = computed(() => {
-  return store.kuIdStatus !== 'Создано';
+    return store.kuIdStatus !== 'Создано';
 });
-
-const isButtonDisabled = () => {
-  return store.disableButtonsExcluded && isEditButtonDisabled.value;
-};
 
 
 const store = useKuIdStore();
-const tableData = ref<IRequirement[]>(getKuExRequirement.value);
-  watch(getKuExRequirement, (value) => {
-  tableData.value = value || [];
+const tableData = ref<IRequirement2[]>(getKuExRequirement.value);
+watch(getKuExRequirement, (value) => {
+    tableData.value = value || [];
 });
 
 //кнопки добавления условий
@@ -62,11 +55,8 @@ const dialogOpenCategory = () => {
 //удаление условий
 const deleteRow = (index: number) => {
     store.tableDataExRequirement.splice(index, 1);
-    store.disableButtonsExcluded = false;
 }
 
-const disableButtonTooltip = computed(() => {
-    return store.disableButtonsExcluded ? 'Кнопка заблокирована. Для доступа удалите условие "Все".' : '';
-});
+
 
 </script>

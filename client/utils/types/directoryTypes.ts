@@ -1,4 +1,5 @@
 import type { ElTree } from 'element-plus'
+import type { FormInstance } from 'element-plus'
 ////////////////////////////////// юр.лица //////////////////////////////////////////
 export interface IEntity {
   entity_id: string;
@@ -273,9 +274,7 @@ export interface IKuStore {
   //параметры для фильтров при запросах
   filterKuValue: GetAllKus
 }
-
-export interface IKuAddStore {
-  //значения v-model при создании
+export interface IKuAddMain {
   newType: string;
   newEntityId: string;
   newEntityName: string;
@@ -297,6 +296,11 @@ export interface IKuAddStore {
   newNegative_turnover: boolean;
   newKu_type: string;
   newPay_method: string;
+}
+export interface IKuAddStore {
+  //значения v-model при создании
+  ruleFormRef: FormInstance | null;
+  kuAddMain: IKuAddMain
   newOfFIOСounteragent: string;
   newOfPostСounteragent: string;
   newOfDocСounteragent: string;
@@ -305,6 +309,10 @@ export interface IKuAddStore {
   newOfDocEntity: string;
   valueProducer_nameContract: string;
   valueBrand_nameContract: string;
+  valueProducer_nameIn: string;
+  valueBrand_nameIn: string;
+  valueProducer_nameEx: string;
+  valueBrand_nameEx: string;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
   multipleSelectionExInvoice: IExInvoiceForKu[]
@@ -318,7 +326,7 @@ export interface IKuAddStore {
   productIncluded: IProduct[];
   productExcluded: IProduct[];
   tableDataInRequirement: IRequirement[];
-  tableDataExRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement2[];
   tableDataContract: IContract[]
   tableDataPercent: IPercent[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
@@ -340,7 +348,6 @@ export interface IKuAddStore {
   dialogFormContractVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
-  disableButtonsExcluded: boolean
   //
   searchExInvoiceNumber: string;
   vendorFilter: string;
@@ -363,6 +370,7 @@ export interface IKuAddStore {
   filterBrandExcluded: GetAllBrands
   filterVendorValue: GetAllVendorsForEntity
   filterExInvoice: GetParamExInvoicesForKu
+  isFormValid: boolean
 }
 
 export interface IKuIdStore {
@@ -388,7 +396,6 @@ export interface IKuIdStore {
   dialogFormManagersVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
-  disableButtonsExcluded: boolean
   //поиски
   searchProductIncluded: string;
   searchProductExcluded: string;
@@ -418,13 +425,11 @@ export interface IKuIdStore {
   kuIdPay_method: string;
   officialId: number | null
   kuIdFIOСounteragent: string;
-  kuIdPostСounteragent:string;
+  kuIdPostСounteragent: string;
   kuIdDocСounteragent: string;
   kuIdFIOEntity: string;
   kuIdPostEntity: string;
   kuIdDocEntity: string;
-  //дизэйбл
-  disableButtons: boolean
   //пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;

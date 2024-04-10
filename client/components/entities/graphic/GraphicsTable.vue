@@ -24,7 +24,7 @@
         </template>
         <el-table-column fixed property="ku_id" width="95" sortable show-overflow-tooltip></el-table-column>
       </el-table-column>
-      <el-table-column label="Юридическое лицо">
+      <el-table-column label="Юридическое лицо" align="center">
         <template #header>
           <div class="column-header" :style="{ color: LegalEntity.length > 0 ? '#409EFF' : 'inherit' }">
             Юридическое лицо
@@ -45,7 +45,7 @@
         <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column label="Поставщик">
+      <el-table-column label="Поставщик" align="center">
         <template #header>
           <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
             Поставщик

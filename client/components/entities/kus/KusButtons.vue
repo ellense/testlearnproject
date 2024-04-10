@@ -15,7 +15,7 @@
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item><el-button @click="ApproveKu()" link type="success"
-                size="small">Утверждено</el-button></el-dropdown-item>
+                size="small">Действует</el-button></el-dropdown-item>
             <el-dropdown-item><el-button @click="CancelKu()" link type="danger"
                 size="small">Отменено</el-button></el-dropdown-item>
             <el-dropdown-item><el-button @click="СreatedKu()" link type="info"

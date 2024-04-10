@@ -2,13 +2,13 @@
   <div class="scrollTable">
     <el-table :data="tableData" style="width: 100%" @selection-change="useKuStore().handleSelectionChange"
       height="calc(100vh - 130px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe
-      :border="true" @sort-change="handleSortChange" >
+      :border="true" @sort-change="handleSortChange">
       <el-table-column type="selection" width="30" fixed />
       <el-table-column property="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
       <el-table-column property="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
       <el-table-column property="description" label="Описание" width="250" show-overflow-tooltip />
 
-      <el-table-column label="Юридическое лицо">
+      <el-table-column label="Юридическое лицо" align="center">
         <template #header>
           <div class="column-header" :style="{ color: LegalEntity.length > 0 ? '#409EFF' : 'inherit' }">
             Юридическое лицо
@@ -29,7 +29,7 @@
         <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column label="Поставщик">
+      <el-table-column label="Поставщик" align="center">
         <template #header>
           <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
             Поставщик
@@ -58,12 +58,13 @@
             Начальная дата
             <el-popover placement="bottom" :width="400" :visible="popoverVisible">
               <template #reference>
-                <el-button style="background-color: transparent; border:none; padding: 10px" @click="popoverVisible = !popoverVisible"><el-icon>
+                <el-button style="background-color: transparent; border:none; padding: 10px"
+                  @click="popoverVisible = !popoverVisible"><el-icon>
                     <Filter />
                   </el-icon></el-button>
               </template>
               <el-date-picker v-model="dateRange" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
-                end-placeholder="Окончание"  size="small" @change="changeDateRange" />
+                end-placeholder="Окончание" size="small" @change="changeDateRange" />
             </el-popover>
           </div>
         </template>
@@ -73,13 +74,14 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column >
+      <el-table-column>
         <template #header>
           <div class="column-header" :style="{ color: dateRange2 ? '#409EFF' : 'inherit' }">
             Конечная дата
-            <el-popover placement="bottom" :width="400" :visible="popoverVisible2" >
+            <el-popover placement="bottom" :width="400" :visible="popoverVisible2">
               <template #reference>
-                <el-button style="background-color: transparent; border:none; padding: 10px" @click="popoverVisible2 = !popoverVisible2"><el-icon>
+                <el-button style="background-color: transparent; border:none; padding: 10px"
+                  @click="popoverVisible2 = !popoverVisible2"><el-icon>
                     <Filter />
                   </el-icon></el-button>
               </template>
@@ -110,7 +112,7 @@
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
-              </el-select-v2>            
+              </el-select-v2>
             </el-popover>
           </div>
         </template>
@@ -124,7 +126,7 @@
         <template #header>
           <div class="column-header" :style="{ color: Status.length > 0 ? '#409EFF' : 'inherit' }">
             Статус
-            <el-popover placement="bottom-end" :width="325" trigger="click" >
+            <el-popover placement="bottom-end" :width="325" trigger="click">
               <template #reference hide-on-click="false">
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
                     <Filter />
@@ -132,11 +134,11 @@
               </template>
               <el-select-v2 v-model="Status" multiple clearable filterable collapse-tags collapse-tags-tooltip
                 :max-collapse-tags="2" :options="optionsStatus" style="width: 300px" placeholder="Фильтр по статусу КУ"
-                 size="small" @change="onStatusChange">
+                size="small" @change="onStatusChange">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                 </template>
-              </el-select-v2>             
+              </el-select-v2>
             </el-popover>
           </div>
         </template>
@@ -166,6 +168,7 @@ import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuStore()
 );
+
 const storeKuAdd = useKuAddStore();
 const visible = ref(false)
 const tableData = ref<IKuList[]>(getKu.value);
@@ -175,15 +178,49 @@ const loading = ref()
 //открывание и редактитрование ку
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
-  useKuIdStore().getKuDetailFromApi(kuId)
-  useKuIdStore().fetchInRequirementForKuId(kuId)
+  await useKuIdStore().getKuDetailFromApi(kuId)
+  await useKuIdStore().fetchInRequirementForKuId(kuId)
   useKuIdStore().fetchExRequirementForKuId(kuId)
   useKuIdStore().fetchBonusForKuId(kuId)
   useKuIdStore().fetchExInvoiceForKuId(kuId)
   useKuIdStore().fetchOfficialForKuId(kuId)
-
   router.push({ path: `/ku/${kuId}` });
+  console.log("СТАТУС", useKuIdStore().kuIdStatus)
+  console.log("ПОСТАВЩИК", useKuIdStore().kuIdVendorId)
+
+  if (useKuIdStore().kuIdStatus === "Создано") {
+    if (useKuIdStore().kuIdVendorId && useKuIdStore().kuIdVendorId.length > 0) {
+      storeKuAdd.setFilterVendor('vendor_id', useKuIdStore().kuIdVendorId);
+      storeKuAdd.getVendorNameFromAPIWithFilter()
+    try {
+      storeKuAdd.setFilterVendor("entity_id", useKuIdStore().kuIdEntityId)
+    storeKuAdd.setFilterBrand("vendor_id", useKuIdStore().kuIdVendorId)
+    storeKuAdd.setFilterCategory("vendor_id", useKuIdStore().kuIdVendorId)
+    storeKuAdd.setFilterExInvoice("vendor_id", useKuIdStore().kuIdVendorId)
+    storeKuAdd.setFilterProducer("vendor_id", useKuIdStore().kuIdVendorId)
+    storeKuAdd.setFilterProductEx("vendor_id", useKuIdStore().kuIdVendorId)
+    storeKuAdd.setFilterProductInRequirement("vendor_id", useKuIdStore().kuIdVendorId)
+    await storeKuAdd.fetchKuEntity({
+      entity_id: "",
+      name: "",
+    });
+    await storeKuAdd.fetchAllVendorIdForEntity();
+    await storeKuAdd.fetchCategories();
+    await storeKuAdd.getProductFromIncludedWithFilter();
+    await storeKuAdd.fetchAllProducersForInclided();
+    await storeKuAdd.fetchAllBrandsForIncluded();
+    await storeKuAdd.getProductFromExcludedWithFilter();
+    await storeKuAdd.getInvoicesFromAPIWithFilter();
+    } catch (error) {
+      console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+    }
+    
+  }
+  else {
+    useKuIdStore().disableButtonsIncluded = true;
+  }
 };
+}
 
 //пагинация
 const pageSize = ref(countRowTable);
@@ -234,7 +271,7 @@ onMounted(async () => {
 });
 
 const formatOkDate = (dateTime: any) => {
-  return dayjs(dateTime).format('DD.MM.YYYY'); 
+  return dayjs(dateTime).format('DD.MM.YYYY');
 };
 
 const getStatusColor = (status: string) => {

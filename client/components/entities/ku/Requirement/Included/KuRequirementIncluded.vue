@@ -1,11 +1,11 @@
 <template>
     <div>
-        <el-button size="small" round @click="onAddItem()" :disabled="isButtonDisabled"
+        <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Все</el-button>
-        <el-button size="small" round @click="dialogOpenProduct()" :disabled="isButtonDisabled"
+        <el-button size="small" round @click="dialogOpenProduct()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
-        <el-button size="small" round @click="dialogOpenCategory()" :disabled="isButtonDisabled"
+        <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Условие по
             категории</el-button>
     </div>
@@ -38,12 +38,6 @@ import type { IRequirement } from "~/utils/types/directoryTypes";
 const { getKuInRequirement } = storeToRefs(
   useKuIdStore()
 );
-const isEditButtonDisabled = computed(() => {
-  return store.kuIdStatus !== 'Создано';
-});
-const isButtonDisabled = () => {
-  return store.disableButtonsExcluded && isEditButtonDisabled.value;
-};
 
 const store = useKuIdStore();
 const tableData = ref<IRequirement[]>(getKuInRequirement.value);
@@ -89,6 +83,11 @@ const onAddItem = () => {
     }
     store.disableButtonsIncluded = true;
 };
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
+
 
 //кнопки добавления условий
 const dialogOpenProduct = () => {

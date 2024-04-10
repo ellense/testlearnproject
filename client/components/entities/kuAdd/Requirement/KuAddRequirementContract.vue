@@ -153,8 +153,8 @@ const onProducerChange = async () => {
 };
 const FormContract = async () => {
     const newItem = {
-        vendor_name: store.newVendorId,
-        ku_type: store.newKu_type,
+        vendor_name: store.kuAddMain.newVendorId,
+        ku_type: store.kuAddMain.newKu_type,
         provider_list: store.tableDataContract.map(item => item.producer_name),
         brand_list: store.tableDataContract.map(item => item.brand_name),
     }

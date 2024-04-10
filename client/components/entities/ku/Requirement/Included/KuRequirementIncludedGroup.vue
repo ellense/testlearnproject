@@ -153,6 +153,7 @@ const AddCategoryItem = async () => {
 
     // Используем сохраненное значение selectedCategoryName
     store.tableDataInRequirement.push({
+      in_prod_id: null,
       item_type: "Категория",
       item_code: value.value,
       item_name: selectedCategoryName, // Передаем имя выбранной категории

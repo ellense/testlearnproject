@@ -7,7 +7,7 @@
       <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
       <el-table-column property="invoice_name" label="Наименование" width="200" sortable show-overflow-tooltip />
-      <el-table-column label="Поставщик">
+      <el-table-column label="Поставщик" align="center">
         <el-table-column property="vendor_id" label="Код" width="200" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="300" sortable show-overflow-tooltip />
       </el-table-column>
@@ -23,8 +23,8 @@
     </el-table>
     <el-dialog v-model="store.dialogFormExInvoiceVisible" title="Выбор исключенных накладных для КУ"
       close-on-click-modal close-on-press-escape draggable>
-      <h4>Код поставщика: <span>{{ useKuAddStore().newVendorId }}</span></h4>
-      <h4>Наименование поставщика: <span>{{ useKuAddStore().newVendorName }}</span></h4>
+      <h4>Код поставщика: <span>{{ useKuAddStore().kuAddMain.newVendorId }}</span></h4>
+      <h4>Наименование поставщика: <span>{{ useKuAddStore().kuAddMain.newVendorName }}</span></h4>
       <div class="directoryBar">
         <div class="directoryBar_filter">
           <el-input v-model="searchQuery" placeholder="Фильтр по номеру накладной" clearable
@@ -152,6 +152,7 @@ const AddExInvoice = () => {
 
   selectedRows.forEach(row => {
     store.tableDataExInvoiceSelect.push({
+      id: null,
       invoice_id: row.invoice_id,
       vendor_id: row.vendor_id,
       vendor_name: row.vendor_name,

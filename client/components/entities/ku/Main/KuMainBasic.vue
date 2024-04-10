@@ -5,7 +5,6 @@
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
           <el-form-item label-width="130" label="Код компании">
-            <!-- <el-text class="kuAddLabel">Код компании</el-text> -->
             <el-select v-model="store.kuIdEntityId" size="small"  clearable
               filterable style="width: 300px" @change="onEntityChange" :disabled="isEditButtonDisabled">
               <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
@@ -31,7 +30,7 @@
           <el-form-item label-width="130" label="Код поставщика">
             <div>
               <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2"
-                :disabled="isButtonDisabled" style="width: 300px" :title="disableSelectVendorTooltip"
+                :disabled="isEditButtonDisabled" style="width: 300px" :title="disableSelectVendorTooltip"
                  @change="onVendorChange" >
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
@@ -156,9 +155,7 @@ const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
 });
 
-const isButtonDisabled = () => {
-  return !store.kuIdEntityId && isEditButtonDisabled.value;
-};
+
 //вывод данных юридического лица
 const options = ref<Array<{ label: string; value: string }>>([]);
 watch(
@@ -200,14 +197,14 @@ const onEntityChange = async () => {
   }
   //для поставщика
   store2.dataVendorId = [];
+  store.kuIdVendorId = "";
   store.kuIdVendorName = "";
   store2.setFilterVendor('entity_id', store.kuIdEntityId);
   if (store.kuIdEntityId) { // Проверка, что выбрана торговая маркка
     useKuAddStore().fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
   } else {
-    store2.setFilterVendor('entity_id', undefined); // Сбросить фильтр
-    store2.removeFilterExInvoice("vendor_id")
+    store2.removeFilterVendor("entity_id")
     store2.tableDataExInvoiceAll.length = 0
   }
 };
@@ -225,12 +222,12 @@ const onVendorChange = async () => {
       store2.setFilterExInvoice('vendor_id', store.kuIdVendorId);
       store2.setFilterCategory('vendor_id', store.kuIdVendorId);
       store2.setFilterExInvoice('vendor_id', store.kuIdVendorId);
-      await store2.fetchCategories();
-      await store2.getProductFromIncludedWithFilter();
-      await store2.fetchAllProducersForInclided();
-      await store2.fetchAllBrandsForIncluded();
-      await store2.getProductFromExcludedWithFilter();
-      await store2.getInvoicesFromAPIWithFilter();
+       store2.fetchCategories();
+       store2.getProductFromIncludedWithFilter();
+      store2.fetchAllProducersForInclided();
+       store2.fetchAllBrandsForIncluded();
+       store2.getProductFromExcludedWithFilter();
+       store2.getInvoicesFromAPIWithFilter();
     } catch (error) {
       console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
     }
@@ -320,7 +317,7 @@ const disableSelectVendorTooltip = computed(() => {
 }
 
 .el-form-item {
-  margin: 2px;
+  margin: 0 !important;
 }
 
 

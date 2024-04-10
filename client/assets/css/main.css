@@ -162,5 +162,11 @@ h3{
 }
 .el-form-item__label {
   font-size: 12px !important;
-
+}
+.cell .el-button {
+  padding: 0 5px !important;
+  height: auto !important;
+}
+.el-table .cell {
+  line-height: 20px !important
 }

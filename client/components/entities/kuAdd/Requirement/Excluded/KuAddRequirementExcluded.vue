@@ -42,7 +42,6 @@ const dialogOpenCategory = () => {
 //удаление условий
 const deleteRow = (index: number) => {
     store.tableDataExRequirement.splice(index, 1);
-    store.disableButtonsExcluded = false;
 }
 
 </script>

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useKuIdStore } from "~~/stores/kuIdStore";
+import type { FormInstance } from 'element-plus'
 
 import type {
     IKuList,
@@ -22,28 +23,30 @@ import type {
 
 export const useKuAddStore = defineStore("KuAddStore", {
     state: (): IKuAddStore => ({
-        //v-model атрибутов при создании
-        newType: "",
-        newEntityId: "",
-        newEntityName: "",
-        newVendorId: "",
-        newVendorName: "",
-        newDateStart: "",
-        newDateEnd: "",
-        newDateActual: "",
-        newDescription: "",
-        newContract: "",
-        newProduct_type: "",
-        newDocu_account: "",
-        newDocu_name: "",
-        newDocu_number: "",
-        newDocu_date: "",
-        newDocu_subject: "",
-        newTax: false,
-        newExclude_return: false,
-        newNegative_turnover: false,
-        newKu_type: "",
-        newPay_method: "",
+        ruleFormRef: null,
+        kuAddMain: {
+            newType: "",
+            newEntityId: "",
+            newEntityName: "",
+            newVendorId: "",
+            newVendorName: "",
+            newDateStart: "",
+            newDateEnd: "",
+            newDateActual: "",
+            newDescription: "",
+            newContract: "",
+            newProduct_type: "",
+            newDocu_account: "",
+            newDocu_name: "",
+            newDocu_number: "",
+            newDocu_date: "",
+            newDocu_subject: "",
+            newTax: false,
+            newExclude_return: false,
+            newNegative_turnover: false,
+            newKu_type: "",
+            newPay_method: "",
+        },
         newOfFIOСounteragent: "",
         newOfPostСounteragent: "",
         newOfDocСounteragent: "",
@@ -52,6 +55,10 @@ export const useKuAddStore = defineStore("KuAddStore", {
         newOfDocEntity: "",
         valueProducer_nameContract: "",
         valueBrand_nameContract: "",
+        valueProducer_nameIn: "",
+        valueBrand_nameIn: "",
+        valueProducer_nameEx: "",
+        valueBrand_nameEx: "",
         //селекты для множественного выбора
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
@@ -87,7 +94,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
         dialogFormContractVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
-        disableButtonsExcluded: false,
         //
         
         vendorFilter: "",
@@ -110,7 +116,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         filterVendorValue: {},
         filterCategory: {},
         filterExInvoice: {},
-
+        isFormValid: false,
     }),
 
     getters: {
@@ -124,7 +130,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
         getBrandsEx: (state) => state.brandIncluded,
         getProductEx: (state) => state.productIncluded,
         getEntity: (state) => state.dataEntity,
-        getEntityName: (state) => state.newEntityName,
+        // getEntityName: (state) => state.newEntityName,
+        getEntityName: (state) => state.kuAddMain.newEntityName,
     },
 
     actions: {
@@ -155,6 +162,50 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.$state.countRowTable = count;
         },
 
+
+        setRuleFormRef(formRef: FormInstance | null) {
+            this.ruleFormRef = formRef;
+          },
+          async isFormValid() {
+            return new Promise((resolve, reject) => {
+              if (!this.ruleFormRef) {
+                console.error('Form reference is not set');
+                reject(new Error('Form reference is not set'));
+                return;
+              }
+              this.ruleFormRef.validate((valid, fields) => {
+                if (valid) {
+                  console.log('Form is valid!');
+                  resolve(true);
+                } else {
+                  console.log('Form is invalid:', fields);
+                  resolve(false);
+                }
+              });
+            });
+          },
+        // async submitForm(formEl: FormInstance | undefined) {
+        //     try {
+        //         if (!formEl) return;
+        //         await formEl.validate((valid, fields) => {
+        //             if (valid) {
+        //               console.log('submit!')
+        //             } else {
+        //               console.log('error submit!', fields)
+        //             }
+        //           })
+        //         // const { valid, fields } = await formEl.validate();
+        //         // if (valid) {
+        //         //     console.log('submit!');
+        //         //     ElMessage.success('Все верно.');
+        //         // } else {
+        //         //     console.log('error submit!', fields);
+        //         //     ElMessage.error('Ошибка валидации формы.');
+        //         // }
+        //     } catch (error) {
+        //         console.error('Ошибка при отправке формы:', error);
+        //     }
+        // },
         //получение данных о юр.лице для создания
         async fetchKuEntity(data: IEntityIdAndName) {
             try {
@@ -204,11 +255,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 vendor_id: this.$state.filterVendorValue.vendor_id,
             })
                 .then((dataVendor) => {
-                    this.$state.newVendorName = dataVendor.results[0].name;
+                    this.$state.kuAddMain.newVendorName = dataVendor.results[0].name;
                     useKuIdStore().setKuIdVendorName(dataVendor.results[0].name)
-                    // this.$state.dataVendorName = dataVendor.results;
-                    console.log('Получены данные vendorName:', this.$state.newVendorName, useKuIdStore().kuIdVendorName);
-                    // console.log('Получены данные dataVendorName:', this.$state.dataVendorName);
+                    console.log('Получены данные vendorName:', this.$state.kuAddMain.newVendorName, useKuIdStore().kuIdVendorName);
                     this.$state.pagination = {
                         count: dataVendor.count,
                         previous: dataVendor.previous,
@@ -260,7 +309,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         // Метод для загрузки данных
         async fetchCategories() {
             try {
-                const vendorId = this.$state.newVendorId; // Получаем vendor_id из состояния хранилища
+                const vendorId = this.$state.kuAddMain.newVendorId; // Получаем vendor_id из состояния хранилища
                 console.log("Before API call, vendorId ", vendorId);
                 // Передаем vendor_id в запрос
                 const result = await CATEGORY.getCategory2({
@@ -291,7 +340,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.newVendorId
+                        vendor_id: this.$state.kuAddMain.newVendorId
                     });
                     allProducer = allProducer.concat(producers.results);
                     totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
@@ -315,6 +364,11 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.$state.filterProducerIncluded[field] = value
             console.log("filterProducerIncluded", this.$state.filterProducerIncluded);
         },
+        removeFilterProducer<T extends keyof GetAllProducer>(field: T) {
+            if (this.$state.filterProducerIncluded) {
+                delete this.$state.filterProducerIncluded[field]
+            }
+        },
 
         //получение данных о бренде с фильтром для включенных условий
         async fetchAllBrandsForIncluded() {
@@ -328,7 +382,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page: nextPage,
                         producer_name: this.$state.filterBrandIncluded.producer_name,
                         l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.newVendorId
+                        vendor_id: this.$state.kuAddMain.newVendorId
                     });
                     allBrands = allBrands.concat(brands.results);
                     totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
@@ -356,12 +410,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async getProductFromIncludedWithFilter(page?: number) {
             this.setFilterProductInRequirement('page', page);
             this.setFilterProductInRequirement('search', this.$state.searchProductIncluded);
-            this.setFilterProductInRequirement('vendor_id', this.$state.newVendorId);
+            this.setFilterProductInRequirement('vendor_id', this.$state.kuAddMain.newVendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
                 search: this.$state.searchProductIncluded,
-                vendor_id: this.$state.newVendorId
+                vendor_id: this.$state.kuAddMain.newVendorId
             })
                 .then((product) => {
                     console.log('Получены данные вкл товаров:', product);
@@ -403,12 +457,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async getProductFromExcludedWithFilter(page?: number) {
             this.setFilterProductEx('page', page);
             this.setFilterProductEx('search', this.$state.searchProductExcluded);
-            this.setFilterProductEx('vendor_id', this.$state.newVendorId);
+            this.setFilterProductEx('vendor_id', this.$state.kuAddMain.newVendorId);
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
                 search: this.$state.searchProductExcluded,
-                vendor_id: this.$state.newVendorId
+                vendor_id: this.$state.kuAddMain.newVendorId
             })
                 .then((product) => {
                     console.log('Получены данные товаров:', product);
@@ -505,27 +559,27 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.tableDataManagerSelect.length = 0;
             this.tableDataContract.length = 0;
             // Значения v-model при создании
-            this.newType = '',
-            this.newEntityId = '';
-            this.newEntityName = '';
-            this.newVendorId = '';
-            this.newVendorName = '';
-            this.newDateStart = '';
-            this.newDateEnd = '';
-            this.newDateActual = '';
-            this.newDescription = '';
-            this.newContract = '';
-            this.newProduct_type = '';
-            this.newDocu_account = '';
-            this.newDocu_name = '';
-            this.newDocu_number = '';
-            this.newDocu_date = '';
-            this.newDocu_subject = '';
-            this.newTax = false;
-            this.newExclude_return = false;
-            this.newNegative_turnover = false;
-            this.newKu_type = '';
-            this.newPay_method = '';
+            this.kuAddMain.newType = '',
+            this.kuAddMain.newEntityId = '';
+            this.kuAddMain.newEntityName = '';
+            this.kuAddMain.newVendorId = '';
+            this.kuAddMain.newVendorName = '';
+            this.kuAddMain.newDateStart = '';
+            this.kuAddMain.newDateEnd = '';
+            this.kuAddMain.newDateActual = '';
+            this.kuAddMain.newDescription = '';
+            this.kuAddMain.newContract = '';
+            this.kuAddMain.newProduct_type = '';
+            this.kuAddMain.newDocu_account = '';
+            this.kuAddMain.newDocu_name = '';
+            this.kuAddMain.newDocu_number = '';
+            this.kuAddMain.newDocu_date = '';
+            this.kuAddMain.newDocu_subject = '';
+            this.kuAddMain.newTax = false;
+            this.kuAddMain.newExclude_return = false;
+            this.kuAddMain.newNegative_turnover = false;
+            this.kuAddMain.newKu_type = '';
+            this.kuAddMain.newPay_method = '';
             this.newOfFIOСounteragent = '';
             this.newOfPostСounteragent = '';
             this.newOfDocСounteragent = '';
@@ -552,7 +606,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
-            this.disableButtonsExcluded = false;
 
             // Сбрасываем значения поисковых строк
             this.searchExInvoiceNumber = '';
@@ -567,7 +620,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             try {
               const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
               console.log("Экземпляр успешно отправлен на бэкенд:", response);
-              this.newContract = response.name; // сохраняем имя в состоянии хранилища
+              this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
             } catch (error) {
               console.error("Ошибка при отправке экземпляра на бэкенд:", error);
               // Можно обработать ошибку здесь, если нужно

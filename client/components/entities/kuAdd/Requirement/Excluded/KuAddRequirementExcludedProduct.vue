@@ -89,7 +89,7 @@ const AddProductItem = () => {
 
   selectedRows.forEach(row => {
     useKuAddStore().tableDataExRequirement.push({
-      in_prod_id: null,
+      id: null,
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,

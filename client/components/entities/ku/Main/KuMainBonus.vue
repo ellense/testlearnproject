@@ -52,7 +52,7 @@ watch(getPercent, (value) => {
 
 //добавление сложного процента
 const addRow = () => {
-  tableData.value.push({ criterion: null, percent_sum: null, fix: false });
+  tableData.value.push({id: null, criterion: null, percent_sum: null, fix: false });
   console.log("данные бонуса:", tableData.value)
   console.log("данные бонуса в хранилище:", store.tableDataPercent)
 };

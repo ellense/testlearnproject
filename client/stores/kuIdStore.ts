@@ -28,7 +28,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
         dialogFormManagersVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
-        disableButtonsExcluded: false,
         //поиски
         searchProductIncluded: "",
         searchProductExcluded: "",
@@ -63,9 +62,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdFIOEntity: "",
         kuIdPostEntity: "",
         kuIdDocEntity: "",
-
-        //дизэйбл
-        disableButtons: false,
         //пагинация в таблицах
         pagination: null,
         countRowTable: 100,
@@ -284,7 +280,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.dialogFormManagersVisible = false;
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
-            this.disableButtonsExcluded = false;
 
             // Сбрасываем значения поисковых строк
             this.searchProductIncluded = '';
@@ -320,8 +315,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdFIOEntity = '';
             this.kuIdPostEntity = '';
             this.kuIdDocEntity = '';
-            // Сбрасываем флаг дизейбла кнопок
-            this.disableButtons = false;
 
             this.multipleSelectionProduct = [];
             this.multipleSelectionExInvoice = [];

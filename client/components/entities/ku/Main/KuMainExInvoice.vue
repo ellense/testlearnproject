@@ -160,6 +160,7 @@ const AddExInvoice = () => {
 
   selectedRows.forEach(row => {
     store.tableDataExInvoiceSelect.push({
+      id: null,
       invoice_id: row.invoice_id,
       vendor_id: row.vendor_id,
       vendor_name: row.vendor_name,
