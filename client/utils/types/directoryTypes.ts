@@ -22,12 +22,12 @@ export interface IEntityFull {
   bank_bink: string;
   merge_id: string;
 }
-export interface EntityStore {
+export interface IEntityStore {
   dataEntity: IEntity[],
   search: string,
-  filterValue: GetAllEntities
+  filterValue: IParamEntities
 }
-export interface GetAllEntities {
+export interface IParamEntities {
   search?: string;
 }
 export interface IEntityIdAndName {
@@ -69,7 +69,7 @@ export interface IVendorFull {
   entity_id: string
   entity_name: string
 }
-export interface VendorStore {
+export interface IVendorStore {
   dataVendor: IVendor[] | null
   pagination: Pagination | null
   countRowTable: number
@@ -78,13 +78,13 @@ export interface VendorStore {
   search: string
   filteredDataVendor: IVendor[],
   juristicPersons: string[]
-  filterValue: GetAllVendorsForEntityInVendor
+  filterValue: IParamVendorsForEntityInVendor
 }
-export interface GetAllVendors {
+export interface IParamVendors {
   page_size?: number
   page?: number
 }
-export interface GetAllVendorsReturnData extends Pagination {
+export interface IVendorsReturnData extends Pagination {
   results: IVendor[]
 }
 export interface IVendorId {
@@ -101,13 +101,13 @@ export interface IVendorIdAndNameForKu {
   vendor_id: string
   vendor_name: string;
 }
-export interface GetAllVendorsForEntity {
+export interface IParamVendorsForEntity {
   entity_id?: string;
   vendor_id?: string;
   page_size?: number;
   page?: number;
 }
-export interface GetAllVendorsForEntityInVendor {
+export interface IParamVendorsForEntityInVendor {
   entity_ids?: string[]
   page_size?: number
   page?: number
@@ -115,12 +115,12 @@ export interface GetAllVendorsForEntityInVendor {
   sort_by?: string;
   sort_order?: string;
 }
-export interface GetAllVendorsForEntityReturnData extends Pagination {
+export interface IVendorsForEntityReturnData extends Pagination {
   resultsId: IVendorId[];
   resultsName: IVendorName[];
   results: IVendorIdAndName[]
 }
-export interface GetAllVendorsForEntityInVendorReturnData extends Pagination {
+export interface IVendorsForEntityInVendorReturnData extends Pagination {
   results: IVendor[];
 }
 
@@ -137,9 +137,7 @@ export interface IInvoice {
   invoice_date: Date | string;
   product_amount: number | null
 }
-
-
-export interface GetAllInvoices {
+export interface IParamInvoices {
   page_size?: number;
   page?: number;
   entity_id?: string[];
@@ -147,10 +145,7 @@ export interface GetAllInvoices {
   start_date?: string,
   end_date?: string,
 }
-
-
-
-export interface InvoiceStore {
+export interface IInvoiceStore {
   dataInvoice: IInvoice[];
   pagination: Pagination | null;
   countRowTable: number;
@@ -158,9 +153,9 @@ export interface InvoiceStore {
   legalEntity: string[]
   // vendor: string[]
   vendor: IVendorId[]
-  filterValue: GetAllInvoices
+  filterValue: IParamInvoices
 }
-export interface GetAllInvoicesReturnData extends Pagination {
+export interface IInvoicesReturnData extends Pagination {
   results: IInvoice[];
 }
 
@@ -192,10 +187,7 @@ export interface IKuList {
 }
 export interface IKuId {
   ku_id: string;
-
 }
-
-
 export interface IKuPost {
   entity_id: string;
   vendor_id: string;
@@ -272,7 +264,7 @@ export interface IKuStore {
   filterVendorId: string[]
   filterEntityId: string[]
   //параметры для фильтров при запросах
-  filterKuValue: GetAllKus
+  filterKuValue: IParamKus
 }
 export interface IKuAddMain {
   newType: string;
@@ -368,11 +360,10 @@ export interface IKuAddStore {
   filterProducerExcluded: GetAllProducer
   filterBrandIncluded: GetAllBrands
   filterBrandExcluded: GetAllBrands
-  filterVendorValue: GetAllVendorsForEntity
+  filterVendorValue: IParamVendorsForEntity
   filterExInvoice: GetParamExInvoicesForKu
   isFormValid: boolean
 }
-
 export interface IKuIdStore {
   //данные таблиц
   tableDataInRequirement: IRequirement[];
@@ -438,10 +429,9 @@ export interface IKuIdStore {
   multipleSelectionExInvoice: IExInvoiceForKu[]
   multipleSelectionManager: IManagerForKu[]
   multipleTableRef: Ref | null;
-  filterVendorValue: GetAllVendorsForEntity
+  filterVendorValue: IParamVendorsForEntity
 }
-
-export interface GetAllKus {
+export interface IParamKus {
   page_size?: number;
   page?: number;
   entity_id?: string[];
@@ -456,22 +446,23 @@ export interface GetAllKus {
   sort_by?: string;
   sort_order?: string;
 }
-export interface GetAllKu_Id {
+export interface IParamKu_Id {
   page_size?: number;
   page?: number;
 }
-export interface GetAllKusReturnData extends Pagination {
+export interface IKusReturnData extends Pagination {
   results: IKuList[];
 }
-export interface GetAllKu_IdReturnData extends Pagination {
+export interface IKu_IdReturnData extends Pagination {
   results: IKuId[];
 }
 ////////////////////////////////////// Вкладки КУ ///////////////////////////////////
-export interface GetParamKuId {
+export interface IParamKuId {
   ku_id?: string;
   page_size?: number;
   page?: number;
 }
+
 //Условия
 export interface IRequirement {
   in_prod_id: number | null;
@@ -511,14 +502,12 @@ export interface IRequirementId {
 export interface IRequirementId2 {
   id: number | null;
 }
-
-export interface GetRequirementReturnData extends Pagination {
+export interface IRequirementReturnData extends Pagination {
   results: IRequirement[];
 }
-export interface GetRequirementReturnData2 extends Pagination {
+export interface IRequirementReturnData2 extends Pagination {
   results: IRequirement2[];
 }
-
 export interface IRequirementPost {
   ku_id: string;
   item_type: string;
@@ -567,7 +556,6 @@ export interface IPercentPost {
   percent_sum: number | null;
   ku_key_id: string;
 }
-
 export interface GetPersentReturnData extends Pagination {
   results: IPercent[];
 }
@@ -663,10 +651,10 @@ export interface IGraphic {
   vendor_id: string;
   vendor_name: string;
   period: string;
-  date_start: Date | string;
-  date_end: Date | string;
-  date_calc: Date | string;
-  date_accrual: Date | string;
+  date_start: Date | string | null;
+  date_end: Date | string | null;
+  date_calc: Date | string | null;
+  date_accrual: Date | string | null;
   percent: number | null;
   sum_calc: number | null;
   sum_bonus: number | null;
@@ -765,7 +753,7 @@ export interface ReportStore {
   getGraphicDone: boolean
   printReportToggle: boolean
   filterValueInvoice: GetAllInvoicesAndProductForGraphic
-  filterValueOfficial: GetParamKuId
+  filterValueOfficial: IParamKuId
 }
 export interface IGraphicNumeralsAndSumQty {
   sum_calc_words: string;

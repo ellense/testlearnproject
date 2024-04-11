@@ -11,7 +11,7 @@ import type {
     IProduct,
     GetAllBrands,
     IBrand,
-    GetAllVendorsForEntity,
+    IParamVendorsForEntity,
     IKuAddStore,
     IVendorId,
     IExInvoiceForKu,
@@ -267,12 +267,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 .catch((error) => Promise.reject(error));
         },
         setFilterVendor<
-            T extends keyof GetAllVendorsForEntity,
-            U extends GetAllVendorsForEntity[T],
+            T extends keyof IParamVendorsForEntity,
+            U extends IParamVendorsForEntity[T],
         >(field: T, value: U) {
             this.$state.filterVendorValue[field] = value
         },
-        removeFilterVendor<T extends keyof GetAllVendorsForEntity>(field: T) {
+        removeFilterVendor<T extends keyof IParamVendorsForEntity>(field: T) {
             if (this.$state.filterVendorValue) {
                 delete this.$state.filterVendorValue[field]
             }
@@ -309,19 +309,15 @@ export const useKuAddStore = defineStore("KuAddStore", {
         // Метод для загрузки данных
         async fetchCategories() {
             try {
-                const vendorId = this.$state.kuAddMain.newVendorId; // Получаем vendor_id из состояния хранилища
-                console.log("Before API call, vendorId ", vendorId);
-                // Передаем vendor_id в запрос
                 const result = await CATEGORY.getCategory2({
                     vendor_id: this.$state.filterCategory.vendor_id,
                 });
                 if (Array.isArray(result)) {
                     this.$state.treeData = this.buildTree(result, '0');
-                    console.log("treeData из стора", this.$state.treeData);
-                    // this.treeRef && this.treeRef.updateKeyChildren(data.classifier_code, this.treeData);
+                    console.log("получено дерево категорий: ", this.$state.treeData);
                 } else {
                     this.treeData = [];
-                    console.error("Данные не получены или не являются массивом");
+                    console.error("Данные категорий не получены или не являются массивом");
                 }
                 console.log("After API call");
             } catch (error) {
@@ -340,7 +336,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.kuAddMain.newVendorId
+                        // vendor_id: this.$state.kuAddMain.newVendorId
+                        vendor_id: this.$state.filterProducerIncluded.vendor_id,
                     });
                     allProducer = allProducer.concat(producers.results);
                     totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
@@ -382,7 +379,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page: nextPage,
                         producer_name: this.$state.filterBrandIncluded.producer_name,
                         l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.kuAddMain.newVendorId
+                        vendor_id: this.$state.filterProducerIncluded.vendor_id
                     });
                     allBrands = allBrands.concat(brands.results);
                     totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
@@ -410,12 +407,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async getProductFromIncludedWithFilter(page?: number) {
             this.setFilterProductInRequirement('page', page);
             this.setFilterProductInRequirement('search', this.$state.searchProductIncluded);
-            this.setFilterProductInRequirement('vendor_id', this.$state.kuAddMain.newVendorId);
+            
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
                 search: this.$state.searchProductIncluded,
-                vendor_id: this.$state.kuAddMain.newVendorId
+                vendor_id: this.$state.filterProductIncluded.vendor_id
             })
                 .then((product) => {
                     console.log('Получены данные вкл товаров:', product);
@@ -462,7 +459,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 page_size: this.$state.countRowTable,
                 page,
                 search: this.$state.searchProductExcluded,
-                vendor_id: this.$state.kuAddMain.newVendorId
+                vendor_id: this.$state.filterProductExcluded.vendor_id
             })
                 .then((product) => {
                     console.log('Получены данные товаров:', product);

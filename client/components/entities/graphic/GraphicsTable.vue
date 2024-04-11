@@ -305,12 +305,19 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных", error);
   }
 });
-//форматы дат в таблице
+
+//форматирование дат
 const formatOkDateTime = (dateTime: any) => {
-  return dayjs(dateTime).format('DD.MM.YYYY HH:mm:ss'); 
+  if (dateTime === null) {
+    return null;
+  }
+  return dayjs(dateTime).format('DD.MM.YYYY HH:mm:ss');
 };
 const formatOkDate = (dateTime: any) => {
-  return dayjs(dateTime).format('DD.MM.YYYY'); 
+  if (dateTime === null) {
+    return null;
+  }
+  return dayjs(dateTime).format('DD.MM.YYYY') ; 
 };
 
 //для общей фильтрации

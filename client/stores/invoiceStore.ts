@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
-import type { EntityId, GetAllInvoices, InvoiceStore } from "~/utils/types/directoryTypes";
-export const useInvoiceStore = defineStore("InvoiceStore", {
-  state: (): InvoiceStore => ({
+import type { EntityId, IParamInvoices, IInvoiceStore } from "~/utils/types/directoryTypes";
+export const useInvoiceStore = defineStore("IInvoiceStore", {
+  state: (): IInvoiceStore => ({
     dataInvoice: [],
     pagination: null,
     countRowTable: 100,
@@ -71,12 +71,12 @@ export const useInvoiceStore = defineStore("InvoiceStore", {
       }
     },
     setFilterValue<
-      T extends keyof GetAllInvoices,
-      U extends GetAllInvoices[T],
+      T extends keyof IParamInvoices,
+      U extends IParamInvoices[T],
     >(field: T, value: U) {
       this.$state.filterValue[field] = value
     },
-    removeFilterValue<T extends keyof GetAllInvoices>(field: T) {
+    removeFilterValue<T extends keyof IParamInvoices>(field: T) {
       if (this.$state.filterValue) {
         delete this.$state.filterValue[field]
       }

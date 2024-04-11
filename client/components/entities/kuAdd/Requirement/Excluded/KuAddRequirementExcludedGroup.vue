@@ -1,6 +1,6 @@
 <template>
   <el-dialog v-model="useKuAddStore().dialogFormCategoryExVisible" style="width: 530px;"
-    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
+    title="Выбор исключенных: категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="selectCategory">
       <div>
@@ -103,8 +103,8 @@ watch(() => store.treeData, (newTreeData: ITree[]) => {
 //изменение поля дерева
 let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
-  store.valueBrand_nameIn = "";
-  store.valueProducer_nameIn = "";
+  store.valueBrand_nameEx = "";
+  store.valueProducer_nameEx = "";
   useKuAddStore().setFilterProducer("l4", []);
   useKuAddStore().setFilterBrand('producer_name', undefined);
   console.log('Отмеченные ключи:', checkedKeys);

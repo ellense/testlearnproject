@@ -6,7 +6,7 @@ import type {
   EntityId,
   GetAllGraphic,
   IKuId,
-  GetAllKu_Id,
+  IParamKu_Id,
   IGraphicStore,
 } from "~/utils/types/directoryTypes";
 
@@ -171,7 +171,7 @@ export const useGraphicStore = defineStore("GraphicStore", {
 
     //получения ку для фильтра в графике
     getKuIdFilterForGraphicFromApi() {
-      const params: GetAllKu_Id = {
+      const params: IParamKu_Id = {
         page_size: 100,
         page: 1,
       };

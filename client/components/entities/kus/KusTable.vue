@@ -180,11 +180,12 @@ const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   await useKuIdStore().getKuDetailFromApi(kuId)
   await useKuIdStore().fetchInRequirementForKuId(kuId)
+  router.push({ path: `/ku/${kuId}` });
   useKuIdStore().fetchExRequirementForKuId(kuId)
   useKuIdStore().fetchBonusForKuId(kuId)
   useKuIdStore().fetchExInvoiceForKuId(kuId)
   useKuIdStore().fetchOfficialForKuId(kuId)
-  router.push({ path: `/ku/${kuId}` });
+  
   console.log("СТАТУС", useKuIdStore().kuIdStatus)
   console.log("ПОСТАВЩИК", useKuIdStore().kuIdVendorId)
 

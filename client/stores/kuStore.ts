@@ -4,7 +4,7 @@ import type {
   IKuList,
   IKuStore,
   EntityId,
-  GetAllKus,
+  IParamKus,
   IVendorId,
 } from "~/utils/types/directoryTypes";
 
@@ -97,12 +97,12 @@ export const useKuStore = defineStore("KuStore", {
 
     //для фильтрации ку
     setFilterValue< 
-      T extends keyof GetAllKus,
-      U extends GetAllKus[T],
+      T extends keyof IParamKus,
+      U extends IParamKus[T],
     >(field: T, value: U) {
       this.$state.filterKuValue[field] = value
     },
-    removeFilterValue<T extends keyof GetAllKus>(field: T) {
+    removeFilterValue<T extends keyof IParamKus>(field: T) {
       if (this.$state.filterKuValue) {
         delete this.$state.filterKuValue[field]
       }

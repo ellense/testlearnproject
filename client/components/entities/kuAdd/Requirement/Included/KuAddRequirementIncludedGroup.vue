@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" width="530px"
+  <el-dialog v-model="useKuAddStore().dialogFormCategoryInVisible" style="width: 530px;"
     title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
     <div class="selectCategory">
@@ -49,7 +49,7 @@
   </el-dialog>
 </template>
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue';
+import { ref, watch } from 'vue';
 import { useKuAddStore } from '~~/stores/kuAddStore';
 import type { ElTree } from 'element-plus'
 import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';

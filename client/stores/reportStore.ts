@@ -1,4 +1,4 @@
-import type { GetAllInvoicesAndProductForGraphic, GetParamKuId, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, IVendorFull, ReportStore } from "~/utils/types/directoryTypes";
+import type { GetAllInvoicesAndProductForGraphic, IParamKuId, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, IVendorFull, ReportStore } from "~/utils/types/directoryTypes";
 
 export const useReportStore = defineStore("ReportStore", {
   state: (): ReportStore => ({
@@ -113,8 +113,8 @@ export const useReportStore = defineStore("ReportStore", {
         });
     },
     setFilterValueOfficial<
-      T extends keyof GetParamKuId,
-      U extends GetParamKuId[T],
+      T extends keyof IParamKuId,
+      U extends IParamKuId[T],
     >(field: T, value: U) {
       this.$state.filterValueOfficial[field] = value
     },

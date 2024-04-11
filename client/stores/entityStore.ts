@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import type { EntityStore, GetAllEntities, } from "~/utils/types/directoryTypes";
+import type { IEntityStore, IParamEntities, } from "~/utils/types/directoryTypes";
 
-export const useEntityStore = defineStore("EntityStore", {
-  state: (): EntityStore => ({
+export const useEntityStore = defineStore("IEntityStore", {
+  state: (): IEntityStore => ({
     dataEntity: [],
     search: "",
     filterValue: {}
@@ -31,8 +31,8 @@ export const useEntityStore = defineStore("EntityStore", {
     },
 
     setFilterValue<
-      T extends keyof GetAllEntities,
-      U extends GetAllEntities[T],
+      T extends keyof IParamEntities,
+      U extends IParamEntities[T],
     >(field: T, value: U) {
       this.$state.filterValue[field] = value
     },

@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
-import type { IVendor, VendorStore, WithoutNullableKeys, GetAllVendorsForEntityInVendor, EntityId } from "~/utils/types/directoryTypes";
+import type { IVendor, IVendorStore, WithoutNullableKeys, IParamVendorsForEntityInVendor, EntityId } from "~/utils/types/directoryTypes";
 
-export const useVendorStore = defineStore("VendorStore", {
-  state: (): VendorStore => ({
+export const useVendorStore = defineStore("IVendorStore", {
+  state: (): IVendorStore => ({
     dataVendor: [], // Массив поставщиков
     pagination: null, // Пагинация результатов запроса
     countRowTable: 100, // Количество строк в таблице
@@ -48,8 +48,8 @@ export const useVendorStore = defineStore("VendorStore", {
       )
     },
     setFilterValue<
-      T extends keyof GetAllVendorsForEntityInVendor,
-      U extends GetAllVendorsForEntityInVendor[T],
+      T extends keyof IParamVendorsForEntityInVendor,
+      U extends IParamVendorsForEntityInVendor[T],
     >(field: T, value: U) {
       this.$state.filterValue[field] = value
     },

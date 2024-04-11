@@ -2,9 +2,9 @@
   <EntitiesKuAddMain />
   <div class="button_bottom">
     <el-button @click="addClose()" size="small">Отменить</el-button>
-    <el-progress type="dashboard" :color="colors" :percentage="progress" v-if="progress !== 100" size="small" />
+    <!-- <el-progress type="dashboard" :color="colors" :percentage="progress" v-if="progress !== 100" size="small" />/ -->
     <el-button type="primary" @click="createKU()" :loading="loading" size="small">Создать</el-button>
-    <el-button plain @click="open"> уведомление </el-button>
+    <!-- <el-button plain @click="open"> уведомление </el-button> -->
   </div>
 </template>
 
@@ -137,7 +137,7 @@ const createKU = async () => {
     }
 
     loading.value = true;
-    open()
+    // open()
 
     const newItem = createNewItem();
 
@@ -288,7 +288,7 @@ const handleSuccess = (response: IKuList, responses: any[], response2: any[], re
   console.log("Должн. лица успешно отправлены на бэкенд:", response6);
   useKuStore().getKuFromAPIWithFilter();
   router.push("ku");
-  ElMessage.success("Коммерческое условие успешно создано.");
+  // ElMessage.success("Коммерческое условие успешно создано.");
   ElMessage({
     message: 'Коммерческое условие успешно создано.',
     duration: 5000,

@@ -4,32 +4,32 @@ import type {
   IEntityIdAndName,
   IKuPost,
   IKuId,
-  GetAllInvoices,
-  GetAllInvoicesReturnData,
+  IParamInvoices,
+  IInvoicesReturnData,
   GetAllProducts,
   GetAllProductsReturnData,
-  GetAllVendors,
-  GetAllVendorsReturnData,
-  GetAllVendorsForEntity,
-  GetAllVendorsForEntityReturnData,
+  IParamVendors,
+  IVendorsReturnData,
+  IParamVendorsForEntity,
+  IVendorsForEntityReturnData,
   GetAllBrandsReturnData,
   GetAllBrands,
   GetAllProducer,
   GetAllProducersReturnData,
-  GetAllVendorsForEntityInVendor,
-  GetAllVendorsForEntityInVendorReturnData,
+  IParamVendorsForEntityInVendor,
+  IVendorsForEntityInVendorReturnData,
   EntityId,
-  GetAllEntities,
+  IParamEntities,
   IKuPostGraphic,
   GetAllGraphic,
   GetAllGraphicsReturnData,
   IGraphicId,
   IKuDeleteGraph,
   IVendorId,
-  GetAllKusReturnData,
-  GetAllKus,
-  GetAllKu_Id,
-  GetAllKu_IdReturnData,
+  IKusReturnData,
+  IParamKus,
+  IParamKu_Id,
+  IKu_IdReturnData,
   ITree,
   IKuList,
   IGraphicInfo,
@@ -49,15 +49,15 @@ import type {
   GetAllOfficialReturnData,
   GetParamExInvoicesForKu,
   GetExInvoicesForKuReturnData,
-  GetParamKuId,
+  IParamKuId,
   IRequirementPost,
-  GetRequirementReturnData,
+  IRequirementReturnData,
   IContractPost,
   IContractPromise,
   IRequirementId,
   IGraphicNumeralsAndSumQty,
   IRequirementId2,
-  GetRequirementReturnData2,
+  IRequirementReturnData2,
   IOfficialForKu,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
@@ -74,12 +74,12 @@ export const AUTH = {
 
 export const INVOICE = {
   getInvoicesList: (
-    params?: GetAllInvoices
-  ): Promise<GetAllInvoicesReturnData> =>
+    params?: IParamInvoices
+  ): Promise<IInvoicesReturnData> =>
     $Get("api/vend_doc_list", { params, isBearer: false }),
 };
 export const ENTITY = {
-  getEntitiesList: (params: GetAllEntities): Promise<IEntity> =>
+  getEntitiesList: (params: IParamEntities): Promise<IEntity> =>
     $Get("api/entity_list/", { params, isBearer: false }),
   getEntityByIdAndName: (data: IEntityIdAndName): Promise<IEntityIdAndName[]> =>
     $Get("api/entity_list/", { data, isBearer: false }),
@@ -90,17 +90,17 @@ export const ENTITY = {
 };
 
 export const VENDOR = {
-  getVendorsList: (params?: GetAllVendors): Promise<GetAllVendorsReturnData> =>
+  getVendorsList: (params?: IParamVendors): Promise<IVendorsReturnData> =>
     $Get("api/vendor_list/", { params, isBearer: false }),
   getVendorsForEntityInVendor: (
-    params?: GetAllVendorsForEntityInVendor
-  ): Promise<GetAllVendorsForEntityInVendorReturnData> =>
+    params?: IParamVendorsForEntityInVendor
+  ): Promise<IVendorsForEntityInVendorReturnData> =>
     $Get("api/vendor_list/", { params, isBearer: false }),
   getVendorById: (): Promise<IVendorId[]> =>
     $Get("api/vendor_list/", { isBearer: false }),
   getVendorsForEntityInKU: (
-    params?: GetAllVendorsForEntity
-  ): Promise<GetAllVendorsForEntityReturnData> =>
+    params?: IParamVendorsForEntity
+  ): Promise<IVendorsForEntityReturnData> =>
     $Get("api/vendor_filter/", { params, isBearer: false }),
   getVendorDetail: (data: IVendorId): Promise<IVendorFull> =>
     $Get(`api/vendor_detail/${data.vendor_id}/`, { data, isBearer: false }),
@@ -114,9 +114,9 @@ export const PRODUCT = {
 };
 
 export const KU = {
-  getKuList: (params: GetAllKus): Promise<GetAllKusReturnData> =>
+  getKuList: (params: IParamKus): Promise<IKusReturnData> =>
     $Get("api/ku_list/", { params, isBearer: false }),
-  getKuIdList: (params: GetAllKu_Id): Promise<GetAllKu_IdReturnData> =>
+  getKuIdList: (params: IParamKu_Id): Promise<IKu_IdReturnData> =>
     $Get("api/ku_list/", { params, isBearer: false }),
   postKu: (data: IKuPost): Promise<IKuList> =>
     $Post("api/ku_create/", { data, isBearer: false }),
@@ -146,15 +146,15 @@ export const KU = {
   postKuExRequirementChange: (data: IRequirementPost): Promise<IRequirementPost> =>
     $Post("api/excluded_condition_list/", { data, isBearer: false }),
 //получение
-  getKuInRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData> =>
+  getKuInRequirements: (params: IParamKuId): Promise<IRequirementReturnData> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
-  getKuExRequirements: (params: GetParamKuId): Promise<GetRequirementReturnData2> =>
+  getKuExRequirements: (params: IParamKuId): Promise<IRequirementReturnData2> =>
     $Get(`api/excluded_condition_list/`, { params, isBearer: false }),
-  getKuRequirementBonus: (params: GetParamKuId): Promise<GetPersentReturnData> =>
+  getKuRequirementBonus: (params: IParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
   getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
     $Get(`api/excluded_venddoc_create/`, { params, isBearer: false }),
-  getKuOfficial: (params: GetParamKuId): Promise<GetAllOfficialReturnData> =>
+  getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
     $Get(`api/official_create/`, { params, isBearer: false }),
   getInvoicesList: (
     params?: GetParamExInvoicesForKu
