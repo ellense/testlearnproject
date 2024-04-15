@@ -31,10 +31,16 @@
           <el-form-item label-width="130" label="Код поставщика" prop="newVendorId">
             <div>
               <el-select-v2 v-model="kuMain.newVendorId" size="small" clearable filterable :options="options2"
-                :disabled="!kuMain.newEntityId" style="width: 300px" :title="disableSelectVendorTooltip"
-                placeholder="Выберите поставщика" @change="onVendorChange">
+                :disabled="!kuMain.newEntityId" popper-class="vendorPopper" style="width: 300px" :title="disableSelectVendorTooltip"
+                placeholder="Выберите поставщика" @change="onVendorChange" >
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
+                  <span style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
                 </template>
               </el-select-v2>
             </div>
@@ -149,6 +155,7 @@ import type {
   IEntityIdAndName,
   IKuAddMain,
   IVendorId,
+IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 import type { FormInstance, FormRules } from 'element-plus'
 const store = useKuAddStore();
@@ -294,9 +301,26 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
-  options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+// watch(() => store.dataVendorId, (vendors: IVendorId[]) => {
+//   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+// });
+watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
+  options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
+// const customFilterMethod = (query: string, item: { label: string; value: string }): boolean => {
+//   // Фильтрация по обоим значениям: label и value
+//   const lowerCaseQuery = query.toLowerCase();
+//   const labelMatch = item.label.toLowerCase().includes(lowerCaseQuery);
+//   const valueMatch = item.value.toLowerCase().includes(lowerCaseQuery);
+//   return labelMatch || valueMatch;
+// };
+// const customFilterMethod = computed(() => {
+//   const lowerCaseQuery = query.value.toLowerCase();
+//   return options2.value.filter(
+//     item => item.label.toLowerCase().includes(lowerCaseQuery) ||
+//             item.value.toLowerCase().includes(lowerCaseQuery)
+//   );
+// });
 
 const onEntityChange = async () => {
   //для наимен. юр. лица
@@ -466,4 +490,8 @@ const disableSelectVendorTooltip = computed(() => {
 .el-form-item {
   margin: 0 !important;
 }
+.vendorPopper {
+  width: 520px !important;
+}
+
 </style>

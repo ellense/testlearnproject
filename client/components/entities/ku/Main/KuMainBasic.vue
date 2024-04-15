@@ -30,10 +30,16 @@
           <el-form-item label-width="130" label="Код поставщика">
             <div>
               <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2"
-                :disabled="isEditButtonDisabled" style="width: 300px" :title="disableSelectVendorTooltip"
+                :disabled="isEditButtonDisabled" popper-class="vendorPopper" style="width: 300px" :title="disableSelectVendorTooltip"
                  @change="onVendorChange" >
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
+                  <span style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
                 </template>
               </el-select-v2>
             </div>
@@ -147,6 +153,7 @@ import { useKuIdStore } from "~~/stores/kuIdStore";
 import type {
   IEntityIdAndName,
   IVendorId,
+IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 
 const store = useKuIdStore();
@@ -182,10 +189,12 @@ onMounted(async () => {
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(() => store2.dataVendorId, (vendors: IVendorId[]) => {
-  options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+// watch(() => store2.dataVendorId, (vendors: IVendorId[]) => {
+//   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+// });
+watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
+  options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
-
 const onEntityChange = async () => {
   //для наимен. юр. лица
   store.kuIdEntityName = "";

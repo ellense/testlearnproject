@@ -142,9 +142,32 @@ h1 {
 .selectVendorInKuAdd .el-vl__window {
   width: 100% !important;
 }
-/* .el-select-dropdown__list .el-vl__window{
+.el-select-dropdown__list .el-vl__window{
   width: 100%;
+}
+/* .el-select-dropdown{
+  width: 520px !important;
 } */
+.vendorPopper  {
+  width: 550px !important;
+}
+/* Увеличиваем ширину выпадающего списка только для элементов с классом vendorPopper */
+.vendorPopper .el-select-dropdown {
+  width: 550px !important;
+}
+
+/* Увеличиваем ширину окна со списком только для элементов с классом vendorPopper */
+.vendorPopper .el-vl__window {
+  width: 550px !important;
+}
+
+/* Увеличиваем ширину элементов списка только для элементов с классом vendorPopper */
+.vendorPopper .el-select-dropdown__item {
+  width: 550px !important;
+}
+.vendorPopper .el-select-dropdown__list{
+  width: 550px !important;
+}
 
 .el-tabs__item {
   font-weight: 600 !important;

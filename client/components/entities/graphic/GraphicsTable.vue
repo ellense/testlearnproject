@@ -16,7 +16,7 @@
                   </el-icon></el-button>
               </template>
               <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="3" placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu" size="small">
+                :max-collapse-tags="2" placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu" size="small">
                 <el-option v-for="item in optionsKu" :key="item" :label="item" :value="item" />
               </el-select>
             </el-popover>
@@ -35,9 +35,17 @@
                   </el-icon></el-button>
               </template>
               <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
+                :max-collapse-tags="2" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
                 size="small">
-                <el-option v-for="item in optionsLegalEntity" :key="item" :label="item" :value="item" />
+                <el-option v-for="item in optionsLegalEntity" :key="item.value" :label="item.label" :value="item.value">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
+                </el-option>
               </el-select>
             </el-popover>
           </div>
@@ -56,10 +64,17 @@
                   </el-icon></el-button>
               </template>
               <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="3" :options="optionsVendor" style="width: 300px" placeholder="Фильтр по поставщику"
-                @change="onVendorChange" size="small">
+                :max-collapse-tags="3" :options="optionsVendor" popper-class="vendorPopper" style="width: 300px"
+                placeholder="Фильтр по поставщику" @change="onVendorChange" size="small">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
+                  <span style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
+
                 </template>
               </el-select-v2>
             </el-popover>
@@ -228,7 +243,7 @@ import { Filter } from '@element-plus/icons-vue'
 import { useGraphicStore } from "~~/stores/graphicStore";
 import { storeToRefs } from "pinia";
 import dayjs from 'dayjs';
-import type { IGraphic, IVendorId } from "~/utils/types/directoryTypes";
+import type { IEntityIdAndName, IGraphic, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 const storeKuAdd = useKuAddStore();
 const { getGraphic, pagination, countRowTable } = storeToRefs(useGraphicStore());
@@ -341,20 +356,30 @@ watch(KuParams, (value) => {
 });
 //фильтр юр лица
 const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
-const optionsLegalEntity = ref<string[]>(legalEntity.value);
+const optionsLegalEntity = ref<Array<{ label: string; value: string }>>([]);
 const changeLegalEntity = () => {
   useGraphicStore().pagination = null;
   useGraphicStore().setFilterValue('entity_id', LegalEntity.value);
   toggleTriggerFilter();
 };
-watch(legalEntity, (value) => {
-  optionsLegalEntity.value = value;
+watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityIdAndName[]) => {
+    optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
+});
+onMounted(async () => {
+  try {
+    await storeKuAdd.fetchKuEntity({
+      entity_id: "",
+      name: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных юр. лица", error);
+  }
 });
 //фильтр поставщика
 const Vendor = ref<string[]>(filterGraphicValue.value.vendor_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => storeKuAdd.dataVendorId, (vendors: IVendorId[]) => {
-  optionsVendor.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+  watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
+  optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 onMounted(async () => {
   try {

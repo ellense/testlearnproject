@@ -326,7 +326,8 @@ export interface IKuAddStore {
   tableDataManagerAll: IManagerForKu[]
   tableDataManagerSelect: IManagerForKu[]
   dataEntity: IEntityIdAndName[];
-  dataVendorId: IVendorId[];
+  // dataVendorId: IVendorId[];
+  dataVendorId:IVendorIdAndName[]
   dataVendorName: IVendorName[];
   treeData: ITree[],
   treeRef: typeof ElTree | null,

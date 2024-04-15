@@ -19,9 +19,17 @@
                   </el-icon></el-button>
               </template>
               <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
+                :max-collapse-tags="2" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
                 size="small">
-                <el-option v-for="item in optionsLegalEntity" :key="item" :label="item" :value="item" />
+                <el-option v-for="item in optionsLegalEntity" :key="item.value" :label="item.label" :value="item.value">
+                  <span style="float: left">{{ item.label }}</span>
+                  <span style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
+                </el-option>
               </el-select>
             </el-popover>
           </div>
@@ -40,10 +48,17 @@
                   </el-icon></el-button>
               </template>
               <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="3" :options="optionsVendor" style="width: 300px" placeholder="Фильтр по поставщику"
-                @change="onVendorChange" size="small">
+                :max-collapse-tags="2" :options="optionsVendor" popper-class="vendorPopper" style="width: 300px"
+                placeholder="Фильтр по поставщику" @change="onVendorChange" size="small">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
+                  <span style="
+                    margin-left: 10px;
+                    float: right;
+                    color: var(--el-text-color-secondary);
+                    font-size: 13px;
+                  ">{{ item.value }}</span>
+
                 </template>
               </el-select-v2>
             </el-popover>
@@ -160,7 +175,7 @@ import { Search } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
 import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IEntityIdAndName, IKuList, IVendorId } from "~/utils/types/directoryTypes";
+import type { IEntityIdAndName, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
@@ -185,7 +200,7 @@ const rowDblclick = async (kuId: string) => {
   useKuIdStore().fetchBonusForKuId(kuId)
   useKuIdStore().fetchExInvoiceForKuId(kuId)
   useKuIdStore().fetchOfficialForKuId(kuId)
-  
+
   console.log("СТАТУС", useKuIdStore().kuIdStatus)
   console.log("ПОСТАВЩИК", useKuIdStore().kuIdVendorId)
 
@@ -193,34 +208,34 @@ const rowDblclick = async (kuId: string) => {
     if (useKuIdStore().kuIdVendorId && useKuIdStore().kuIdVendorId.length > 0) {
       storeKuAdd.setFilterVendor('vendor_id', useKuIdStore().kuIdVendorId);
       storeKuAdd.getVendorNameFromAPIWithFilter()
-    try {
-      storeKuAdd.setFilterVendor("entity_id", useKuIdStore().kuIdEntityId)
-    storeKuAdd.setFilterBrand("vendor_id", useKuIdStore().kuIdVendorId)
-    storeKuAdd.setFilterCategory("vendor_id", useKuIdStore().kuIdVendorId)
-    storeKuAdd.setFilterExInvoice("vendor_id", useKuIdStore().kuIdVendorId)
-    storeKuAdd.setFilterProducer("vendor_id", useKuIdStore().kuIdVendorId)
-    storeKuAdd.setFilterProductEx("vendor_id", useKuIdStore().kuIdVendorId)
-    storeKuAdd.setFilterProductInRequirement("vendor_id", useKuIdStore().kuIdVendorId)
-    await storeKuAdd.fetchKuEntity({
-      entity_id: "",
-      name: "",
-    });
-    await storeKuAdd.fetchAllVendorIdForEntity();
-    await storeKuAdd.fetchCategories();
-    await storeKuAdd.getProductFromIncludedWithFilter();
-    await storeKuAdd.fetchAllProducersForInclided();
-    await storeKuAdd.fetchAllBrandsForIncluded();
-    await storeKuAdd.getProductFromExcludedWithFilter();
-    await storeKuAdd.getInvoicesFromAPIWithFilter();
-    } catch (error) {
-      console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+      try {
+        storeKuAdd.setFilterVendor("entity_id", useKuIdStore().kuIdEntityId)
+        storeKuAdd.setFilterBrand("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterCategory("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterExInvoice("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterProducer("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterProductEx("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterProductInRequirement("vendor_id", useKuIdStore().kuIdVendorId)
+        await storeKuAdd.fetchKuEntity({
+          entity_id: "",
+          name: "",
+        });
+        await storeKuAdd.fetchAllVendorIdForEntity();
+        await storeKuAdd.fetchCategories();
+        await storeKuAdd.getProductFromIncludedWithFilter();
+        await storeKuAdd.fetchAllProducersForInclided();
+        await storeKuAdd.fetchAllBrandsForIncluded();
+        await storeKuAdd.getProductFromExcludedWithFilter();
+        await storeKuAdd.getInvoicesFromAPIWithFilter();
+      } catch (error) {
+        console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+      }
+
     }
-    
-  }
-  else {
-    useKuIdStore().disableButtonsIncluded = true;
-  }
-};
+    else {
+      useKuIdStore().disableButtonsIncluded = true;
+    }
+  };
 }
 
 //пагинация
@@ -291,7 +306,6 @@ const getStatusColor = (status: string) => {
 }
 
 //для общей фильтрации
-const { legalEntity } = storeToRefs(useKuStore());
 const { filterKuValue } = storeToRefs(useKuStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
@@ -301,23 +315,33 @@ watch(triggerFilter, () => {
 
 //фильтр юр лица
 const LegalEntity = ref<string[]>(filterKuValue.value.entity_id || []);
-const optionsLegalEntity = ref<string[]>(legalEntity.value);
+const optionsLegalEntity = ref<Array<{ label: string; value: string }>>([]);
 const changeLegalEntity = () => {
   useKuStore().pagination = null;
   useKuStore().setFilterValue('entity_id', LegalEntity.value);
-  console.log('shopLegalEntity.value:', LegalEntity.value);
   toggleTriggerFilter();
 };
-watch(legalEntity, (value) => {
-  optionsLegalEntity.value = value;
+watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityIdAndName[]) => {
+    optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
+});
+onMounted(async () => {
+  try {
+    await storeKuAdd.fetchKuEntity({
+      entity_id: "",
+      name: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных юр. лица", error);
+  }
 });
 
 //фильтр поставщика
 const Vendor = ref<string[]>(filterKuValue.value.vendor_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => storeKuAdd.dataVendorId, (vendors: IVendorId[]) => {
-  optionsVendor.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
+watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
+  optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
+
 onMounted(async () => {
   try {
     await storeKuAdd.fetchAllVendorIdForEntity();
@@ -326,6 +350,7 @@ onMounted(async () => {
   }
 });
 const onVendorChange = async () => {
+  useKuStore().pagination = null;
   useKuStore().setFilterValue('vendor_id', Vendor.value);
   toggleTriggerFilter();
 };
