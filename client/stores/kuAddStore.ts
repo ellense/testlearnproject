@@ -19,6 +19,7 @@ import type {
     GetAllCategory,
     GetParamExInvoicesForKu,
     IContractPost,
+    IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 
 export const useKuAddStore = defineStore("KuAddStore", {
@@ -224,7 +225,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         //получение данных о поставщиках для создания
         async fetchAllVendorIdForEntity() {
             try {
-                let allVendors: IVendorId[] = [];
+                let allVendors: IVendorIdAndName[] = [];
                 let nextPage = 1;
                 let totalPages = 1;
                 while (nextPage <= totalPages) {
@@ -336,7 +337,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         l4: this.$state.filterProducerIncluded.l4,
-                        // vendor_id: this.$state.kuAddMain.newVendorId
                         vendor_id: this.$state.filterProducerIncluded.vendor_id,
                     });
                     allProducer = allProducer.concat(producers.results);
@@ -402,6 +402,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         >(field: T, value: U) {
             this.$state.filterBrandIncluded[field] = value
         },
+        removeFilterBrand<T extends keyof GetAllBrands>(field: T) {
+            if (this.$state.filterBrandIncluded) {
+                delete this.$state.filterBrandIncluded[field]
+            }
+        },
+
 
         //получение данных о товарах для условий с фильтром и поиск 
         async getProductFromIncludedWithFilter(page?: number) {
@@ -417,7 +423,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 .then((product) => {
                     console.log('Получены данные вкл товаров:', product);
                     this.$state.productIncluded = product.results;
-                    // this.$state.productExcluded = product.results;
                     this.$state.pagination = {
                         count: product.count,
                         previous: product.previous,
@@ -555,6 +560,10 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.tableDataExInvoiceSelect.length = 0;
             this.tableDataManagerSelect.length = 0;
             this.tableDataContract.length = 0;
+            this.tableDataExInvoiceAll.length = 0;
+            this.tableDataManagerAll.length = 0;
+            this.productIncluded.length = 0;
+            this.productExcluded.length = 0;
             // Значения v-model при создании
             this.kuAddMain.newType = '',
             this.kuAddMain.newEntityId = '';
@@ -611,6 +620,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
             // очищение фильтров
             this.removeFilterVendor('entity_id');
+            this.removeFilterCategory('vendor_id');
+            this.removeFilterExInvoice('vendor_id');
+            this.removeFilterProducer('vendor_id');
+            this.removeFilterBrand('vendor_id');
+            this.removeFilterCategory('vendor_id');
+            this.removeFilterCategory('vendor_id');
         },
         //создание контракта
         async createKuContract(newItem:IContractPost ) {

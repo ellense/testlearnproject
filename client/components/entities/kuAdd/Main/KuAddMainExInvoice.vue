@@ -1,30 +1,39 @@
 <template>
   <el-scrollbar height="45vh">
-    <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true"
-      class="buttonAdd">Добавить</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
+
+
+    <h4>Код поставщика: <span style="font-weight: 400;">{{ useKuAddStore().kuAddMain.newVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+      useKuAddStore().kuAddMain.newVendorName }}</span></h4>
+    <el-button size="small" type="primary" plain round
+      @click="store.dialogFormExInvoiceVisible = true">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataExInvoiceSelect.length = 0">Удалить
+      все</el-button>
+
+    <el-table :data="tableData2" border style="width: 1200px; margin-top: 10px;" height="33vh"
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
       <el-table-column property="invoice_name" label="Наименование" width="200" sortable show-overflow-tooltip />
-      <el-table-column label="Поставщик" align="center">
+      <!-- <el-table-column label="Поставщик" align="center">
         <el-table-column property="vendor_id" label="Код" width="200" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="300" sortable show-overflow-tooltip />
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column property="invoice_date" type="date" label="Дата" width="140" sortable show-overflow-tooltip />
       <el-table-column property="product_amount" label="Сумма" width="120" show-overflow-tooltip />
-      <el-table-column property="doc_id" label="Документ" width="300" show-overflow-tooltip />
-      <el-table-column  label="Операция" align="center">
+      <el-table-column property="docid" label="Документ" width="300" show-overflow-tooltip />
+      <el-table-column label="Операция" width="150" align="center">
         <template #default="scope">
-          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
-           >Удалить</el-button>
+          <el-button text type="danger" :icon="Delete" size="small"
+            @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog v-model="store.dialogFormExInvoiceVisible" title="Выбор исключенных накладных для КУ"
       close-on-click-modal close-on-press-escape draggable>
-      <h4>Код поставщика: <span>{{ useKuAddStore().kuAddMain.newVendorId }}</span></h4>
-      <h4>Наименование поставщика: <span>{{ useKuAddStore().kuAddMain.newVendorName }}</span></h4>
+      <h4>Код поставщика: <span style="font-weight: 400;">{{ useKuAddStore().kuAddMain.newVendorId }}</span></h4>
+      <h4>Наименование поставщика: <span style="font-weight: 400;">{{ useKuAddStore().kuAddMain.newVendorName }}</span>
+      </h4>
       <div class="directoryBar">
         <div class="directoryBar_filter">
           <el-input v-model="searchQuery" placeholder="Фильтр по номеру накладной" clearable
@@ -35,7 +44,8 @@
       </div>
       <el-scrollbar class="scrollTableFiltres">
         <el-table style="width: 100%" height="300" :data="tableData"
-          @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading" stripe>
+          @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading"
+          stripe>
           <el-table-column type="selection" width="40" />
           <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
           <el-table-column property="invoice_number" label="Номер" width="150" sortable show-overflow-tooltip />
@@ -43,7 +53,7 @@
           <el-table-column property="invoice_date" type="date" label="Дата" width="100" sortable
             show-overflow-tooltip />
           <el-table-column property="product_amount" label="Сумма" width="100" show-overflow-tooltip />
-          <el-table-column property="doc_id" label="Документ" show-overflow-tooltip />
+          <el-table-column property="docid" label="Документ" show-overflow-tooltip />
         </el-table>
       </el-scrollbar>
       <div v-if="pagination?.count" class="pagination">
@@ -160,7 +170,7 @@ const AddExInvoice = () => {
       invoice_number: row.invoice_number,
       invoice_date: dayjs(row.invoice_date).format("DD.MM.YYYY"),
       product_amount: row.product_amount,
-      doc_id: row.doc_id,
+      docid: row.docid,
     });
   });
   console.log("искл.Накладные", useKuAddStore().tableDataExInvoiceSelect);

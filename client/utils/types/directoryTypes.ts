@@ -572,7 +572,7 @@ export interface IExInvoiceForKu {
   invoice_number: string;
   invoice_date: Date | string;
   product_amount: number | null
-  doc_id: string
+  docid: string
 }
 export interface IExInvoiceForKuOrigin {
   id: number | null;
@@ -583,11 +583,11 @@ export interface IExInvoiceForKuOrigin {
   invoice_number: string;
   invoice_date: Date | string;
   product_amount: number | null
-  doc_id: string
+  docid: string
 }
 export interface IExInvoiceForKuPost {
   ku_id: string;
-  doc_id: string;
+  docid: string;
 }
 export interface GetParamExInvoicesForKu {
   page_size?: number;

@@ -1,6 +1,8 @@
 <template>
   <el-scrollbar height="45vh">
-    <el-button size="small" round @click="store.dialogFormManagersVisible = true" class="buttonAdd">Добавить</el-button>
+    <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true" class="buttonAdd">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0" class="buttonAdd">Удалить
+      все</el-button>
     <el-table :data="tableData2" border style="width: 820px; margin-top: 10px;" height="40vh"
       empty-text="Добавьте категорийных менеджеров">
       <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />

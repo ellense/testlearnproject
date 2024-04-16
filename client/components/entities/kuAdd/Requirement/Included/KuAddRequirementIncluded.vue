@@ -1,14 +1,16 @@
 <template>
     <div>
-        <el-button size="small" round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
+        <el-button size="small" type="primary" plain round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
             :title="disableButtonTooltip">+ Все</el-button>
-        <el-button size="small" round @click="dialogOpenProduct()" :disabled="store.disableButtonsIncluded"
-            :title="disableButtonTooltip">+ Условие по
+        <el-button size="small" type="primary" plain round @click="dialogOpenProduct()"
+            :disabled="store.disableButtonsIncluded" :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
         <!-- :loading="categoryDialogLoading"  -->
-        <el-button size="small" round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
-            :title="disableButtonTooltip">+ Условие по
+        <el-button size="small" type="primary" plain round @click="dialogOpenCategory()"
+            :disabled="store.disableButtonsIncluded" :title="disableButtonTooltip">+ Условие по
             категории</el-button>
+        <el-button size="small" type="danger" plain round @click="store.tableDataInRequirement.length = 0"
+          >Удалить все</el-button>
     </div>
     <el-scrollbar class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:26vh" height="26vh" :data="kuRequirementList" border

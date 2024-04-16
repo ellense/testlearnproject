@@ -1,8 +1,9 @@
 <template>
-    <div>
-        <el-button size="small" round @click="store.dialogFormContractVisible = true">Добавить</el-button>
-        <el-button size="small" type="primary" round plain @click="FormContract()">Cформировать поле контакт</el-button>
-    </div>
+        <el-button size="small" type="primary" plain round
+            @click="store.dialogFormContractVisible = true">Добавить</el-button>
+        <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0">Удалить
+            все</el-button>
+        <el-button size="small" type="success" plain round @click="FormContract()">Cформировать поле контакт</el-button>
     <div class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:26vh" height="26vh" :data="tableData" border
             empty-text="" align="center">
@@ -19,12 +20,12 @@
                 <template #default="{ row }">
                     <el-checkbox v-model="row.use_producer" @change="onUseProducerChange(row)"></el-checkbox>
                 </template>
-            </el-table-column>
-            <el-table-column prop="use_brand" label="Использовать торговую марку" width="120" align="center">
-                <template #default="{ row }">
+</el-table-column>
+<el-table-column prop="use_brand" label="Использовать торговую марку" width="120" align="center">
+    <template #default="{ row }">
                     <el-checkbox v-model="row.use_brand" @change="onUseBrandChange(row)"></el-checkbox>
                 </template>
-            </el-table-column> -->
+</el-table-column> -->
             <el-table-column fixed="right" label="Операция">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"

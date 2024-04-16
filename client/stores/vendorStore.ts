@@ -74,6 +74,7 @@ export const useVendorStore = defineStore("IVendorStore", {
         sort_order,
       })
         .then((dataVendor) => {
+          console.log('Получены данные поставщиков:', dataVendor);
           this.$state.dataVendor = dataVendor.results;
           this.$state.pagination = {
             count: dataVendor.count,
