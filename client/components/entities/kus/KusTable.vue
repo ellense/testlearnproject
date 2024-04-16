@@ -266,7 +266,7 @@ watch(getKu, (value) => {
 
 const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
   try {
-    pagination = null;
+    useKuStore().pagination = null;
     const sortField = prop; // поле, по которому сортируем
     const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
     console.log("(поле, порядок) = (", sortField, ",", sortOrder, ")");

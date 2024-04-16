@@ -1,6 +1,7 @@
 <template>
   <el-scrollbar height="45vh">
-    <el-form :model="kuMain" label-position="left" :rules="rules" status-icon ref="ruleFormRef" :show-message=false :hide-required-asterisk=true>
+    <el-form :model="kuMain" label-position="left" :rules="rules" status-icon ref="ruleFormRef" :show-message=false
+      :hide-required-asterisk=true>
       <div class="kuAddMain">
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
@@ -23,26 +24,26 @@
             </el-input>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
-          <el-form-item label-width="130" label="Описание" >
+          <el-form-item label-width="130" label="Описание">
             <el-input v-model="kuMain.newDescription" size="small" placeholder="Введите описание" clearable
               style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика" prop="newVendorId">
             <div>
-              <el-select-v2 v-model="kuMain.newVendorId" size="small" clearable filterable :options="options2"
-                :disabled="!kuMain.newEntityId" popper-class="vendorPopper" style="width: 300px" :title="disableSelectVendorTooltip"
-                placeholder="Выберите поставщика" @change="onVendorChange" >
-                <template #default="{ item }" class="selectVendorInKuAdd">
-                  <span style="margin-right: 8px">{{ item.label }}</span>
+              <el-select v-model="kuMain.newVendorId" size="small" placeholder="Выберите поставщика" clearable
+                filterable style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
+                :title="disableSelectVendorTooltip">
+                <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
+                  <span style="float: left">{{ item.label }}</span>
                   <span style="
                     margin-left: 10px;
                     float: right;
                     color: var(--el-text-color-secondary);
                     font-size: 13px;
                   ">{{ item.value }}</span>
-                </template>
-              </el-select-v2>
+                </el-option>
+              </el-select>
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Контракт">
@@ -81,8 +82,8 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item  label-width="170"
-            label="Дата договора" prop="newDocu_date" :validate-status="docuDateValidation">
+          <el-form-item label-width="170" label="Дата договора" prop="newDocu_date"
+            :validate-status="docuDateValidation">
             <el-date-picker v-model="kuMain.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
               value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
@@ -115,7 +116,7 @@
               @change="onChangeAndValidateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
-          <el-form-item >
+          <el-form-item>
             <el-checkbox v-model="kuMain.newTax" label="База премии включает налог" size="small" />
           </el-form-item>
           <el-form-item>
@@ -155,7 +156,7 @@ import type {
   IEntityIdAndName,
   IKuAddMain,
   IVendorId,
-IVendorIdAndName,
+  IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 import type { FormInstance, FormRules } from 'element-plus'
 const store = useKuAddStore();
@@ -165,7 +166,7 @@ onMounted(() => {
   store.setRuleFormRef(ruleFormRef.value);
 });
 const rules = reactive<FormRules<IKuAddMain>>({
-  
+
   newEntityId: [
     {
       required: true,
@@ -187,7 +188,7 @@ const rules = reactive<FormRules<IKuAddMain>>({
   newVendorName: [
     { required: true, trigger: 'change' },
   ],
-  
+
   newType: [
     { required: true, trigger: 'change' },
   ],
@@ -242,10 +243,10 @@ const rules = reactive<FormRules<IKuAddMain>>({
       trigger: 'change',
     },
   ],
-  
+
 })
 
- const submitForm = async (formEl: FormInstance | undefined) => {
+const submitForm = async (formEl: FormInstance | undefined) => {
   if (!formEl) return
   await formEl.validate((valid, fields) => {
     if (valid) {
@@ -382,7 +383,7 @@ const dateStartValidation = ref<"error" | "success" | "validating" | undefined>(
 const dateStartError = ref<string | undefined>('');
 const dateEndValidation = ref<"error" | "success" | "validating" | undefined>('success');
 const dateEndError = ref<string | undefined>('');
-  const docuDateValidation = ref<"error" | "success" | "validating" | undefined>('success');
+const docuDateValidation = ref<"error" | "success" | "validating" | undefined>('success');
 
 // Периоды и их соответствующие минимальные разницы в днях
 const periods: Record<string, number> = {
@@ -490,8 +491,8 @@ const disableSelectVendorTooltip = computed(() => {
 .el-form-item {
   margin: 0 !important;
 }
+
 .vendorPopper {
   width: 520px !important;
 }
-
 </style>

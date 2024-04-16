@@ -2,6 +2,9 @@
   <el-dialog v-model="store.dialogFormCategoryExVisible" width="530px"
     title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal close-on-press-escape
     draggable>
+    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+      store.kuIdVendorName }}</span></h4>
     <div class="selectCategory">
       <div>
         <div class="custom-label">Категория</div>

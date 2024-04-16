@@ -1,5 +1,8 @@
 <template>
   <el-scrollbar height="45vh">
+    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+      store.kuIdVendorName }}</span></h4>
     <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd"
       :disabled="isEditButtonDisabled">Добавить</el-button>
     <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
@@ -7,13 +10,9 @@
       <!-- <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
       <el-table-column property="invoice_name" label="Наименование" width="200" sortable show-overflow-tooltip />
-      <el-table-column label="Поставщик">
-        <el-table-column property="vendor_id" label="Код" width="200" sortable show-overflow-tooltip />
-        <el-table-column property="vendor_name" label="Наименование" width="300" sortable show-overflow-tooltip />
-      </el-table-column>
       <el-table-column property="invoice_date" type="date" label="Дата" width="140" sortable show-overflow-tooltip />
       <el-table-column property="product_amount" label="Сумма" width="120" show-overflow-tooltip /> -->
-      <el-table-column property="doc_id" label="Документ" width="300"show-overflow-tooltip />
+      <el-table-column property="docid" label="Документ" width="300"show-overflow-tooltip />
       <el-table-column label="Операция" align="center">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
@@ -168,7 +167,7 @@ const AddExInvoice = () => {
       invoice_number: row.invoice_number,
       invoice_date: new Date(row.invoice_date),
       product_amount: row.product_amount,
-      doc_id: row.doc_id,
+      docid: row.docid,
 
     });
     console.log("искл.Накладные", useKuAddStore().tableDataExInvoiceSelect);

@@ -29,19 +29,19 @@
           </el-form-item>
           <el-form-item label-width="130" label="Код поставщика">
             <div>
-              <el-select-v2 v-model="store.kuIdVendorId" size="small" clearable filterable :options="options2"
-                :disabled="isEditButtonDisabled" popper-class="vendorPopper" style="width: 300px" :title="disableSelectVendorTooltip"
-                 @change="onVendorChange" >
-                <template #default="{ item }" class="selectVendorInKuAdd">
-                  <span style="margin-right: 8px">{{ item.label }}</span>
+              <el-select v-model="store.kuIdVendorId" size="small" placeholder="Выберите поставщика" clearable
+                filterable style="width: 300px" @change="onVendorChange" :disabled="isEditButtonDisabled"
+                :title="disableSelectVendorTooltip">
+                <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
+                  <span style="float: left">{{ item.label }}</span>
                   <span style="
                     margin-left: 10px;
                     float: right;
                     color: var(--el-text-color-secondary);
                     font-size: 13px;
                   ">{{ item.value }}</span>
-                </template>
-              </el-select-v2>
+                </el-option>
+              </el-select>
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Статус премии">

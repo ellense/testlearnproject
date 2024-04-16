@@ -193,9 +193,9 @@ const postManagerItems = async (response:any, dataArray: any, postFunction: any)
 };
 
 const postItems = async (response: any, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { doc_id: any; }) => ({
+  const itemsArray = dataArray.map((item: { docid: any; }) => ({
     ku_id: response.ku_id,
-    doc_id: item.doc_id,
+    docid: item.docid,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {

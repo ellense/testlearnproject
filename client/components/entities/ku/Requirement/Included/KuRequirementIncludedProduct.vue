@@ -1,6 +1,9 @@
 <template>
   <el-dialog v-model="store.dialogFormProductInVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
+    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+      store.kuIdVendorName }}</span></h4>
     <div class="buttonBar_search">
       <el-input v-model="searchProductInKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>

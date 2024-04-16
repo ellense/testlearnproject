@@ -134,7 +134,7 @@ export const KU = {
   postKuRequirementBonus: (data: IPercentPost): Promise<IPercentPost> =>
     $Post("api/bonus_condition/", { data, isBearer: false }),
   postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
-    $Post("api/excluded_venddoc_create/", { data, isBearer: false }),
+    $Post("api/excluded_venddoc_list_create/", { data, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
     $Post("api/manager_create/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
@@ -153,7 +153,7 @@ export const KU = {
   getKuRequirementBonus: (params: IParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
   getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
-    $Get(`api/excluded_venddoc_create/`, { params, isBearer: false }),
+    $Get(`api/excluded_venddoc_list_create/`, { params, isBearer: false }),
   getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
     $Get(`api/official_create/`, { params, isBearer: false }),
   getInvoicesList: (
