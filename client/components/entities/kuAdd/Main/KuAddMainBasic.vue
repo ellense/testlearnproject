@@ -23,6 +23,9 @@
             <el-input v-model="kuMain.newEntityName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
+          <el-form-item>
+            <el-checkbox v-model="kuMain.newExclude_return" label="Включать дочерние компании" size="small" />
+          </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
             <el-input v-model="kuMain.newDescription" size="small" placeholder="Введите описание" clearable

@@ -3,8 +3,10 @@
     <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
       store.kuIdVendorName }}</span></h4>
-    <el-button size="small" round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd"
+    <el-button size="small" type="primary" plain round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd"
       :disabled="isEditButtonDisabled">Добавить</el-button>
+      <el-button size="small" type="danger" plain round @click="store.tableDataExInvoiceSelect.length = 0" :disabled="isEditButtonDisabled"
+      class="buttonAdd">Удалить все</el-button>
     <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <!-- <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />

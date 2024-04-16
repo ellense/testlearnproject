@@ -3,7 +3,7 @@
 <el-tabs  v-model="activeName" class="demo-tabs" @tab-click="handleClick">
     <el-tab-pane label="Включенные условия" name="first"><EntitiesKuRequirementIncluded/></el-tab-pane>
     <el-tab-pane label="Исключенные условия" name="second"><EntitiesKuRequirementExcluded/></el-tab-pane>
-    <!-- <el-tab-pane label="Наименование контракта" name="third">В разработке...</el-tab-pane> -->
+    <el-tab-pane label="Наименование контракта" name="third"><EntitiesKuRequirementContract/></el-tab-pane>
   </el-tabs>
 </div>
 </template>

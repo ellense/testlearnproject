@@ -3,6 +3,7 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import type {
     IProduct,
     IKuIdStore,
+    IContractPost,
 } from "~/utils/types/directoryTypes";
 
 export const useKuIdStore = defineStore("KuIdStore", {
@@ -26,6 +27,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         dialogFormProductExVisible: false,
         dialogFormCategoryExVisible: false,
         dialogFormManagersVisible: false,
+        dialogFormContractVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         //поиски
@@ -62,6 +64,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdFIOEntity: "",
         kuIdPostEntity: "",
         kuIdDocEntity: "",
+        valueProducer_nameContract: "",
+        valueBrand_nameContract: "",
         //пагинация в таблицах
         pagination: null,
         countRowTable: 100,
@@ -262,6 +266,17 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+        //создание контракта
+        async createKuContract(newItem:IContractPost ) {
+            try {
+              const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+              console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
+              this.kuIdContract = response.name; // сохраняем имя в состоянии хранилища
+            } catch (error) {
+              console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
+              // Можно обработать ошибку здесь, если нужно
+            }
+          },
         clearData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;
@@ -278,6 +293,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.dialogFormProductExVisible = false;
             this.dialogFormCategoryExVisible = false;
             this.dialogFormManagersVisible = false;
+            this.dialogFormContractVisible = false;
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
 
@@ -315,6 +331,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdFIOEntity = '';
             this.kuIdPostEntity = '';
             this.kuIdDocEntity = '';
+            this.valueProducer_nameContract = '';
+            this.valueBrand_nameContract = '';
 
             this.multipleSelectionProduct = [];
             this.multipleSelectionExInvoice = [];

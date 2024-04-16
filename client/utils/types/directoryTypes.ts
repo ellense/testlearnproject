@@ -386,6 +386,7 @@ export interface IKuIdStore {
   dialogFormProductExVisible: boolean
   dialogFormCategoryExVisible: boolean
   dialogFormManagersVisible: boolean
+  dialogFormContractVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   //поиски
@@ -422,6 +423,8 @@ export interface IKuIdStore {
   kuIdFIOEntity: string;
   kuIdPostEntity: string;
   kuIdDocEntity: string;
+  valueProducer_nameContract: string;
+  valueBrand_nameContract: string;
   //пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;

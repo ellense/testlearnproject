@@ -12,6 +12,7 @@
 <script lang="ts" setup>
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuStore } from "~~/stores/kuStore";
+import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from "dayjs";
 import type { IKuList } from "~/utils/types/directoryTypes";
 import { ElMessage } from 'element-plus'
@@ -54,6 +55,8 @@ const isFormValid = () => {
 const addClose = () => {
   router.push({ path: "/" });
   store.clearData()
+  useKuAddStore().clearNewData()
+  
 };
 const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
@@ -222,6 +225,7 @@ const createOfficialArray = () => {
 };
 
 const handleSuccess = (response: any, responses: any[], response2: any[], response3: any,response4: any, response5: any,response6: any) => {
+  router.push({ path: "/" });
   console.log("Экземпляр успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
   console.log("исклУсловия успешно отправлены на бэкенд:", response2);
@@ -233,82 +237,8 @@ const handleSuccess = (response: any, responses: any[], response2: any[], respon
   router.push({ path: "/" });
   ElMessage.success("Коммерческое условие успешно изменено.");
   store.clearData()
+  useKuAddStore().clearNewData()
 };
-
-
-
-// const changeKuToBackend = async () => {
-//   // Проверяем валидность формы
-//   if (!isFormValid()) {
-//     ElMessage.error('Не все поля заполнены корректно.');
-//     return;
-//   }
-
-//   loading.value = true;
-
-//   try {
-//     // Создаем объект newItem для отправки на бэкенд
-//     const newItem = {
-//       ku_id: store.ku_id,
-//       entity_id: store.kuIdEntityId,
-//       vendor_id: store.kuIdVendorId,
-//       period: store.kuIdType,
-//       date_start: dayjs(store.kuIdDateStart).format("YYYY-MM-DD"),
-//       date_end: dayjs(store.kuIdDateEnd).format("YYYY-MM-DD"),
-//       status: "Создано",
-//       description: store.kuIdDescription,
-//       contract: store.kuIdContract,
-//       product_type: store.kuIdProduct_type,
-//       docu_account: store.kuIdDocu_account,
-//       docu_name: store.kuIdDocu_name,
-//       docu_number: store.kuIdDocu_number,
-//       docu_date: dayjs(store.kuIdDocu_date).format("YYYY-MM-DD"),
-//       docu_subject: store.kuIdDocu_subject,
-//       tax: store.kuIdTax,
-//       exclude_return: store.kuIdExclude_return,
-//       negative_turnover: store.kuIdNegative_turnover,
-//       // ku_type: store.kuIdKu_type === 'Ретро-бонус' ? 'Service' : 'RetroBonus',
-//       ku_type: store.kuIdKu_type,
-//       pay_method: store.kuIdPay_method,
-//     };
-//     console.log("newItem", newItem)
-//     // Отправляем запрос на создание нового элемента на бэкенд
-//     const response = await KU.updateKu(newItem);
-
-//     const newItem2 = {
-//       ku_id: store.ku_id,
-//       entity_id: store.kuIdEntityId,
-//       ku_id: string;
-//   item_type: string;
-//   item_code: string;
-//   item_name: string;
-//   producer: string;
-//   brand: string;
-//     };
-//     console.log("newItem", newItem)
-//     // Отправляем запрос на создание нового элемента на бэкенд
-//     const response2 = await KU.updateKu(newItem);
-//     if (response) {
-//       console.log("Экземпляр успешно отправлен на бэкенд:", response);
-//       //   console.log("Условия успешно отправлены на бэкенд:", responses);
-//       router.push("ku");
-//       ElMessage.success("Коммерческое условие успешно изменено.");
-//     } else {
-//       console.error("Не удалось отправить экземпляр или условия на бэкенд из-за проверок");
-//       ElMessage.error("Возникла ошибка. Коммерческое условие не изменено.");
-//     }
-
-//   } catch (error) {
-//     ElMessage.error("Возникла ошибка. Коммерческое условие не изменено.");
-//     console.error("Ошибка при gизменении экземпляра или условий на бэкенд:", error);
-//   } finally {
-//     loading.value = false;
-
-//   }
-//   router.push({ path: "/" });
-//   store.clearData()
-
-// }
 
 //удаление вкл условий
 const deleteInRequirement = () => {

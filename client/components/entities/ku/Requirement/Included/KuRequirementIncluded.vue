@@ -1,14 +1,14 @@
 <template>
     <div>
-        <el-button size="small" type="primary" plain round @click="onAddItem()" :disabled="store.disableButtonsIncluded"
+        <el-button size="small" type="primary" plain round @click="onAddItem()" :disabled="isEditButtonDisabled"
             :title="disableButtonTooltip">+ Все</el-button>
-        <el-button size="small" type="primary" plain round @click="dialogOpenProduct()" :disabled="store.disableButtonsIncluded"
+        <el-button size="small" type="primary" plain round @click="dialogOpenProduct()" :disabled="isEditButtonDisabled"
             :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
-        <el-button size="small" type="primary" plain round @click="dialogOpenCategory()" :disabled="store.disableButtonsIncluded"
+        <el-button size="small" type="primary" plain round @click="dialogOpenCategory()" :disabled="isEditButtonDisabled"
             :title="disableButtonTooltip">+ Условие по
             категории</el-button>
-        <el-button size="small" type="danger" plain round @click="store.tableDataInRequirement.length = 0"
+        <el-button size="small" type="danger" plain round @click="store.tableDataInRequirement.length = 0" :disabled="isEditButtonDisabled"
           >Удалить все</el-button>
     </div>
     <el-scrollbar class="scrollTableRequirement">
@@ -40,6 +40,7 @@ import type { IRequirement } from "~/utils/types/directoryTypes";
 const { getKuInRequirement } = storeToRefs(
   useKuIdStore()
 );
+
 
 const store = useKuIdStore();
 const tableData = ref<IRequirement[]>(getKuInRequirement.value);

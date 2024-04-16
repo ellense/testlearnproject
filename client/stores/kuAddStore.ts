@@ -631,10 +631,10 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async createKuContract(newItem:IContractPost ) {
             try {
               const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
-              console.log("Экземпляр успешно отправлен на бэкенд:", response);
+              console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
               this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
             } catch (error) {
-              console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+              console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
               // Можно обработать ошибку здесь, если нужно
             }
           },
