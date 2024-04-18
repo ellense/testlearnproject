@@ -1,7 +1,7 @@
 <template>
     <el-scrollbar height="45vh">
         <h4>В разработке...</h4>
-      <!-- <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true" class="buttonAdd">Добавить</el-button>
+      <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true" class="buttonAdd">Добавить</el-button>
       <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0" class="buttonAdd">Удалить
         все</el-button>
       <el-table :data="tableData2" border style="width: 820px; margin-top: 10px;" height="40vh"
@@ -35,7 +35,7 @@
             <el-button @click="AddManagers()">Сохранить</el-button>
           </span>
         </template>
-      </el-dialog> -->
+      </el-dialog>
     </el-scrollbar>
   </template>
   

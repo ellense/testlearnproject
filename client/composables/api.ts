@@ -1,7 +1,7 @@
 import type { GetUserData } from "~/utils/types/authTypes";
 import type {
   IEntity,
-  IEntityIdAndName,
+  IEntityInKu,
   IKuPost,
   IKuId,
   IParamInvoices,
@@ -81,7 +81,7 @@ export const INVOICE = {
 export const ENTITY = {
   getEntitiesList: (params: IParamEntities): Promise<IEntity> =>
     $Get("api/entity_list/", { params, isBearer: false }),
-  getEntityByIdAndName: (data: IEntityIdAndName): Promise<IEntityIdAndName[]> =>
+  getEntityByIdAndName: (data: IEntityInKu): Promise<IEntityInKu[]> =>
     $Get("api/entity_list/", { data, isBearer: false }),
   getEntityById: (): Promise<EntityId[]> =>
     $Get("api/entity_list/", { isBearer: false }),
@@ -152,8 +152,10 @@ export const KU = {
     $Get(`api/excluded_condition_list/`, { params, isBearer: false }),
   getKuRequirementBonus: (params: IParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
+  // getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
+  //   $Get(`api/excluded_venddoc_list_create/`, { params, isBearer: false }),
   getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
-    $Get(`api/excluded_venddoc_list_create/`, { params, isBearer: false }),
+    $Get(`api/excluded_venddoc_list_full/`, { params, isBearer: false }),
   getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
     $Get(`api/official_create/`, { params, isBearer: false }),
   getInvoicesList: (

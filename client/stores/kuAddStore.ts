@@ -4,7 +4,7 @@ import type { FormInstance } from 'element-plus'
 
 import type {
     IKuList,
-    IEntityIdAndName,
+    IEntityInKu,
     GetAllProducer,
     IProducer,
     GetAllProducts,
@@ -29,6 +29,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             newType: "",
             newEntityId: "",
             newEntityName: "",
+            newSubsidiaries: false,
             newVendorId: "",
             newVendorName: "",
             newDateStart: "",
@@ -95,6 +96,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         dialogFormContractVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
+        disableSubsidiaries: false,
         //
         
         vendorFilter: "",
@@ -208,13 +210,15 @@ export const useKuAddStore = defineStore("KuAddStore", {
         //     }
         // },
         //получение данных о юр.лице для создания
-        async fetchKuEntity(data: IEntityIdAndName) {
+        async fetchKuEntity(data: IEntityInKu) {
             try {
                 const result = await ENTITY.getEntityByIdAndName(data);
                 if (Array.isArray(result)) {
                     this.dataEntity = result;
+                    console.log("Все данные о юр. лицах:", result);
                 } else {
                     this.dataEntity = [];
+                    
                     console.error("Данные не получены или не являются массивом");
                 }
             } catch (error) {

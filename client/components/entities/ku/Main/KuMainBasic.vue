@@ -23,7 +23,7 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="store.kuIdSubsidiaries" label="Включать дочерние компании" size="small" />
+            <el-checkbox v-model="store.kuIdSubsidiaries" size="small" :label="labelNewSubsidiaries" :disabled="store.disableSubsidiaries" :title="disableSelectEntityTooltip"/>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
@@ -154,7 +154,7 @@ import dayjs from "dayjs";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import type {
-  IEntityIdAndName,
+  IEntityInKu,
   IVendorId,
 IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
@@ -170,7 +170,7 @@ const isEditButtonDisabled = computed(() => {
 const options = ref<Array<{ label: string; value: string }>>([]);
 watch(
   () => store2.dataEntity,
-  (dataEntity: IEntityIdAndName[]) => {
+  (dataEntity: IEntityInKu[]) => {
     options.value = dataEntity.map((item) => ({
       label: item.name,
       value: item.entity_id,
@@ -182,6 +182,7 @@ onMounted(async () => {
     await store2.fetchKuEntity({
       entity_id: "",
       name: "",
+      merge_id: "",
     });
   } catch (error) {
     console.error("Ошибка при загрузке данных юр. лица", error);
@@ -191,14 +192,25 @@ onMounted(async () => {
 //вывод данных поставщика
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
-
-// watch(() => store2.dataVendorId, (vendors: IVendorId[]) => {
-//   options2.value = vendors.map(item => ({ label: item.vendor_id, value: item.vendor_id }));
-// });
 watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
   options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 const onEntityChange = async () => {
+   //для галочки
+  const entity = store2.dataEntity.find(item => item.entity_id === store.kuIdEntityId);
+  if (entity) {
+    if (entity.merge_id) {
+      store.kuIdSubsidiaries = true;
+      console.log(`merge_id для выбранного юр. лица: ${entity.merge_id}`);
+      store.disableSubsidiaries = false;
+    } else {
+      console.log('У выбранного юр. лица отсутствует merge_id');
+      store.disableSubsidiaries = true;
+    }
+  } else {
+    console.log('Выбранное юр. лицо не найдено в данных');
+  }
+
   //для наимен. юр. лица
   store.kuIdEntityName = "";
   store.kuIdSubsidiaries = true;
@@ -221,7 +233,14 @@ const onEntityChange = async () => {
     store2.tableDataExInvoiceAll.length = 0
   }
 };
-
+const labelNewSubsidiaries = computed(() => {
+  const entity = store2.dataEntity.find(item => item.entity_id === store.kuIdEntityId);
+  
+  if (entity && entity.merge_id) {
+    return `Включить дочернии компании: ${entity.merge_id}`;
+  }
+  return 'Включить дочернии компании';
+});
 const onVendorChange = async () => {
   store.kuIdVendorName = "";
   if (store.kuIdVendorId && store.kuIdVendorId.length > 0) {
@@ -313,7 +332,9 @@ watch(() => store.kuIdDateEnd, validateDateEnd);
 const disableSelectVendorTooltip = computed(() => {
   return !store.kuIdEntityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
 });
-
+const disableSelectEntityTooltip = computed(() => {
+  return store.disableSubsidiaries ? 'У выбранной компании нет дочерних компаний' : '';
+});
 
 </script>
 

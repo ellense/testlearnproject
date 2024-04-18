@@ -175,7 +175,7 @@ import { Search } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
 import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IEntityIdAndName, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
+import type { IEntityInKu, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
@@ -205,6 +205,19 @@ const rowDblclick = async (kuId: string) => {
   console.log("ПОСТАВЩИК", useKuIdStore().kuIdVendorId)
 
   if (useKuIdStore().kuIdStatus === "Создано") {
+    const entity = storeKuAdd.dataEntity.find(item => item.entity_id === useKuIdStore().kuIdEntityId);
+  if (entity) {
+    if (entity.merge_id) {
+      useKuIdStore().kuIdSubsidiaries = true;
+      console.log(`merge_id для выбранного юр. лица: ${entity.merge_id}`);
+      useKuIdStore().disableSubsidiaries = false;
+    } else {
+      console.log('У выбранного юр. лица отсутствует merge_id');
+      useKuIdStore().disableSubsidiaries = true;
+    }
+  } else {
+    console.log('Выбранное юр. лицо не найдено в данных');
+  }
     if (useKuIdStore().kuIdVendorId && useKuIdStore().kuIdVendorId.length > 0) {
       storeKuAdd.setFilterVendor('vendor_id', useKuIdStore().kuIdVendorId);
       storeKuAdd.getVendorNameFromAPIWithFilter()
@@ -219,6 +232,7 @@ const rowDblclick = async (kuId: string) => {
         await storeKuAdd.fetchKuEntity({
           entity_id: "",
           name: "",
+          merge_id: "",
         });
         await storeKuAdd.fetchAllVendorIdForEntity();
         await storeKuAdd.fetchCategories();
@@ -322,7 +336,7 @@ const changeLegalEntity = () => {
   useKuStore().setFilterValue('entity_id', LegalEntity.value);
   toggleTriggerFilter();
 };
-watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityIdAndName[]) => {
+watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityInKu[]) => {
     optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
 });
 onMounted(async () => {
@@ -330,6 +344,7 @@ onMounted(async () => {
     await storeKuAdd.fetchKuEntity({
       entity_id: "",
       name: "",
+      merge_id: "",
     });
   } catch (error) {
     console.error("Ошибка при загрузке данных юр. лица", error);

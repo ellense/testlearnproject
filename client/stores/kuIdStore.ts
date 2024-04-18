@@ -29,6 +29,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         dialogFormContractVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
+        disableSubsidiaries: false,
         //поиски
         searchProductIncluded: "",
         searchProductExcluded: "",

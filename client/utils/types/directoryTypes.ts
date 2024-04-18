@@ -30,9 +30,10 @@ export interface IEntityStore {
 export interface IParamEntities {
   search?: string;
 }
-export interface IEntityIdAndName {
+export interface IEntityInKu {
   entity_id: string;
   name: string;
+  merge_id: string;
 }
 export interface IEntityIdAndNameForKu {
   entity_id: string[];
@@ -74,7 +75,7 @@ export interface IVendorStore {
   pagination: Pagination | null
   countRowTable: number
   entityName: string[]
-  dataEntity: IEntityIdAndName[];
+  dataEntity: IEntityInKu[];
   search: string
   filteredDataVendor: IVendor[],
   juristicPersons: string[]
@@ -326,7 +327,7 @@ export interface IKuAddStore {
   tableDataExInvoiceSelect: IExInvoiceForKu[]
   tableDataManagerAll: IManagerForKu[]
   tableDataManagerSelect: IManagerForKu[]
-  dataEntity: IEntityIdAndName[];
+  dataEntity: IEntityInKu[];
   // dataVendorId: IVendorId[];
   dataVendorId:IVendorIdAndName[]
   dataVendorName: IVendorName[];
@@ -342,6 +343,7 @@ export interface IKuAddStore {
   dialogFormContractVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
+  disableSubsidiaries: boolean
   //
   searchExInvoiceNumber: string;
   vendorFilter: string;
@@ -429,6 +431,7 @@ export interface IKuIdStore {
   dialogFormContractVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
+  disableSubsidiaries: boolean
   //поиски
   searchProductIncluded: string;
   searchProductExcluded: string;
