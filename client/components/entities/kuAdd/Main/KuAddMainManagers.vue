@@ -25,8 +25,8 @@
       </el-scrollbar>
       <div v-if="pagination?.count" class="pagination">
         <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-          @size-change="handleSizeChange" @current-change="paginationChange" />
+          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
+          @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
       </div>
       <template #footer>
         <span class="dialog-footer">

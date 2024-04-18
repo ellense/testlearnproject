@@ -270,6 +270,7 @@ export interface IKuAddMain {
   newType: string;
   newEntityId: string;
   newEntityName: string;
+  newSubsidiaries: boolean;
   newVendorId: string;
   newVendorName: string;
   newDateStart: Date | string;
@@ -365,10 +366,49 @@ export interface IKuAddStore {
   filterExInvoice: GetParamExInvoicesForKu
   isFormValid: boolean
 }
+export interface IInitialState {
+  kuIdStatus: string;
+  kuIdType: string;
+  kuIdEntityId: string;
+  kuIdEntityName: string;
+  kuIdSubsidiaries: boolean;
+  kuIdVendorId: string;
+  kuIdVendorName: string;
+  kuIdDateStart: Date | string;
+  kuIdDateEnd: Date | string;
+  kuIdDateActual: Date | string;
+  kuIdDescription: string;
+  kuIdContract: string;
+  kuIdProduct_type: string;
+  kuIdDocu_account: string;
+  kuIdDocu_name: string;
+  kuIdDocu_number: string;
+  kuIdDocu_date: Date | string;
+  kuIdDocu_subject: string;
+  kuIdTax: boolean;
+  kuIdExclude_return: boolean;
+  kuIdNegative_turnover: boolean;
+  kuIdKu_type: string;
+  kuIdPay_method: string;
+  officialId: number | null;
+  kuIdFIOСounteragent: string;
+  kuIdPostСounteragent: string;
+  kuIdDocСounteragent: string;
+  kuIdFIOEntity: string;
+  kuIdPostEntity: string;
+  kuIdDocEntity: string;
+  valueProducer_nameContract: string;
+  valueBrand_nameContract: string;
+  tableDataInRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement2[];
+  tableDataPercent: IPercent[];
+  tableDataExInvoiceSelect: IExInvoiceForKu[];
+  tableDataManagerSelect: IManagerForKu[];
+  tableDataContract: IContract[];
+}
 export interface IKuIdStore {
   //данные таблиц
   tableDataInRequirement: IRequirement[];
-  tableDataInRequirementOrigin: IRequirementOrigin[];
   tableDataExRequirement: IRequirement2[];
   tableDataExRequirementOrigin: IRequirementOrigin2[];
   tableDataPercent: IPercent[];
@@ -398,6 +438,7 @@ export interface IKuIdStore {
   kuIdType: string;
   kuIdEntityId: string;
   kuIdEntityName: string;
+  kuIdSubsidiaries: boolean;
   kuIdVendorId: string;
   kuIdVendorName: string;
   kuIdDateStart: Date | string;
@@ -425,6 +466,7 @@ export interface IKuIdStore {
   kuIdDocEntity: string;
   valueProducer_nameContract: string;
   valueBrand_nameContract: string;
+  initialState: IInitialState;
   //пагинация в таблицах
   pagination: Pagination | null;
   countRowTable: number;

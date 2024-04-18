@@ -24,7 +24,7 @@
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="kuMain.newExclude_return" label="Включать дочерние компании" size="small" />
+            <el-checkbox v-model="kuMain.newSubsidiaries" label="Включать дочерние компании" size="small" />
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
@@ -329,7 +329,7 @@ watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
 const onEntityChange = async () => {
   //для наимен. юр. лица
   kuMain.newEntityName = "";
-
+  kuMain.newSubsidiaries = true;
   if (kuMain.newEntityId && kuMain.newEntityId.length > 0) {
     const selectedEntity = options.value.find(option => option.value === kuMain.newEntityId);
     if (selectedEntity) {

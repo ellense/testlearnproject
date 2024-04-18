@@ -3,11 +3,11 @@
     <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
       store.kuIdVendorName }}</span></h4>
-    <el-button size="small" type="primary" plain round @click="store.dialogFormExInvoiceVisible = true" class="buttonAdd"
+    <el-button size="small" type="primary" plain round @click="store.dialogFormExInvoiceVisible = true" 
       :disabled="isEditButtonDisabled">Добавить</el-button>
       <el-button size="small" type="danger" plain round @click="store.tableDataExInvoiceSelect.length = 0" :disabled="isEditButtonDisabled"
-      class="buttonAdd">Удалить все</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
+      >Удалить все</el-button>
+    <el-table :data="tableData2" border style="width: 1200px; margin-top: 10px;" height="33vh"
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <!-- <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
@@ -15,7 +15,7 @@
       <el-table-column property="invoice_date" type="date" label="Дата" width="140" sortable show-overflow-tooltip />
       <el-table-column property="product_amount" label="Сумма" width="120" show-overflow-tooltip /> -->
       <el-table-column property="docid" label="Документ" width="300"show-overflow-tooltip />
-      <el-table-column label="Операция" align="center">
+      <el-table-column label="Операция" width="150" align="center">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
            :disabled="isEditButtonDisabled">Удалить</el-button>
@@ -49,8 +49,8 @@
       </el-scrollbar>
       <div v-if="pagination?.count" class="pagination">
         <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-          @size-change="handleSizeChange" @current-change="paginationChange" />
+          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
+          @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
       </div>
       <template #footer>
         <span class="dialog-footer">

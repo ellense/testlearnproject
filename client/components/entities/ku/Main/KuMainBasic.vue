@@ -22,6 +22,9 @@
             <el-input v-model="store.kuIdEntityName" size="small" style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
+          <el-form-item>
+            <el-checkbox v-model="store.kuIdSubsidiaries" label="Включать дочерние компании" size="small" />
+          </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
             <el-input v-model="store.kuIdDescription" size="small"  style="width: 300px" :disabled="isEditButtonDisabled">
@@ -198,6 +201,7 @@ watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
 const onEntityChange = async () => {
   //для наимен. юр. лица
   store.kuIdEntityName = "";
+  store.kuIdSubsidiaries = true;
   if (store.kuIdEntityId && store.kuIdEntityId.length > 0) {
     const selectedEntity = options.value.find(option => option.value === store.kuIdEntityId);
     if (selectedEntity) {

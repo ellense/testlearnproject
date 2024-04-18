@@ -1,10 +1,10 @@
 <template>
     <el-dialog v-model="useGraphicStore().dialogFormEditApprovedVisible" title='Измените значение "Утверждено"'
         close-on-click-modal close-on-press-escape draggable style="width: 20%;">
-        <form>
+        <form @submit.prevent>
             <el-form-item>
                 <el-input v-model="useGraphicStore().editApproved" clearable 
-                    placeholder="Введите новое значение" style="width: 100%"  />
+                    placeholder="Введите новое значение" style="width: 100%"  @keyup.enter="handleEnterKeyPress"  />
             </el-form-item>
         </form>
         <template #footer>
@@ -19,7 +19,13 @@
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
 import { useGraphicStore } from "~~/stores/graphicStore";
+import dayjs from "dayjs";
 
+// Функция для обработки нажатия клавиши Enter
+const handleEnterKeyPress = (event: KeyboardEvent) => {
+    event.preventDefault(); // Остановить стандартное действие события (отправка формы)
+    editApproved(); // Вызвать вашу функцию editApproved()
+};
 //изменение поля утверждено
 const editApproved = async () => {
     const selectedRows = useGraphicStore().selectedRowEditApproved
@@ -33,9 +39,9 @@ const editApproved = async () => {
         vendor_name: selectedRows.vendor_name,
         vendor_id: selectedRows.vendor_id,
         period: selectedRows.period,
-        date_start: selectedRows.date_start,
-        date_end: selectedRows.date_end,
-        date_calc: selectedRows.date_calc,
+        date_start: dayjs(selectedRows.date_start).format("YYYY-MM-DD"),
+        date_end: dayjs(selectedRows.date_end).format("YYYY-MM-DD"),
+        date_calc: dayjs(selectedRows.date_calc).format("YYYY-MM-DD"),
         percent: selectedRows.percent,
         sum_calc: selectedRows.sum_calc,
         sum_bonus: selectedRows.sum_bonus,

@@ -1,9 +1,9 @@
 <template>
         <el-button size="small" type="primary" plain round
-            @click="store.dialogFormContractVisible = true">Добавить</el-button>
-        <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0">Удалить
+            @click="store.dialogFormContractVisible = true" :disabled="isEditButtonDisabled">Добавить</el-button>
+        <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0" :disabled="isEditButtonDisabled">Удалить
             все</el-button>
-        <el-button size="small" type="success" plain round @click="FormContract()">Cформировать поле контакт</el-button>
+        <el-button size="small" type="success" plain round @click="FormContract()" :disabled="isEditButtonDisabled">Cформировать поле контакт</el-button>
     <div class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:26vh" height="26vh" :data="tableData" border
             empty-text="" align="center">
@@ -88,6 +88,10 @@ import type { IBrand, IContract, IProducer } from "~/utils/types/directoryTypes"
 const store = useKuIdStore();
 const store2 = useKuAddStore();
 const tableData = ref(store.tableDataContract);
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
 //добавление строк
 const addRow = async () => {
     if (store.valueProducer_nameContract || store.valueBrand_nameContract) {

@@ -4,9 +4,9 @@
       height="calc(100vh - 130px)" @row-dblclick="row => rowDblclick(row.ku_id)" v-loading="loading" stripe
       :border="true" @sort-change="handleSortChange">
       <el-table-column type="selection" width="30" fixed />
-      <el-table-column property="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
-      <el-table-column property="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
-      <el-table-column property="description" label="Описание" width="250" show-overflow-tooltip />
+      <el-table-column prop="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
+      <el-table-column prop="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
+      <el-table-column prop="description" label="Описание" width="250" show-overflow-tooltip />
 
       <el-table-column label="Юридическое лицо" align="center">
         <template #header>
@@ -34,8 +34,8 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
-        <el-table-column property="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
+        <el-table-column prop="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
+        <el-table-column prop="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик" align="center">
         <template #header>
@@ -64,8 +64,8 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
-        <el-table-column property="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
+        <el-table-column prop="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
+        <el-table-column prop="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
       <el-table-column>
         <template #header>
@@ -165,8 +165,8 @@
   </div>
   <div v-if="pagination?.count" class="pagination">
     <el-pagination v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-      @size-change="handleSizeChange" @current-change="paginationChange" size="small" />
+      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total "
+      @size-change="handleSizeChange" @current-change="paginationChange"  :total="pagination.count" />
   </div>
 </template>
 

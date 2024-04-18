@@ -233,8 +233,8 @@
   </el-scrollbar>
   <div class="pagination">
     <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next"
-      @size-change="handleSizeChange" @current-change="paginationChange" />
+      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
+      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
   </div>
 </template>
 <script lang="ts" setup>

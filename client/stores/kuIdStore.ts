@@ -9,7 +9,6 @@ import type {
 export const useKuIdStore = defineStore("KuIdStore", {
     state: (): IKuIdStore => ({
         tableDataInRequirement: [],
-        tableDataInRequirementOrigin: [],
         tableDataExRequirement: [],
         tableDataExRequirementOrigin: [],
         tableDataPercent: [],
@@ -39,6 +38,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdType: "",
         kuIdEntityId: "",
         kuIdEntityName: "",
+        kuIdSubsidiaries: false,
         kuIdVendorId: "",
         kuIdVendorName: "",
         kuIdDateStart: "",
@@ -66,6 +66,46 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdDocEntity: "",
         valueProducer_nameContract: "",
         valueBrand_nameContract: "",
+        initialState: {
+            kuIdStatus: "",
+            kuIdType: "",
+            kuIdEntityId: "",
+            kuIdEntityName: "",
+            kuIdSubsidiaries: false,
+            kuIdVendorId: "",
+            kuIdVendorName: "",
+            kuIdDateStart: "",
+            kuIdDateEnd: "",
+            kuIdDateActual: "",
+            kuIdDescription: "",
+            kuIdContract: "",
+            kuIdProduct_type: "",
+            kuIdDocu_account: "",
+            kuIdDocu_name: "",
+            kuIdDocu_number: "",
+            kuIdDocu_date: "",
+            kuIdDocu_subject: "",
+            kuIdTax: false,
+            kuIdExclude_return: false,
+            kuIdNegative_turnover: false,
+            kuIdKu_type: "",
+            kuIdPay_method: "",
+            officialId: null,
+            kuIdFIOСounteragent: "",
+            kuIdPostСounteragent: "",
+            kuIdDocСounteragent: "",
+            kuIdFIOEntity: "",
+            kuIdPostEntity: "",
+            kuIdDocEntity: "",
+            valueProducer_nameContract: "",
+            valueBrand_nameContract: "",
+            tableDataInRequirement: [],
+            tableDataExRequirement: [],
+            tableDataPercent: [],
+            tableDataExInvoiceSelect: [],
+            tableDataManagerSelect: [],
+            tableDataContract: [],
+        },
         //пагинация в таблицах
         pagination: null,
         countRowTable: 100,
@@ -122,6 +162,28 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.kuIdNegative_turnover = results.negative_turnover;
                 this.$state.kuIdKu_type = results.ku_type;
                 this.$state.kuIdPay_method = results.pay_method;
+                
+                this.$state.initialState.kuIdStatus = results.status;
+                this.$state.initialState.kuIdType = results.period;
+                this.$state.initialState.kuIdEntityId = results.entity_id
+                this.$state.initialState.kuIdEntityName = results.entity_name
+                this.$state.initialState.kuIdVendorId = results.vendor_id
+                this.$state.initialState.kuIdVendorName = results.vendor_name
+                this.$state.initialState.kuIdDateStart = results.date_start;
+                this.$state.initialState.kuIdDateEnd = new Date(results.date_end);
+                this.$state.initialState.kuIdDescription = results.description;
+                this.$state.initialState.kuIdContract = results.contract;
+                this.$state.initialState.kuIdProduct_type = results.product_type;
+                this.$state.initialState.kuIdDocu_account = results.docu_account;
+                this.$state.initialState.kuIdDocu_name = results.docu_name;
+                this.$state.initialState.kuIdDocu_number = results.docu_number;
+                this.$state.initialState.kuIdDocu_date = new Date(results.docu_date)
+                this.$state.initialState.kuIdDocu_subject = results.docu_subject;
+                this.$state.initialState.kuIdTax = results.tax;
+                this.$state.initialState.kuIdExclude_return = results.exclude_return;
+                this.$state.initialState.kuIdNegative_turnover = results.negative_turnover;
+                this.$state.initialState.kuIdKu_type = results.ku_type;
+                this.$state.initialState.kuIdPay_method = results.pay_method;
 
                 console.log("успешно получили данные ку_айди", results);
             } catch (error) {
@@ -158,9 +220,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные вкл условий ку_айди:', tableData);
                     this.$state.tableDataInRequirement = tableData.results;
-                    this.$state.tableDataInRequirementOrigin = this.$state.tableDataInRequirement.slice();
+                    this.$state.initialState.tableDataInRequirement = this.$state.tableDataInRequirement.slice();
                     console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
-                    console.log('tableDataInRequirementOrigin:', this.$state.tableDataInRequirementOrigin);
+                    console.log('initialState.tableDataInRequirement:', this.$state.initialState.tableDataInRequirement);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -180,9 +242,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные искл условий ку_айди:', tableData);
                     this.$state.tableDataExRequirement = tableData.results;
-                    this.$state.tableDataExRequirementOrigin = this.$state.tableDataExRequirement.slice();
+                    this.$state.initialState.tableDataExRequirement = this.$state.tableDataExRequirement.slice();
                     console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
-                    console.log('tableDataExRequirementOrigin:', this.$state.tableDataExRequirementOrigin);
+                    console.log('initialState.tableDataExRequirement:', this.$state.initialState.tableDataExRequirement);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -203,9 +265,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные бонуса ку_айди:', tableData);
                     this.$state.tableDataPercent = tableData.results;
-                    this.$state.tableDataPercentOrigin = this.$state.tableDataPercent.slice();
+                    this.$state.initialState.tableDataPercent = this.$state.tableDataPercent.slice();
                     console.log('tableDataPercent:', this.$state.tableDataPercent);
-                    console.log('tableDataPercentOrigin:', this.$state.tableDataPercentOrigin);
+                    console.log('initialState.tableDataPercent:', this.$state.tableDataPercent);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -226,9 +288,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные искл накладных ку_айди:', tableData);
                     this.$state.tableDataExInvoiceSelect = tableData.results;
-                    this.$state.tableDataExInvoiceSelectOrigin = this.$state.tableDataExInvoiceSelect.slice();
+                    this.$state.initialState.tableDataExInvoiceSelect = this.$state.tableDataExInvoiceSelect.slice();
                     console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
-                    console.log('tableDataExInvoiceSelectOrigin:', this.$state.tableDataExInvoiceSelectOrigin);
+                    console.log('initialState.tableDataExInvoiceSelect:', this.$state.initialState.tableDataExInvoiceSelect);
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -255,6 +317,14 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     this.$state.kuIdFIOEntity = tableData.results[0].entity_name;
                     this.$state.kuIdPostEntity = tableData.results[0].entity_post;
                     this.$state.kuIdDocEntity = tableData.results[0].entity_docu;
+
+                    this.$state.initialState.officialId = tableData.results[0].id;
+                    this.$state.initialState.kuIdFIOСounteragent = tableData.results[0].counterparty_name;
+                    this.$state.initialState.kuIdPostСounteragent = tableData.results[0].counterparty_post;
+                    this.$state.initialState.kuIdDocСounteragent = tableData.results[0].counterparty_docu;
+                    this.$state.initialState.kuIdFIOEntity = tableData.results[0].entity_name;
+                    this.$state.initialState.kuIdPostEntity = tableData.results[0].entity_post;
+                    this.$state.initialState.kuIdDocEntity = tableData.results[0].entity_docu;
                     this.$state.pagination = {
                         count: tableData.count,
                         previous: tableData.previous,
@@ -267,20 +337,56 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 });
         },
         //создание контракта
-        async createKuContract(newItem:IContractPost ) {
+        async createKuContract(newItem: IContractPost) {
             try {
-              const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
-              console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
-              this.kuIdContract = response.name; // сохраняем имя в состоянии хранилища
+                const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+                console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
+                this.kuIdContract = response.name; // сохраняем имя в состоянии хранилища
             } catch (error) {
-              console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
-              // Можно обработать ошибку здесь, если нужно
+                console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
+                // Можно обработать ошибку здесь, если нужно
             }
-          },
+        },
+        hasChanges() {
+            return (
+                this.kuIdStatus !== this.initialState.kuIdStatus ||
+                this.kuIdType !== this.initialState.kuIdType ||
+                this.kuIdEntityId !== this.initialState.kuIdEntityId ||
+                this.kuIdEntityName !== this.initialState.kuIdEntityName ||
+                this.kuIdSubsidiaries !== this.initialState.kuIdSubsidiaries ||
+                this.kuIdVendorId !== this.initialState.kuIdVendorId ||
+                this.kuIdVendorName !== this.initialState.kuIdVendorName ||
+                this.kuIdDateStart !== this.initialState.kuIdDateStart ||
+                this.kuIdDateEnd !== this.initialState.kuIdDateEnd ||
+                this.kuIdDateActual !== this.initialState.kuIdDateActual ||
+                this.kuIdDescription !== this.initialState.kuIdDescription ||
+                this.kuIdContract !== this.initialState.kuIdContract ||
+                this.kuIdProduct_type !== this.initialState.kuIdProduct_type ||
+                this.kuIdDocu_account !== this.initialState.kuIdDocu_account ||
+                this.kuIdDocu_name !== this.initialState.kuIdDocu_name ||
+                this.kuIdDocu_number !== this.initialState.kuIdDocu_number ||
+                this.kuIdDocu_date !== this.initialState.kuIdDocu_date ||
+                this.kuIdDocu_subject !== this.initialState.kuIdDocu_subject ||
+                this.kuIdTax !== this.initialState.kuIdTax ||
+                this.kuIdExclude_return !== this.initialState.kuIdExclude_return ||
+                this.kuIdNegative_turnover !== this.initialState.kuIdNegative_turnover ||
+                this.kuIdPay_method !== this.initialState.kuIdPay_method ||
+                this.kuIdFIOСounteragent !== this.initialState.kuIdFIOСounteragent ||
+                this.kuIdDocСounteragent !== this.initialState.kuIdDocСounteragent ||
+                this.kuIdPostСounteragent !== this.initialState.kuIdPostСounteragent ||
+                this.kuIdFIOEntity !== this.initialState.kuIdFIOEntity ||
+                this.kuIdPostEntity !== this.initialState.kuIdPostEntity ||
+                this.kuIdDocEntity !== this.initialState.kuIdDocEntity ||
+                this.valueBrand_nameContract !== this.initialState.valueBrand_nameContract ||
+                // this.tableDataInRequirement !== this.initialState.tableDataInRequirement || изменить сравнение таблиц
+                this.valueProducer_nameContract !== this.initialState.valueProducer_nameContract
+                // Добавьте сравнение для других полей, которые вы хотите проверить
+            );
+        },
         clearData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;
-            this.tableDataInRequirementOrigin.length = 0;
+            
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
             this.tableDataExInvoiceSelect.length = 0;
@@ -338,6 +444,43 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.multipleSelectionExInvoice = [];
             this.multipleSelectionManager = [];
             this.multipleTableRef = null;
+
+            this.initialState.tableDataInRequirement.length = 0;
+            this.initialState.tableDataExRequirement.length = 0;
+            this.initialState.tableDataPercent.length = 0;
+            this.initialState.tableDataExInvoiceSelect.length = 0;
+            this.initialState.tableDataManagerSelect.length = 0;
+            this.initialState.tableDataContract.length = 0;
+            this.initialState.kuIdStatus = '';
+            this.initialState.kuIdType = '';
+            this.initialState.kuIdEntityId = '';
+            this.initialState.kuIdEntityName = '';
+            this.initialState.kuIdSubsidiaries = false;
+            this.initialState.kuIdVendorId = '';
+            this.initialState.kuIdVendorName = '';
+            this.initialState.kuIdDateStart = '';
+            this.initialState.kuIdDateEnd = '';
+            this.initialState.kuIdDateActual = '';
+            this.initialState.kuIdDescription = '';
+            this.initialState.kuIdContract = '';
+            this.initialState.kuIdProduct_type = '';
+            this.initialState.kuIdDocu_account = '';
+            this.initialState.kuIdDocu_name = '';
+            this.initialState.kuIdDocu_number = '';
+            this.initialState.kuIdDocu_date = '';
+            this.initialState.kuIdDocu_subject = '';
+            this.initialState.kuIdTax = false;
+            this.initialState.kuIdExclude_return = false;
+            this.initialState.kuIdNegative_turnover = false;
+            this.initialState.kuIdPay_method = '';
+            this.initialState.kuIdFIOСounteragent = '';
+            this.initialState.kuIdDocСounteragent = '';
+            this.initialState.kuIdPostСounteragent = '';
+            this.initialState.kuIdFIOEntity = '';
+            this.initialState.kuIdPostEntity = '';
+            this.initialState.kuIdDocEntity = '';
+            this.initialState.valueProducer_nameContract = '';
+            this.initialState.valueBrand_nameContract = '';
         }
     },
 

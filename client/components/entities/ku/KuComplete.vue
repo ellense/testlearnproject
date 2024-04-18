@@ -21,6 +21,59 @@ const store = useKuIdStore();
 const router = useRouter();
 const loading = ref(false);
 
+
+const clearDataBeforeLeave = () => {
+  store.clearData()
+}
+
+// Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
+onBeforeRouteLeave((to, from, next) => {
+  if (store.tableDataInRequirement.length > 0 ||
+    store.tableDataExRequirement.length > 0 ||
+    store.tableDataPercent.length > 0 ||
+    store.tableDataExInvoiceSelect.length > 0 ||
+    store.tableDataManagerSelect.length > 0 ||
+    store.tableDataContract.length > 0 ||
+    kuMain.newType !== '' ||
+    kuMain.newEntityId !== '' ||
+    kuMain.newEntityName !== '' ||
+    kuMain.newVendorId !== '' ||
+    kuMain.newVendorName !== '' ||
+    kuMain.newDateStart !== '' ||
+    kuMain.newDateEnd !== '' ||
+    kuMain.newDateActual !== '' ||
+    kuMain.newDescription !== '' ||
+    kuMain.newContract !== '' ||
+    kuMain.newProduct_type !== '' ||
+    kuMain.newDocu_account !== '' ||
+    kuMain.newDocu_name !== '' ||
+    kuMain.newDocu_number !== '' ||
+    kuMain.newDocu_date !== '' ||
+    kuMain.newDocu_subject !== '' ||
+    kuMain.newKu_type !== '' ||
+    kuMain.newPay_method !== '' ||
+    store.newOfFIOСounteragent !== '' ||
+    store.newOfPostСounteragent !== '' ||
+    store.newOfDocСounteragent !== '' ||
+    store.newOfFIOEntity !== '' ||
+    store.newOfDocEntity !== '' ||
+    store.valueProducer_nameContract !== '' ||
+    store.valueBrand_nameContract !== '') {
+    ElMessageBox.alert('Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.', 'Предупреждение', {
+
+      type: 'warning'
+    }).then(() => {
+      clearDataBeforeLeave()
+      next()
+    }).catch(() => {
+      next(false)
+    })
+  } else {
+    next()
+  }
+})
+
+
 //проверка полей формы
 const isFormValid = () => {
   const isEmpty = (value: any) => {
@@ -242,7 +295,7 @@ const handleSuccess = (response: any, responses: any[], response2: any[], respon
 
 //удаление вкл условий
 const deleteInRequirement = () => {
-  const selectedRows = store.tableDataInRequirementOrigin.map((row) => row.in_prod_id);
+  const selectedRows = store.initialState.tableDataInRequirement.map((row) => row.in_prod_id);
   console.log("SSSselectedRows", selectedRows);
   const deletePromises = selectedRows.map(async (in_prod_id) => {
     try {
