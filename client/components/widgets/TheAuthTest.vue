@@ -43,7 +43,7 @@ const login = () => {
       .getTokenForApi(form)
       .then(() => {
         useAuthStore().setAuth(true);
-        router.push("ku");
+        router.push("kuV");
         message.success("Вы вошли в личный кабинет");
         form.password = "";
         form.username = "";

@@ -1,5 +1,5 @@
 <template>
   <el-scrollbar height="calc(100vh - 45px)">
-    <FeaturesInvoice/>
+    <FeaturesInvoiceV/>
   </el-scrollbar>
 </template>

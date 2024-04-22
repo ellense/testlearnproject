@@ -25,7 +25,7 @@ import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IVendor } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
-
+const store = useVendorStore()
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
 const tableData = ref<IVendor[]>(getVendors.value);
   const loading = ref()
@@ -42,19 +42,31 @@ const handleSizeChange = async (val: number) => {
 const paginationChange = (page: number) => {
   try {
     useVendorStore().setFilterValue('page', page);
-    useVendorStore().getVendorFromAPIWithFilter(page);
+    useVendorStore().getVendorFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
 };
 
 
-const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+// const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+//   try {
+//     const sortField = prop; // поле, по которому сортируем
+//     const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+//     console.log("(поле, порядок) = (", sortField,",", sortOrder, ")");
+//     // await useVendorStore().getVendorFromAPIWithFilter(undefined, sortField, sortOrder);
+//     await useVendorStore().getVendorFromAPIWithFilter();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных", error);
+//   }
+// };
+const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
   try {
-    const sortField = prop; // поле, по которому сортируем
-    const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-    console.log("(поле, порядок) = (", sortField,",", sortOrder, ")");
-    await useVendorStore().getVendorFromAPIWithFilter(undefined, sortField, sortOrder);
+    store.pagination = null
+    store.sortProp = prop; // поле, по которому сортируем
+    store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    await useVendorStore().getVendorFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

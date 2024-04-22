@@ -8,10 +8,10 @@ export const startPage = (): string | undefined => {
   if (role) {
     switch (role) {
       case "admin":
-        return "/ku";
+        return "/kuV";
 
       case "manager":
-        return "/graphic";
+        return "/graphicV";
 
       default:
         return undefined;

@@ -9,9 +9,11 @@ export const useVendorStore = defineStore("IVendorStore", {
     entityName: [],
     dataEntity: [],
     search: "",
+    sortProp: "",
+    sortOrder: "",
     filteredDataVendor: [],
     juristicPersons: [],
-    filterValue: { entity_ids: [] }
+    filterValue: {}
   }),
 
   getters: {

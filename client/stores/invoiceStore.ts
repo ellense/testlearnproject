@@ -5,6 +5,8 @@ export const useInvoiceStore = defineStore("IInvoiceStore", {
     dataInvoice: [],
     pagination: null,
     countRowTable: 100,
+    sortProp: "",
+    sortOrder: "",
     legalEntity: [],
     vendor: [],
     search: "",
@@ -89,8 +91,11 @@ export const useInvoiceStore = defineStore("IInvoiceStore", {
 
 
     //получение накладных
-    async getInvoicesFromAPIWithFilter(page?: number) {
-      console.log('Выполняется запрос накладных с фильтрацией...');
+    async getInvoicesFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
+      this.setFilterValue('page', page);
+      this.setFilterValue('search', this.$state.search);
+      this.setFilterValue('sort_by', sort_by);
+      this.setFilterValue('sort_order', sort_order);
       await INVOICE.getInvoicesList({
         page_size: this.$state.countRowTable,
         page,
@@ -98,6 +103,8 @@ export const useInvoiceStore = defineStore("IInvoiceStore", {
         search: this.$state.search,
         start_date: this.$state.filterValue?.start_date,
         end_date: this.$state.filterValue?.end_date,
+        sort_by,
+        sort_order,
       })
         .then((dataInvoice) => {
           console.log('Получены данные накладных:', dataInvoice);

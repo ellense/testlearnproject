@@ -46,6 +46,8 @@ export const useGraphicStore = defineStore("GraphicStore", {
     pagination: null,
     countRowTable: 50,
     countRowTable2: 950,
+    sortProp: "",
+    sortOrder: "",
     //
     legalEntity: [],
     //поиски

@@ -183,7 +183,7 @@ import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuStore()
 );
-
+const store = useKuStore();
 const storeKuAdd = useKuAddStore();
 const visible = ref(false)
 const tableData = ref<IKuList[]>(getKu.value);
@@ -195,7 +195,7 @@ const rowDblclick = async (kuId: string) => {
   const router = useRouter();
   await useKuIdStore().getKuDetailFromApi(kuId)
   await useKuIdStore().fetchInRequirementForKuId(kuId)
-  router.push({ path: `/ku/${kuId}` });
+  router.push({ path: `/kuV/${kuId}` });
   useKuIdStore().fetchExRequirementForKuId(kuId)
   useKuIdStore().fetchBonusForKuId(kuId)
   useKuIdStore().fetchExInvoiceForKuId(kuId)
@@ -266,7 +266,7 @@ const handleSizeChange = async (val: number) => {
 const paginationChange = (page: number) => {
   try {
     useKuStore().setFilterValue('page', page);
-    useKuStore().getKuFromAPIWithFilter(page);
+    useKuStore().getKuFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных ку2", error);
   }
@@ -277,14 +277,13 @@ watch(getKu, (value) => {
   tableData.value = value || [];
 });
 
-
-const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
   try {
-    useKuStore().pagination = null;
-    const sortField = prop; // поле, по которому сортируем
-    const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-    console.log("(поле, порядок) = (", sortField, ",", sortOrder, ")");
-    await useKuStore().getKuFromAPIWithFilter(undefined, sortField, sortOrder);
+    store.pagination = null
+    store.sortProp = prop; // поле, по которому сортируем
+    store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    await useKuStore().getKuFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

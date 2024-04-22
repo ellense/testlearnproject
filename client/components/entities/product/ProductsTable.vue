@@ -27,7 +27,7 @@ import VueResizable from 'vue-resizable'
 import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
 import { useProductStore } from "~~/stores/productStore";
-
+const store = useProductStore()
 const { getProducts, pagination, countRowTable } = storeToRefs(
   useProductStore()
 );
@@ -49,12 +49,13 @@ watch(getProducts, (value) => {
   tableData.value = value || [];
 });
 
-const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
   try {
-    const sortField = prop; // поле, по которому сортируем
-    const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-    console.log("(поле, порядок) = (", sortField,",", sortOrder, ")");
-    await useProductStore().getProductFromAPIWithFilter(undefined, sortField, sortOrder);
+    store.pagination = null
+    store.sortProp = prop; // поле, по которому сортируем
+    store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    await store.getProductFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }
@@ -62,7 +63,7 @@ const handleSortChange = async ({ prop, order }: { prop: string, order: string }
 
 const paginationChange = (page: number) => {
   useProductStore().setFilterValue('page', page);
-  useProductStore().getProductFromAPIWithFilter(page);
+  useProductStore().getProductFromAPIWithFilter(page, store.sortProp, store.sortOrder);
 };
 
 onMounted(async () => {

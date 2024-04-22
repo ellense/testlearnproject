@@ -50,8 +50,8 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
-        <el-table-column property="entity_name" label="Наименование" width="170" sortable show-overflow-tooltip />
+        <el-table-column property="entity_id" label="Код" width="65"  show-overflow-tooltip />
+        <el-table-column property="entity_name" label="Наименование" width="170"  show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик" align="center">
         <template #header>
@@ -245,6 +245,7 @@ import { storeToRefs } from "pinia";
 import dayjs from 'dayjs';
 import type { IEntityInKu, IGraphic, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
+const store = useGraphicStore();
 const storeKuAdd = useKuAddStore();
 const { getGraphic, pagination, countRowTable } = storeToRefs(useGraphicStore());
 const loading = ref()
@@ -298,15 +299,22 @@ watch(getGraphic, (value) => {
 });
 
 const paginationChange = (page: number) => {
-  useGraphicStore().getGraphicsFromAPIWithFilter(page);
+  try {
+    useGraphicStore().setFilterValue('page', page);
+    useGraphicStore().getGraphicsFromAPIWithFilter(page, store.sortProp, store.sortOrder);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+
 };
 
-const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
+const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
   try {
-    const sortField = prop; // поле, по которому сортируем
-    const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-    console.log("(поле, порядок) = (", sortField, ",", sortOrder, ")");
-    await useGraphicStore().getGraphicsFromAPIWithFilter(undefined, sortField, sortOrder);
+    store.pagination = null
+    store.sortProp = prop; // поле, по которому сортируем
+    store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    await useGraphicStore().getGraphicsFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

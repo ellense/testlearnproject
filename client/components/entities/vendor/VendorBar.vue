@@ -26,7 +26,7 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { useVendorStore } from "~~/stores/vendorStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import type { IEntityIdAndName } from "~/utils/types/directoryTypes";
+import type { IEntityInKu } from "~/utils/types/directoryTypes";
 
 const { juristicPersons } = storeToRefs(useVendorStore());
 
@@ -39,6 +39,7 @@ const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
 const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
+  useVendorStore().pagination = null;
   useVendorStore().performSearch(newValue);
 });
 
@@ -67,7 +68,7 @@ const changeLegalEntity = () => {
   useVendorStore().setFilterValue('entity_ids', LegalEntity.value);
   toggleTriggerFilter();
 };
-watch(() => useKuAddStore().dataEntity, (dataEntity: IEntityIdAndName[]) => {
+watch(() => useKuAddStore().dataEntity, (dataEntity: IEntityInKu[]) => {
     optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
 });
 onMounted(async () => {
@@ -75,6 +76,7 @@ onMounted(async () => {
     await useKuAddStore().fetchKuEntity({
       entity_id: "",
       name: "",
+      merge_id: "",
     });
   } catch (error) {
     console.error("Ошибка при загрузке данных юр. лица", error);

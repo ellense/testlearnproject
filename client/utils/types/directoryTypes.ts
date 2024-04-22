@@ -76,6 +76,8 @@ export interface IVendorStore {
   countRowTable: number
   entityName: string[]
   dataEntity: IEntityInKu[];
+  sortProp: string
+  sortOrder: string
   search: string
   filteredDataVendor: IVendor[],
   juristicPersons: string[]
@@ -145,11 +147,15 @@ export interface IParamInvoices {
   search?: string;
   start_date?: string,
   end_date?: string,
+  sort_by?: string;
+  sort_order?: string;
 }
 export interface IInvoiceStore {
   dataInvoice: IInvoice[];
   pagination: Pagination | null;
   countRowTable: number;
+  sortProp: string;
+  sortOrder: string;
   search: string;
   legalEntity: string[]
   // vendor: string[]
@@ -261,6 +267,8 @@ export interface IKuStore {
   //поиски
   search: string;
   //
+  sortProp: string;
+  sortOrder: string;
   legalEntity: string[]
   filterVendorId: string[]
   filterEntityId: string[]
@@ -608,6 +616,8 @@ export interface IPercentPost {
 export interface GetPersentReturnData extends Pagination {
   results: IPercent[];
 }
+
+
 //ПОСТАВЩИКИ И ДОГОВОРЫ
 export interface IVendorAndContract {
   type_partner: string;
@@ -737,6 +747,8 @@ export interface IGraphicStore {
   pagination: Pagination | null;
   countRowTable: number;
   countRowTable2: number;
+  sortProp: string;
+  sortOrder: string;
   //поиски
   searchGraphic: string;
   //
@@ -869,6 +881,8 @@ export interface ProductStore {
   product: IProduct[];
   pagination: Pagination | null;
   countRowTable: number;
+  sortProp: string
+  sortOrder: string
   search: string
   filterValue: GetAllProducts
 }

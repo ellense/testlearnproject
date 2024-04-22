@@ -8,14 +8,10 @@
           <el-form-item label-width="130" label="Код компании" prop="newEntityId">
             <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
               filterable style="width: 300px" @change="onEntityChange">
-              <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
-                <span style="float: left">{{ item.label }}</span>
-                <span style="
-                    margin-left: 10px;
-                    float: right;
-                    color: var(--el-text-color-secondary);
-                    font-size: 13px;
-                  ">{{ item.value }}</span>
+              <el-option v-for="item in options" :key="item.label" :label="item.value" :value="item.value">
+                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -39,13 +35,9 @@
                 filterable style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left">{{ item.label }}</span>
-                  <span style="
-                    margin-left: 10px;
-                    float: right;
-                    color: var(--el-text-color-secondary);
-                    font-size: 13px;
-                  ">{{ item.value }}</span>
+                  <span style="float: left;">{{ item.value }}</span>
+                  <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
                 </el-option>
               </el-select>
             </div>
@@ -355,7 +347,7 @@ const onEntityChange = async () => {
 
 const labelNewSubsidiaries = computed(() => {
   const entity = store.dataEntity.find(item => item.entity_id === kuMain.newEntityId);
-  
+
   if (entity && entity.merge_id) {
     return `Включить дочернии компании: ${entity.merge_id}`;
   }

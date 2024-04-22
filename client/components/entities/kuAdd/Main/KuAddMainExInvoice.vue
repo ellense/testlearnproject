@@ -11,8 +11,8 @@
       empty-text="Добавьте исключенные накладные" v-loading="loading">
       <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
-      <el-table-column property="invoice_name" label="Наименование" width="200" sortable show-overflow-tooltip />
-      <el-table-column property="invoice_date" type="date" label="Дата" width="140" sortable show-overflow-tooltip />
+      <el-table-column property="invoice_name" label="Наименование" width="200"  show-overflow-tooltip />
+      <el-table-column property="invoice_date" type="date" label="Дата" width="140"  show-overflow-tooltip />
       <el-table-column property="product_amount" label="Сумма" width="120" show-overflow-tooltip />
       <el-table-column property="docid" label="Документ" width="300" show-overflow-tooltip />
       <el-table-column label="Операция" width="150" align="center">

@@ -3,7 +3,7 @@
     <el-scrollbar height="calc(100vh - 60px)">
       <el-menu active-color="#689EFF">
         <el-divider content-position="left" style=" color: #337ecc;">КУ поставщиков</el-divider>
-        <nuxt-link to="/ku">
+        <nuxt-link to="/kuV">
           <el-menu-item index="1">
             <el-icon>
               <Document />
@@ -11,7 +11,7 @@
             <span>Коммерческие условия</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/graphic">
+        <nuxt-link to="/graphicV">
           <el-menu-item index="2">
             <el-icon>
               <Calendar />
@@ -19,7 +19,7 @@
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/invoice">
+        <nuxt-link to="/invoiceV">
           <el-menu-item index="3">
             <el-icon>
               <Memo />
@@ -28,7 +28,7 @@
           </el-menu-item>
         </nuxt-link>
         <el-divider content-position="left" style=" color: #337ecc;">КУ клиентов</el-divider>
-        <nuxt-link to="kuCustomers">
+        <nuxt-link to="kuC">
           <el-menu-item index="4">
             <el-icon>
               <Document />
@@ -36,7 +36,7 @@
             <span>Коммерческие условия</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/graphicCustomers">
+        <nuxt-link to="/graphicC">
           <el-menu-item index="5">
             <el-icon>
               <Calendar />
@@ -44,7 +44,7 @@
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/invoiceCustomers">
+        <nuxt-link to="/invoiceC">
           <el-menu-item index="6">
             <el-icon>
               <Memo />

@@ -19,6 +19,8 @@ export const useKuStore = defineStore("KuStore", {
     pagination: null,
     countRowTable: 50,
     //
+    sortProp: "",
+    sortOrder: "",
     legalEntity: [],
     //поиски
     search: "",

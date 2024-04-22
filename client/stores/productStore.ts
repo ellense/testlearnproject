@@ -6,10 +6,10 @@ export const useProductStore = defineStore("ProductStore", {
     product: [],
     pagination: null,
     countRowTable: 100,
+    sortProp: "",
+    sortOrder: "",
     search: "",
-    filterValue: {
-      categories_l4:[]
-    },
+    filterValue: {},
   }),
 
   getters: {

@@ -1,8 +1,8 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" :border="true" stripe>
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" :border="true" @sort-change="handleSortChange" stripe>
       <el-table-column prop="invoice_id" label="ID" width="100" sortable show-overflow-tooltip/>
-      <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip/>
+      <el-table-column property="invoice_number" label="Номер" width="200" sortable show-overflow-tooltip/>
       <el-table-column property="invoice_name" label="Наименование" width="160" sortable show-overflow-tooltip />
       <el-table-column label="Юридическое лицо" align="center">
         <el-table-column property="entity_id" label="Идентификатор" width="160" sortable show-overflow-tooltip />
@@ -27,7 +27,7 @@ import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IInvoice } from "~/utils/types/directoryTypes";
 import { useInvoiceStore } from "~~/stores/invoiceStore";
-
+const store = useInvoiceStore()
 const { getInvoices, pagination, countRowTable } = storeToRefs(
   useInvoiceStore()
 );
@@ -48,7 +48,19 @@ const handleSizeChange = async (val: number) => {
 const paginationChange = (page: number) => {
   try {
     useInvoiceStore().setFilterValue('page', page);
-    useInvoiceStore().getInvoicesFromAPIWithFilter(page);
+    useInvoiceStore().getInvoicesFromAPIWithFilter(page, store.sortProp, store.sortOrder);
+  } catch (error) {
+    console.error("Ошибка при загрузке данных", error);
+  }
+};
+
+const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
+  try {
+    store.pagination = null
+    store.sortProp = prop; // поле, по которому сортируем
+    store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
+    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    await useInvoiceStore().getInvoicesFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
   }

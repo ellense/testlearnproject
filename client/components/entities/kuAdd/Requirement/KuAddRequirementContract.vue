@@ -26,7 +26,7 @@
                     <el-checkbox v-model="row.use_brand" @change="onUseBrandChange(row)"></el-checkbox>
                 </template>
 </el-table-column> -->
-            <el-table-column fixed="right" label="Операция">
+            <el-table-column fixed="right" label="Операция" align="center">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
                         style="width: 125px; height: 100%;">Удалить</el-button>
