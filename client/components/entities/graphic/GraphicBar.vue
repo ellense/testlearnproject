@@ -5,10 +5,23 @@
       <el-divider direction="vertical" />
       <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonDeleteTooltip" size="small">Удалить</el-button>
-      <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip" style="margin: 0;" size="small">Утвердить</el-button>
+      <!-- <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
+        :title="disableButtonTooltip" style="margin: 0;" size="small">Утвердить</el-button> -->
       <el-dropdown :disabled="isButtonsDisabled">
         <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
+          Изменить статус<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item><el-button @click="AccruedGraphic()" link type="primary"
+                size="small">Начислено</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="ApproveGraphic()" link type="success"
+                size="small">Утверждено</el-button></el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <el-dropdown :disabled="isButtonsDisabledAct">
+        <el-button type="primary" plain :disabled="isButtonsDisabledAct" :title="disableButtonTooltip" size="small">
           Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
         </el-button>
         <template #dropdown>
@@ -114,23 +127,22 @@ const createReportProduct = async () => {
 
 }
 
-
-//утверждение графика
-const ApproveGraphic = async () => {
+//начисление графика
+const AccruedGraphic = async () => {
   const selectedRows = useGraphicStore().multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
     ku_id: selectedRows[0].ku_id,
-    status: "Утверждено",
+    status: "Начислено",
     entity_id: selectedRows[0].entity_id,
     entity_name: selectedRows[0].entity_name,
     vendor_name: selectedRows[0].vendor_name,
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
-    date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end,
-    date_calc: selectedRows[0].date_calc,
+    date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
+    date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
+    date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
     percent: selectedRows[0].percent,
     sum_calc: selectedRows[0].sum_calc,
     sum_bonus: selectedRows[0].sum_bonus,
@@ -145,6 +157,44 @@ const ApproveGraphic = async () => {
     console.error("Ошибка при обновлении статуса грфика:", error);
   }
 };
+
+//утверждение графика
+const ApproveGraphic = async () => {
+  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  console.log("selectedRows статус", selectedRows)
+  const data = {
+    graph_id: selectedRows[0].graph_id,
+    ku_id: selectedRows[0].ku_id,
+    status: "Утверждено",
+    entity_id: selectedRows[0].entity_id,
+    entity_name: selectedRows[0].entity_name,
+    vendor_name: selectedRows[0].vendor_name,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+
+    date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
+    date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
+    date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
+    // date_start: selectedRows[0].date_start,
+    // date_end: selectedRows[0].date_end,
+    // date_calc: selectedRows[0].date_calc,
+    percent: selectedRows[0].percent,
+    sum_calc: selectedRows[0].sum_calc,
+    sum_bonus: selectedRows[0].sum_bonus,
+    sum_approved: selectedRows[0].sum_approved,
+  };
+
+  try {
+    const response = await GRAPHIC.updateGraphic(data);
+    console.log("Статус графика успешно обновлен :", response);
+    await useGraphicStore().getGraphicsFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса грфика:", error);
+  }
+};
+
+
+
 
 //удаление графиков
 const deleteGraphic = async () => {
@@ -177,6 +227,9 @@ const disableButtonDeleteTooltip = computed(() => {
   return useGraphicStore().multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';
 });
 
+const isButtonsDisabledAct = computed(() => {
+  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0 || useGraphicStore().multipleSelectionGraphic[0].status!=="Утверждено";
+});
 
 
 //для АКТА ПРЕДОСТАВЛЕНИЯ ВОЗНАГРАЖДЕНИЯ
@@ -223,7 +276,7 @@ const renderDoc = async () => {
         doc.render({
           vendor_name: useReportStore().vendor.urastic_name,
           counterparty_post: useReportStore().official[0].counterparty_post,
-          counterparty_name:  useReportStore().official[0].counterparty_name,
+          counterparty_name: useReportStore().official[0].counterparty_name,
           counterparty_docu: useReportStore().official[0].counterparty_docu,
           entity_name: useReportStore().entity.urastic_name,
           entity_post: useReportStore().official[0].entity_post,

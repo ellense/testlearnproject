@@ -126,7 +126,7 @@ export const KU = {
     $Put(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuList> =>
     $Get(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
-//отправление
+  //отправление
   postKuInRequirement: (data: IRequirementPost): Promise<IRequirementPost> =>
     $Post("api/included_condition_create/", { data, isBearer: false }),
   postKuExRequirement: (data: IRequirementPost): Promise<IRequirementPost> =>
@@ -145,7 +145,7 @@ export const KU = {
     $Post("api/included_condition_list/", { data, isBearer: false }),
   postKuExRequirementChange: (data: IRequirementPost): Promise<IRequirementPost> =>
     $Post("api/excluded_condition_list/", { data, isBearer: false }),
-//получение
+  //получение
   getKuInRequirements: (params: IParamKuId): Promise<IRequirementReturnData> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
   getKuExRequirements: (params: IParamKuId): Promise<IRequirementReturnData2> =>
@@ -162,7 +162,7 @@ export const KU = {
     params?: GetParamExInvoicesForKu
   ): Promise<GetExInvoicesForKuReturnData> =>
     $Get("api/vend_doc_list", { params, isBearer: false }),
-// для редактирования
+  // для редактирования
   deleteInRequirement: (data: IRequirementId) =>
     $Delete(`api/included_condition_detail/${data.in_prod_id}/`, { data, isBearer: false }),
   deleteExRequirement: (data: IRequirementId2) =>

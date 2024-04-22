@@ -145,11 +145,11 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_end"  sortable width="85" show-overflow-tooltip >
+        <el-table-column property="date_end" sortable width="85" show-overflow-tooltip>
           <template #default="{ row }">
             <span>{{ formatOkDate(row.date_end) }}</span>
           </template>
-          </el-table-column>
+        </el-table-column>
       </el-table-column>
       <el-table-column>
         <template #header>
@@ -168,7 +168,7 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_accrual" sortable width="85" show-overflow-tooltip >
+        <el-table-column property="date_accrual" sortable width="85" show-overflow-tooltip>
           <template #default="{ row }">
             <span>{{ formatOkDate(row.date_accrual) }}</span>
           </template>
@@ -191,16 +191,16 @@
   </el-popover> -->
           </div>
         </template>
-        <el-table-column property="date_calc" width="130" sortable show-overflow-tooltip >
+        <el-table-column property="date_calc" width="130" sortable show-overflow-tooltip>
           <template #default="{ row }">
             <span>{{ formatOkDateTime(row.date_calc) }}</span>
           </template>
-          </el-table-column>
+        </el-table-column>
       </el-table-column>
       <el-table-column fixed="right" property="sum_calc" label="База расчета" width="100" show-overflow-tooltip />
       <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
-      <el-table-column fixed="right" prop="sum_approved" label="Утверждено" width="100" show-overflow-tooltip>
+      <el-table-column fixed="right" prop="sum_approved" label="Начислено" width="100" show-overflow-tooltip>
         <template #default="scope">
           {{ scope.row.sum_approved }}
         </template>
@@ -234,7 +234,7 @@
   <div class="pagination">
     <el-pagination v-if="pagination?.count" v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
+      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
   </div>
 </template>
 <script lang="ts" setup>
@@ -243,20 +243,20 @@ import { Filter } from '@element-plus/icons-vue'
 import { useGraphicStore } from "~~/stores/graphicStore";
 import { storeToRefs } from "pinia";
 import dayjs from 'dayjs';
-import type { IEntityIdAndName, IGraphic, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
+import type { IEntityInKu, IGraphic, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 const storeKuAdd = useKuAddStore();
 const { getGraphic, pagination, countRowTable } = storeToRefs(useGraphicStore());
 const loading = ref()
 const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseEvent) => {
   if (column.property === 'sum_approved') {
-    if (row.status === 'Утверждено') {
+    if (row.status === 'Начислено') {
       useGraphicStore().editApproved = row.sum_approved;
       useGraphicStore().selectedRowEditApproved = row;
       useGraphicStore().dialogFormEditApprovedVisible = true;
-      console.log('Вы нажали на ячейку столбца "Утверждено"');
+      console.log('Вы нажали на ячейку столбца "Начислено"');
     } else {
-      ElMessage.error('Невозможно открыть диалоговое окно: статус не "Утвержденo"');
+      ElMessage.error('Невозможно открыть диалоговое окно: статус не "Начислено"');
     }
   }
 };
@@ -275,6 +275,8 @@ const getStatusColor = (status: string) => {
       return '#117ba5';
     case 'Рассчитано':
       return '#e79e00';
+    case 'Начислено':
+      return '#630e94';
     default:
       return '#000';
   }
@@ -332,7 +334,7 @@ const formatOkDate = (dateTime: any) => {
   if (dateTime === null) {
     return null;
   }
-  return dayjs(dateTime).format('DD.MM.YYYY') ; 
+  return dayjs(dateTime).format('DD.MM.YYYY');
 };
 
 //для общей фильтрации
@@ -362,14 +364,15 @@ const changeLegalEntity = () => {
   useGraphicStore().setFilterValue('entity_id', LegalEntity.value);
   toggleTriggerFilter();
 };
-watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityIdAndName[]) => {
-    optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
+watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityInKu[]) => {
+  optionsLegalEntity.value = dataEntity.map((item) => ({ label: item.name, value: item.entity_id, }));
 });
 onMounted(async () => {
   try {
     await storeKuAdd.fetchKuEntity({
       entity_id: "",
       name: "",
+      merge_id: "",
     });
   } catch (error) {
     console.error("Ошибка при загрузке данных юр. лица", error);
@@ -378,7 +381,7 @@ onMounted(async () => {
 //фильтр поставщика
 const Vendor = ref<string[]>(filterGraphicValue.value.vendor_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-  watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
+watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
   optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 onMounted(async () => {
@@ -409,6 +412,7 @@ const Status = ref<string[]>(filterGraphicValue.value.status || []);
 const optionsStatus = ref<Array<{ label: string; value: string }>>([
   { label: 'Запланировано', value: 'Запланировано' },
   { label: 'Рассчитано', value: 'Рассчитано' },
+  { label: 'Начислено', value: 'Начислено' },
   { label: 'Утверждено', value: 'Утверждено' },
 ]);
 const onStatusChange = async () => {

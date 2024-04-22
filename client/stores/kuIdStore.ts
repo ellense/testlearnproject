@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import _ from 'lodash';
 import type {
     IProduct,
     IKuIdStore,
@@ -163,7 +164,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.kuIdNegative_turnover = results.negative_turnover;
                 this.$state.kuIdKu_type = results.ku_type;
                 this.$state.kuIdPay_method = results.pay_method;
-                
+
                 this.$state.initialState.kuIdStatus = results.status;
                 this.$state.initialState.kuIdType = results.period;
                 this.$state.initialState.kuIdEntityId = results.entity_id
@@ -349,6 +350,12 @@ export const useKuIdStore = defineStore("KuIdStore", {
             }
         },
         hasChanges() {
+            const tablesChanged = !_.isEqual(this.tableDataInRequirement, this.initialState.tableDataInRequirement);
+            const tablesChanged2 = !_.isEqual(this.tableDataExRequirement, this.initialState.tableDataInRequirement);
+            const tablesChanged3 = !_.isEqual(this.tableDataPercent, this.initialState.tableDataPercent);
+            const tablesChanged4 = !_.isEqual(this.tableDataExInvoiceSelect, this.initialState.tableDataExInvoiceSelect);
+            const tablesChanged5 = !_.isEqual(this.tableDataManagerSelect, this.initialState.tableDataManagerSelect);
+            const tablesChanged6 = !_.isEqual(this.tableDataContract, this.initialState.tableDataContract);
             return (
                 this.kuIdStatus !== this.initialState.kuIdStatus ||
                 this.kuIdType !== this.initialState.kuIdType ||
@@ -379,15 +386,19 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.kuIdPostEntity !== this.initialState.kuIdPostEntity ||
                 this.kuIdDocEntity !== this.initialState.kuIdDocEntity ||
                 this.valueBrand_nameContract !== this.initialState.valueBrand_nameContract ||
-                // this.tableDataInRequirement !== this.initialState.tableDataInRequirement || изменить сравнение таблиц
-                this.valueProducer_nameContract !== this.initialState.valueProducer_nameContract
-                // Добавьте сравнение для других полей, которые вы хотите проверить
+                this.valueProducer_nameContract !== this.initialState.valueProducer_nameContract ||
+                tablesChanged ||
+                tablesChanged2 ||
+                tablesChanged3 ||
+                tablesChanged4 ||
+                tablesChanged5 ||
+                tablesChanged6
             );
         },
         clearData() {
             // Очищаем таблицу условий
             this.tableDataInRequirement.length = 0;
-            
+
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
             this.tableDataExInvoiceSelect.length = 0;

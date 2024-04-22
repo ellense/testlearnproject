@@ -329,7 +329,7 @@ export interface IKuAddStore {
   tableDataManagerSelect: IManagerForKu[]
   dataEntity: IEntityInKu[];
   // dataVendorId: IVendorId[];
-  dataVendorId:IVendorIdAndName[]
+  dataVendorId: IVendorIdAndName[]
   dataVendorName: IVendorName[];
   treeData: ITree[],
   treeRef: typeof ElTree | null,
@@ -608,7 +608,19 @@ export interface IPercentPost {
 export interface GetPersentReturnData extends Pagination {
   results: IPercent[];
 }
-
+//ПОСТАВЩИКИ И ДОГОВОРЫ
+export interface IVendorAndContract {
+  type_partner: string;
+  account_number: string;
+  vendor_name: string;
+  vendor_retention: string;
+  doc_id: string;
+  doc_title: string;
+  doc_name: Date | string;
+  status: number | null
+  entity_id: string
+  entity_name: string
+}
 
 //искл. накладные
 export interface IExInvoiceForKu {

@@ -14,7 +14,6 @@ import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuStore } from "~~/stores/kuStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from "dayjs";
-import type { IKuList } from "~/utils/types/directoryTypes";
 import { ElMessage } from 'element-plus'
 
 const store = useKuIdStore();
@@ -22,54 +21,24 @@ const router = useRouter();
 const loading = ref(false);
 
 
-const clearDataBeforeLeave = () => {
-  store.clearData()
-}
 
 // Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
 onBeforeRouteLeave((to, from, next) => {
-  if (store.tableDataInRequirement.length > 0 ||
-    store.tableDataExRequirement.length > 0 ||
-    store.tableDataPercent.length > 0 ||
-    store.tableDataExInvoiceSelect.length > 0 ||
-    store.tableDataManagerSelect.length > 0 ||
-    store.tableDataContract.length > 0 ||
-    kuMain.newType !== '' ||
-    kuMain.newEntityId !== '' ||
-    kuMain.newEntityName !== '' ||
-    kuMain.newVendorId !== '' ||
-    kuMain.newVendorName !== '' ||
-    kuMain.newDateStart !== '' ||
-    kuMain.newDateEnd !== '' ||
-    kuMain.newDateActual !== '' ||
-    kuMain.newDescription !== '' ||
-    kuMain.newContract !== '' ||
-    kuMain.newProduct_type !== '' ||
-    kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_name !== '' ||
-    kuMain.newDocu_number !== '' ||
-    kuMain.newDocu_date !== '' ||
-    kuMain.newDocu_subject !== '' ||
-    kuMain.newKu_type !== '' ||
-    kuMain.newPay_method !== '' ||
-    store.newOfFIOСounteragent !== '' ||
-    store.newOfPostСounteragent !== '' ||
-    store.newOfDocСounteragent !== '' ||
-    store.newOfFIOEntity !== '' ||
-    store.newOfDocEntity !== '' ||
-    store.valueProducer_nameContract !== '' ||
-    store.valueBrand_nameContract !== '') {
+  if (store.hasChanges() && store.$state.kuIdStatus === "Создано") {
     ElMessageBox.alert('Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.', 'Предупреждение', {
-
       type: 'warning'
     }).then(() => {
-      clearDataBeforeLeave()
       next()
+      store.clearData()
+      useKuAddStore().clearNewData()
     }).catch(() => {
       next(false)
     })
   } else {
     next()
+    store.clearData()
+    useKuAddStore().clearNewData()
+
   }
 })
 
@@ -106,10 +75,23 @@ const isFormValid = () => {
 
 //отменить
 const addClose = () => {
-  router.push({ path: "/" });
-  store.clearData()
-  useKuAddStore().clearNewData()
-  
+  if (store.hasChanges() && store.$state.kuIdStatus === "Создано") {
+    ElMessageBox.alert('Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.', 'Предупреждение', {
+      type: 'warning'
+    }).then(() => {
+      router.push({ path: "/" });
+      useKuAddStore().clearNewData()
+      store.clearData()
+    }).catch(() => {
+    })
+  } else {
+    router.push({ path: "/" });
+
+    useKuAddStore().clearNewData()
+    store.clearData()
+  }
+
+
 };
 const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
@@ -145,18 +127,18 @@ const changeKuToBackend = async () => {
     const responses = await postRequirements(response, store.tableDataInRequirement, KU.postKuInRequirementChange);
     deleteExRequirement()
     const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirementChange);
-deleteRequirementBonus()
+    deleteRequirementBonus()
     const response3 = await postBonusRequirements(response, store.tableDataPercent);
     deleteExInvoice()
-     const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
-     deleteManager()
-     const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
+    const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
+    deleteManager()
+    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
 
-     const response6 = await KU.updateOfficial(createOfficialArray());
+    const response6 = await KU.updateOfficial(createOfficialArray());
 
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response2, response3,response4,response5,response6,);
+      handleSuccess(response, responses, response2, response3, response4, response5, response6,);
 
     }
   } catch (error) {
@@ -221,7 +203,7 @@ const postBonusRequirements = async (response: any, dataArray: any) => {
     percent_sum: item.percent_sum,
   }));
 
-  return await Promise.all(requirementsArray.map(async (newItem: any)  => {
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
     try {
       return await KU.postKuRequirementBonus(newItem);
     } catch (error) {
@@ -231,7 +213,7 @@ const postBonusRequirements = async (response: any, dataArray: any) => {
   }));
 };
 
-const postManagerItems = async (response:any, dataArray: any, postFunction: any) => {
+const postManagerItems = async (response: any, dataArray: any, postFunction: any) => {
   const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
     ku_id: response.ku_id,
     group: item.group,
@@ -268,16 +250,16 @@ const createOfficialArray = () => {
   return {
     id: store.officialId,
     ku_id: store.ku_id,
-      counterparty_name: store.kuIdFIOСounteragent,
-      counterparty_post: store.kuIdPostСounteragent,
-      counterparty_docu: store.kuIdDocСounteragent,
-      entity_name: store.kuIdFIOEntity,
-      entity_post: store.kuIdPostEntity,
-      entity_docu: store.kuIdDocEntity,
+    counterparty_name: store.kuIdFIOСounteragent,
+    counterparty_post: store.kuIdPostСounteragent,
+    counterparty_docu: store.kuIdDocСounteragent,
+    entity_name: store.kuIdFIOEntity,
+    entity_post: store.kuIdPostEntity,
+    entity_docu: store.kuIdDocEntity,
   };
 };
 
-const handleSuccess = (response: any, responses: any[], response2: any[], response3: any,response4: any, response5: any,response6: any) => {
+const handleSuccess = (response: any, responses: any[], response2: any[], response3: any, response4: any, response5: any, response6: any) => {
   router.push({ path: "/" });
   console.log("Экземпляр успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
@@ -304,7 +286,7 @@ const deleteInRequirement = () => {
       return results;
     } catch (error) {
       console.error("Ошибка при удалении строки:", error);
-      throw error; 
+      throw error;
     }
   });
 

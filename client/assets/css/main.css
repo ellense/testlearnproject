@@ -49,6 +49,7 @@ a {
   display: flex;
   justify-content: space-between;
   margin-right: 10px;
+  /* background-color: #630e94; */
 }
 
 .dialog-footer button:first-child {

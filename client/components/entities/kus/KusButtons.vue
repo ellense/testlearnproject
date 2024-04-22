@@ -159,6 +159,19 @@ const CancelKu = async () => {
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
     date_end: selectedRows[0].date_end,
+    description: selectedRows[0].description,
+    contract: selectedRows[0].contract,
+    product_type: selectedRows[0].product_type,
+    docu_account: selectedRows[0].docu_account,
+    docu_name: selectedRows[0].docu_name,
+    docu_number: selectedRows[0].docu_number,
+    docu_date: selectedRows[0].docu_date,
+    docu_subject: selectedRows[0].docu_subject,
+    tax: selectedRows[0].tax,
+    exclude_return: selectedRows[0].exclude_return,
+    negative_turnover: selectedRows[0].negative_turnover,
+    ku_type: selectedRows[0].ku_type,
+    pay_method: selectedRows[0].pay_method,
   };
   try {
     const response = await KU.deleteGraphRow(data);
@@ -181,7 +194,20 @@ const ApproveKu = async () => {
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end
+    date_end: selectedRows[0].date_end,
+    description: selectedRows[0].description,
+    contract: selectedRows[0].contract,
+    product_type: selectedRows[0].product_type,
+    docu_account: selectedRows[0].docu_account,
+    docu_name: selectedRows[0].docu_name,
+    docu_number: selectedRows[0].docu_number,
+    docu_date: selectedRows[0].docu_date,
+    docu_subject: selectedRows[0].docu_subject,
+    tax: selectedRows[0].tax,
+    exclude_return: selectedRows[0].exclude_return,
+    negative_turnover: selectedRows[0].negative_turnover,
+    ku_type: selectedRows[0].ku_type,
+    pay_method: selectedRows[0].pay_method,
   };
 
   try {
@@ -203,7 +229,20 @@ const СreatedKu = async () => {
     vendor_id: selectedRows[0].vendor_id,
     period: selectedRows[0].period,
     date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end
+    date_end: selectedRows[0].date_end,
+    description: selectedRows[0].description,
+    contract: selectedRows[0].contract,
+    product_type: selectedRows[0].product_type,
+    docu_account: selectedRows[0].docu_account,
+    docu_name: selectedRows[0].docu_name,
+    docu_number: selectedRows[0].docu_number,
+    docu_date: selectedRows[0].docu_date,
+    docu_subject: selectedRows[0].docu_subject,
+    tax: selectedRows[0].tax,
+    exclude_return: selectedRows[0].exclude_return,
+    negative_turnover: selectedRows[0].negative_turnover,
+    ku_type: selectedRows[0].ku_type,
+    pay_method: selectedRows[0].pay_method,
   };
 
   try {
