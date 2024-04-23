@@ -3,25 +3,10 @@
     <div class="directoryBar_filter">
       <h3>Графики расчетов</h3>
       <el-divider direction="vertical" />
-      <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
-        :title="disableButtonDeleteTooltip" size="small">Удалить</el-button>
       <!-- <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip" style="margin: 0;" size="small">Утвердить</el-button> -->
-      <el-dropdown :disabled="isButtonsDisabled">
-        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
-          Изменить статус<el-icon class="el-icon--right"><arrow-down /></el-icon>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="AccruedGraphic()" link type="primary"
-                size="small">Начислено</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="ApproveGraphic()" link type="success"
-                size="small">Утверждено</el-button></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
       <el-dropdown :disabled="isButtonsDisabledAct">
-        <el-button type="primary" plain :disabled="isButtonsDisabledAct" :title="disableButtonTooltip" size="small">
+        <el-button type="success" plain :disabled="isButtonsDisabledAct" :title="disableButtonTooltip" size="small">
           Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
         </el-button>
         <template #dropdown>
@@ -37,6 +22,21 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-dropdown :disabled="isButtonsDisabled">
+        <el-button type="primary" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
+          Изменить статус<el-icon class="el-icon--right"><arrow-down /></el-icon>
+        </el-button>
+        <template #dropdown>
+          <el-dropdown-menu>
+            <el-dropdown-item><el-button @click="AccruedGraphic()" link type="primary"
+                size="small">Начислено</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="ApproveGraphic()" link type="success"
+                size="small">Утверждено</el-button></el-dropdown-item>
+          </el-dropdown-menu>
+        </template>
+      </el-dropdown>
+      <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
+        :title="disableButtonDeleteTooltip" size="small">Удалить</el-button>
     </div>
     <!-- <div class="directoryBar_filter">
       <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="2"

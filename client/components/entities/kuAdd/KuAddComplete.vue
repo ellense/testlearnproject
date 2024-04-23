@@ -287,7 +287,7 @@ const handleSuccess = (response: IKuList, responses: any[], response2: any[], re
   console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
   console.log("Должн. лица успешно отправлены на бэкенд:", response6);
   useKuStore().getKuFromAPIWithFilter();
-  router.push("ku");
+  router.push("kuV");
   // ElMessage.success("Коммерческое условие успешно создано.");
   ElMessage({
     message: 'Коммерческое условие успешно создано.',
@@ -348,14 +348,14 @@ const addClose = () => {
       }
     ).then(() => {
       // Если пользователь подтвердил, переходим на другую страницу и очищаем данные
-      router.push("ku");
+      router.push("kuV");
       store.clearNewData();
     }).catch(() => {
       // Если пользователь отменил, ничего не делаем
     });
   } else {
     // Если нет несохраненных данных, просто переходим на другую страницу и очищаем данные
-    router.push("ku");
+    router.push("kuV");
     store.clearNewData();
   }
 };

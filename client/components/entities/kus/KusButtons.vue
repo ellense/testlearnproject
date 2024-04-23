@@ -3,9 +3,9 @@
     <div class="directoryBar_filter">
       <h3>Коммерческие условия поставщиков</h3>
       <el-divider direction="vertical" />
-      <el-button type="primary" plain @click="redirectToCreatePage" size="small">Создать
+      <el-button type="success" plain @click="redirectToCreatePage" size="small">Создать
         КУ</el-button>
-      <el-button type="primary" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
+      <el-button type="success" plain @click="addGraphic()" :loading="loading" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip" style="margin: 0;" size="small">Создать
         график</el-button>
       <el-dropdown :disabled="isButtonsDisabled">
@@ -80,7 +80,7 @@ onMounted(() => {
 
 //кнопка создать ку
 const redirectToCreatePage = () => {
-  router.push("kuAdd");
+  router.push("kuVAdd");
 };
 
 const isCreateButtonDisabled = computed(() => {
