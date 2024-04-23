@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="kuStore.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
+  <el-dialog v-model="store.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
-    <h4>Код поставщика: <span style="font-weight: 400;">{{ useKuAddStore().kuAddMain.newVendorId }}</span></h4>
+    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
-      useKuAddStore().kuAddMain.newVendorName }}</span></h4>
+      store.kuAddMain.newVendorName }}</span></h4>
     <div class="buttonBar_search">
       <el-input v-model="searchProductExKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
       <el-table style="width: 100%" height="300" :data="tableData"
-        @selection-change="useKuAddStore().handleSelectionChange3" ref="multipleTableRef" v-loading="loading" stripe>
+        @selection-change="store.handleSelectionChange3" ref="multipleTableRef" v-loading="loading" stripe>
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="300" show-overflow-tooltip />
@@ -24,7 +24,7 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="kuStore.dialogFormProductExVisible = false">Отмена</el-button>
+        <el-button @click="store.dialogFormProductExVisible = false">Отмена</el-button>
         <el-button @click="AddProductItem()">Сохранить</el-button>
       </span>
     </template>
@@ -39,9 +39,9 @@ import type { IProduct } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 
-const kuStore = useKuAddStore();
+const store = useKuAddStore();
 const { getProductEx, pagination, countRowTable } = storeToRefs(
-  useKuAddStore()
+  store
 );
 const tableData = ref<IProduct[]>(getProductEx.value);
 
@@ -54,9 +54,9 @@ watch(getProductEx, (value) => {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuAddStore().setCountRowTable(val);
+  store.setCountRowTable(val);
   try {
-    await useKuAddStore().getProductFromExcludedWithFilter();
+    await store.getProductFromExcludedWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных искл.продуктов", error);
   }
@@ -64,14 +64,14 @@ const handleSizeChange = async (val: number) => {
 
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterProductEx('page', page);
-  useKuAddStore().getProductFromExcludedWithFilter(page);
+  store.setFilterProductEx('page', page);
+  store.getProductFromExcludedWithFilter(page);
 };
 
 //поиск
 const searchProductExKu = ref('');
 watch(searchProductExKu, (newValue: string) => {
-  useKuAddStore().performSearchProductEx(newValue);
+  store.performSearchProductEx(newValue);
 });
 
 //для очистки выбора
@@ -88,10 +88,10 @@ const toggleSelection = (rows?: IProduct[]) => {
 
 //добавление условий
 const AddProductItem = () => {
-  const selectedRows = useKuAddStore().multipleSelectionProduct;
+  const selectedRows = store.multipleSelectionProduct;
 
   selectedRows.forEach(row => {
-    useKuAddStore().tableDataExRequirement.push({
+    store.tableDataExRequirement.push({
       id: null,
       item_type: "Таблица",
       item_code: row.itemid,
@@ -99,9 +99,9 @@ const AddProductItem = () => {
       producer: "",
       brand: "",
     });
-    console.log("исклПРОДУКТЫ", useKuAddStore().tableDataExRequirement);
+    console.log("исклПРОДУКТЫ", store.tableDataExRequirement);
   });
   toggleSelection()
-  kuStore.dialogFormProductExVisible = false;
+  store.dialogFormProductExVisible = false;
 };
 </script>

@@ -2,8 +2,8 @@
   <el-dialog v-model="store.dialogFormCategoryExVisible" style="width: 530px;"
     title="Выбор исключенных: категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
-    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
-    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+    <h4>Код клиента: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование клиента: <span style="font-weight: 400;">{{
       store.kuAddMain.newVendorName }}</span></h4>
     <div class="selectCategory">
       <div>
@@ -54,11 +54,11 @@
 
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useKuAddStore } from '~~/stores/kuAddStore';
+import { useKuCAddStore } from '~~/stores/kuCAddStore';
 import type { ElTree } from 'element-plus'
 import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 const options3 = ref<Array<{ label: string; value: string }>>([]);

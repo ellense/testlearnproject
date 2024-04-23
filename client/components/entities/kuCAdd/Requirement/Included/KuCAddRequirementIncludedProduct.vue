@@ -1,8 +1,8 @@
 <template>
   <el-dialog v-model="store.dialogFormProductInVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
-    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
-    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+    <h4>Код клиента: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование клиента: <span style="font-weight: 400;">{{
       store.kuAddMain.newVendorName }}</span></h4>
     <div class="buttonBar_search">
       <el-input v-model="searchProductInKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
@@ -36,12 +36,12 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 const { getProductIn, pagination, countRowTable } = storeToRefs(
-  useKuAddStore()
+  useKuCAddStore()
 );
 const tableData = ref<IProduct[]>(getProductIn.value);
 

@@ -1,34 +1,15 @@
 <template>
   <el-scrollbar height="45vh">
-    <!-- <h4>В разработке...</h4> -->
-    <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true"
-      class="buttonAdd">Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0"
-      class="buttonAdd">Удалить
+    <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true" class="buttonAdd">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0" class="buttonAdd">Удалить
       все</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
-      empty-text="Добавьте поставщиков"  >
-      <el-table-column property="group" label="Тип партнера" width="150" show-overflow-tooltip />
-      <el-table-column label="Поставщик" align="center">
-      <el-table-column property="discription" label="Номер счета" width="150" show-overflow-tooltip />
-      <el-table-column property="discription" label="Наименование" width="200"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Удержание" width="100"  show-overflow-tooltip />
-    </el-table-column>
-      <el-table-column label="Документ"  align="center">
-        <el-table-column property="discription" label="Код" width="150"  show-overflow-tooltip />
-        <el-table-column property="discription" label="Заголовок" width="150" 
-          show-overflow-tooltip />
-        <el-table-column property="discription" label="Название" width="150"  show-overflow-tooltip />
-      </el-table-column>
-      <el-table-column property="discription" label="Статус" width="150"  show-overflow-tooltip />
-      <el-table-column label="Юридическое лицо"  align="center">
-      <el-table-column property="discription" label="Код" width="100"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Наименование" width="200"  show-overflow-tooltip />
-    </el-table-column>
+    <el-table :data="tableData2" border style="width: 820px; margin-top: 10px;" height="40vh"
+      empty-text="Добавьте категорийных менеджеров">
+      <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
+      <el-table-column property="discription" label="Описание" width="400" sortable show-overflow-tooltip />
       <el-table-column align="center" label="Операция">
         <template #default="scope">
-          <el-button text type="danger" :icon="Delete" size="small"
-            @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
+          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -45,7 +26,7 @@
       <div v-if="pagination?.count" class="pagination">
         <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
           :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-          @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
+          @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
       </div>
       <template #footer>
         <span class="dialog-footer">
@@ -60,11 +41,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import type { IManagerForKu } from "~/utils/types/directoryTypes";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   store
 );

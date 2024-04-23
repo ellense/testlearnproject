@@ -1,9 +1,9 @@
 <template>
-  <el-dialog v-model="store.dialogFormCategoryExVisible" style="width: 530px;"
-    title="Выбор исключенных: категории, производителя и торговой марки для КУ" close-on-click-modal
+  <el-dialog v-model="store.dialogFormCategoryInVisible" style="width: 530px;"
+    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
     close-on-press-escape draggable>
-    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
-    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+    <h4>Код клиента: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование клиента: <span style="font-weight: 400;">{{
       store.kuAddMain.newVendorName }}</span></h4>
     <div class="selectCategory">
       <div>
@@ -14,7 +14,7 @@
       </div>
       <div>
         <div class="custom-label">Производитель</div>
-        <el-select-v2 v-model="store.valueProducer_nameEx" clearable filterable style="width: 500px; "
+        <el-select-v2 v-model="store.valueProducer_nameIn" clearable filterable style="width: 500px; "
           placeholder="Выберите производителя" :options="options2" @change="onProducerChange">
           <template #option="{ option }">
             <span>{{ option.label }}</span>
@@ -29,7 +29,7 @@
       </div>
       <div>
         <div class="custom-label">Торговая марка</div>
-        <el-select-v2 v-model="store.valueBrand_nameEx" clearable filterable style="width: 500px"
+        <el-select-v2 v-model="store.valueBrand_nameIn" clearable filterable style="width: 500px"
           placeholder="Выберите торговую марку" :options="options3">
           <template #option="{ option }">
             <span>{{ option.label }}</span>
@@ -45,43 +45,42 @@
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="store.dialogFormCategoryExVisible = false">Отменить</el-button>
+        <el-button @click="store.dialogFormCategoryInVisible = false">Отменить</el-button>
         <el-button @click="AddCategoryItem()">Сохранить</el-button>
       </span>
     </template>
   </el-dialog>
 </template>
-
 <script setup lang="ts">
 import { ref, watch } from 'vue';
-import { useKuAddStore } from '~~/stores/kuAddStore';
+import { useKuCAddStore } from '~~/stores/kuCAddStore';
 import type { ElTree } from 'element-plus'
 import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 const options3 = ref<Array<{ label: string; value: string }>>([]);
 
-watch(() => store.producerExcluded, (producers: IProducer[]) => {
+watch(() => store.producerIncluded, (producers: IProducer[]) => {
   const uniqueProducers = Array.from(new Set(producers.map(item => item.producer_name)));
   options2.value = uniqueProducers.map(label => ({ label, value: label }));
 });
 
-watch(() => store.brandExcluded, (brands: IBrand[]) => {
+watch(() => store.brandIncluded, (brands: IBrand[]) => {
   const uniqueBrands = Array.from(new Set(brands.map(item => item.brand_name)));
   options3.value = uniqueBrands.map(label => ({ label, value: label }));
 });
 
 const onProducerChange = async () => {
-  store.valueBrand_nameEx = "";
-  store.setFilterBrand('producer_name', store.valueProducer_nameEx);
-  if (store.valueProducer_nameEx) { // Проверка, что выбрана торговая маркка
+  store.valueBrand_nameIn = "";
+  store.setFilterBrand('producer_name', store.valueProducer_nameIn);
+  if (store.valueProducer_nameIn) { // Проверка, что выбрана торговая маркка
     store.fetchAllBrandsForIncluded(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных производителей.');
   } else {
     store.setFilterBrand('producer_name', undefined); // Сбросить фильтр
-    console.log('Сброшен фильтр производителей:', store.filterBrandExcluded);
+    console.log('Сброшен фильтр производителей:', store.filterBrandIncluded);
     store.fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
     console.log('Выполнен запрос на получение всех данных производителей.');
   }
@@ -106,8 +105,8 @@ watch(() => store.treeData, (newTreeData: ITree[]) => {
 //изменение поля дерева
 let selectedCategoryName = '';
 const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
-  store.valueBrand_nameEx = "";
-  store.valueProducer_nameEx = "";
+  store.valueBrand_nameIn = "";
+  store.valueProducer_nameIn = "";
   store.setFilterProducer("l4", []);
   store.setFilterBrand('producer_name', undefined);
   console.log('Отмеченные ключи:', checkedKeys);
@@ -150,25 +149,25 @@ const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
 
 //добавление условий по категории
 const AddCategoryItem = async () => {
-  if (store.valueProducer_nameEx || value.value || store.valueBrand_nameEx) {
-    console.log("valueProducer_name", store.valueProducer_nameEx);
-    console.log("valueBrand_name", store.valueBrand_nameEx);
+  if (store.valueProducer_nameIn || value.value || store.valueBrand_nameIn) {
+    console.log("valueProducer_name", store.valueProducer_nameIn);
+    console.log("valueBrand_name", store.valueBrand_nameIn);
 
     // Используем сохраненное значение selectedCategoryName
-    store.tableDataExRequirement.push({
-      id: null,
+    store.tableDataInRequirement.push({
+      in_prod_id: null,
       item_type: "Категория",
       item_code: value.value,
       item_name: selectedCategoryName, // Передаем имя выбранной категории
-      producer: store.valueProducer_nameEx,
-      brand: store.valueBrand_nameEx,
+      producer: store.valueProducer_nameIn,
+      brand: store.valueBrand_nameIn,
     });
-    console.log("искл таблица КАТЕГОРИЯ", store.tableDataExRequirement);
+    console.log("вкл таблица КАТЕГОРИЯ", store.tableDataInRequirement);
 
-    store.dialogFormCategoryExVisible = false;
+    store.dialogFormCategoryInVisible = false;
     value.value = "";
-    store.valueProducer_nameEx = "";
-    store.valueBrand_nameEx = "";
+    store.valueProducer_nameIn = "";
+    store.valueBrand_nameIn = "";
     selectedCategoryName = ''
     store.setFilterProducer("l4", []);
     store.setFilterBrand('producer_name', undefined);

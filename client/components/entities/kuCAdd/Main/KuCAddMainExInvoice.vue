@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar height="45vh">
-    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
-    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+    <h4>Код клинета: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование клиента: <span style="font-weight: 400;">{{
       store.kuAddMain.newVendorName }}</span></h4>
     <el-button size="small" type="primary" plain round
       @click="store.dialogFormExInvoiceVisible = true">Добавить</el-button>
@@ -24,8 +24,8 @@
     </el-table>
     <el-dialog v-model="store.dialogFormExInvoiceVisible" title="Выбор исключенных накладных для КУ"
       close-on-click-modal close-on-press-escape draggable>
-      <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
-      <h4>Наименование поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorName }}</span>
+      <h4>Код клинета: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
+      <h4>Наименование клиента: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorName }}</span>
       </h4>
       <div class="directoryBar">
         <div class="directoryBar_filter">
@@ -67,12 +67,12 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import type { IExInvoiceForKu } from "~/utils/types/directoryTypes";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
 import { Delete } from '@element-plus/icons-vue'
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 const { getExInvoiceAll, pagination, countRowTable } = storeToRefs(
   store
 );

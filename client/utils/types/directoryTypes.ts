@@ -957,6 +957,353 @@ export type WithoutNullableKeys<Type> = {
 
 
 
+///////////////////////////////////////// КУ КЛИЕНТОВ ////////////////////////////////////////////////////
+
+export interface IKuCList {
+  ku_id: string;
+  entity_id: string;
+  entity_name: string;
+  vendor_id: string;
+  vendor_name: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  graph_exists: boolean | string
+  status: string;
+  description: string;
+  contract: string;
+  product_type: string;
+  docu_account: string;
+  docu_name: string;
+  docu_number: string;
+  docu_date: Date | string;
+  docu_subject: string;
+  tax: boolean;
+  exclude_return: boolean;
+  negative_turnover: boolean;
+  ku_type: string;
+  pay_method: string;
+}
+
+export interface IKuCPost {
+  entity_id: string;
+  vendor_id: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  status: string;
+  description: string;
+  contract: string;
+  product_type: string;
+  docu_account: string;
+  docu_name: string;
+  docu_number: string;
+  docu_date: Date | string;
+  docu_subject: string;
+  tax: boolean;
+  exclude_return: boolean;
+  negative_turnover: boolean;
+  ku_type: string;
+  pay_method: string;
+}
+export interface IKuCPost2 {
+  requirements: IRequirement[];
+}
+export interface IKuCPostGraphic {
+  ku_id: string;
+  entity_id: string;
+  vendor_id: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  status: string;
+  graph_exists: boolean | string
+}
+export interface IKuCUpdate {
+  ku_id: string;
+  status: string;
+  entity_id: string;
+  vendor_id: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  description: string;
+  contract: string;
+  product_type: string;
+  docu_account: string;
+  docu_name: string;
+  docu_number: string;
+  docu_date: Date | string;
+  docu_subject: string;
+  tax: boolean;
+  exclude_return: boolean;
+  negative_turnover: boolean;
+  ku_type: string;
+  pay_method: string;
+}
+export interface IKuDeleteGraph {
+  ku_id: string;
+  status: string;
+}
+export interface IKuCStore {
+  //селекты для множественного выбора
+  multipleSelection: IKuCList[];
+  multipleTableRef: Ref | null;
+  //данные таблиц
+  tableData: IKuCList[];
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  //поиски
+  search: string;
+  //
+  sortProp: string;
+  sortOrder: string;
+  legalEntity: string[]
+  filterVendorId: string[]
+  filterEntityId: string[]
+  //параметры для фильтров при запросах
+  filterKuValue: IParamKusC
+}
+export interface IKuCAddMain {
+  newType: string;
+  newEntityId: string;
+  newEntityName: string;
+  newSubsidiaries: boolean;
+  newVendorId: string;
+  newVendorName: string;
+  newDateStart: Date | string;
+  newDateEnd: Date | string;
+  newDateActual: Date | string;
+  newDescription: string;
+  newContract: string;
+  newProduct_type: string;
+  newDocu_account: string;
+  newDocu_name: string;
+  newDocu_number: string;
+  newDocu_date: Date | string;
+  newDocu_subject: string;
+  newTax: boolean;
+  newExclude_return: boolean;
+  newNegative_turnover: boolean;
+  newKu_type: string;
+  newPay_method: string;
+}
+export interface IKuCAddStore {
+  //значения v-model при создании
+  ruleFormRef: FormInstance | null;
+  kuAddMain: IKuCAddMain
+  newOfFIOСounteragent: string;
+  newOfPostСounteragent: string;
+  newOfDocСounteragent: string;
+  newOfFIOEntity: string;
+  newOfPostEntity: string;
+  newOfDocEntity: string;
+  valueProducer_nameContract: string;
+  valueBrand_nameContract: string;
+  valueProducer_nameIn: string;
+  valueBrand_nameIn: string;
+  valueProducer_nameEx: string;
+  valueBrand_nameEx: string;
+  //селекты для множественного выбора
+  multipleSelectionProduct: IProduct[];
+  multipleSelectionExInvoice: IExInvoiceForKu[]
+  multipleSelectionManager: IManagerForKu[]
+  multipleTableRef: Ref | null;
+  //данные таблиц
+  brandIncluded: IBrand[];
+  brandExcluded: IBrand[];
+  producerIncluded: IProducer[];
+  producerExcluded: IProducer[];
+  productIncluded: IProduct[];
+  productExcluded: IProduct[];
+  tableDataInRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement2[];
+  tableDataContract: IContract[]
+  tableDataPercent: IPercent[];
+  tableDataExInvoiceAll: IExInvoiceForKu[]
+  tableDataExInvoiceSelect: IExInvoiceForKu[]
+  tableDataManagerAll: IManagerForKu[]
+  tableDataManagerSelect: IManagerForKu[]
+  dataEntity: IEntityInKu[];
+  // dataVendorId: IVendorId[];
+  dataVendorId: IVendorIdAndName[]
+  dataVendorName: IVendorName[];
+  treeData: ITree[],
+  treeRef: typeof ElTree | null,
+  //v-model диалоговых форм
+  dialogFormExInvoiceVisible: boolean
+  dialogFormManagersVisible: boolean
+  dialogFormProductInVisible: boolean
+  dialogFormCategoryInVisible: boolean
+  dialogFormProductExVisible: boolean
+  dialogFormCategoryExVisible: boolean
+  dialogFormContractVisible: boolean
+  //дизэйбл кнопок
+  disableButtonsIncluded: boolean
+  disableSubsidiaries: boolean
+  //
+  searchExInvoiceNumber: string;
+  vendorFilter: string;
+  // kuFilter: number | null;
+  vendors: IVendorIdAndName[];
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  countRowTable2: number;
+  //поиски
+  searchProductIncluded: string;
+  searchProductExcluded: string;
+  //параметры для фильтров при запросах
+  filterCategory: GetAllCategory
+  filterProductIncluded: GetAllProducts
+  filterProductExcluded: GetAllProducts
+  filterProducerIncluded: GetAllProducer
+  filterProducerExcluded: GetAllProducer
+  filterBrandIncluded: GetAllBrands
+  filterBrandExcluded: GetAllBrands
+  filterVendorValue: IParamVendorsForEntity
+  filterExInvoice: GetParamExInvoicesForKu
+  isFormValid: boolean
+}
+export interface IInitialStateC {
+  kuIdStatus: string;
+  kuIdType: string;
+  kuIdEntityId: string;
+  kuIdEntityName: string;
+  kuIdSubsidiaries: boolean;
+  kuIdVendorId: string;
+  kuIdVendorName: string;
+  kuIdDateStart: Date | string;
+  kuIdDateEnd: Date | string;
+  kuIdDateActual: Date | string;
+  kuIdDescription: string;
+  kuIdContract: string;
+  kuIdProduct_type: string;
+  kuIdDocu_account: string;
+  kuIdDocu_name: string;
+  kuIdDocu_number: string;
+  kuIdDocu_date: Date | string;
+  kuIdDocu_subject: string;
+  kuIdTax: boolean;
+  kuIdExclude_return: boolean;
+  kuIdNegative_turnover: boolean;
+  kuIdKu_type: string;
+  kuIdPay_method: string;
+  officialId: number | null;
+  kuIdFIOСounteragent: string;
+  kuIdPostСounteragent: string;
+  kuIdDocСounteragent: string;
+  kuIdFIOEntity: string;
+  kuIdPostEntity: string;
+  kuIdDocEntity: string;
+  valueProducer_nameContract: string;
+  valueBrand_nameContract: string;
+  tableDataInRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement2[];
+  tableDataPercent: IPercent[];
+  tableDataExInvoiceSelect: IExInvoiceForKu[];
+  tableDataManagerSelect: IManagerForKu[];
+  tableDataContract: IContract[];
+}
+export interface IKuCIdStore {
+  //данные таблиц
+  tableDataInRequirement: IRequirement[];
+  tableDataExRequirement: IRequirement2[];
+  tableDataExRequirementOrigin: IRequirementOrigin2[];
+  tableDataPercent: IPercent[];
+  tableDataPercentOrigin: IPercentOrigin[];
+  tableDataExInvoiceAll: IExInvoiceForKu[]
+  tableDataExInvoiceSelect: IExInvoiceForKu[]
+  tableDataExInvoiceSelectOrigin: IExInvoiceForKuOrigin[]
+  tableDataManagerSelect: IManagerForKu[]
+  tableDataManagerSelectOrigin: IManagerForKuOrigin[]
+  tableDataContract: IContract[],
+  //v-model диалоговых форм
+  dialogFormExInvoiceVisible: boolean
+  dialogFormProductInVisible: boolean
+  dialogFormCategoryInVisible: boolean
+  dialogFormProductExVisible: boolean
+  dialogFormCategoryExVisible: boolean
+  dialogFormManagersVisible: boolean
+  dialogFormContractVisible: boolean
+  //дизэйбл кнопок
+  disableButtonsIncluded: boolean
+  disableSubsidiaries: boolean
+  //поиски
+  searchProductIncluded: string;
+  searchProductExcluded: string;
+  //v-model атрибутов
+  ku_id: string;
+  kuIdStatus: string;
+  kuIdType: string;
+  kuIdEntityId: string;
+  kuIdEntityName: string;
+  kuIdSubsidiaries: boolean;
+  kuIdVendorId: string;
+  kuIdVendorName: string;
+  kuIdDateStart: Date | string;
+  kuIdDateEnd: Date | string;
+  kuIdDateActual: Date | string;
+  kuIdDescription: string;
+  kuIdContract: string;
+  kuIdProduct_type: string;
+  kuIdDocu_account: string;
+  kuIdDocu_name: string;
+  kuIdDocu_number: string;
+  kuIdDocu_date: Date | string;
+  kuIdDocu_subject: string;
+  kuIdTax: boolean
+  kuIdExclude_return: boolean
+  kuIdNegative_turnover: boolean
+  kuIdKu_type: string;
+  kuIdPay_method: string;
+  officialId: number | null
+  kuIdFIOСounteragent: string;
+  kuIdPostСounteragent: string;
+  kuIdDocСounteragent: string;
+  kuIdFIOEntity: string;
+  kuIdPostEntity: string;
+  kuIdDocEntity: string;
+  valueProducer_nameContract: string;
+  valueBrand_nameContract: string;
+  initialState: IInitialStateC;
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  //
+  multipleSelectionProduct: IProduct[];
+  multipleSelectionExInvoice: IExInvoiceForKu[]
+  multipleSelectionManager: IManagerForKu[]
+  multipleTableRef: Ref | null;
+  filterVendorValue: IParamVendorsForEntity
+}
+export interface IParamKusC {
+  page_size?: number;
+  page?: number;
+  entity_id?: string[];
+  vendor_id?: string[];
+  status?: string[];
+  graph_exists?: string[];
+  date_start_s?: string,
+  date_start_e?: string,
+  date_end_s?: string,
+  date_end_e?: string,
+  search?: string;
+  sort_by?: string;
+  sort_order?: string;
+}
+export interface IParamKuC_Id {
+  page_size?: number;
+  page?: number;
+}
+export interface IKusCReturnData extends Pagination {
+  results: IKuCList[];
+}
+export interface IKuC_IdReturnData extends Pagination {
+  results: IKuId[];
+}
+
 
 
 

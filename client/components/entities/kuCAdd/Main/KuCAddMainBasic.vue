@@ -29,9 +29,9 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="130" label="Код поставщика" prop="newVendorId">
+          <el-form-item label-width="130" label="Код клиента" prop="newVendorId">
             <div>
-              <el-select v-model="kuMain.newVendorId" size="small" placeholder="Выберите поставщика" clearable
+              <el-select v-model="kuMain.newVendorId" size="small" placeholder="Выберите клинета" clearable
                 filterable style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
@@ -57,7 +57,7 @@
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
-          <el-form-item label-width="170" label="Наименование поставщика" prop="newVendorName">
+          <el-form-item label-width="170" label="Наименование клиента" prop="newVendorName">
             <el-input v-model="kuMain.newVendorName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
@@ -147,7 +147,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import dayjs from "dayjs";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import type {
   IEntityInKu,
   IKuAddMain,
@@ -155,7 +155,7 @@ import type {
   IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 import type { FormInstance, FormRules } from 'element-plus'
-const store = useKuAddStore();
+const store = useKuCAddStore();
 const kuMain = store.kuAddMain
 const ruleFormRef = ref<FormInstance | null>(null);
 onMounted(() => {
@@ -295,7 +295,7 @@ onMounted(async () => {
   }
 });
 
-//вывод данных поставщика
+//вывод данных клинета
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
@@ -328,14 +328,14 @@ const onEntityChange = async () => {
     }
   }
 
-  //для поставщика
+  //для клиента
   store.dataVendorId = [];
   kuMain.newVendorName = "";
 
   store.setFilterVendor('entity_id', kuMain.newEntityId);
   if (kuMain.newEntityId) { // Проверка, что выбрано юр. лицо
     store.fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
-    console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
+    console.log('Выполнен запрос на получение данных клиента по фильтру юр.лица.');
   } else {
     store.removeFilterVendor("entity_id")
     store.disableSubsidiaries = false;
@@ -361,7 +361,7 @@ const onVendorChange = async () => {
     store.getVendorNameFromAPIWithFilter()
 
     try {
-      console.log("поставщик:", kuMain.newVendorId);
+      console.log("клиент:", kuMain.newVendorId);
       store.setFilterProductInRequirement('vendor_id', kuMain.newVendorId);
       store.setFilterProducer('vendor_id', kuMain.newVendorId);
       store.setFilterBrand('vendor_id', kuMain.newVendorId);
@@ -374,7 +374,7 @@ const onVendorChange = async () => {
       await store.getProductFromExcludedWithFilter();
       await store.getInvoicesFromAPIWithFilter();
     } catch (error) {
-      console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+      console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру клиента", error);
     }
   } else {
     store.removeFilterExInvoice("vendor_id")
@@ -455,7 +455,7 @@ const resetDatesOnPeriodChange = () => {
   kuMain.newDateStart = "";
   kuMain.newDateEnd = "";
 };
-// Функция сброса поставщика
+// Функция сброса клиента
 const resetVendorOnEntityChange = () => {
   kuMain.newVendorId = "";
 };

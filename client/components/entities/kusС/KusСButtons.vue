@@ -1,7 +1,7 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <h3>Коммерческие условия поставщиков</h3>
+      <h3>Коммерческие условия клиентов</h3>
       <el-divider direction="vertical" />
       <el-button type="success" plain @click="redirectToCreatePage" size="small">Создать
         КУ</el-button>
@@ -33,14 +33,14 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { ArrowDown } from '@element-plus/icons-vue'
-import { useKuCStore } from "~~/stores/kuCStore";
+import { useKuStore } from "~~/stores/kuStore";
 import { useRouter } from "vue-router";
 import "dayjs/locale/ru";
 import type { IKuPostGraphic } from "~/utils/types/directoryTypes";
-const store = useKuCStore();
+const store = useKuStore();
 const router = useRouter();
 const loading = ref(false);
-const { legalEntity } = storeToRefs(store);
+const { legalEntity } = storeToRefs(useKuStore());
 
 
 //для поиска
@@ -80,7 +80,7 @@ onMounted(() => {
 
 //кнопка создать ку
 const redirectToCreatePage = () => {
-  router.push("kuVAdd");
+  router.push("kuCAdd");
 };
 
 const isCreateButtonDisabled = computed(() => {
@@ -116,142 +116,142 @@ const isDeleteButtonDisabled = computed(() => {
 
 // };
 const deleteKu = async () => {
-  const selectedRows = store.multipleSelection.map((row) => row.ku_id);
+  // const selectedRows = store.multipleSelection.map((row) => row.ku_id);
 
-  try {
-    for (const ku_id of selectedRows) {
-      const kuDetails = await KU.getInfoKu({ ku_id }); // Получаем детали КУ
-      if (kuDetails.status !== 'Создано') {
-        // Если статус не равен "Создано", выводим сообщение об ошибке и пропускаем удаление
-        const message = `В статусе "${kuDetails.status}" удалить КУ невозможно`;
-        console.error(message);
-        ElMessage.error(message);
-        return;
-      } else {
-        const results = await KU.deleteKu({ ku_id });
-        console.log("КУ успешно удалено", results);
-        store.tableData = store.tableData.filter(
-          (row) => !selectedRows.includes(row.ku_id)
-        );
-        store.multipleSelection = [];
-      }
-    }
-    if (selectedRows.length == 1)
-      ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
-    else ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
-  } catch (error) {
-    console.error("Ошибка при удалении ку:", error);
-    ElMessage.error("Ошибка при удалении коммерческого условия");
-  }
+  // try {
+  //   for (const ku_id of selectedRows) {
+  //     const kuDetails = await KU.getInfoKu({ ku_id }); // Получаем детали КУ
+  //     if (kuDetails.status !== 'Создано') {
+  //       // Если статус не равен "Создано", выводим сообщение об ошибке и пропускаем удаление
+  //       const message = `В статусе "${kuDetails.status}" удалить КУ невозможно`;
+  //       console.error(message);
+  //       ElMessage.error(message);
+  //       return;
+  //     } else {
+  //       const results = await KU.deleteKu({ ku_id });
+  //       console.log("КУ успешно удалено", results);
+  //       store.tableData = store.tableData.filter(
+  //         (row) => !selectedRows.includes(row.ku_id)
+  //       );
+  //       store.multipleSelection = [];
+  //     }
+  //   }
+  //   if (selectedRows.length == 1)
+  //     ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
+  //   else ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
+  // } catch (error) {
+  //   console.error("Ошибка при удалении ку:", error);
+  //   ElMessage.error("Ошибка при удалении коммерческого условия");
+  // }
 };
 
 const CancelKu = async () => {
-  const selectedRows = store.multipleSelection
-  const data = {
-    ku_id: selectedRows[0].ku_id,
-    status: "Запланировано",
-  };
-  const data2 = {
-    ku_id: selectedRows[0].ku_id,
-    status: "Отменено",
-    entity_id: selectedRows[0].entity_id,
-    vendor_id: selectedRows[0].vendor_id,
-    period: selectedRows[0].period,
-    date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end,
-    description: selectedRows[0].description,
-    contract: selectedRows[0].contract,
-    product_type: selectedRows[0].product_type,
-    docu_account: selectedRows[0].docu_account,
-    docu_name: selectedRows[0].docu_name,
-    docu_number: selectedRows[0].docu_number,
-    docu_date: selectedRows[0].docu_date,
-    docu_subject: selectedRows[0].docu_subject,
-    tax: selectedRows[0].tax,
-    exclude_return: selectedRows[0].exclude_return,
-    negative_turnover: selectedRows[0].negative_turnover,
-    ku_type: selectedRows[0].ku_type,
-    pay_method: selectedRows[0].pay_method,
-  };
-  try {
-    const response = await KU.deleteGraphRow(data);
-    console.log("строки графика успешно удалены:", response);
-    const response2 = await KU.updateKu(data2);
-    console.log("строки графика успешно удалены:", response2);
-    await store.getKuFromAPIWithFilter();
-  } catch (error) {
-    console.error("Ошибка при удалении строк графика:", error);
-  }
+  // const selectedRows = store.multipleSelection
+  // const data = {
+  //   ku_id: selectedRows[0].ku_id,
+  //   status: "Запланировано",
+  // };
+  // const data2 = {
+  //   ku_id: selectedRows[0].ku_id,
+  //   status: "Отменено",
+  //   entity_id: selectedRows[0].entity_id,
+  //   vendor_id: selectedRows[0].vendor_id,
+  //   period: selectedRows[0].period,
+  //   date_start: selectedRows[0].date_start,
+  //   date_end: selectedRows[0].date_end,
+  //   description: selectedRows[0].description,
+  //   contract: selectedRows[0].contract,
+  //   product_type: selectedRows[0].product_type,
+  //   docu_account: selectedRows[0].docu_account,
+  //   docu_name: selectedRows[0].docu_name,
+  //   docu_number: selectedRows[0].docu_number,
+  //   docu_date: selectedRows[0].docu_date,
+  //   docu_subject: selectedRows[0].docu_subject,
+  //   tax: selectedRows[0].tax,
+  //   exclude_return: selectedRows[0].exclude_return,
+  //   negative_turnover: selectedRows[0].negative_turnover,
+  //   ku_type: selectedRows[0].ku_type,
+  //   pay_method: selectedRows[0].pay_method,
+  // };
+  // try {
+  //   const response = await KU.deleteGraphRow(data);
+  //   console.log("строки графика успешно удалены:", response);
+  //   const response2 = await KU.updateKu(data2);
+  //   console.log("строки графика успешно удалены:", response2);
+  //   await store.getKuFromAPIWithFilter();
+  // } catch (error) {
+  //   console.error("Ошибка при удалении строк графика:", error);
+  // }
 };
 
 //утверждение ку
 const ApproveKu = async () => {
-  const selectedRows = store.multipleSelection
-  const data = {
-    ku_id: selectedRows[0].ku_id,
-    status: "Действует",
-    entity_id: selectedRows[0].entity_id,
-    vendor_id: selectedRows[0].vendor_id,
-    period: selectedRows[0].period,
-    date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end,
-    description: selectedRows[0].description,
-    contract: selectedRows[0].contract,
-    product_type: selectedRows[0].product_type,
-    docu_account: selectedRows[0].docu_account,
-    docu_name: selectedRows[0].docu_name,
-    docu_number: selectedRows[0].docu_number,
-    docu_date: selectedRows[0].docu_date,
-    docu_subject: selectedRows[0].docu_subject,
-    tax: selectedRows[0].tax,
-    exclude_return: selectedRows[0].exclude_return,
-    negative_turnover: selectedRows[0].negative_turnover,
-    ku_type: selectedRows[0].ku_type,
-    pay_method: selectedRows[0].pay_method,
-  };
+  // const selectedRows = store.multipleSelection
+  // const data = {
+  //   ku_id: selectedRows[0].ku_id,
+  //   status: "Действует",
+  //   entity_id: selectedRows[0].entity_id,
+  //   vendor_id: selectedRows[0].vendor_id,
+  //   period: selectedRows[0].period,
+  //   date_start: selectedRows[0].date_start,
+  //   date_end: selectedRows[0].date_end,
+  //   description: selectedRows[0].description,
+  //   contract: selectedRows[0].contract,
+  //   product_type: selectedRows[0].product_type,
+  //   docu_account: selectedRows[0].docu_account,
+  //   docu_name: selectedRows[0].docu_name,
+  //   docu_number: selectedRows[0].docu_number,
+  //   docu_date: selectedRows[0].docu_date,
+  //   docu_subject: selectedRows[0].docu_subject,
+  //   tax: selectedRows[0].tax,
+  //   exclude_return: selectedRows[0].exclude_return,
+  //   negative_turnover: selectedRows[0].negative_turnover,
+  //   ku_type: selectedRows[0].ku_type,
+  //   pay_method: selectedRows[0].pay_method,
+  // };
 
-  try {
-    const response = await KU.updateKu(data);
-    console.log("Статус успешно обновлен:", response);
-    await store.getKuFromAPIWithFilter();
-  } catch (error) {
-    console.error("Ошибка при обновлении статуса:", error);
-  }
+  // try {
+  //   const response = await KU.updateKu(data);
+  //   console.log("Статус успешно обновлен:", response);
+  //   await store.getKuFromAPIWithFilter();
+  // } catch (error) {
+  //   console.error("Ошибка при обновлении статуса:", error);
+  // }
 };
 
 //статус создано 
 const СreatedKu = async () => {
-  const selectedRows = store.multipleSelection
-  const data = {
-    ku_id: selectedRows[0].ku_id,
-    status: "Создано",
-    entity_id: selectedRows[0].entity_id,
-    vendor_id: selectedRows[0].vendor_id,
-    period: selectedRows[0].period,
-    date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end,
-    description: selectedRows[0].description,
-    contract: selectedRows[0].contract,
-    product_type: selectedRows[0].product_type,
-    docu_account: selectedRows[0].docu_account,
-    docu_name: selectedRows[0].docu_name,
-    docu_number: selectedRows[0].docu_number,
-    docu_date: selectedRows[0].docu_date,
-    docu_subject: selectedRows[0].docu_subject,
-    tax: selectedRows[0].tax,
-    exclude_return: selectedRows[0].exclude_return,
-    negative_turnover: selectedRows[0].negative_turnover,
-    ku_type: selectedRows[0].ku_type,
-    pay_method: selectedRows[0].pay_method,
-  };
+  // const selectedRows = store.multipleSelection
+  // const data = {
+  //   ku_id: selectedRows[0].ku_id,
+  //   status: "Создано",
+  //   entity_id: selectedRows[0].entity_id,
+  //   vendor_id: selectedRows[0].vendor_id,
+  //   period: selectedRows[0].period,
+  //   date_start: selectedRows[0].date_start,
+  //   date_end: selectedRows[0].date_end,
+  //   description: selectedRows[0].description,
+  //   contract: selectedRows[0].contract,
+  //   product_type: selectedRows[0].product_type,
+  //   docu_account: selectedRows[0].docu_account,
+  //   docu_name: selectedRows[0].docu_name,
+  //   docu_number: selectedRows[0].docu_number,
+  //   docu_date: selectedRows[0].docu_date,
+  //   docu_subject: selectedRows[0].docu_subject,
+  //   tax: selectedRows[0].tax,
+  //   exclude_return: selectedRows[0].exclude_return,
+  //   negative_turnover: selectedRows[0].negative_turnover,
+  //   ku_type: selectedRows[0].ku_type,
+  //   pay_method: selectedRows[0].pay_method,
+  // };
 
-  try {
-    const response = await KU.updateKu(data);
-    console.log("Статус успешно обновлен:", response);
-    await store.getKuFromAPIWithFilter();
-  } catch (error) {
-    console.error("Ошибка при обновлении статуса:", error);
-  }
+  // try {
+  //   const response = await KU.updateKu(data);
+  //   console.log("Статус успешно обновлен:", response);
+  //   await store.getKuFromAPIWithFilter();
+  // } catch (error) {
+  //   console.error("Ошибка при обновлении статуса:", error);
+  // }
 };
 
 //создание графика

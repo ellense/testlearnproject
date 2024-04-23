@@ -60,11 +60,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import type { IManagerForKu } from "~/utils/types/directoryTypes";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   store
 );

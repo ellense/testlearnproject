@@ -1,15 +1,15 @@
 <template>
-  <el-dialog v-model="store.dialogFormProductInVisible" title="Выбор включенных товаров для КУ" close-on-click-modal
+  <el-dialog v-model="store.dialogFormProductExVisible" title="Выбор исключенных товаров для КУ" close-on-click-modal
     close-on-press-escape draggable>
-    <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
-    <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
+    <h4>Код клиента: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
+    <h4 style="margin-bottom:10px;">Наименование клиента: <span style="font-weight: 400;">{{
       store.kuAddMain.newVendorName }}</span></h4>
     <div class="buttonBar_search">
-      <el-input v-model="searchProductInKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+      <el-input v-model="searchProductExKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
-      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="store.handleSelectionChange3"
-        ref="multipleTableRef" v-loading="loading" stripe>
+      <el-table style="width: 100%" height="300" :data="tableData"
+        @selection-change="store.handleSelectionChange3" ref="multipleTableRef" v-loading="loading" stripe>
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="300" show-overflow-tooltip />
@@ -19,12 +19,12 @@
     </el-scrollbar>
     <div v-if="pagination?.count" class="pagination">
       <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
+        :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
+        @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
     </div>
     <template #footer>
       <span class="dialog-footer">
-        <el-button @click="store.dialogFormProductInVisible = false">Отмена</el-button>
+        <el-button @click="store.dialogFormProductExVisible = false">Отмена</el-button>
         <el-button @click="AddProductItem()">Сохранить</el-button>
       </span>
     </template>
@@ -36,18 +36,18 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
 import type { IProduct } from "~/utils/types/directoryTypes";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 
-const store = useKuAddStore();
-const { getProductIn, pagination, countRowTable } = storeToRefs(
-  useKuAddStore()
+const store = useKuCAddStore();
+const { getProductEx, pagination, countRowTable } = storeToRefs(
+  store
 );
-const tableData = ref<IProduct[]>(getProductIn.value);
+const tableData = ref<IProduct[]>(getProductEx.value);
 
 const loading = ref()
 
-watch(getProductIn, (value) => {
+watch(getProductEx, (value) => {
   tableData.value = value || [];
 });
 
@@ -56,21 +56,22 @@ const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   store.setCountRowTable(val);
   try {
-    await store.getProductFromIncludedWithFilter();
+    await store.getProductFromExcludedWithFilter();
   } catch (error) {
-    console.error("Ошибка при загрузке данных вкл.прдуктов", error);
+    console.error("Ошибка при загрузке данных искл.продуктов", error);
   }
 };
+
 //пагинация
 const paginationChange = (page: number) => {
-  store.setFilterProductInRequirement('page', page);
-  store.getProductFromIncludedWithFilter(page);
+  store.setFilterProductEx('page', page);
+  store.getProductFromExcludedWithFilter(page);
 };
 
 //поиск
-const searchProductInKu = ref('');
-watch(searchProductInKu, (newValue: string) => {
-  store.performSearchProductIn(newValue);
+const searchProductExKu = ref('');
+watch(searchProductExKu, (newValue: string) => {
+  store.performSearchProductEx(newValue);
 });
 
 //для очистки выбора
@@ -90,30 +91,17 @@ const AddProductItem = () => {
   const selectedRows = store.multipleSelectionProduct;
 
   selectedRows.forEach(row => {
-    store.tableDataInRequirement.push({
-      in_prod_id: null,
+    store.tableDataExRequirement.push({
+      id: null,
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,
       producer: "",
       brand: "",
     });
-    console.log("store.tableDataRequirementПРОДУКТЫ",store.tableDataInRequirement);
+    console.log("исклПРОДУКТЫ", store.tableDataExRequirement);
   });
   toggleSelection()
-  store.dialogFormProductInVisible = false;
+  store.dialogFormProductExVisible = false;
 };
-
-// //монтирование данных в таблицу
-// onMounted(async () => {
-//   try {
-//     loading.value = true; 
-//     await store.getProductFromIncludedWithFilter();
-//     loading.value = false;
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//     loading.value = false;
-//   }
-// });
-
 </script>

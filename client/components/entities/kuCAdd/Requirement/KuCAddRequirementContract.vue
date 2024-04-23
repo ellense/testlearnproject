@@ -81,10 +81,10 @@
 <script lang="ts" setup>
 import { ref } from "vue";
 import { Delete } from '@element-plus/icons-vue'
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import type { IBrand, IContract, IProducer } from "~/utils/types/directoryTypes";
 
-const store = useKuAddStore();
+const store = useKuCAddStore();
 const tableData = ref(store.tableDataContract);
 //добавление строк
 const addRow = async () => {

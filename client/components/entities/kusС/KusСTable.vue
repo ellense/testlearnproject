@@ -37,10 +37,10 @@
         <el-table-column prop="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column prop="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
       </el-table-column>
-      <el-table-column label="Поставщик" align="center">
+      <el-table-column label="Клиент" align="center">
         <template #header>
           <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
-            Поставщик
+            Клиент
             <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
@@ -49,7 +49,7 @@
               </template>
               <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
                 :max-collapse-tags="2" :options="optionsVendor" popper-class="vendorPopper" style="width: 300px"
-                placeholder="Фильтр по поставщику" @change="onVendorChange" size="small">
+                placeholder="Фильтр по клиенту" @change="onVendorChange" size="small">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                   <span style="
@@ -176,16 +176,15 @@ import { storeToRefs } from "pinia";
 import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
 import type { IEntityInKu, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
-import { useKuCStore } from "~~/stores/kuCStore";
+import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
-  useKuCStore()
+  useKuStore()
 );
-const store = useKuCStore();
-const store2 = useKuCAddStore();
-const store3 = useKuIdStore();
+const store = useKuStore();
+const storeKuAdd = useKuAddStore();
 const visible = ref(false)
 const tableData = ref<IKuList[]>(getKu.value);
 
@@ -194,61 +193,61 @@ const loading = ref()
 //открывание и редактитрование ку
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
-  await store3.getKuDetailFromApi(kuId)
-  await store3.fetchInRequirementForKuId(kuId)
+  await useKuIdStore().getKuDetailFromApi(kuId)
+  await useKuIdStore().fetchInRequirementForKuId(kuId)
   router.push({ path: `/kuV/${kuId}` });
-  store3.fetchExRequirementForKuId(kuId)
-  store3.fetchBonusForKuId(kuId)
-  store3.fetchExInvoiceForKuId(kuId)
-  store3.fetchOfficialForKuId(kuId)
+  useKuIdStore().fetchExRequirementForKuId(kuId)
+  useKuIdStore().fetchBonusForKuId(kuId)
+  useKuIdStore().fetchExInvoiceForKuId(kuId)
+  useKuIdStore().fetchOfficialForKuId(kuId)
 
-  console.log("СТАТУС", store3.kuIdStatus)
-  console.log("ПОСТАВЩИК", store3.kuIdVendorId)
+  console.log("СТАТУС", useKuIdStore().kuIdStatus)
+  console.log("КЛИЕНТ", useKuIdStore().kuIdVendorId)
 
-  if (store3.kuIdStatus === "Создано") {
-    const entity = store2.dataEntity.find(item => item.entity_id === store3.kuIdEntityId);
+  if (useKuIdStore().kuIdStatus === "Создано") {
+    const entity = storeKuAdd.dataEntity.find(item => item.entity_id === useKuIdStore().kuIdEntityId);
   if (entity) {
     if (entity.merge_id) {
-      store3.kuIdSubsidiaries = true;
+      useKuIdStore().kuIdSubsidiaries = true;
       console.log(`merge_id для выбранного юр. лица: ${entity.merge_id}`);
-      store3.disableSubsidiaries = false;
+      useKuIdStore().disableSubsidiaries = false;
     } else {
       console.log('У выбранного юр. лица отсутствует merge_id');
-      store3.disableSubsidiaries = true;
+      useKuIdStore().disableSubsidiaries = true;
     }
   } else {
     console.log('Выбранное юр. лицо не найдено в данных');
   }
-    if (store3.kuIdVendorId && store3.kuIdVendorId.length > 0) {
-      store2.setFilterVendor('vendor_id', store3.kuIdVendorId);
-      store2.getVendorNameFromAPIWithFilter()
+    if (useKuIdStore().kuIdVendorId && useKuIdStore().kuIdVendorId.length > 0) {
+      storeKuAdd.setFilterVendor('vendor_id', useKuIdStore().kuIdVendorId);
+      storeKuAdd.getVendorNameFromAPIWithFilter()
       try {
-        store2.setFilterVendor("entity_id", store3.kuIdEntityId)
-        store2.setFilterBrand("vendor_id", store3.kuIdVendorId)
-        store2.setFilterCategory("vendor_id", store3.kuIdVendorId)
-        store2.setFilterExInvoice("vendor_id", store3.kuIdVendorId)
-        store2.setFilterProducer("vendor_id", store3.kuIdVendorId)
-        store2.setFilterProductEx("vendor_id", store3.kuIdVendorId)
-        store2.setFilterProductInRequirement("vendor_id", store3.kuIdVendorId)
-        await store2.fetchKuEntity({
+        storeKuAdd.setFilterVendor("entity_id", useKuIdStore().kuIdEntityId)
+        storeKuAdd.setFilterBrand("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterCategory("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterExInvoice("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterProducer("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterProductEx("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterProductInRequirement("vendor_id", useKuIdStore().kuIdVendorId)
+        await storeKuAdd.fetchKuEntity({
           entity_id: "",
           name: "",
           merge_id: "",
         });
-        await store2.fetchAllVendorIdForEntity();
-        await store2.fetchCategories();
-        await store2.getProductFromIncludedWithFilter();
-        await store2.fetchAllProducersForInclided();
-        await store2.fetchAllBrandsForIncluded();
-        await store2.getProductFromExcludedWithFilter();
-        await store2.getInvoicesFromAPIWithFilter();
+        await storeKuAdd.fetchAllVendorIdForEntity();
+        await storeKuAdd.fetchCategories();
+        await storeKuAdd.getProductFromIncludedWithFilter();
+        await storeKuAdd.fetchAllProducersForInclided();
+        await storeKuAdd.fetchAllBrandsForIncluded();
+        await storeKuAdd.getProductFromExcludedWithFilter();
+        await storeKuAdd.getInvoicesFromAPIWithFilter();
       } catch (error) {
-        console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру поставщика", error);
+        console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру клиента", error);
       }
 
     }
     else {
-      store3.disableButtonsIncluded = true;
+      useKuIdStore().disableButtonsIncluded = true;
     }
   };
 }
@@ -336,12 +335,12 @@ const changeLegalEntity = () => {
   store.setFilterValue('entity_id', LegalEntity.value);
   toggleTriggerFilter();
 };
-watch(() => store2.dataEntity, (dataEntity: IEntityInKu[]) => {
+watch(() => storeKuAdd.dataEntity, (dataEntity: IEntityInKu[]) => {
     optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
 });
 onMounted(async () => {
   try {
-    await store2.fetchKuEntity({
+    await storeKuAdd.fetchKuEntity({
       entity_id: "",
       name: "",
       merge_id: "",
@@ -351,18 +350,18 @@ onMounted(async () => {
   }
 });
 
-//фильтр поставщика
+//фильтр клиента
 const Vendor = ref<string[]>(filterKuValue.value.vendor_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
+watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
   optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 
 onMounted(async () => {
   try {
-    await store2.fetchAllVendorIdForEntity();
+    await storeKuAdd.fetchAllVendorIdForEntity();
   } catch (error) {
-    console.error("Ошибка при загрузке данных поставщика", error);
+    console.error("Ошибка при загрузке данных Клиента", error);
   }
 });
 const onVendorChange = async () => {

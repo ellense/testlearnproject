@@ -17,7 +17,7 @@
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
         <el-table style="width: 680px" height="300" :data="tableData" border
-          @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
+          @selection-change="store.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="30" />
           <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
           <el-table-column property="discription" label="Описание" width="350" show-overflow-tooltip />
@@ -47,7 +47,7 @@ import { Delete } from '@element-plus/icons-vue'
 
 const store = useKuAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
-  useKuAddStore()
+  store
 );
 const tableData = ref<IManagerForKu[]>(getManagerAll.value);
 
@@ -60,17 +60,17 @@ watch(getManagerAll, (value) => {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuAddStore().setCountRowTable(val);
+  store.setCountRowTable(val);
   try {
-    // await useKuAddStore().getProductFromExcludedWithFilter();
+    // await store.getProductFromExcludedWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных кат. менеджеров", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  // useKuAddStore().setFilterExInvoice('page', page);
-  //   useKuAddStore().getProductFromExcludedWithFilter(page);
+  // store.setFilterExInvoice('page', page);
+  //   store.getProductFromExcludedWithFilter(page);
 };
 
 //для очистки выбора
@@ -97,7 +97,7 @@ const AddManagers = () => {
       discription: row.discription,
     });
   });
-  console.log("менеджеры", useKuAddStore().tableDataManagerSelect);
+  console.log("менеджеры", store.tableDataManagerSelect);
   toggleSelection()
   store.dialogFormManagersVisible = false;
 };
