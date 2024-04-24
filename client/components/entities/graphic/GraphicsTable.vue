@@ -50,7 +50,7 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="entity_id" label="Код" width="65"  show-overflow-tooltip />
+        <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="170"  show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Поставщик" align="center">

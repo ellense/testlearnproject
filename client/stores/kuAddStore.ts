@@ -48,6 +48,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             newNegative_turnover: false,
             newKu_type: "",
             newPay_method: "",
+            newVendorIdVAC: "",
         },
         newOfFIOСounteragent: "",
         newOfPostСounteragent: "",

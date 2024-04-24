@@ -126,24 +126,47 @@ const deleteKu = async () => {
         const message = `В статусе "${kuDetails.status}" удалить КУ невозможно`;
         console.error(message);
         ElMessage.error(message);
-        return;
+        return
+      }
+
+      // Если есть несохраненные данные, показываем диалоговое окно для подтверждения от пользователя
+      const confirmResult = await ElMessageBox.confirm(
+        'Вы действительно хотите удалить коммерческое условие без возможности восстановления?',
+        'Предупреждение',
+        {
+          type: 'warning',
+          confirmButtonText: 'Да',
+          cancelButtonText: 'Нет',
+        }
+      );
+
+      if (!confirmResult) {
+        // Если пользователь отказался от удаления, пропускаем текущую итерацию цикла
+        return
+      }
+
+      // Удаляем КУ
+      const results = await KU.deleteKu({ ku_id });
+      console.log("КУ успешно удалено", results);
+      // Обновляем данные в таблице и сбрасываем выделение
+      store.tableData = store.tableData.filter(
+        (row) => !selectedRows.includes(row.ku_id)
+      );
+      store.multipleSelection = [];
+      // Выводим сообщение об успешном удалении
+      if (selectedRows.length === 1) {
+        ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
       } else {
-        const results = await KU.deleteKu({ ku_id });
-        console.log("КУ успешно удалено", results);
-        store.tableData = store.tableData.filter(
-          (row) => !selectedRows.includes(row.ku_id)
-        );
-        store.multipleSelection = [];
+        ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
       }
     }
-    if (selectedRows.length == 1)
-      ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
-    else ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
   } catch (error) {
     console.error("Ошибка при удалении ку:", error);
     ElMessage.error("Ошибка при удалении коммерческого условия");
   }
 };
+
+
 
 const CancelKu = async () => {
   const selectedRows = store.multipleSelection

@@ -298,6 +298,7 @@ export interface IKuAddMain {
   newNegative_turnover: boolean;
   newKu_type: string;
   newPay_method: string;
+  newVendorIdVAC: string;
 }
 export interface IKuAddStore {
   //значения v-model при создании
@@ -838,7 +839,7 @@ export interface GraphicForExcelReportInvoice {
   invoice_date: Date | string;
   purch_number: string;
   purch_date: Date | string;
-  invoicestatus: string;
+  invoice_status: string;
   product_amount: number | null;
 }
 export interface GraphicForExcelReportProduct {

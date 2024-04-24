@@ -141,7 +141,8 @@ function exportAsExcel() {
         v: column.label,
         t: "s",
         s: {
-          border: getBorderCell("trbl"),
+          font: { bold: true },
+          border: getBorderCell("trbl", "000000"),
           fill: { fgColor: { rgb: "e9ecef" } },
         },
       });
@@ -166,7 +167,7 @@ function exportAsExcel() {
           }
         } else {
           newRow.push({
-            v: "!!", // или другое значение, которое вы хотите использовать для null
+            v: "", // или другое значение, которое вы хотите использовать для null
             t: "s",
           });
         }

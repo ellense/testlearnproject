@@ -35,18 +35,29 @@
     <el-dialog v-model="store.dialogFormManagersVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
-        <el-table style="width: 680px" height="300" :data="tableData" border
-          @selection-change="store.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
-          <el-table-column type="selection" width="30" />
-          <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
-          <el-table-column property="discription" label="Описание" width="350" show-overflow-tooltip />
-        </el-table>
+        <el-form >
+          <el_form_item label-width="130" label="Код поставщика" prop="newVendorId">
+            <el-select v-model="kuMain.newVendorIdVAC" size="small" placeholder="Выберите поставщика" clearable
+                filterable style="width: 300px">
+                <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
+                  <span style="float: left;">{{ item.value }}</span>
+                  <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                </el-option>
+              </el-select>
+          </el_form_item>
+          <el-form-item label-width="130" label="Код компании" prop="newEntityId">
+            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" @change="onEntityChange">
+              <el-option v-for="item in options" :key="item.label" :label="item.value" :value="item.value">
+                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </el-scrollbar>
-      <div v-if="pagination?.count" class="pagination">
-        <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-          @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
-      </div>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="store.dialogFormManagersVisible = false">Отмена</el-button>
@@ -65,6 +76,7 @@ import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
 const store = useKuAddStore();
+const kuMain = store.kuAddMain
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   store
 );
