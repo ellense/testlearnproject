@@ -714,6 +714,8 @@ export interface IOfficialForKuPost {
 export interface GetAllOfficialReturnData extends Pagination {
   results: IOfficialForKu[];
 }
+
+////услуги
 ///////////////////////////////// График////////////////////////////////////
 export interface IGraphic {
   graph_id: number | null;
@@ -1108,6 +1110,9 @@ export interface IKuCAddStore {
   valueBrand_nameEx: string;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
+  multipleSelectionService: IService[];
+  multipleSelectionArticle: IArticle[];
+  multipleSelectionServiceSelect: IServiceAndArticle[];
   multipleSelectionExInvoice: IExInvoiceForKu[]
   multipleSelectionManager: IManagerForKu[]
   multipleTableRef: Ref | null;
@@ -1127,6 +1132,9 @@ export interface IKuCAddStore {
   tableDataManagerAll: IManagerForKu[]
   tableDataManagerSelect: IManagerForKu[]
   dataEntity: IEntityInKu[];
+  tableDataServiceAll: IService[]
+  tableDatArticleAll: IArticle[]
+  tableDataServiceSelect: IServiceAndArticle[]
   // dataVendorId: IVendorId[];
   dataVendorId: IVendorIdAndName[]
   dataVendorName: IVendorName[];
@@ -1140,6 +1148,7 @@ export interface IKuCAddStore {
   dialogFormProductExVisible: boolean
   dialogFormCategoryExVisible: boolean
   dialogFormContractVisible: boolean
+  dialogFormServiceVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   disableSubsidiaries: boolean
@@ -1303,6 +1312,27 @@ export interface IKusCReturnData extends Pagination {
 }
 export interface IKuC_IdReturnData extends Pagination {
   results: IKuId[];
+}
+
+////услуги/////////////
+export interface IServiceAndArticle {
+  service_id: string;
+  service_name: string;
+  article_id: string;
+  article_name: string;
+  ratio: number;
+}
+export interface IService {
+  service_id: string;
+  service_name: string;
+}
+export interface IArticle {
+  article_id: string;
+  article_name: string;
+}
+
+export interface pricelist{
+  
 }
 
 

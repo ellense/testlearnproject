@@ -6,8 +6,6 @@
       <el-table-column type="selection" width="30" fixed />
       <el-table-column prop="ku_id" label="Код КУ" width="100" fixed sortable show-overflow-tooltip />
       <el-table-column prop="contract" label="Контракт" width="200" fixed show-overflow-tooltip />
-      <el-table-column prop="description" label="Описание" width="250" show-overflow-tooltip />
-
       <el-table-column label="Юридическое лицо" align="center">
         <template #header>
           <div class="column-header" :style="{ color: LegalEntity.length > 0 ? '#409EFF' : 'inherit' }">
@@ -111,6 +109,7 @@
           </template>
         </el-table-column>
       </el-table-column>
+      <el-table-column prop="" label="Сумма выплат" width="150" show-overflow-tooltip />
       <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
         <template #header>
           <div class="column-header" :style="{ color: Graph.length > 0 ? '#409EFF' : 'inherit' }">

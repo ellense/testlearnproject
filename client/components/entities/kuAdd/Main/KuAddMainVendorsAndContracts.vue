@@ -46,16 +46,6 @@
                 </el-option>
               </el-select>
           </el_form_item>
-          <el-form-item label-width="130" label="Код компании" prop="newEntityId">
-            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
-              filterable style="width: 300px" @change="onEntityChange">
-              <el-option v-for="item in options" :key="item.label" :label="item.value" :value="item.value">
-                <span style="float: left;">{{ item.value }}</span>
-                <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item>
         </el-form>
       </el-scrollbar>
       <template #footer>
@@ -70,7 +60,7 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IManagerForKu } from "~/utils/types/directoryTypes";
+import type { IManagerForKu, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
@@ -80,29 +70,34 @@ const kuMain = store.kuAddMain
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   store
 );
-const tableData = ref<IManagerForKu[]>(getManagerAll.value);
+// const tableData = ref<IManagerForKu[]>(getManagerAll.value);
 
-const loading = ref()
+// const loading = ref()
 
-watch(getManagerAll, (value) => {
-  tableData.value = value || [];
+const options2 = ref<Array<{ label: string; value: string }>>([]);
+watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
+  options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 
-const pageSize = ref(countRowTable);
-const handleSizeChange = async (val: number) => {
-  pageSize.value = val;
-  store.setCountRowTable(val);
-  try {
-    // await store.getProductFromExcludedWithFilter();
-  } catch (error) {
-    console.error("Ошибка при загрузке данных кат. менеджеров", error);
-  }
-};
-//пагинация
-const paginationChange = (page: number) => {
-  // store.setFilterExInvoice('page', page);
-  //   store.getProductFromExcludedWithFilter(page);
-};
+// // watch(getManagerAll, (value) => {
+// //   tableData.value = value || [];
+// // });
+
+// const pageSize = ref(countRowTable);
+// const handleSizeChange = async (val: number) => {
+//   pageSize.value = val;
+//   store.setCountRowTable(val);
+//   try {
+//     // await store.getProductFromExcludedWithFilter();
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных кат. менеджеров", error);
+//   }
+// };
+// //пагинация
+// const paginationChange = (page: number) => {
+//   // store.setFilterExInvoice('page', page);
+//   //   store.getProductFromExcludedWithFilter(page);
+// };
 
 //для очистки выбора
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()

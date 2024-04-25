@@ -63,6 +63,9 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         //селекты для множественного выбора
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
+        multipleSelectionService: [],
+        multipleSelectionArticle: [],
+        multipleSelectionServiceSelect: [],
         multipleSelectionManager: [],
         multipleTableRef: null,
         //данные 
@@ -80,6 +83,9 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         tableDataExInvoiceSelect: [],
         tableDataManagerAll: [],
         tableDataManagerSelect: [],
+        tableDataServiceAll: [],
+        tableDatArticleAll: [],
+        tableDataServiceSelect: [],
         dataEntity: [],
         dataVendorId: [],
         dataVendorName: [],
@@ -93,6 +99,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         dialogFormProductExVisible: false,
         dialogFormCategoryExVisible: false,
         dialogFormContractVisible: false,
+        dialogFormServiceVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
@@ -124,6 +131,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
     getters: {
         // getKu: (state) => state.tableData,
         getExInvoiceAll: (state) => state.tableDataExInvoiceAll,
+        getServiceAll: (state) => state.tableDataServiceAll,
         getManagerAll: (state) => state.tableDataManagerAll,
         getProducersIn: (state) => state.producerIncluded,
         getBrandsIn: (state) => state.brandIncluded,

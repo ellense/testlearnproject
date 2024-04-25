@@ -24,7 +24,7 @@
             <el-icon>
               <Memo />
             </el-icon>
-            <span>Накладные</span>
+            <span>Накладные поставок</span>
           </el-menu-item>
         </nuxt-link>
         <el-divider content-position="left" style=" color: #337ecc;">КУ клиентов</el-divider>
@@ -49,7 +49,31 @@
             <el-icon>
               <Memo />
             </el-icon>
-            <span>Накладные</span>
+            <span>Услуги</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/invoiceC">
+          <el-menu-item index="6">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Статьи услуг</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/invoiceC">
+          <el-menu-item index="6">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Прайс-лист услуг</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/invoiceC">
+          <el-menu-item index="6">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Места оказания услуг</span>
           </el-menu-item>
         </nuxt-link>
         <el-divider content-position="left" style=" color: #337ecc;">Справочники</el-divider>
@@ -68,6 +92,14 @@
               <Box />
             </el-icon>
             <span>Поставщики</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/vendor">
+          <el-menu-item index="8">
+            <el-icon>
+              <Box />
+            </el-icon>
+            <span>Клиенты</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/product">
