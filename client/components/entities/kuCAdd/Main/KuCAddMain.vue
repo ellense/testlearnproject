@@ -2,14 +2,14 @@
     <el-tabs v-model="activeName" type="border-card" style="margin-right: 10px; height: 85vh;">
         <!-- <vue-resizable  minHeight=300 maxHeight=1500 active="[ 'b']" style="border-bottom: 1px solid var(--el-border-color); height: calc(100vh - 560px);"> -->
         <el-tab-pane label="Основное" name="first"><EntitiesKuCAddMainBasic/></el-tab-pane>
-        <el-tab-pane label="Условия бонуса" name="second"><EntitiesKuCAddMainBonus/></el-tab-pane>
-        <el-tab-pane label="Оказываемые услуги" name="third"><EntitiesKuCAddMainService/></el-tab-pane>
+        <!-- <el-tab-pane label="Условия бонуса" name="second"><EntitiesKuCAddMainBonus/></el-tab-pane> -->
+        <!-- <el-tab-pane label="Оказываемые услуги" name="third"><EntitiesKuCAddMainService/></el-tab-pane> -->
         <el-tab-pane label="Поставщики и договоры" name="fourth"><EntitiesKuCAddMainVendorsAndContracts/></el-tab-pane>
         <!-- <el-tab-pane label="Исключенные накладные" name="fourth"><EntitiesKuCAddMainExInvoice/></el-tab-pane> -->
         <el-tab-pane label="Категорийные менеджеры" name="fifth"><EntitiesKuCAddMainManagers/></el-tab-pane>
         <el-tab-pane label="Должностные лица" name="sixth"><EntitiesKuCAddMainOfficial/></el-tab-pane>
     <!-- </vue-resizable> -->
-    <!-- <EntitiesKuCAddRequirement /> -->
+    <EntitiesKuCAddRequirement />
     </el-tabs>
 </template>
 <script lang="ts" setup>

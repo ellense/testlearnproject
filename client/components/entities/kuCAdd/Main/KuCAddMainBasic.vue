@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="45vh">
+  <el-scrollbar height="40vh">
     <el-form :model="kuMain" label-position="left" :rules="rules" status-icon ref="ruleFormRef" :show-message=false
       :hide-required-asterisk=true>
       <div class="kuAddMain">
@@ -47,11 +47,48 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="130" label="Тип товаров">
+          <!-- <el-form-item label-width="130" label="Тип товаров">
             <el-select v-model="kuMain.newProduct_type" size="small" clearable placeholder="Выберите тип товаров"
               style="width: 300px">
               <el-option label="Продовольственные" value="Продовольственные"></el-option>
               <el-option label="Непродовольственные" value="Непродовольственные"></el-option>
+            </el-select>
+          </el-form-item> -->
+        </div>
+        <div class="kuAddMainCol">
+          <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
+          <el-form-item label-width="170" label="Тип периода" prop="newType">
+            <el-select v-model="kuMain.newType" size="small" clearable placeholder="Выберите тип периода"
+              style="width: 300px">
+              <el-option label="Месяц" value="Месяц"></el-option>
+              <el-option label="Квартал" value="Квартал"></el-option>
+              <el-option label="Полгода" value="Полгода"></el-option>
+              <el-option label="Год" value="Год"></el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
+            label-width="170" label="Начальная дата" prop="newDateStart">
+            <el-date-picker v-model="kuMain.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
+              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
+              @change="onChangeAndValidateDateStart"></el-date-picker>
+          </el-form-item>
+          <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
+            label="Конечная дата" prop="newDateEnd">
+            <el-date-picker v-model="kuMain.newDateEnd" style="width: 300px" size="small"
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
+              @change="onChangeAndValidateDateEnd"></el-date-picker>
+          </el-form-item>
+          <el-divider content-position="left" style=" color: #337ecc">Оплата</el-divider>
+          <el-form-item label-width="170" label="Общая сумма премии" prop="newDocu_account">
+            <el-input v-model="kuMain.newPay_sum" size="small" clearable placeholder="Введите номер счета"
+              style="width: 300px">
+            </el-input>
+          </el-form-item>
+          <el-form-item label-width="170" label="Способ оплаты премии" prop="newPay_method">
+            <el-select v-model="kuMain.newPay_method" size="small" clearable placeholder="Выберите способ оплаты"
+              style="width: 300px">
+              <el-option label="Оплата" value="Оплата"></el-option>
+              <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
             </el-select>
           </el-form-item>
         </div>
@@ -88,54 +125,7 @@
               type="textarea" placeholder="Введите предмет договора" />
           </el-form-item>
         </div>
-        <div class="kuAddMainCol">
-          <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
-          <el-form-item label-width="170" label="Тип периода" prop="newType">
-            <el-select v-model="kuMain.newType" size="small" clearable placeholder="Выберите тип периода"
-              style="width: 300px">
-              <el-option label="Месяц" value="Месяц"></el-option>
-              <el-option label="Квартал" value="Квартал"></el-option>
-              <el-option label="Полгода" value="Полгода"></el-option>
-              <el-option label="Год" value="Год"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
-            label-width="170" label="Начальная дата" prop="newDateStart">
-            <el-date-picker v-model="kuMain.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
-              @change="onChangeAndValidateDateStart"></el-date-picker>
-          </el-form-item>
-          <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
-            label="Конечная дата" prop="newDateEnd">
-            <el-date-picker v-model="kuMain.newDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
-              @change="onChangeAndValidateDateEnd"></el-date-picker>
-          </el-form-item>
-          <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
-          <el-form-item>
-            <el-checkbox v-model="kuMain.newTax" label="База премии включает налог" size="small" />
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox v-model="kuMain.newExclude_return" label="Исключать возвраты из расчета" size="small" />
-          </el-form-item>
-          <el-form-item>
-            <el-checkbox v-model="kuMain.newNegative_turnover" label="Отрицательный товарооборот" size="small" />
-          </el-form-item>
-          <el-form-item label-width="170" label="Тип коммерческого условия" prop="newKu_type">
-            <el-select v-model="kuMain.newKu_type" size="small" clearable placeholder="Выберите тип КУ"
-              style="width: 300px">
-              <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
-              <el-option label="Услуга" value="Услуга"></el-option>
-            </el-select>
-          </el-form-item>
-          <el-form-item label-width="170" label="Способ оплаты премии" prop="newPay_method">
-            <el-select v-model="kuMain.newPay_method" size="small" clearable placeholder="Выберите способ оплаты"
-              style="width: 300px">
-              <el-option label="Оплата" value="Оплата"></el-option>
-              <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
-            </el-select>
-          </el-form-item>
-        </div>
+        
       </div>
     </el-form>
     <!-- <el-button type="primary" @click="submitForm(ruleFormRef)">

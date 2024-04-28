@@ -1,12 +1,12 @@
 <template>
-  <el-scrollbar height="45vh">
+  <el-scrollbar height="40vh">
     <!-- <h4>В разработке...</h4> -->
     <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true"
       class="buttonAdd">Добавить</el-button>
     <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0"
       class="buttonAdd">Удалить
       все</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="40vh"
+    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="35vh"
       empty-text="Добавьте поставщиков"  >
       <el-table-column property="group" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">

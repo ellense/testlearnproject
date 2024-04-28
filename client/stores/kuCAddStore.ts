@@ -36,16 +36,12 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             newDateActual: "",
             newDescription: "",
             newContract: "",
-            newProduct_type: "",
             newDocu_account: "",
             newDocu_name: "",
             newDocu_number: "",
             newDocu_date: "",
             newDocu_subject: "",
-            newTax: false,
-            newExclude_return: false,
-            newNegative_turnover: false,
-            newKu_type: "",
+            newPay_sum: null,
             newPay_method: "",
         },
         newOfFIOСounteragent: "",
@@ -54,12 +50,11 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         newOfFIOEntity: "",
         newOfPostEntity: "",
         newOfDocEntity: "",
-        valueProducer_nameContract: "",
-        valueBrand_nameContract: "",
-        valueProducer_nameIn: "",
-        valueBrand_nameIn: "",
-        valueProducer_nameEx: "",
-        valueBrand_nameEx: "",
+        valueService_nameContract: "",
+        valueArticle_nameContract: "",
+        valueService_id: "",
+        valueArticle_id: "",
+        valueRatio: null,
         //селекты для множественного выбора
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
@@ -84,7 +79,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         tableDataManagerAll: [],
         tableDataManagerSelect: [],
         tableDataServiceAll: [],
-        tableDatArticleAll: [],
+        tableDataArticleAll: [],
         tableDataServiceSelect: [],
         dataEntity: [],
         dataVendorId: [],
@@ -104,7 +99,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
         //
-        
+
         vendorFilter: "",
         vendors: [],
         //пагинация в таблицах
@@ -175,25 +170,25 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
 
         setRuleFormRef(formRef: FormInstance | null) {
             this.ruleFormRef = formRef;
-          },
-          async isFormValid() {
+        },
+        async isFormValid() {
             return new Promise((resolve, reject) => {
-              if (!this.ruleFormRef) {
-                console.error('Form reference is not set');
-                reject(new Error('Form reference is not set'));
-                return;
-              }
-              this.ruleFormRef.validate((valid, fields) => {
-                if (valid) {
-                  console.log('Form is valid!');
-                  resolve(true);
-                } else {
-                  console.log('Form is invalid:', fields);
-                  resolve(false);
+                if (!this.ruleFormRef) {
+                    console.error('Form reference is not set');
+                    reject(new Error('Form reference is not set'));
+                    return;
                 }
-              });
+                this.ruleFormRef.validate((valid, fields) => {
+                    if (valid) {
+                        console.log('Form is valid!');
+                        resolve(true);
+                    } else {
+                        console.log('Form is invalid:', fields);
+                        resolve(false);
+                    }
+                });
             });
-          },
+        },
         // async submitForm(formEl: FormInstance | undefined) {
         //     try {
         //         if (!formEl) return;
@@ -225,7 +220,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                     console.log("Все данные о юр. лицах:", result);
                 } else {
                     this.dataEntity = [];
-                    
+
                     console.error("Данные не получены или не являются массивом");
                 }
             } catch (error) {
@@ -336,7 +331,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 console.error("Произошла ошибка при получении данных категорий", error);
             }
         },
-       
+
         //получение данных о производителе с фильтром
         async fetchAllProducersForInclided() {
             try {
@@ -424,7 +419,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         async getProductFromIncludedWithFilter(page?: number) {
             this.setFilterProductInRequirement('page', page);
             this.setFilterProductInRequirement('search', this.$state.searchProductIncluded);
-            
+
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
@@ -508,7 +503,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         >(field: T, value: U) {
             this.$state.filterProductExcluded[field] = value
         },
-////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
         //получение накладных
         async getInvoicesFromAPIWithFilter(page?: number) {
             console.log('Выполняется запрос искл.накладных с фильтрацией...');
@@ -577,7 +572,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.productExcluded.length = 0;
             // Значения v-model при создании
             this.kuAddMain.newType = '',
-            this.kuAddMain.newEntityId = '';
+                this.kuAddMain.newEntityId = '';
             this.kuAddMain.newEntityName = '';
             this.kuAddMain.newVendorId = '';
             this.kuAddMain.newVendorName = '';
@@ -586,26 +581,21 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.kuAddMain.newDateActual = '';
             this.kuAddMain.newDescription = '';
             this.kuAddMain.newContract = '';
-            this.kuAddMain.newProduct_type = '';
             this.kuAddMain.newDocu_account = '';
             this.kuAddMain.newDocu_name = '';
             this.kuAddMain.newDocu_number = '';
             this.kuAddMain.newDocu_date = '';
             this.kuAddMain.newDocu_subject = '';
-            this.kuAddMain.newTax = false;
-            this.kuAddMain.newExclude_return = false;
-            this.kuAddMain.newNegative_turnover = false;
-            this.kuAddMain.newKu_type = '';
             this.kuAddMain.newPay_method = '';
+            this.kuAddMain.newPay_sum = null;
             this.newOfFIOСounteragent = '';
             this.newOfPostСounteragent = '';
             this.newOfDocСounteragent = '';
             this.newOfFIOEntity = '';
             this.newOfPostEntity = '';
             this.newOfDocEntity = '';
-            this.valueProducer_nameContract = '';
-            this.valueBrand_nameContract = '';
-
+            this.valueService_nameContract = '';
+            this.valueArticle_nameContract = '';
             // Селекты для множественного выбора
             this.multipleSelectionProduct = [];
             this.multipleSelectionExInvoice = [];
@@ -639,15 +629,15 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.removeFilterCategory('vendor_id');
         },
         //создание контракта
-        async createKuContract(newItem:IContractPost ) {
+        async createKuContract(newItem: IContractPost) {
             try {
-              const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
-              console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
-              this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
+                const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+                console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
+                this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
             } catch (error) {
-              console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
-              // Можно обработать ошибку здесь, если нужно
+                console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
+                // Можно обработать ошибку здесь, если нужно
             }
-          },
+        },
     }
 });

@@ -59,6 +59,16 @@ import type {
   IRequirementId2,
   IRequirementReturnData2,
   IOfficialForKu,
+  IParamServices,
+  IServicesReturnData,
+  IPlaceReturnData,
+  IPricelistReturnData,
+  IArticleReturnData,
+  IKuCPost,
+  IParamKusC,
+  IKusCReturnData,
+  IKuCList,
+  IServicesPost,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -214,4 +224,47 @@ export const CATEGORY = {
     $Get("api/classifier_tree/", { data, isBearer: false }),
   getCategory2: (params: GetAllCategory): Promise<ITree> =>
     $Get("api/classifier_tree/", { params, isBearer: false }),
+};
+
+export const SERVICE = {
+  getServiceList: (params?: IParamServices): Promise<IServicesReturnData> =>
+    $Get("api/vendor_list/", { params, isBearer: false }),
+  getPlaceList: (params?: IParamServices): Promise<IPlaceReturnData> =>
+    $Get("api/vendor_list/", { params, isBearer: false }),
+  getPricelistList: (params?: IParamServices): Promise<IPricelistReturnData> =>
+    $Get("api/vendor_list/", { params, isBearer: false }),
+  getArticleList: (params?: IParamServices): Promise<IArticleReturnData> =>
+    $Get("api/vendor_list/", { params, isBearer: false }),
+  // getVendorsForEntityInVendor: (
+  //   params?: IParamVendorsForEntityInVendor
+  // ): Promise<IVendorsForEntityInVendorReturnData> =>
+  //   $Get("api/vendor_list/", { params, isBearer: false }),
+  // getVendorById: (): Promise<IVendorId[]> =>
+  //   $Get("api/vendor_list/", { isBearer: false }),
+  // getVendorsForEntityInKU: (
+  //   params?: IParamVendorsForEntity
+  // ): Promise<IVendorsForEntityReturnData> =>
+  //   $Get("api/vendor_filter/", { params, isBearer: false }),
+  // getVendorDetail: (data: IVendorId): Promise<IVendorFull> =>
+  //   $Get(`api/vendor_detail/${data.vendor_id}/`, { data, isBearer: false }),
+};
+
+export const KUC = {
+  getKuList: (params: IParamKusC): Promise<IKusCReturnData> =>
+    $Get("api/ku_list/", { params, isBearer: false }),
+
+  //отправление
+  postKu: (data: IKuCPost): Promise<IKuCList> =>
+    $Post("api/ku_create/", { data, isBearer: false }),
+  postKuServices: (data: IServicesPost): Promise<IServicesPost> =>
+    $Post("api/included_condition_create/", { data, isBearer: false }),
+  postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
+    $Post("api/excluded_venddoc_list_create/", { data, isBearer: false }),
+  postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
+    $Post("api/manager_create/", { data, isBearer: false }),
+  postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
+    $Post("api/official_create/", { data, isBearer: false }),
+  postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
+    $Post("api/name_contact_create/", { data, isBearer: false }),
+  
 };

@@ -1,8 +1,9 @@
 <template>
-    <div style="margin-top: 10px;  height: 35vh;">
+    <div style="margin-top: 10px;  height: 40vh;">
 <el-tabs  v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-    <el-tab-pane label="Включенные условия" name="first"><EntitiesKuCAddRequirementIncluded/></el-tab-pane>
-    <el-tab-pane label="Исключенные условия" name="second"><EntitiesKuCAddRequirementExcluded/></el-tab-pane>
+    <!-- <el-tab-pane label="Включенные условия" name="first"><EntitiesKuCAddRequirementIncluded/></el-tab-pane>
+    <el-tab-pane label="Исключенные условия" name="second"><EntitiesKuCAddRequirementExcluded/></el-tab-pane> -->
+    <el-tab-pane label="Оказываемые услуги" name="first"><EntitiesKuCAddRequirementService/></el-tab-pane>
     <el-tab-pane label="Наименование контракта" name="third"><EntitiesKuCAddRequirementContract/></el-tab-pane>
   </el-tabs>
 </div>

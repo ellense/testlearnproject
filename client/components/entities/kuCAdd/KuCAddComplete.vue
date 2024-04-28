@@ -12,7 +12,7 @@
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { useKuCStore } from "~~/stores/kuCStore";
 import dayjs from "dayjs";
-import type { IExInvoiceForKuPost, IKuList, IManagerForKuPost, IOfficialForKuPost } from "~/utils/types/directoryTypes";
+import type { IExInvoiceForKuPost, IKuCList, IKuList, IManagerForKuPost, IOfficialForKuPost } from "~/utils/types/directoryTypes";
 import { useRouter } from 'vue-router'
 const store = useKuCAddStore();
 const loading = ref(false);
@@ -45,21 +45,20 @@ onBeforeRouteLeave((to, from, next) => {
     kuMain.newDateActual !== '' ||
     kuMain.newDescription !== '' ||
     kuMain.newContract !== '' ||
-    kuMain.newProduct_type !== '' ||
     kuMain.newDocu_account !== '' ||
     kuMain.newDocu_name !== '' ||
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
-    kuMain.newKu_type !== '' ||
+    kuMain.newPay_sum !== null ||
     kuMain.newPay_method !== '' ||
     store.newOfFIOСounteragent !== '' ||
     store.newOfPostСounteragent !== '' ||
     store.newOfDocСounteragent !== '' ||
     store.newOfFIOEntity !== '' ||
     store.newOfDocEntity !== '' ||
-    store.valueProducer_nameContract !== '' ||
-    store.valueBrand_nameContract !== '') {
+    store.valueService_nameContract !== '' ||
+    store.valueArticle_nameContract !== '') {
     ElMessageBox.alert('Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.', 'Предупреждение', {
 
       type: 'warning'
@@ -140,24 +139,22 @@ const createKU = async () => {
     // open()
 
     const newItem = createNewItem();
-
-    const response = await KU.postKu(newItem);
     progress.value = 10;
-    const responses = await postRequirements(response, store.tableDataInRequirement, KU.postKuInRequirement);
+    const response = await KUC.postKu(newItem);
     progress.value = 20;
-    const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirement);
+    const responses = await postRequirements(response, store.tableDataServiceSelect, KUC.postKuServices);
     progress.value = 30;
     const response3 = await postBonusRequirements(response, store.tableDataPercent);
     progress.value = 40;
-    const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
+    const response4 = await postItems(response, store.tableDataExInvoiceSelect, KUC.postKuExInvoices);
     progress.value = 50;
-    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
+    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KUC.postKuManager);
     progress.value = 60;
-    const response6 = await KU.postKuOfficial(createOfficialArray(response));
+    const response6 = await KUC.postKuOfficial(createOfficialArray(response));
     progress.value = 70;
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response2, response3, response4, response5, response6);
+      handleSuccess(response, responses, response3, response4, response5, response6);
     } else {
       handleError();
     }
@@ -181,21 +178,17 @@ const createNewItem = () => {
     status: "Создано",
     description: kuMain.newDescription,
     contract: kuMain.newContract,
-    product_type: kuMain.newProduct_type,
     docu_account: kuMain.newDocu_account,
     docu_name: kuMain.newDocu_name,
     docu_number: kuMain.newDocu_number,
     docu_date: dayjs(kuMain.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
     docu_subject: kuMain.newDocu_subject,
-    tax: kuMain.newTax,
-    exclude_return: kuMain.newExclude_return,
-    negative_turnover: kuMain.newNegative_turnover,
-    ku_type: kuMain.newKu_type,
+    pay_sum: kuMain.newPay_sum,
     pay_method: kuMain.newPay_method,
   };
 };
 
-const postRequirements = async (response: IKuList, dataArray: any, postFunction: any) => {
+const postRequirements = async (response: IKuCList, dataArray: any, postFunction: any) => {
   const requirementsArray = dataArray.map((item: { item_type: any; item_code: any; item_name: any; producer: any; brand: any; }) => ({
     ku_id: response.ku_id,
     item_type: item.item_type,
@@ -215,7 +208,7 @@ const postRequirements = async (response: IKuList, dataArray: any, postFunction:
   }));
 };
 
-const postBonusRequirements = async (response: IKuList, dataArray: any) => {
+const postBonusRequirements = async (response: IKuCList, dataArray: any) => {
   const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
     ku_key_id: response.ku_id,
     fix: item.fix,
@@ -233,7 +226,7 @@ const postBonusRequirements = async (response: IKuList, dataArray: any) => {
   }));
 };
 
-const postManagerItems = async (response: IKuList, dataArray: any, postFunction: any) => {
+const postManagerItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
   const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
     ku_id: response.ku_id,
     group: item.group,
@@ -250,7 +243,7 @@ const postManagerItems = async (response: IKuList, dataArray: any, postFunction:
   }));
 };
 
-const postItems = async (response: IKuList, dataArray: any, postFunction: any) => {
+const postItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
   const itemsArray = dataArray.map((item: { docid: any; }) => ({
     ku_id: response.ku_id,
     docid: item.docid,
@@ -266,7 +259,7 @@ const postItems = async (response: IKuList, dataArray: any, postFunction: any) =
   }));
 };
 
-const createOfficialArray = (response: IKuList) => {
+const createOfficialArray = (response: IKuCList) => {
   return {
     ku_id: response.ku_id,
     counterparty_name: store.newOfFIOСounteragent,
@@ -278,10 +271,9 @@ const createOfficialArray = (response: IKuList) => {
   };
 };
 
-const handleSuccess = (response: IKuList, responses: any[], response2: any[], response3: any[], response4: any[], response5: any[], response6: IOfficialForKuPost) => {
+const handleSuccess = (response: IKuCList, responses: any[], response3: any[], response4: any[], response5: any[], response6: IOfficialForKuPost) => {
   console.log("Экземпляр успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
-  console.log("исклУсловия успешно отправлены на бэкенд:", response2);
   console.log("бонус успешно отправлены на бэкенд:", response3);
   console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
   console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
@@ -321,21 +313,20 @@ const addClose = () => {
     kuMain.newDateActual !== '' ||
     kuMain.newDescription !== '' ||
     kuMain.newContract !== '' ||
-    kuMain.newProduct_type !== '' ||
     kuMain.newDocu_account !== '' ||
     kuMain.newDocu_name !== '' ||
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
-    kuMain.newKu_type !== '' ||
+    kuMain.newPay_sum !== null ||
     kuMain.newPay_method !== '' ||
     store.newOfFIOСounteragent !== '' ||
     store.newOfPostСounteragent !== '' ||
     store.newOfDocСounteragent !== '' ||
     store.newOfFIOEntity !== '' ||
     store.newOfDocEntity !== '' ||
-    store.valueProducer_nameContract !== '' ||
-    store.valueBrand_nameContract !== ''
+    store.valueService_nameContract !== '' ||
+    store.valueArticle_nameContract !== ''
   ) {
     // Если есть несохраненные данные, показываем диалоговое окно для подтверждения от пользователя
     ElMessageBox.alert(

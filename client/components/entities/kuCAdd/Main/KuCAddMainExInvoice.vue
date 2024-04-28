@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar height="45vh">
+  <el-scrollbar height="40vh">
     <h4>Код клинета: <span style="font-weight: 400;">{{ store.kuAddMain.newVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование клиента: <span style="font-weight: 400;">{{
       store.kuAddMain.newVendorName }}</span></h4>

@@ -975,16 +975,12 @@ export interface IKuCList {
   status: string;
   description: string;
   contract: string;
-  product_type: string;
   docu_account: string;
   docu_name: string;
   docu_number: string;
   docu_date: Date | string;
   docu_subject: string;
-  tax: boolean;
-  exclude_return: boolean;
-  negative_turnover: boolean;
-  ku_type: string;
+  pay_sum: string;
   pay_method: string;
 }
 
@@ -997,21 +993,15 @@ export interface IKuCPost {
   status: string;
   description: string;
   contract: string;
-  product_type: string;
   docu_account: string;
   docu_name: string;
   docu_number: string;
   docu_date: Date | string;
   docu_subject: string;
-  tax: boolean;
-  exclude_return: boolean;
-  negative_turnover: boolean;
-  ku_type: string;
+  pay_sum: number | null;
   pay_method: string;
 }
-export interface IKuCPost2 {
-  requirements: IRequirement[];
-}
+
 export interface IKuCPostGraphic {
   ku_id: string;
   entity_id: string;
@@ -1032,16 +1022,12 @@ export interface IKuCUpdate {
   date_end: Date | string;
   description: string;
   contract: string;
-  product_type: string;
   docu_account: string;
   docu_name: string;
   docu_number: string;
   docu_date: Date | string;
   docu_subject: string;
-  tax: boolean;
-  exclude_return: boolean;
-  negative_turnover: boolean;
-  ku_type: string;
+  pay_sum: string;
   pay_method: string;
 }
 export interface IKuDeleteGraph {
@@ -1080,16 +1066,12 @@ export interface IKuCAddMain {
   newDateActual: Date | string;
   newDescription: string;
   newContract: string;
-  newProduct_type: string;
   newDocu_account: string;
   newDocu_name: string;
   newDocu_number: string;
   newDocu_date: Date | string;
   newDocu_subject: string;
-  newTax: boolean;
-  newExclude_return: boolean;
-  newNegative_turnover: boolean;
-  newKu_type: string;
+  newPay_sum: number | null
   newPay_method: string;
 }
 export interface IKuCAddStore {
@@ -1102,12 +1084,11 @@ export interface IKuCAddStore {
   newOfFIOEntity: string;
   newOfPostEntity: string;
   newOfDocEntity: string;
-  valueProducer_nameContract: string;
-  valueBrand_nameContract: string;
-  valueProducer_nameIn: string;
-  valueBrand_nameIn: string;
-  valueProducer_nameEx: string;
-  valueBrand_nameEx: string;
+  valueService_nameContract: string;
+  valueArticle_nameContract: string;
+  valueService_id: string;
+  valueArticle_id: string;
+  valueRatio: number | null;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
   multipleSelectionService: IService[];
@@ -1133,7 +1114,7 @@ export interface IKuCAddStore {
   tableDataManagerSelect: IManagerForKu[]
   dataEntity: IEntityInKu[];
   tableDataServiceAll: IService[]
-  tableDatArticleAll: IArticle[]
+  tableDataArticleAll: IArticle[]
   tableDataServiceSelect: IServiceAndArticle[]
   // dataVendorId: IVendorId[];
   dataVendorId: IVendorIdAndName[]
@@ -1322,17 +1303,101 @@ export interface IServiceAndArticle {
   article_name: string;
   ratio: number;
 }
+export interface IServicesPost {
+  ku_id: string;
+  service_id: string;
+  service_name: string;
+  article_id: string;
+  article_name: string;
+  ratio: number;
+}
 export interface IService {
   service_id: string;
   service_name: string;
 }
 export interface IArticle {
-  article_id: string;
+  service_id: string;
   article_name: string;
 }
 
-export interface pricelist{
-  
+export interface IPricelist {
+  date: Date | string
+  expiration_date: string;
+  article_id: string;
+  article_name: string;
+  cost: number | null;
+  measure_unit: string;
+}
+
+export interface IPlace {
+  shop_id: string;
+  shop_name: string;
+  address: string;
+}
+
+
+
+export interface IServiceStore {
+  tableDataPlace: IPlace[];
+  tableDataPricelist: IPricelist[];
+  tableDataArticle: IArticle[];
+  tableDataService: IService[];
+  tableDataServiceAndArticleSelect: IServiceAndArticle[];
+
+  pagination: Pagination | null
+  countRowTable: number
+  sortProp: string
+  sortOrder: string
+  searchService: string
+  searchArticle: string
+  searchPlace: string
+  searchPricelist: string
+
+  dialogFormPlaceVisible: boolean
+  dialogFormPricelistVisible: boolean
+  dialogFormArticleVisible: boolean
+  dialogFormServiceVisible: boolean
+  dialogFormServiceAndArticleSelectVisible: boolean
+
+  newService_id: string;
+  newService_name: string;
+  newArticle_id: string;
+  newArticle_name: string;
+  newPriceDate: string;
+  newPriceExpiration_date: string;
+  newPriceCost: number | null;
+  newPricMeasure_unit: string;
+  newPriceArticle_id: string;
+  newPriceArticle_name: string;
+  newShop_id: string;
+  newShop_name: string;
+  newAddress: string;
+
+  filterValueService: IParamServices
+  filterValuePlace: IParamServices
+  filterValuePricelist: IParamServices
+  filterValueArticle: IParamServices
+}
+
+export interface IParamServices {
+  page_size?: number
+  page?: number
+  search?: string;
+  sort_by?: string;
+  sort_order?: string;
+}
+
+export interface IServicesReturnData extends Pagination {
+  results: IService[]
+}
+export interface IPlaceReturnData extends Pagination {
+  results: IPlace[]
+}
+export interface IPricelistReturnData extends Pagination {
+  results: IPricelist[]
+}
+export interface IArticleReturnData extends Pagination {
+  results: IArticle[]
 }
 
 
