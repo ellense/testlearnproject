@@ -174,18 +174,18 @@ import { Search } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
 import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IEntityInKu, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
-import { useKuStore } from "~~/stores/kuStore";
+import type { IEntityInKu, IKuCList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
+import { useKuCStore } from "~~/stores/kuCStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
-  useKuStore()
+  useKuCStore()
 );
-const store = useKuStore();
+const store = useKuCStore();
 const storeKuAdd = useKuAddStore();
 const visible = ref(false)
-const tableData = ref<IKuList[]>(getKu.value);
+const tableData = ref<IKuCList[]>(getKu.value);
 
 const loading = ref()
 

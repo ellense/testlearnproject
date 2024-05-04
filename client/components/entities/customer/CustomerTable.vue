@@ -1,7 +1,7 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange" stripe>
-      <el-table-column label="Код" prop="vendor_id" width="140" show-overflow-tooltip sortable />
+      <el-table-column label="Код" prop="customer_id" width="140" show-overflow-tooltip sortable />
       <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
       <el-table-column prop="urastic_name" label="Полное наименование" width="300" show-overflow-tooltip sortable />
       <el-table-column label="Юридическое лицо" align="center">
@@ -27,7 +27,7 @@ import type { IVendor } from "~/utils/types/directoryTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
 const store = useVendorStore()
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
-const tableData = ref<IVendor[]>(getVendors.value);
+const tableData = ref<ICustomerFull[]>(getVendors.value);
   const loading = ref()
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {

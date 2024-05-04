@@ -33,11 +33,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { ArrowDown } from '@element-plus/icons-vue'
-import { useKuCStore } from "~~/stores/kuCStore";
+import { useKuStore } from "~~/stores/kuStore";
 import { useRouter } from "vue-router";
 import "dayjs/locale/ru";
 import type { IKuPostGraphic } from "~/utils/types/directoryTypes";
-const store = useKuCStore();
+const store = useKuStore();
 const router = useRouter();
 const loading = ref(false);
 const { legalEntity } = storeToRefs(store);

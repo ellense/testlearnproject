@@ -19,14 +19,7 @@
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/invoiceV">
-          <el-menu-item index="3">
-            <el-icon>
-              <Memo />
-            </el-icon>
-            <span>Накладные поставок</span>
-          </el-menu-item>
-        </nuxt-link>
+        
         <el-divider content-position="left" style=" color: #337ecc;">КУ клиентов</el-divider>
         <nuxt-link to="kuC">
           <el-menu-item index="4">
@@ -100,6 +93,14 @@
               <Box />
             </el-icon>
             <span>Клиенты</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/invoiceV">
+          <el-menu-item index="14">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Накладные поставок</span>
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/product">

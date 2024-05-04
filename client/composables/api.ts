@@ -228,13 +228,13 @@ export const CATEGORY = {
 
 export const SERVICE = {
   getServiceList: (params?: IParamServices): Promise<IServicesReturnData> =>
-    $Get("api/vendor_list/", { params, isBearer: false }),
+    $Get("api/service_list/", { params, isBearer: false }),
   getPlaceList: (params?: IParamServices): Promise<IPlaceReturnData> =>
-    $Get("api/vendor_list/", { params, isBearer: false }),
+    $Get("api/place_service_list/", { params, isBearer: false }),
   getPricelistList: (params?: IParamServices): Promise<IPricelistReturnData> =>
-    $Get("api/vendor_list/", { params, isBearer: false }),
+    $Get("api/price_list/", { params, isBearer: false }),
   getArticleList: (params?: IParamServices): Promise<IArticleReturnData> =>
-    $Get("api/vendor_list/", { params, isBearer: false }),
+    $Get("api/article_list/", { params, isBearer: false }),
   // getVendorsForEntityInVendor: (
   //   params?: IParamVendorsForEntityInVendor
   // ): Promise<IVendorsForEntityInVendorReturnData> =>

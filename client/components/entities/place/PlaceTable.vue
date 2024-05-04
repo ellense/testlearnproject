@@ -1,9 +1,9 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange" stripe>
-      <el-table-column label="Код магазина" prop="vendor_id" width="300" show-overflow-tooltip sortable />
-      <el-table-column prop="vendor_id" label="Наименование"  width="500" show-overflow-tooltip sortable />
-      <el-table-column prop="vendor_id" label="Адрес"  show-overflow-tooltip sortable />
+      <el-table-column label="Код магазина" prop="shop_code" width="300" show-overflow-tooltip sortable />
+      <el-table-column prop="shop_name" label="Наименование"  width="500" show-overflow-tooltip sortable />
+      <el-table-column prop="address" label="Адрес"  show-overflow-tooltip sortable />
       <el-table-column label="Операция" align="center" width="200">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.$index)"

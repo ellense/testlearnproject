@@ -3,19 +3,19 @@
     <el-button size="small" type="primary" plain round @click="addRow" class="buttonAdd">Добавить</el-button>
     <el-button size="small" type="danger" plain round @click="store.tableDataPercent.length = 0" class="buttonAdd">Удалить
       все</el-button>
-    <el-table :data="tableData" border style="width: 720px; margin-top: 10px;" height="40vh"
+    <el-table :data="tableData" border style="width: 620px; margin-top: 10px;" height="40vh"
       empty-text="Добавьте условия бонуса">
-      <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
+      <!-- <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
         <template #default="{ row }">
           <el-checkbox v-model="row.fix" @change="onFixChange(row)"></el-checkbox>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="criterion" label="Критерий в руб." width="200">
         <template #default="{ row }">
           <el-input v-model="row.criterion" @change="onCriteriaChange(row)" clearable size="small"></el-input>
         </template>
       </el-table-column>
-      <el-table-column prop="percent_sum" label="Процент/Сумма за период" width="200">
+      <el-table-column prop="percent_sum" label="Процент" width="200">
         <template #default="{ row }">
           <el-input v-model="row.percent_sum" style="border: none !important" @change="onPercentSummaChange(row)"
             clearable size="small"></el-input>

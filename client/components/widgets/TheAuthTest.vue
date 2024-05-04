@@ -1,6 +1,11 @@
 <template>
   <div class="login-container">
     <el-card class="login-card">
+      <template #header>
+      
+        <h1>Авторизация</h1>
+    
+    </template>
       <div class="auth-container__form">
         <el-form :model="form" @submit.prevent.stop="login">
           <el-form-item>
@@ -67,7 +72,7 @@ const login = () => {
 
 <style scoped>
 .el-form {
-  margin-top: 30px;
+  /* margin-top: 10px; */
 }
 
 .login-container {
@@ -79,7 +84,12 @@ const login = () => {
 
 .login-card {
   width: 550px;
-  height: 300px;
+  height: 230px;
   padding: 20px;
+}
+
+h1 {
+  color: #337ecc;
+  margin: 0;
 }
 </style>

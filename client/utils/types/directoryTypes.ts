@@ -715,7 +715,7 @@ export interface GetAllOfficialReturnData extends Pagination {
   results: IOfficialForKu[];
 }
 
-////услуги
+
 ///////////////////////////////// График////////////////////////////////////
 export interface IGraphic {
   graph_id: number | null;
@@ -1312,30 +1312,28 @@ export interface IServicesPost {
   ratio: number;
 }
 export interface IService {
-  service_id: string;
+  service_code: string;
   service_name: string;
 }
 export interface IArticle {
-  service_id: string;
+  article_code: string;
   article_name: string;
 }
 
 export interface IPricelist {
-  date: Date | string
-  expiration_date: string;
-  article_id: string;
+  date_action: Date | string
+  date_expiration: Date | string;
+  article_code: string;
   article_name: string;
-  cost: number | null;
-  measure_unit: string;
+  price: number | null;
+  unit: string;
 }
 
 export interface IPlace {
-  shop_id: string;
+  shop_code: string;
   shop_name: string;
   address: string;
 }
-
-
 
 export interface IServiceStore {
   tableDataPlace: IPlace[];
@@ -1399,6 +1397,111 @@ export interface IPricelistReturnData extends Pagination {
 export interface IArticleReturnData extends Pagination {
   results: IArticle[]
 }
+
+export interface IGraphicС {
+  graph_id: number | null;
+  ku_id: string;
+  entity_id: string;
+  entity_name: string;
+  vendor_id: string;
+  vendor_name: string;
+  period: string;
+  date_start: Date | string | null;
+  date_end: Date | string | null;
+  date_calc: Date | string | null;
+  date_accrual: Date | string | null;
+  percent: number | null;
+  sum_calc: number | null;
+  sum_bonus: number | null;
+  sum_approved: number | null;
+  status: string
+}
+export interface IGraphicСStore {
+  //селекты для множественного выбора
+  multipleSelectionGraphic: IGraphic[];
+  multipleTableRef: Ref | null;
+  //данные таблиц
+  dataGraphic: IGraphic[];
+  //v-model диалоговых форм
+  dialogFormEditApprovedVisible: boolean;
+  //
+  vendorFilter: string;
+  vendors: IVendorIdAndName[];
+  //пагинация в таблицах
+  pagination: Pagination | null;
+  countRowTable: number;
+  countRowTable2: number;
+  sortProp: string;
+  sortOrder: string;
+  //поиски
+  searchGraphic: string;
+  //
+  editApproved: number | null;
+  selectedRowEditApproved: IGraphic;
+  //
+  legalEntity: string[]
+  //параметры для фильтров при запросах
+  KuParams: string[]
+  filterGraphicValue: GetAllGraphic
+}
+export interface IGraphicСInfo {
+  graph_id: number | null;
+  entity_id: string;
+  entity_name: string;
+  ku_id: string;
+  vendor_id: string;
+  vendor_name: string;
+  period: string;
+  date_start: Date | string;
+  date_end: Date | string;
+  date_calc: Date | string;
+  percent: number | null;
+  sum_calc: number | null;
+  sum_bonus: number | null;
+  status: string
+  sum_approved: number | null;
+}
+
+export interface GetAllGraphicС {
+  page_size?: number;
+  page?: number;
+  ku_id?: string[];
+  entity_id?: string[];
+  vendor_id?: string[];
+  status?: string[];
+  period?: string[]
+  date_start_s?: string,
+  date_start_e?: string,
+  date_end_s?: string,
+  date_end_e?: string,
+  date_calc_s?: string,
+  date_calc_e?: string,
+  date_accrual_s?: string,
+  date_accrual_e?: string,
+  search?: string;
+  sort_by?: string;
+  sort_order?: string;
+}
+export interface GetAllGraphicСsReturnData extends Pagination {
+  results: IGraphic[];
+}
+
+export interface ICustomerFull {
+  customer_id: string
+  name: string
+  urastic_name: string
+  director_name: string
+  urastic_adress: string
+  inn_kpp: string
+  account: string
+  bank_name: string
+  bank_bik: string
+  corr_account: string
+  dir_party: number | null
+  entity_id: string
+  entity_name: string
+}
+
 
 
 

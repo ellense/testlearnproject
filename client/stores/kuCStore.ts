@@ -5,6 +5,7 @@ import type {
   EntityId,
   IParamKus,
   IKuCStore,
+  IKuCList,
 } from "~/utils/types/directoryTypes";
 
 export const useKuCStore = defineStore("KuCStore", {
@@ -50,7 +51,7 @@ export const useKuCStore = defineStore("KuCStore", {
         }
       }
     },
-    handleSelectionChange(val: IKuList[]) {
+    handleSelectionChange(val: IKuCList[]) {
       this.multipleSelection = val;
     },
 
@@ -65,7 +66,7 @@ export const useKuCStore = defineStore("KuCStore", {
       this.setFilterValue('search', this.$state.search);
       this.setFilterValue('sort_by', sort_by);
       this.setFilterValue('sort_order', sort_order); 
-      await KU.getKuList({
+      await KUC.getKuList({
         page_size: this.$state.countRowTable,
         page,
         entity_id: this.$state.filterKuValue?.entity_id || [],

@@ -176,14 +176,14 @@ import { storeToRefs } from "pinia";
 import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
 import type { IEntityInKu, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
-import { useKuCStore } from "~~/stores/kuCStore";
+import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
-  useKuCStore()
+  useKuStore()
 );
-const store = useKuCStore();
+const store = useKuStore();
 const store2 = useKuCAddStore();
 const store3 = useKuIdStore();
 const visible = ref(false)

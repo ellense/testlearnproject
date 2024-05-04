@@ -1,8 +1,8 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange" stripe>
-      <el-table-column label="Код услуги" prop="vendor_id" width="400" show-overflow-tooltip sortable />
-      <el-table-column prop="name" label="Наименование  услуги"  show-overflow-tooltip sortable />
+      <el-table-column label="Код услуги" prop="service_code" width="400" show-overflow-tooltip sortable />
+      <el-table-column prop="service_name" label="Наименование  услуги"  show-overflow-tooltip sortable />
       <el-table-column label="Операция" align="center" width="200">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.$index)"

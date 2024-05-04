@@ -121,13 +121,13 @@
           <el-form-item>
             <el-checkbox v-model="kuMain.newNegative_turnover" label="Отрицательный товарооборот" size="small" />
           </el-form-item>
-          <el-form-item label-width="170" label="Тип коммерческого условия" prop="newKu_type">
+          <!-- <el-form-item label-width="170" label="Тип коммерческого условия" prop="newKu_type">
             <el-select v-model="kuMain.newKu_type" size="small" clearable placeholder="Выберите тип КУ"
               style="width: 300px">
               <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
               <el-option label="Услуга" value="Услуга"></el-option>
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label-width="170" label="Способ оплаты премии" prop="newPay_method">
             <el-select v-model="kuMain.newPay_method" size="small" clearable placeholder="Выберите способ оплаты"
               style="width: 300px">

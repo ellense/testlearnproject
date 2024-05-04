@@ -1,12 +1,12 @@
 <template>
   <el-scrollbar class="scrollTable">
     <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange" stripe>
-      <el-table-column label="Действует с" prop="vendor_id" width="200" show-overflow-tooltip sortable />
-      <el-table-column label="Истечение срока" prop="vendor_id" width="200" show-overflow-tooltip sortable />
-      <el-table-column label="Код статьи услуги" prop="vendor_id" width="200" show-overflow-tooltip sortable />
-      <el-table-column prop="name" label="Наименование  статьи услуги"  width="500" show-overflow-tooltip sortable />
-      <el-table-column label="Стоимость" prop="vendor_id" width="200" show-overflow-tooltip sortable />
-      <el-table-column label="Единица измерения" prop="vendor_id"  show-overflow-tooltip sortable />
+      <el-table-column label="Действует с" prop="date_action" width="200" show-overflow-tooltip sortable />
+      <el-table-column label="Истечение срока" prop="date_expiration" width="200" show-overflow-tooltip sortable />
+      <el-table-column label="Код статьи услуги" prop="article_code" width="200" show-overflow-tooltip sortable />
+      <el-table-column prop="article_name" label="Наименование  статьи услуги"  width="500" show-overflow-tooltip sortable />
+      <el-table-column label="Стоимость" prop="price" width="200" show-overflow-tooltip sortable />
+      <el-table-column label="Единица измерения" prop="unit"  show-overflow-tooltip sortable />
       <el-table-column label="Операция" align="center" width="200">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.$index)"
