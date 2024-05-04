@@ -3,8 +3,8 @@
     <div class="directoryBar_filter">
       <h3>Графики расчетов</h3>
       <el-divider direction="vertical" />
-      <el-dropdown :disabled="isButtonsDisabledAct">
-        <el-button type="success" plain :disabled="isButtonsDisabledAct" :title="disableButtonTooltip" size="small">
+      <el-dropdown :disabled="isButtonsDisabled">
+        <el-button type="success" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
           Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
         </el-button>
         <template #dropdown>

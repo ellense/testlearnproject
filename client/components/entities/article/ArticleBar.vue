@@ -4,6 +4,7 @@
     <h3>Статьи услуг</h3>
     <el-divider direction="vertical" />
     <el-button type="success" plain @click="store.dialogFormArticleVisible = true" size="small">Добавить</el-button>
+    <el-button type="primary" plain @click="" size="small">Создать отчет</el-button>
   </div>
     <div class="directoryBar_filter">
       <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;" :prefix-icon="Search" size="small"></el-input>
@@ -47,7 +48,7 @@ watch(searchQuery, (newValue: string) => {
 });
 
 const saveRow = async () => {
-  tableData.value.push({ article_id: store.newArticle_id , article_name: store.newArticle_name, });
+  tableData.value.push({ article_code: store.newArticle_id , article_name: store.newArticle_name, });
   console.log("данные статей услуг :", store.tableDataArticle)
   store.dialogFormArticleVisible = false
   store.pagination = null
