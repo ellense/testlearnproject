@@ -1086,8 +1086,8 @@ export interface IKuCAddStore {
   newOfDocEntity: string;
   valueService_nameContract: string;
   valueArticle_nameContract: string;
-  valueService_id: string;
-  valueArticle_id: string;
+  valueService_name: string;
+  valueArticle_name: string;
   valueRatio: number | null;
   //селекты для множественного выбора
   multipleSelectionProduct: IProduct[];
@@ -1106,7 +1106,7 @@ export interface IKuCAddStore {
   productExcluded: IProduct[];
   tableDataInRequirement: IRequirement[];
   tableDataExRequirement: IRequirement2[];
-  tableDataContract: IContract[]
+  tableDataContract: IContractService[]
   tableDataPercent: IPercent[];
   tableDataExInvoiceAll: IExInvoiceForKu[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
@@ -1146,8 +1146,8 @@ export interface IKuCAddStore {
   searchProductIncluded: string;
   searchProductExcluded: string;
   //параметры для фильтров при запросах
-  filterCategory: GetAllCategory
-  filterProductIncluded: GetAllProducts
+  filterService: IParamServices
+  filterArticle: IParamServices
   filterProductExcluded: GetAllProducts
   filterProducerIncluded: GetAllProducer
   filterProducerExcluded: GetAllProducer
@@ -1297,11 +1297,11 @@ export interface IKuC_IdReturnData extends Pagination {
 
 ////услуги/////////////
 export interface IServiceAndArticle {
-  service_id: string;
+  service_code: string;
   service_name: string;
-  article_id: string;
+  article_code: string;
   article_name: string;
-  ratio: number;
+  ratio: number | null;
 }
 export interface IServicesPost {
   ku_id: string;
@@ -1486,6 +1486,7 @@ export interface GetAllGraphicСsReturnData extends Pagination {
   results: IGraphic[];
 }
 
+//клиенты
 export interface ICustomerFull {
   customer_id: string
   name: string
@@ -1501,6 +1502,46 @@ export interface ICustomerFull {
   entity_id: string
   entity_name: string
 }
+export interface IParamCustomers {
+    entity_ids?: string[]
+    page_size?: number
+    page?: number
+    search?: string;
+    sort_by?: string;
+    sort_order?: string;
+}
+export interface ICustomerReturnData extends Pagination {
+  results: ICustomerFull[]
+}
+export interface ICustomerStore {
+  dataCustomer: ICustomerFull[] 
+  pagination: Pagination | null
+  countRowTable: number
+  entityName: string[]
+  dataEntity: IEntityInKu[];
+  sortProp: string
+  sortOrder: string
+  search: string
+  filteredDataCustomer: ICustomerFull[],
+  juristicPersons: string[]
+  filterValue: IParamCustomers
+}
+
+//контракт
+export interface IContractService {
+  service_code: string;
+  service_name: string;
+  article_code: string;
+  article_name: string;
+}
+export interface IContractServicePost {
+  vendor_name: string;
+  ku_type: string;
+  provider_list: string[];
+  brand_list: string[];
+}
+
+
 
 
 

@@ -349,23 +349,6 @@ const onVendorChange = async () => {
   if (kuMain.newVendorId && kuMain.newVendorId.length > 0) {
     store.setFilterVendor('vendor_id', kuMain.newVendorId);
     store.getVendorNameFromAPIWithFilter()
-
-    try {
-      console.log("клиент:", kuMain.newVendorId);
-      store.setFilterProductInRequirement('vendor_id', kuMain.newVendorId);
-      store.setFilterProducer('vendor_id', kuMain.newVendorId);
-      store.setFilterBrand('vendor_id', kuMain.newVendorId);
-      store.setFilterCategory('vendor_id', kuMain.newVendorId);
-      store.setFilterExInvoice('vendor_id', kuMain.newVendorId);
-      await store.fetchCategories();
-      await store.getProductFromIncludedWithFilter();
-      await store.fetchAllProducersForInclided();
-      await store.fetchAllBrandsForIncluded();
-      await store.getProductFromExcludedWithFilter();
-      await store.getInvoicesFromAPIWithFilter();
-    } catch (error) {
-      console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру клиента", error);
-    }
   } else {
     store.removeFilterExInvoice("vendor_id")
     store.tableDataExInvoiceAll.length = 0

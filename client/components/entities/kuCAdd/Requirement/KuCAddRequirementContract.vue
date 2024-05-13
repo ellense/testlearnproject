@@ -6,26 +6,16 @@
         <el-button size="small" type="success" plain round @click="FormContract()">Cформировать поле контакт</el-button>
     <div class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:30vh" height="30vh" :data="tableData" border
-            empty-text="" align="center">
+            empty-text="" >
             <el-table-column label="Услуга" align="center">
-                <el-table-column property="producer_code" label="Код" width="200" show-overflow-tooltip
-                    align="center" />
-                <el-table-column property="producer_name" label="Наименование" width="500" align="center" />
+                <el-table-column property="service_code" label="Код" width="200" show-overflow-tooltip
+                     />
+                <el-table-column property="service_name" label="Наименование" width="500" />
             </el-table-column>
             <el-table-column label="Статья услуги" align="center">
-                <el-table-column property="brand_code" label="Код" width="200" show-overflow-tooltip />
-                <el-table-column property="brand_name" label="Наименование" width="500" />
+                <el-table-column property="article_code" label="Код" width="200" show-overflow-tooltip />
+                <el-table-column property="article_name" label="Наименование" width="500" />
             </el-table-column>
-            <!-- <el-table-column prop="use_producer" label="Использовать производителя" width="120" align="center">
-                <template #default="{ row }">
-                    <el-checkbox v-model="row.use_producer" @change="onUseProducerChange(row)"></el-checkbox>
-                </template>
-</el-table-column>
-<el-table-column prop="use_brand" label="Использовать торговую марку" width="120" align="center">
-    <template #default="{ row }">
-                    <el-checkbox v-model="row.use_brand" @change="onUseBrandChange(row)"></el-checkbox>
-                </template>
-</el-table-column> -->
             <el-table-column fixed="right" label="Операция" align="center">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
@@ -41,7 +31,7 @@
             <div>
                 <div class="custom-label">Услуга</div>
                 <el-select-v2 v-model="store.valueService_nameContract" clearable filterable style="width: 500px; "
-                    placeholder="Выберите услугу" :options="options2" @change="onProducerChange">
+                    placeholder="Выберите услугу" :options="optionsService">
                     <template #option="{ option }">
                         <span>{{ option.label }}</span>
                         <span style="
@@ -56,7 +46,7 @@
             <div>
                 <div class="custom-label">Статья услуг</div>
                 <el-select-v2 v-model="store.valueArticle_nameContract" clearable filterable style="width: 500px"
-                    placeholder="Выберите статью" :options="options3">
+                    placeholder="Выберите статью" :options="optionsArticle">
                     <template #option="{ option }">
                         <span>{{ option.label }}</span>
                         <span style="
@@ -82,82 +72,68 @@
 import { ref } from "vue";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
-import type { IBrand, IContract, IProducer } from "~/utils/types/directoryTypes";
+import type { IArticle, IBrand, IContract, IProducer, IService } from "~/utils/types/directoryTypes";
 
 const store = useKuCAddStore();
 const tableData = ref(store.tableDataContract);
 //добавление строк
+
 const addRow = async () => {
     if (store.valueService_nameContract || store.valueArticle_nameContract) {
-        console.log("производитель", store.valueService_nameContract);
-        console.log("марка", store.valueArticle_nameContract);
+        const selectedArticle = optionsArticle.value.find(option => option.value === store.valueArticle_nameContract);
+        const articleName = selectedArticle ? selectedArticle.label : '';
 
-        // Используем сохраненное значение selectedCategoryName
+        const selectedService = optionsService.value.find(option => option.value === store.valueService_nameContract);
+        const serviceName = selectedService ? selectedService.label : '';
+
+        console.log("valueService_id", store.valueService_nameContract);
+        console.log("valueArticle_id", store.valueArticle_nameContract);
+
+        // Используем наименование услуги и статьи услуги для сохранения
         store.tableDataContract.push({
-            producer_code: "",
-            brand_code: "",
-            use_producer: false,
-            use_brand: false,
-            producer_name: store.valueService_nameContract,
-            brand_name: store.valueArticle_nameContract,
+            service_code: store.valueService_nameContract,
+            service_name: serviceName,
+            article_code: store.valueArticle_nameContract,
+            article_name: articleName,
         });
-        console.log("строка таблицы контркта", store.tableDataContract);
 
-        store.dialogFormContractVisible = false;
-        store.valueArticle_nameContract = "";
-        store.valueService_nameContract = "";
-        store.setFilterBrand('producer_name', undefined);
-        await store.fetchAllProducersForInclided();
-        await store.fetchAllBrandsForIncluded();
+        console.log("оказываемые услуги", store.tableDataServiceSelect);
+        store.dialogFormServiceVisible = false;
+        store.valueRatio = null;
+        store.valueService_name = "";
+        store.valueArticle_name = "";
     } else {
         ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
     }
 };
+
 //удаление строк
 const deleteRow = (index: number) => {
     store.tableDataContract.splice(index, 1);
 }
-
-const onUseProducerChange = (row: IContract) => {
-    const rowIndex = tableData.value.findIndex(item => item === row);
-    store.tableDataContract[rowIndex].use_producer = row.use_producer;
-    console.log("данные tableDataContract в хранилище изменены:", store.tableDataContract)
-};
-const onUseBrandChange = (row: IContract) => {
-    const rowIndex = tableData.value.findIndex(item => item === row);
-    store.tableDataContract[rowIndex].use_brand = row.use_brand;
-    console.log("данные tableDataContract в хранилище изменены:", store.tableDataContract)
-};
-
-const options2 = ref<Array<{ label: string; value: string }>>([]);
-const options3 = ref<Array<{ label: string; value: string }>>([]);
-
-watch(() => store.producerIncluded, (producers: IProducer[]) => {
-    const uniqueProducers = Array.from(new Set(producers.map(item => item.producer_name)));
-    options2.value = uniqueProducers.map(label => ({ label, value: label }));
-});
-
-watch(() => store.brandIncluded, (brands: IBrand[]) => {
-    const uniqueBrands = Array.from(new Set(brands.map(item => item.brand_name)));
-    options3.value = uniqueBrands.map(label => ({ label, value: label }));
-});
-
-const onProducerChange = async () => {
-    store.valueArticle_nameContract = "";
-    store.setFilterBrand('producer_name', store.valueService_nameContract);
-    if (store.valueService_nameContract) { // Проверка, что выбрана торговая маркка
-        store.fetchAllBrandsForIncluded();
-    } else {
-        store.setFilterBrand('producer_name', undefined); // Сбросить фильтр
-        store.fetchAllBrandsForIncluded(); // Выполнить запрос без фильтра
+onMounted(async () => {
+    try {
+        await store.getServiceFromAPIWithFilter();
+        await store.getArticleFromAPIWithFilter();
+    } catch (error) {
+        console.error("Ошибка при загрузке данных услуг", error);
     }
-};
+});
+const optionsService = ref<Array<{ label: string; value: string }>>([]);
+watch(() => store.tableDataServiceAll, (vendors: IService[]) => {
+    optionsService.value = vendors.map(item => ({ label: item.service_name, value: item.service_code }));
+});
+const optionsArticle = ref<Array<{ label: string; value: string }>>([]);
+watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
+    optionsArticle.value = vendors.map(item => ({ label: item.article_name, value: item.article_code }));
+});
+
 const FormContract = async () => {
     const newItem = {
         vendor_name: store.kuAddMain.newVendorId,
         ku_type: "",
-        provider_list: store.tableDataContract.map(item => item.producer_name),
-        brand_list: store.tableDataContract.map(item => item.brand_name),
+        provider_list: store.tableDataContract.map(item => item.service_code),
+        brand_list: store.tableDataContract.map(item => item.article_code),
     }
     await store.createKuContract(newItem)
 }

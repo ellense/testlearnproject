@@ -1,21 +1,19 @@
 <template>
-    <el-button size="small" type="primary" plain round @click="store.dialogFormServiceVisible = true"
-        >Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0"
-        >Удалить
+    <el-button size="small" type="primary" plain round
+        @click="store.dialogFormServiceVisible = true">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataServiceSelect.length = 0">Удалить
         все</el-button>
     <div class="scrollTableRequirement">
-        <el-table :data="tableData2" border style="width: 100%; height:30vh" height="30vh"
-            empty-text="Добавьте услуги">
+        <el-table :data="tableData2" border style="width: 100%; height:30vh" height="30vh" empty-text="Добавьте услуги">
             <el-table-column label="Услуга" align="center">
-                <el-table-column property="discription" label="Код" width="200" show-overflow-tooltip />
-                <el-table-column property="discription" label="Наименование" width="400" show-overflow-tooltip />
+                <el-table-column property="service_code" label="Код" width="200" show-overflow-tooltip />
+                <el-table-column property="service_name" label="Наименование" width="400" show-overflow-tooltip />
             </el-table-column>
             <el-table-column label="Статья услуги" align="center">
-                <el-table-column property="discription" label="Код" width="200" show-overflow-tooltip />
-                <el-table-column property="discription" label="Наименование" width="400" show-overflow-tooltip />
+                <el-table-column property="article_code" label="Код" width="200" show-overflow-tooltip />
+                <el-table-column property="article_name" label="Наименование" width="550" show-overflow-tooltip />
             </el-table-column>
-            <el-table-column prop="percent_sum" label="Коэффициент" width="200"/>
+            <el-table-column prop="ratio" label="Коэффициент" width="150" />
             <el-table-column align="center" label="Операция">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small"
@@ -25,119 +23,210 @@
         </el-table>
     </div>
     <el-dialog v-model="store.dialogFormServiceVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
-      close-on-press-escape draggable width="715px">
-      <el-scrollbar class="scrollTableFiltres">
-        <el-form >
-          <el-form-item label-width="130" label="Услуга">
-            <el-select v-model="store.valueService_id" size="small" placeholder="Выберите услугу" clearable
-                filterable style="width: 300px">
-                <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left;">{{ item.value }}</span>
-                  <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
-                </el-option>
-              </el-select>
-          </el-form-item>
-          <el-form-item label-width="130" label="Статья услуги" >
-            <el-select v-model="store.valueArticle_id" size="small" placeholder="Выберите статью" clearable
-                filterable style="width: 300px">
-                <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left;">{{ item.value }}</span>
-                  <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
-                </el-option>
-              </el-select>
-          </el-form-item>
-          <el-form-item label-width="130" label="Коэффициент" >
-            <el-input v-model="store.valueRatio" size="small" clearable placeholder="Введите коэффициент"
-              style="width: 300px">
-            </el-input>
-          </el-form-item>
-        </el-form>
-      </el-scrollbar>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="store.dialogFormServiceVisible = false">Отмена</el-button>
-          <el-button @click="saveRow()">Сохранить</el-button>
-        </span>
-      </template>
+        close-on-press-escape draggable width="715px">
+        <el-scrollbar class="scrollTableFiltres">
+            <el-form>
+                <el-form-item label-width="130" label="Услуга">
+                    <el-select v-model="store.valueService_name" size="small" placeholder="Выберите услугу" clearable
+                        filterable style="width: 300px">
+                        <el-option v-for="item in optionsService" :key="item.value" :label="item.label" :value="item.value">
+                            <span style="float: left;">{{ item.label }}</span>
+                            <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
+                        </el-option>
+                        <template #footer>
+                            <el-button v-if="!isAddingService" text bg size="small" @click="onAddServiceOption">
+                                Добавить
+                            </el-button>
+                            <template v-else>
+                                <el-input v-model="optionServiceId" class="option-input" placeholder="Введите код услуги"
+                                    size="small" />
+                                <el-input v-model="optionServiceName" class="option-input"
+                                    placeholder="Введите наименование услуги" size="small" />
+                                <el-button type="primary" size="small" @click="onConfirmService">
+                                    Сохранить
+                                </el-button>
+                                <el-button size="small" @click="clearService">Отменить</el-button>
+                            </template>
+                        </template>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label-width="130" label="Статья услуги">
+                    <el-select v-model="store.valueArticle_name" size="small" placeholder="Выберите статью" clearable
+                        filterable style="width: 300px">
+                        <el-option v-for="item in optionsArticle" :key="item.value" :label="item.label" :value="item.value">
+                            <span style="float: left;">{{ item.label }}</span>
+                            <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
+                        </el-option>
+                        <template #footer>
+                            <el-button v-if="!isAddingArticle" text bg size="small" @click="onAddArticleOption">
+                                Добавить
+                            </el-button>
+                            <template v-else>
+                                <el-input v-model="optionArticleId" class="option-input" placeholder="Введите код статьи услуги"
+                                    size="small" />
+                                <el-input v-model="optionArticleName" class="option-input"
+                                    placeholder="Введите наименование статьи услуги" size="small" />
+                                <el-button type="primary" size="small" @click="onConfirmArticle">
+                                    Сохранить
+                                </el-button>
+                                <el-button size="small" @click="clearArticle">Отменить</el-button>
+                            </template>
+                        </template>
+                    </el-select>
+                </el-form-item>
+                <el-form-item label-width="130" label="Коэффициент">
+                    <el-input v-model="store.valueRatio" size="small" clearable placeholder="Введите коэффициент"
+                        style="width: 300px">
+                    </el-input>
+                </el-form-item>
+            </el-form>
+        </el-scrollbar>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="store.dialogFormServiceVisible = false">Отмена</el-button>
+                <el-button @click="saveRow()">Сохранить</el-button>
+            </span>
+        </template>
     </el-dialog>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
-import type { IArticle, IService, IServiceAndArticle, } from "~/utils/types/directoryTypes";
+import type { IArticle, IService } from "~/utils/types/directoryTypes";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
 const store = useKuCAddStore();
-const { getServiceAll, pagination, countRowTable } = storeToRefs(
-    store
-);
-const tableData = ref<IService[]>(getServiceAll.value);
 
-const loading = ref()
-
-watch(getServiceAll, (value) => {
-    tableData.value = value || [];
-});
-
-const pageSize = ref(countRowTable);
-const handleSizeChange = async (val: number) => {
-    pageSize.value = val;
-    store.setCountRowTable(val);
-    try {
-        // await store.getProductFromExcludedWithFilter();
-    } catch (error) {
-        console.error("Ошибка при загрузке данных кат. менеджеров", error);
-    }
-};
-//пагинация
-const paginationChange = (page: number) => {
-    // store.setFilterExInvoice('page', page);
-    //   store.getProductFromExcludedWithFilter(page);
-};
-
-//для очистки выбора
-const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const toggleSelection = (rows?: IServiceAndArticle[]) => {
-    if (rows) {
-        rows.forEach((row) => {
-            multipleTableRef.value!.toggleRowSelection(row, false)
-        })
-    } else {
-        multipleTableRef.value!.clearSelection()
-    }
-}
 const tableData2 = ref(store.tableDataServiceSelect);
 
-const options = ref<Array<{ label: string; value: string }>>([]);
+onMounted(async () => {
+    try {
+        await store.getServiceFromAPIWithFilter();
+        await store.getArticleFromAPIWithFilter();
+    } catch (error) {
+        console.error("Ошибка при загрузке данных услуг", error);
+    }
+});
+const optionsService = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store.tableDataServiceAll, (vendors: IService[]) => {
-  options2.value = vendors.map(item => ({ label: item.service_name, value: item.service_id }));
+    optionsService.value = vendors.map(item => ({ label: item.service_name, value: item.service_code }));
 });
-
-const options2 = ref<Array<{ label: string; value: string }>>([]);
+const optionsArticle = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
-  options2.value = vendors.map(item => ({ label: item.article_name, value: item.service_id }));
+    optionsArticle.value = vendors.map(item => ({ label: item.article_name, value: item.article_code }));
 });
-//добавление условий
-const saveRow = () => {
-    const selectedRows = store.multipleSelectionServiceSelect;
 
-    selectedRows.forEach(row => {
+const isAddingService = ref(false)
+const optionServiceId = ref('')
+const optionServiceName = ref('')
+
+const onAddServiceOption = () => {
+    isAddingService.value = true
+}
+
+const onConfirmService = async () => {
+    if (optionServiceName.value || optionServiceId.value) {
+        optionsService.value.push({
+            label: optionServiceName.value,
+            value: optionServiceId.value,
+        })
+        const data = {
+            service_code: optionServiceId.value,
+            service_name: optionServiceName.value,
+        };
+
+        try {
+            const response = await SERVICE.postServices(data);
+            console.log("услуга успешно отправлена:", response);
+            await store.getServiceFromAPIWithFilter();
+        } catch (error) {
+            console.error("Ошибка при добавлении услуг на сервер", error);
+        }
+        clearService()
+    }
+}
+
+const clearService = () => {
+    optionServiceId.value = ''
+    optionServiceName.value = ''
+    isAddingService.value = false
+}
+
+const isAddingArticle = ref(false)
+const optionArticleId = ref('')
+const optionArticleName = ref('')
+
+const onAddArticleOption = () => {
+    isAddingArticle.value = true
+}
+
+const onConfirmArticle = async () => {
+    if (optionArticleName.value || optionArticleId.value) {
+        optionsArticle.value.push({
+            label: optionArticleName.value,
+            value: optionArticleId.value,
+        })
+        const data = {
+            article_code: optionArticleId.value,
+            article_name: optionArticleName.value,
+        };
+
+        try {
+            const response = await SERVICE.postArticles(data);
+            console.log("услуга успешно отправлена:", response);
+            await store.getArticleFromAPIWithFilter();
+        } catch (error) {
+            console.error("Ошибка при добавлении услуг на сервер", error);
+        }
+        clearArticle()
+    }
+}
+
+const clearArticle = () => {
+    optionArticleId.value = ''
+    optionArticleName.value = ''
+    isAddingArticle.value = false
+}
+//добавление услуг
+const saveRow = async () => {
+    if (store.valueService_name || store.valueArticle_name || store.valueRatio) {
+        // Находим объект с соответствующим значением article_code в options2
+        const selectedArticle = optionsArticle.value.find(option => option.value === store.valueArticle_name);
+        // Получаем наименование статьи услуги из найденного объекта
+        const articleName = selectedArticle ? selectedArticle.label : '';
+
+        // Находим объект с соответствующим значением service_code в options
+        const selectedService = optionsService.value.find(option => option.value === store.valueService_name);
+        // Получаем наименование услуги из найденного объекта
+        const serviceName = selectedService ? selectedService.label : '';
+
+        console.log("valueService_id", store.valueService_name);
+        console.log("valueArticle_id", store.valueArticle_name);
+        console.log("valueRatio", store.valueRatio);
+
+        // Используем наименование услуги и статьи услуги для сохранения
         store.tableDataServiceSelect.push({
-            service_id: row.service_id,
-            service_name: row.service_name,
-            article_id: row.service_name,
-            article_name: row.service_name,
-            ratio: row.ratio,
+            service_code: store.valueService_name,
+            service_name: serviceName,
+            article_code: store.valueArticle_name,
+            article_name: articleName,
+            ratio: store.valueRatio,
         });
-    });
-    console.log("менеджеры", store.tableDataServiceSelect);
-    toggleSelection()
-    store.dialogFormManagersVisible = false;
+
+        console.log("оказываемые услуги", store.tableDataServiceSelect);
+        store.dialogFormServiceVisible = false;
+        store.valueRatio = null;
+        store.valueService_name = "";
+        store.valueArticle_name = "";
+    } else {
+        ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
+    }
 };
+
+
 //удаление менеджеров
 const deleteRow = (index: number) => {
     store.tableDataServiceSelect.splice(index, 1);
@@ -148,5 +237,10 @@ const deleteRow = (index: number) => {
 <style scoped>
 .el-scrollbar__view {
     width: 740px;
+}
+
+.option-input {
+    width: 100%;
+    margin-bottom: 8px;
 }
 </style>

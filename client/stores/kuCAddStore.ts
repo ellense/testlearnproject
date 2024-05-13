@@ -19,6 +19,7 @@ import type {
     IContractPost,
     IVendorIdAndName,
     IKuCAddStore,
+    IParamServices,
 } from "~/utils/types/directoryTypes";
 
 export const useKuCAddStore = defineStore("KuCAddStore", {
@@ -52,8 +53,8 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         newOfDocEntity: "",
         valueService_nameContract: "",
         valueArticle_nameContract: "",
-        valueService_id: "",
-        valueArticle_id: "",
+        valueService_name: "",
+        valueArticle_name: "",
         valueRatio: null,
         //селекты для множественного выбора
         multipleSelectionProduct: [],
@@ -111,14 +112,14 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         searchProductIncluded: "",
         searchProductExcluded: "",
         //параметры для фильтров при запросах
-        filterProductIncluded: {},
+        filterService: {},
+        filterArticle: {},
         filterProductExcluded: {},
         filterProducerIncluded: {},
         filterProducerExcluded: {},
         filterBrandIncluded: {},
         filterBrandExcluded: {},
         filterVendorValue: {},
-        filterCategory: {},
         filterExInvoice: {},
         isFormValid: false,
     }),
@@ -287,176 +288,76 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
 
 
         ////////////////////////////////////////////////////////////////////
-        setFilterCategory<
-            T extends keyof GetAllCategory,
-            U extends GetAllCategory[T],
-        >(field: T, value: U) {
-            this.$state.filterCategory[field] = value
-            console.log("filterCategory", this.$state.filterCategory);
-        },
-        removeFilterCategory<T extends keyof GetAllCategory>(field: T) {
-            if (this.$state.filterCategory) {
-                delete this.$state.filterCategory[field]
-            }
-        },
-        // Метод для построения дерева
-        buildTree(nodes: ITree[], parentCode: string | null = null): ITree[] {
-            const parentNode = nodes.filter(node => node.parent_code === parentCode);
-            if (!parentNode.length) return []; // Если узел родителя не существует, вернуть пустой массив
 
-            return parentNode.map(node => {
-                const children = this.buildTree(nodes, node.classifier_code.toString());
-                if (children.length) {
-                    node.children = children;
-                }
-                return node;
-            });
-        },
-
-        // Метод для загрузки данных
-        async fetchCategories() {
-            try {
-                const result = await CATEGORY.getCategory2({
-                    vendor_id: this.$state.filterCategory.vendor_id,
-                });
-                if (Array.isArray(result)) {
-                    this.$state.treeData = this.buildTree(result, '0');
-                    console.log("получено дерево категорий: ", this.$state.treeData);
-                } else {
-                    this.treeData = [];
-                    console.error("Данные категорий не получены или не являются массивом");
-                }
-                console.log("After API call");
-            } catch (error) {
-                console.error("Произошла ошибка при получении данных категорий", error);
-            }
-        },
-
-        //получение данных о производителе с фильтром
-        async fetchAllProducersForInclided() {
-            try {
-                let allProducer: IProducer[] = [];
-                let nextPage = 1;
-                let totalPages = 1;
-                while (nextPage <= totalPages) {
-                    const producers = await PRODUCER.getProducer({
-                        page_size: this.$state.countRowTable2,
-                        page: nextPage,
-                        l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.filterProducerIncluded.vendor_id,
-                    });
-                    allProducer = allProducer.concat(producers.results);
-                    totalPages = Math.ceil(producers.count / this.$state.countRowTable2);
-                    nextPage++;
-                }
-                console.log("Все данные о производителе:", allProducer);
-                this.$state.producerIncluded = allProducer;
-                this.$state.producerExcluded = allProducer;
-            } catch (error) {
-                console.error(
-                    "Произошла ошибка при получении данных о производителе",
-                    error
-                );
-                return Promise.reject(error);
-            }
-        },
-        setFilterProducer<
-            T extends keyof GetAllProducer,
-            U extends GetAllProducer[T],
-        >(field: T, value: U) {
-            this.$state.filterProducerIncluded[field] = value
-            console.log("filterProducerIncluded", this.$state.filterProducerIncluded);
-        },
-        removeFilterProducer<T extends keyof GetAllProducer>(field: T) {
-            if (this.$state.filterProducerIncluded) {
-                delete this.$state.filterProducerIncluded[field]
-            }
-        },
-
-        //получение данных о бренде с фильтром для включенных условий
-        async fetchAllBrandsForIncluded() {
-            try {
-                let allBrands: IBrand[] = [];
-                let nextPage = 1;
-                let totalPages = 1;
-                while (nextPage <= totalPages) {
-                    const brands = await BRAND.getBrand({
-                        page_size: this.$state.countRowTable2,
-                        page: nextPage,
-                        producer_name: this.$state.filterBrandIncluded.producer_name,
-                        l4: this.$state.filterProducerIncluded.l4,
-                        vendor_id: this.$state.filterProducerIncluded.vendor_id
-                    });
-                    allBrands = allBrands.concat(brands.results);
-                    totalPages = Math.ceil(brands.count / this.$state.countRowTable2);
-                    nextPage++;
-                }
-                console.log("Все данные о брендах:", allBrands);
-                this.$state.brandIncluded = allBrands;
-                this.$state.brandExcluded = allBrands;
-            } catch (error) {
-                console.error(
-                    "Произошла ошибка при получении данных о брендах",
-                    error
-                );
-                return Promise.reject(error);
-            }
-        },
-        setFilterBrand<
-            T extends keyof GetAllBrands,
-            U extends GetAllBrands[T],
-        >(field: T, value: U) {
-            this.$state.filterBrandIncluded[field] = value
-        },
-        removeFilterBrand<T extends keyof GetAllBrands>(field: T) {
-            if (this.$state.filterBrandIncluded) {
-                delete this.$state.filterBrandIncluded[field]
-            }
-        },
-
-
-        //получение данных о товарах для условий с фильтром и поиск 
-        async getProductFromIncludedWithFilter(page?: number) {
-            this.setFilterProductInRequirement('page', page);
-            this.setFilterProductInRequirement('search', this.$state.searchProductIncluded);
-
-            await PRODUCT.getProductsList({
+         //получение услуг
+        async getServiceFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
+            this.setFilterValueServices('page', page);
+            this.setFilterValueServices('sort_by', sort_by);
+            this.setFilterValueServices('sort_order', sort_order);
+            await SERVICE.getServiceList({
                 page_size: this.$state.countRowTable,
                 page,
-                search: this.$state.searchProductIncluded,
-                vendor_id: this.$state.filterProductIncluded.vendor_id
+                sort_by,
+                sort_order,
             })
-                .then((product) => {
-                    console.log('Получены данные вкл товаров:', product);
-                    this.$state.productIncluded = product.results;
+                .then((tableData) => {
+                    console.log('Получены данные услуг:', tableData);
+                    this.$state.tableDataServiceAll = tableData.results;
                     this.$state.pagination = {
-                        count: product.count,
-                        previous: product.previous,
-                        next: product.next,
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
                     };
                 })
-                .catch((error) => {
-                    console.error('Ошибка при получении данных вкл товаров ку_адд:', error);
-                    return Promise.reject(error);
-                });
+                .catch((error) => Promise.reject(error));
         },
-        async performSearchProductIn(searchQuery: string) {
-            try {
-                this.setSearchProductIn(searchQuery);
-                await this.getProductFromIncludedWithFilter();
-            } catch (error) {
-                console.error('Ошибка при выполнении поиска в вкл товарах ку_адд', error);
-            }
-        },
-        setSearchProductIn(query: string) {
-            this.$state.searchProductIncluded = query;
-        },
-        setFilterProductInRequirement<
-            T extends keyof GetAllProducts,
-            U extends GetAllProducts[T],
+
+        setFilterValueServices<
+            T extends keyof IParamServices,
+            U extends IParamServices[T],
         >(field: T, value: U) {
-            this.$state.filterProductIncluded[field] = value
+            this.$state.filterService[field] = value
         },
+
+
+        //получение статей услуг
+        async getArticleFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
+            this.setFilterValueArticle('page', page);
+            this.setFilterValueArticle('sort_by', sort_by);
+            this.setFilterValueArticle('sort_order', sort_order);
+            await SERVICE.getArticleList({
+                page_size: this.$state.countRowTable,
+                page,
+                sort_by,
+                sort_order,
+            })
+                .then((tableData) => {
+                    console.log('Получены данные статей услуг:', tableData);
+                    this.$state.tableDataArticleAll = tableData.results;
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => Promise.reject(error));
+        },
+
+        setFilterValueArticle<
+            T extends keyof IParamServices,
+            U extends IParamServices[T],
+        >(field: T, value: U) {
+            this.$state.filterArticle[field] = value
+        },
+
+///////////////////////////////////////////////////////////////////
+
+     
+
+      
+
+
+       
 
 
         //////////////////////// ИСКЛЮЧЕННЫЕ УСЛОВИЯ   //////////////////////////////////////////////
@@ -621,12 +522,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
 
             // очищение фильтров
             this.removeFilterVendor('entity_id');
-            this.removeFilterCategory('vendor_id');
-            this.removeFilterExInvoice('vendor_id');
-            this.removeFilterProducer('vendor_id');
-            this.removeFilterBrand('vendor_id');
-            this.removeFilterCategory('vendor_id');
-            this.removeFilterCategory('vendor_id');
+
         },
         //создание контракта
         async createKuContract(newItem: IContractPost) {

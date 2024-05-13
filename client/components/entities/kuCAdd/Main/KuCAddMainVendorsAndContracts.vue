@@ -10,20 +10,14 @@
       empty-text="Добавьте поставщиков"  >
       <el-table-column property="group" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">
-      <el-table-column property="discription" label="Номер счета" width="150" show-overflow-tooltip />
-      <el-table-column property="discription" label="Наименование" width="200"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Удержание" width="100"  show-overflow-tooltip />
+      <el-table-column property="discription" label="Код" width="200" show-overflow-tooltip />
+      <el-table-column property="discription" label="Наименование" width="300"  show-overflow-tooltip />
+      <el-table-column property="discription" label="Удержание" width="150"  show-overflow-tooltip />
+      <el-table-column property="discription" label="Статус" width="200"  show-overflow-tooltip />
     </el-table-column>
-      <el-table-column label="Документ"  align="center">
-        <el-table-column property="discription" label="Код" width="150"  show-overflow-tooltip />
-        <el-table-column property="discription" label="Заголовок" width="150" 
-          show-overflow-tooltip />
-        <el-table-column property="discription" label="Название" width="150"  show-overflow-tooltip />
-      </el-table-column>
-      <el-table-column property="discription" label="Статус" width="150"  show-overflow-tooltip />
       <el-table-column label="Юридическое лицо"  align="center">
-      <el-table-column property="discription" label="Код" width="100"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Наименование" width="200"  show-overflow-tooltip />
+      <el-table-column property="discription" label="Код" width="150"  show-overflow-tooltip />
+      <el-table-column property="discription" label="Наименование" width="300"  show-overflow-tooltip />
     </el-table-column>
       <el-table-column align="center" label="Операция">
         <template #default="scope">

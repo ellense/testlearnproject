@@ -69,6 +69,10 @@ import type {
   IKusCReturnData,
   IKuCList,
   IServicesPost,
+  IService,
+  IArticle,
+  IParamCustomers,
+  ICustomerReturnData,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -114,6 +118,10 @@ export const VENDOR = {
     $Get("api/vendor_filter/", { params, isBearer: false }),
   getVendorDetail: (data: IVendorId): Promise<IVendorFull> =>
     $Get(`api/vendor_detail/${data.vendor_id}/`, { data, isBearer: false }),
+};
+export const CUSTOMER = {
+  getCustomersList: (params?: IParamCustomers): Promise<ICustomerReturnData> =>
+    $Get("api/customer_list/", { params, isBearer: false }),
 };
 
 export const PRODUCT = {
@@ -235,6 +243,11 @@ export const SERVICE = {
     $Get("api/price_list/", { params, isBearer: false }),
   getArticleList: (params?: IParamServices): Promise<IArticleReturnData> =>
     $Get("api/article_list/", { params, isBearer: false }),
+
+  postServices: (data: IService): Promise<IService> =>
+    $Post("api/service_list/", { data, isBearer: false }),
+  postArticles: (data: IArticle): Promise<IArticle> =>
+    $Post("api/article_list/", { data, isBearer: false }),
   // getVendorsForEntityInVendor: (
   //   params?: IParamVendorsForEntityInVendor
   // ): Promise<IVendorsForEntityInVendorReturnData> =>

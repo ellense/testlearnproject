@@ -74,7 +74,7 @@ export const useServiceStore = defineStore("IServiceStore", {
                 sort_order,
             })
                 .then((tableData) => {
-                    console.log('Получены данные поставщиков:', tableData);
+                    console.log('Получены данные услуг:', tableData);
                     this.$state.tableDataService = tableData.results;
                     this.$state.pagination = {
                         count: tableData.count,
@@ -119,7 +119,7 @@ export const useServiceStore = defineStore("IServiceStore", {
                 sort_order,
             })
                 .then((tableData) => {
-                    console.log('Получены данные поставщиков:', tableData);
+                    console.log('Получены данные статей услуг:', tableData);
                     this.$state.tableDataArticle = tableData.results;
                     this.$state.pagination = {
                         count: tableData.count,
@@ -164,7 +164,7 @@ export const useServiceStore = defineStore("IServiceStore", {
                 sort_order,
             })
                 .then((tableData) => {
-                    console.log('Получены данные поставщиков:', tableData);
+                    console.log('Получены данные прайслиста:', tableData);
                     this.$state.tableDataPricelist = tableData.results;
                     this.$state.pagination = {
                         count: tableData.count,
@@ -209,7 +209,7 @@ export const useServiceStore = defineStore("IServiceStore", {
                 sort_order,
             })
                 .then((tableData) => {
-                    console.log('Получены данные поставщиков:', tableData);
+                    console.log('Получены данные мест оказания услуг:', tableData);
                     this.$state.tableDataPlace = tableData.results;
                     this.$state.pagination = {
                         count: tableData.count,

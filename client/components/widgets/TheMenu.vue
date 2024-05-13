@@ -37,38 +37,7 @@
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        <nuxt-link to="/service">
-          <el-menu-item index="6">
-            <el-icon>
-              <Memo />
-            </el-icon>
-            <span>Услуги</span>
-          </el-menu-item>
-        </nuxt-link>
-        <nuxt-link to="/article">
-          <el-menu-item index="7">
-            <el-icon>
-              <Memo />
-            </el-icon>
-            <span>Статьи услуг</span>
-          </el-menu-item>
-        </nuxt-link>
-        <nuxt-link to="/pricelist">
-          <el-menu-item index="8">
-            <el-icon>
-              <Memo />
-            </el-icon>
-            <span>Прайс-лист услуг</span>
-          </el-menu-item>
-        </nuxt-link>
-        <nuxt-link to="/place">
-          <el-menu-item index="9">
-            <el-icon>
-              <Memo />
-            </el-icon>
-            <span>Места оказания услуг</span>
-          </el-menu-item>
-        </nuxt-link>
+        
         <el-divider content-position="left" style=" color: #337ecc;">Справочники</el-divider>
         <nuxt-link to="/entity">
           <el-menu-item index="10">
@@ -111,7 +80,40 @@
             <span>Товары</span>
           </el-menu-item>
         </nuxt-link>
+        <nuxt-link to="/service">
+          <el-menu-item index="6">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Услуги</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/article">
+          <el-menu-item index="7">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Статьи услуг</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/pricelist">
+          <el-menu-item index="8">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Прайс-лист услуг</span>
+          </el-menu-item>
+        </nuxt-link>
+        <nuxt-link to="/place">
+          <el-menu-item index="9">
+            <el-icon>
+              <Memo />
+            </el-icon>
+            <span>Места оказания услуг</span>
+          </el-menu-item>
+        </nuxt-link>
         <el-divider />
+        
 
         <el-menu-item index="14">
           <!-- <el-dropdown>

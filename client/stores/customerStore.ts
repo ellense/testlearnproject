@@ -1,23 +1,23 @@
 import { defineStore } from "pinia";
-import type { IVendor, IVendorStore, WithoutNullableKeys, IParamVendorsForEntityInVendor, EntityId } from "~/utils/types/directoryTypes";
+import type { IVendor, IVendorStore, WithoutNullableKeys, IParamVendorsForEntityInVendor, EntityId, IParamCustomers, ICustomerStore } from "~/utils/types/directoryTypes";
 
-export const useVendorStore = defineStore("IVendorStore", {
-  state: (): IVendorStore => ({
-    dataVendor: [], // Массив поставщиков
-    pagination: null, // Пагинация результатов запроса
-    countRowTable: 100, // Количество строк в таблице
+export const useCustomerStore = defineStore("ICustomerStore", {
+  state: (): ICustomerStore => ({
+    dataCustomer: [], 
+    pagination: null, 
+    countRowTable: 100, 
     entityName: [],
     dataEntity: [],
     search: "",
     sortProp: "",
     sortOrder: "",
-    filteredDataVendor: [],
+    filteredDataCustomer: [],
     juristicPersons: [],
     filterValue: {}
   }),
 
   getters: {
-    getVendors: (state) => state.dataVendor as WithoutNullableKeys<IVendor[]>,
+    getCustomers: (state) => state.dataCustomer,
   },
 
   actions: {
@@ -27,7 +27,7 @@ export const useVendorStore = defineStore("IVendorStore", {
         // Устанавливаем значение для поиска в хранилище
         this.setSearchQuery(searchQuery);
         // Вызываем метод для получения данных с учетом поискового запроса
-        await this.getVendorFromAPIWithFilter();
+        await this.getCustomerFromAPIWithFilter();
       } catch (error) {
         console.error('Ошибка при выполнении поиска', error);
       }
@@ -49,8 +49,8 @@ export const useVendorStore = defineStore("IVendorStore", {
       )
     },
     setFilterValue<
-      T extends keyof IParamVendorsForEntityInVendor,
-      U extends IParamVendorsForEntityInVendor[T],
+      T extends keyof IParamCustomers,
+      U extends IParamCustomers[T],
     >(field: T, value: U) {
       this.$state.filterValue[field] = value
     },
@@ -61,12 +61,12 @@ export const useVendorStore = defineStore("IVendorStore", {
     },
 
     //получение поставщиков
-    async getVendorFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
+    async getCustomerFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
       this.setFilterValue('page', page);
       this.setFilterValue('search', this.$state.search);
       this.setFilterValue('sort_by', sort_by);
       this.setFilterValue('sort_order', sort_order); 
-      await VENDOR.getVendorsForEntityInVendor({
+      await CUSTOMER.getCustomersList({
         page_size: this.$state.countRowTable,
         page,
         entity_ids: this.$state.filterValue?.entity_ids || [],
@@ -74,13 +74,13 @@ export const useVendorStore = defineStore("IVendorStore", {
         sort_by,
         sort_order,
       })
-        .then((dataVendor) => {
-          console.log('Получены данные поставщиков:', dataVendor);
-          this.$state.dataVendor = dataVendor.results;
+        .then((dataCustomer) => {
+          console.log('Получены данные поставщиков:', dataCustomer);
+          this.$state.dataCustomer = dataCustomer.results;
           this.$state.pagination = {
-            count: dataVendor.count,
-            previous: dataVendor.previous,
-            next: dataVendor.next,
+            count: dataCustomer.count,
+            previous: dataCustomer.previous,
+            next: dataCustomer.next,
           };
         })
         .catch((error) => Promise.reject(error));
