@@ -6,6 +6,7 @@ import type {
   IParamKus,
   IKuCStore,
   IKuCList,
+  IParamKusC,
 } from "~/utils/types/directoryTypes";
 
 export const useKuCStore = defineStore("KuCStore", {
@@ -70,7 +71,7 @@ export const useKuCStore = defineStore("KuCStore", {
         page_size: this.$state.countRowTable,
         page,
         entity_id: this.$state.filterKuValue?.entity_id || [],
-        vendor_id: this.$state.filterKuValue?.vendor_id || [],
+        customer_id: this.$state.filterKuValue?.customer_id || [],
         status: this.$state.filterKuValue?.status || [],
         graph_exists: this.$state.filterKuValue?.graph_exists,
         date_start_s: this.$state.filterKuValue?.date_start_s,
@@ -99,12 +100,12 @@ export const useKuCStore = defineStore("KuCStore", {
 
     //для фильтрации ку
     setFilterValue< 
-      T extends keyof IParamKus,
-      U extends IParamKus[T],
+      T extends keyof IParamKusC,
+      U extends IParamKusC[T],
     >(field: T, value: U) {
       this.$state.filterKuValue[field] = value
     },
-    removeFilterValue<T extends keyof IParamKus>(field: T) {
+    removeFilterValue<T extends keyof IParamKusC>(field: T) {
       if (this.$state.filterKuValue) {
         delete this.$state.filterKuValue[field]
       }

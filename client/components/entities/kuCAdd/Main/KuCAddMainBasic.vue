@@ -29,9 +29,9 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="130" label="Код клиента" prop="newVendorId">
+          <el-form-item label-width="130" label="Код клиента" prop="newCustomerId">
             <div>
-              <el-select v-model="kuMain.newVendorId" size="small" placeholder="Выберите клинета" clearable
+              <el-select v-model="kuMain.newCustomerId" size="small" placeholder="Выберите клинета" clearable
                 filterable style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
@@ -47,13 +47,6 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <!-- <el-form-item label-width="130" label="Тип товаров">
-            <el-select v-model="kuMain.newProduct_type" size="small" clearable placeholder="Выберите тип товаров"
-              style="width: 300px">
-              <el-option label="Продовольственные" value="Продовольственные"></el-option>
-              <el-option label="Непродовольственные" value="Непродовольственные"></el-option>
-            </el-select>
-          </el-form-item> -->
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
@@ -80,7 +73,7 @@
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Оплата</el-divider>
           <el-form-item label-width="170" label="Общая сумма премии" prop="newDocu_account">
-            <el-input v-model="kuMain.newPay_sum" size="small" clearable placeholder="Введите номер счета"
+            <el-input v-model="kuMain.newPay_sum" size="small" clearable placeholder="Введите сумму премии"
               style="width: 300px">
             </el-input>
           </el-form-item>
@@ -94,21 +87,14 @@
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
-          <el-form-item label-width="170" label="Наименование клиента" prop="newVendorName">
-            <el-input v-model="kuMain.newVendorName" size="small" style="width: 300px">
+          <el-form-item label-width="170" label="Наименование клиента" prop="newCustomerName">
+            <el-input v-model="kuMain.newCustomerName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
           <el-form-item label-width="170" label="Номер счета" prop="newDocu_account">
             <el-input v-model="kuMain.newDocu_account" size="small" clearable placeholder="Введите номер счета"
               style="width: 300px">
             </el-input>
-          </el-form-item>
-          <el-form-item label-width="170" label="Название договора" prop="newDocu_name">
-            <el-select v-model="kuMain.newDocu_name" size="small" clearable placeholder="Выберите название договора"
-              style="width: 300px">
-              <el-option label="Договор премий" value="Договор премий"></el-option>
-              <el-option label="Договор услуг" value="Договор услуг"></el-option>
-            </el-select>
           </el-form-item>
           <el-form-item label-width="170" label="Номер договора" prop="newDocu_number">
             <el-input v-model="kuMain.newDocu_number" size="small" clearable placeholder="Введите номер договора"
@@ -139,8 +125,10 @@ import { reactive, ref } from 'vue'
 import dayjs from "dayjs";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import type {
+ICustomerIdAndName,
   IEntityInKu,
   IKuAddMain,
+  IKuCAddMain,
   IVendorId,
   IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
@@ -151,7 +139,7 @@ const ruleFormRef = ref<FormInstance | null>(null);
 onMounted(() => {
   store.setRuleFormRef(ruleFormRef.value);
 });
-const rules = reactive<FormRules<IKuAddMain>>({
+const rules = reactive<FormRules<IKuCAddMain>>({
 
   newEntityId: [
     {
@@ -165,41 +153,31 @@ const rules = reactive<FormRules<IKuAddMain>>({
       trigger: 'change',
     },
   ],
-  newVendorId: [
+  newCustomerId: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newVendorName: [
+  newCustomerName: [
     { required: true, trigger: 'change' },
   ],
-
   newType: [
     { required: true, trigger: 'change' },
   ],
   newDateEnd: [
     {
-
       required: true,
       trigger: 'change',
     },
   ],
   newDateStart: [
     {
-
       required: true,
       trigger: 'change',
     },
   ],
   newDocu_date: [
-    {
-
-      required: true,
-      trigger: 'change',
-    },
-  ],
-  newKu_type: [
     {
       required: true,
       trigger: 'change',
@@ -217,7 +195,7 @@ const rules = reactive<FormRules<IKuAddMain>>({
       trigger: 'change',
     },
   ],
-  newDocu_name: [
+  newPay_sum: [
     {
       required: true,
       trigger: 'change',
@@ -288,8 +266,8 @@ onMounted(async () => {
 //вывод данных клинета
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
-  options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
+watch(() => store.dataCustomerId, (vendors: ICustomerIdAndName[]) => {
+  options2.value = vendors.map(item => ({ label: item.name, value: item.customer_id }));
 });
 
 const onEntityChange = async () => {
@@ -319,8 +297,8 @@ const onEntityChange = async () => {
   }
 
   //для клиента
-  store.dataVendorId = [];
-  kuMain.newVendorName = "";
+  store.dataCustomerId = [];
+  kuMain.newCustomerName = "";
 
   store.setFilterVendor('entity_id', kuMain.newEntityId);
   if (kuMain.newEntityId) { // Проверка, что выбрано юр. лицо
@@ -330,7 +308,6 @@ const onEntityChange = async () => {
     store.removeFilterVendor("entity_id")
     store.disableSubsidiaries = false;
     kuMain.newSubsidiaries = false;
-    store.tableDataExInvoiceAll.length = 0
   }
   // store.removeFilterExInvoice("vendor_id")
 };
@@ -345,13 +322,11 @@ const labelNewSubsidiaries = computed(() => {
 });
 
 const onVendorChange = async () => {
-  kuMain.newVendorName = "";
-  if (kuMain.newVendorId && kuMain.newVendorId.length > 0) {
-    store.setFilterVendor('vendor_id', kuMain.newVendorId);
+  kuMain.newCustomerName = "";
+  if (kuMain.newCustomerId && kuMain.newCustomerId.length > 0) {
+    store.setFilterVendor('customer_id', kuMain.newCustomerId);
     store.getVendorNameFromAPIWithFilter()
   } else {
-    store.removeFilterExInvoice("vendor_id")
-    store.tableDataExInvoiceAll.length = 0
   }
 
 
@@ -374,8 +349,6 @@ const periods: Record<string, number> = {
 
 // Функция проверки даты начала
 const onChangeAndValidateDateStart = async () => {
-  store.setFilterExInvoice('start_date', dayjs(kuMain.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"));
-  await store.getInvoicesFromAPIWithFilter();
   const startDate = dayjs(kuMain.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(kuMain.newDateEnd, 'DD.MM.YYYY');
 
@@ -395,8 +368,6 @@ const onChangeAndValidateDateStart = async () => {
 
 // Функция проверки даты окончания
 const onChangeAndValidateDateEnd = async () => {
-  store.setFilterExInvoice('end_date', dayjs(kuMain.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"));
-  await store.getInvoicesFromAPIWithFilter();
   const startDate = dayjs(kuMain.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(kuMain.newDateEnd, 'DD.MM.YYYY');
   // Проверка на минимальную разницу в зависимости от выбранного периода
@@ -430,7 +401,7 @@ const resetDatesOnPeriodChange = () => {
 };
 // Функция сброса клиента
 const resetVendorOnEntityChange = () => {
-  kuMain.newVendorId = "";
+  kuMain.newCustomerId = "";
 };
 // Обработчик изменения выбранного периода
 watch(() => kuMain.newType, (newValue, oldValue) => {

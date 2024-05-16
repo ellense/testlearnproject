@@ -22,7 +22,7 @@
             </el-table-column>
         </el-table>
     </div>
-    <el-dialog v-model="store.dialogFormServiceVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
+    <el-dialog v-model="store.dialogFormServiceVisible" title="Выбор оказываемых услуг" close-on-click-modal
         close-on-press-escape draggable width="715px">
         <el-scrollbar class="scrollTableFiltres">
             <el-form>

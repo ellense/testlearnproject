@@ -247,7 +247,7 @@ function loadFile(url: string, callback: (error: any, content: any) => void) {
 const renderDoc = async () => {
   try {
     const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
-    console.log("selectedRows[0]:", selectedRows[0])
+    console.log("выбранный график", selectedRows[0])
     await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
     await useReportStore().getNumeralsGraphFromApi(selectedRows[0]);
     console.log("useReportStore().graphic[0].ku_id", useReportStore().graphic[0].ku_id)

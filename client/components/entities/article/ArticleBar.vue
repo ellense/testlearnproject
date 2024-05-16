@@ -15,10 +15,10 @@
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
         <el-form >
-          <el-form-item label-width="200" label="Код статьи услуги" >
-            <el-input v-model="store.newArticle_id" placeholder="Введите код " style=" width: 300px;" size="small"></el-input>
+          <el-form-item label-width="200" label="Код статьи услуги">
+            <el-input v-model="store.newArticle_id" placeholder="Введите код" style=" width: 300px;" size="small"></el-input>
           </el-form-item>
-          <el-form-item label-width="200" label="Наименование статьи услуги" prop="newVendorId">
+          <el-form-item label-width="200" label="Наименование статьи услуги">
             <el-input v-model="store.newArticle_name" placeholder="Введите наименование" style=" width: 300px;" size="small"></el-input>
           </el-form-item>
         </el-form>

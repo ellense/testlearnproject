@@ -12,7 +12,7 @@
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { useKuCStore } from "~~/stores/kuCStore";
 import dayjs from "dayjs";
-import type { IExInvoiceForKuPost, IKuCList, IKuList, IManagerForKuPost, IOfficialForKuPost } from "~/utils/types/directoryTypes";
+import type { IExInvoiceForKuPost, IKuCList, IKuList, IManagerForKuPost, IOfficialForKuPost, IServiceAndArticle } from "~/utils/types/directoryTypes";
 import { useRouter } from 'vue-router'
 const store = useKuCAddStore();
 const loading = ref(false);
@@ -29,24 +29,21 @@ const clearDataBeforeLeave = () => {
 
 // Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
 onBeforeRouteLeave((to, from, next) => {
-  if (store.tableDataInRequirement.length > 0 ||
-    store.tableDataExRequirement.length > 0 ||
-    store.tableDataPercent.length > 0 ||
-    store.tableDataExInvoiceSelect.length > 0 ||
+  if (
+    store.tableDataServiceSelect.length > 0 ||
     store.tableDataManagerSelect.length > 0 ||
     store.tableDataContract.length > 0 ||
     kuMain.newType !== '' ||
     kuMain.newEntityId !== '' ||
     kuMain.newEntityName !== '' ||
-    kuMain.newVendorId !== '' ||
-    kuMain.newVendorName !== '' ||
+    kuMain.newCustomerId !== '' ||
+    kuMain.newCustomerName !== '' ||
     kuMain.newDateStart !== '' ||
     kuMain.newDateEnd !== '' ||
     kuMain.newDateActual !== '' ||
     kuMain.newDescription !== '' ||
     kuMain.newContract !== '' ||
     kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_name !== '' ||
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
@@ -116,15 +113,6 @@ const createKU = async () => {
       });
       return;
     }
-
-    if (store.tableDataInRequirement.length === 0 && store.tableDataExRequirement.length === 0) {
-      ElMessage.error('Добавьте минимум одно включенное или исключенное условие');
-      return;
-    }
-    if (store.tableDataPercent.length === 0) {
-      ElMessage.error('Добавьте минимум одно условие бонуса');
-      return;
-    }
     if (store.newOfFIOСounteragent.length === 0 &&
       store.newOfPostСounteragent.length === 0 &&
       store.newOfDocСounteragent.length === 0 &&
@@ -144,9 +132,7 @@ const createKU = async () => {
     progress.value = 20;
     const responses = await postRequirements(response, store.tableDataServiceSelect, KUC.postKuServices);
     progress.value = 30;
-    const response3 = await postBonusRequirements(response, store.tableDataPercent);
     progress.value = 40;
-    const response4 = await postItems(response, store.tableDataExInvoiceSelect, KUC.postKuExInvoices);
     progress.value = 50;
     const response5 = await postManagerItems(response, store.tableDataManagerSelect, KUC.postKuManager);
     progress.value = 60;
@@ -154,7 +140,7 @@ const createKU = async () => {
     progress.value = 70;
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response3, response4, response5, response6);
+      handleSuccess(response, responses, response5, response6);
     } else {
       handleError();
     }
@@ -171,7 +157,7 @@ const createKU = async () => {
 const createNewItem = () => {
   return {
     entity_id: kuMain.newEntityId,
-    vendor_id: kuMain.newVendorId,
+    customer_id: kuMain.newCustomerId,
     period: kuMain.newType,
     date_start: dayjs(kuMain.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
     date_end: dayjs(kuMain.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
@@ -179,7 +165,6 @@ const createNewItem = () => {
     description: kuMain.newDescription,
     contract: kuMain.newContract,
     docu_account: kuMain.newDocu_account,
-    docu_name: kuMain.newDocu_name,
     docu_number: kuMain.newDocu_number,
     docu_date: dayjs(kuMain.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
     docu_subject: kuMain.newDocu_subject,
@@ -189,42 +174,25 @@ const createNewItem = () => {
 };
 
 const postRequirements = async (response: IKuCList, dataArray: any, postFunction: any) => {
-  const requirementsArray = dataArray.map((item: { item_type: any; item_code: any; item_name: any; producer: any; brand: any; }) => ({
+  const requirementsArray = dataArray.map((item: { service_code: any; service_name: any; article_code: any; article_name: any; ratio: any; }) => ({
     ku_id: response.ku_id,
-    item_type: item.item_type,
-    item_code: item.item_code,
-    item_name: item.item_name,
-    producer: item.producer,
-    brand: item.brand,
+    service_code: item.service_code,
+    service_name: item.service_name,
+    article_code: item.article_code,
+    article_name: item.article_name,
+    ratio: item.ratio,
   }));
 
   return await Promise.all(requirementsArray.map(async (newItem: any) => {
     try {
       return await postFunction(newItem);
     } catch (error) {
-      console.error("Ошибка при отправке условия на бэкенд:", error);
+      console.error("Ошибка при отправке услуг на бэкенд:", error);
       return null;
     }
   }));
 };
 
-const postBonusRequirements = async (response: IKuCList, dataArray: any) => {
-  const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
-    ku_key_id: response.ku_id,
-    fix: item.fix,
-    criterion: item.criterion !== null ? item.criterion : 0,
-    percent_sum: item.percent_sum,
-  }));
-
-  return await Promise.all(requirementsArray.map(async (newItem: any) => {
-    try {
-      return await KU.postKuRequirementBonus(newItem);
-    } catch (error) {
-      console.error("Ошибка при отправке бонуса на бэкенд:", error);
-      return null;
-    }
-  }));
-};
 
 const postManagerItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
   const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
@@ -271,16 +239,13 @@ const createOfficialArray = (response: IKuCList) => {
   };
 };
 
-const handleSuccess = (response: IKuCList, responses: any[], response3: any[], response4: any[], response5: any[], response6: IOfficialForKuPost) => {
-  console.log("Экземпляр успешно отправлен на бэкенд:", response);
-  console.log("вклУсловия успешно отправлены на бэкенд:", responses);
-  console.log("бонус успешно отправлены на бэкенд:", response3);
-  console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
+const handleSuccess = (response: IKuCList, responses: any[], response5: any[], response6: IOfficialForKuPost) => {
+  console.log("КУ клиентов успешно отправлен на бэкенд:", response);
+  console.log("услуги успешно отправлены на бэкенд:", responses);
   console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
   console.log("Должн. лица успешно отправлены на бэкенд:", response6);
   useKuCStore().getKuFromAPIWithFilter();
-  router.push("kuV");
-  // ElMessage.success("Коммерческое условие успешно создано.");
+  router.push("kuC");
   ElMessage({
     message: 'Коммерческое условие успешно создано.',
     duration: 5000,
@@ -298,23 +263,19 @@ const handleError = () => {
 const addClose = () => {
   if (
     // Проверяем наличие несохраненных данных
-    store.tableDataInRequirement.length > 0 ||
-    store.tableDataExRequirement.length > 0 ||
-    store.tableDataPercent.length > 0 ||
-    store.tableDataExInvoiceSelect.length > 0 ||
+    store.tableDataServiceSelect.length > 0 ||
     store.tableDataManagerSelect.length > 0 ||
     kuMain.newType !== '' ||
     kuMain.newEntityId !== '' ||
     kuMain.newEntityName !== '' ||
-    kuMain.newVendorId !== '' ||
-    kuMain.newVendorName !== '' ||
+    kuMain.newCustomerId !== '' ||
+    kuMain.newCustomerName !== '' ||
     kuMain.newDateStart !== '' ||
     kuMain.newDateEnd !== '' ||
     kuMain.newDateActual !== '' ||
     kuMain.newDescription !== '' ||
     kuMain.newContract !== '' ||
     kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_name !== '' ||
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
@@ -339,14 +300,14 @@ const addClose = () => {
       }
     ).then(() => {
       // Если пользователь подтвердил, переходим на другую страницу и очищаем данные
-      router.push("kuV");
+      router.push("kuC");
       store.clearNewData();
     }).catch(() => {
       // Если пользователь отменил, ничего не делаем
     });
   } else {
     // Если нет несохраненных данных, просто переходим на другую страницу и очищаем данные
-    router.push("kuV");
+    router.push("kuC");
     store.clearNewData();
   }
 };

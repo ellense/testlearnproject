@@ -8,16 +8,16 @@
       все</el-button>
     <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="35vh"
       empty-text="Добавьте поставщиков"  >
-      <el-table-column property="group" label="Тип партнера" width="150" show-overflow-tooltip />
+      <el-table-column property="type_partner" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">
-      <el-table-column property="discription" label="Код" width="200" show-overflow-tooltip />
-      <el-table-column property="discription" label="Наименование" width="300"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Удержание" width="150"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Статус" width="200"  show-overflow-tooltip />
+      <el-table-column property="vendor_id" label="Код" width="200" show-overflow-tooltip />
+      <el-table-column property="vendor_name" label="Наименование" width="300"  show-overflow-tooltip />
+      <el-table-column property="vendor_retention" label="Удержание" width="150"  show-overflow-tooltip />
+      <el-table-column property="vendor_status" label="Статус" width="200"  show-overflow-tooltip />
     </el-table-column>
       <el-table-column label="Юридическое лицо"  align="center">
-      <el-table-column property="discription" label="Код" width="150"  show-overflow-tooltip />
-      <el-table-column property="discription" label="Наименование" width="300"  show-overflow-tooltip />
+      <el-table-column property="entity_id" label="Код" width="150"  show-overflow-tooltip />
+      <el-table-column property="entity_name" label="Наименование" width="300"  show-overflow-tooltip />
     </el-table-column>
       <el-table-column align="center" label="Операция">
         <template #default="scope">
@@ -30,7 +30,7 @@
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
         <el-table style="width: 680px" height="300" :data="tableData" border
-          @selection-change="store.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
+          @selection-change="store.handleSelectionChangeVendorAndContract" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="30" />
           <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
           <el-table-column property="discription" label="Описание" width="350" show-overflow-tooltip />

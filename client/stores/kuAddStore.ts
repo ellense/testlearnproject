@@ -62,6 +62,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         valueBrand_nameIn: "",
         valueProducer_nameEx: "",
         valueBrand_nameEx: "",
+        valueVendorInfo: [],
         //селекты для множественного выбора
         multipleSelectionProduct: [],
         multipleSelectionExInvoice: [],
@@ -82,6 +83,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         tableDataExInvoiceSelect: [],
         tableDataManagerAll: [],
         tableDataManagerSelect: [],
+        tableDataVAC:[],
         dataEntity: [],
         dataVendorId: [],
         dataVendorName: [],
@@ -95,6 +97,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         dialogFormProductExVisible: false,
         dialogFormCategoryExVisible: false,
         dialogFormContractVisible: false,
+        dialogFormVACVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
@@ -188,28 +191,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
               });
             });
           },
-        // async submitForm(formEl: FormInstance | undefined) {
-        //     try {
-        //         if (!formEl) return;
-        //         await formEl.validate((valid, fields) => {
-        //             if (valid) {
-        //               console.log('submit!')
-        //             } else {
-        //               console.log('error submit!', fields)
-        //             }
-        //           })
-        //         // const { valid, fields } = await formEl.validate();
-        //         // if (valid) {
-        //         //     console.log('submit!');
-        //         //     ElMessage.success('Все верно.');
-        //         // } else {
-        //         //     console.log('error submit!', fields);
-        //         //     ElMessage.error('Ошибка валидации формы.');
-        //         // }
-        //     } catch (error) {
-        //         console.error('Ошибка при отправке формы:', error);
-        //     }
-        // },
+          
         //получение данных о юр.лице для создания
         async fetchKuEntity(data: IEntityInKu) {
             try {
@@ -283,6 +265,22 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 delete this.$state.filterVendorValue[field]
             }
         },
+        async getVendorDetailFromApi(vendorId: string) {
+            try {
+              const results = await VENDOR.getVendorDetail({
+                vendor_id: vendorId,
+              });
+              this.$state.valueVendorInfo = [results];
+            //   this.$state.kuid = results.ku_id;
+            //   this.$state.vendorid = results.vendor_id;
+            //   this.$state.entityid = results.entity_id;
+              console.log("успешно получили данные вендор_айди", results);
+              console.log("добавили данные в valueVendorInfo[] ", this.$state.valueVendorInfo);
+            //   console.log("номер ку графика, поставщик, юр.лицо ", this.$state.kuid, ",", this.$state.vendorid, ",", this.$state.entityid);
+            } catch (error) {
+              console.error("Ошибка при получении данных вендор_айди:", error);
+            }
+          },
 
 
         ////////////////////////////////////////////////////////////////////
@@ -291,7 +289,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             U extends GetAllCategory[T],
         >(field: T, value: U) {
             this.$state.filterCategory[field] = value
-            console.log("filterCategory", this.$state.filterCategory);
         },
         removeFilterCategory<T extends keyof GetAllCategory>(field: T) {
             if (this.$state.filterCategory) {
@@ -364,7 +361,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             U extends GetAllProducer[T],
         >(field: T, value: U) {
             this.$state.filterProducerIncluded[field] = value
-            console.log("filterProducerIncluded", this.$state.filterProducerIncluded);
         },
         removeFilterProducer<T extends keyof GetAllProducer>(field: T) {
             if (this.$state.filterProducerIncluded) {

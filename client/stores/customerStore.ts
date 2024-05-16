@@ -69,7 +69,7 @@ export const useCustomerStore = defineStore("ICustomerStore", {
       await CUSTOMER.getCustomersList({
         page_size: this.$state.countRowTable,
         page,
-        entity_ids: this.$state.filterValue?.entity_ids || [],
+        entity_id: this.$state.filterValue?.entity_id || [],
         search: this.$state.search,
         sort_by,
         sort_order,

@@ -5,21 +5,13 @@ import type { FormInstance } from 'element-plus'
 import type {
     IKuList,
     IEntityInKu,
-    GetAllProducer,
-    IProducer,
-    GetAllProducts,
-    IProduct,
-    GetAllBrands,
-    IBrand,
-    IParamVendorsForEntity,
-    IExInvoiceForKu,
-    ITree,
-    GetAllCategory,
-    GetParamExInvoicesForKu,
     IContractPost,
-    IVendorIdAndName,
     IKuCAddStore,
     IParamServices,
+    ICustomerIdAndName,
+    IParamCustomersKU,
+    IManagerForKu,
+    IVendorAndContract,
 } from "~/utils/types/directoryTypes";
 
 export const useKuCAddStore = defineStore("KuCAddStore", {
@@ -30,15 +22,14 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             newEntityId: "",
             newEntityName: "",
             newSubsidiaries: false,
-            newVendorId: "",
-            newVendorName: "",
+            newCustomerId: "",
+            newCustomerName: "",
             newDateStart: "",
             newDateEnd: "",
             newDateActual: "",
             newDescription: "",
             newContract: "",
             newDocu_account: "",
-            newDocu_name: "",
             newDocu_number: "",
             newDocu_date: "",
             newDocu_subject: "",
@@ -57,86 +48,45 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         valueArticle_name: "",
         valueRatio: null,
         //селекты для множественного выбора
-        multipleSelectionProduct: [],
-        multipleSelectionExInvoice: [],
         multipleSelectionService: [],
         multipleSelectionArticle: [],
         multipleSelectionServiceSelect: [],
         multipleSelectionManager: [],
+        multipleSelectionVendorAndContract: [],
         multipleTableRef: null,
         //данные 
-        brandIncluded: [],
-        brandExcluded: [],
-        producerIncluded: [],
-        producerExcluded: [],
-        productIncluded: [],
-        productExcluded: [],
-        tableDataInRequirement: [],
-        tableDataExRequirement: [],
         tableDataContract: [],
-        tableDataPercent: [],
-        tableDataExInvoiceAll: [],
-        tableDataExInvoiceSelect: [],
         tableDataManagerAll: [],
         tableDataManagerSelect: [],
         tableDataServiceAll: [],
         tableDataArticleAll: [],
         tableDataServiceSelect: [],
         dataEntity: [],
-        dataVendorId: [],
-        dataVendorName: [],
-        treeData: [],
-        treeRef: null,
+        dataCustomerId: [],
         //v-model диалоговых форм
-        dialogFormExInvoiceVisible: false,
         dialogFormManagersVisible: false,
-        dialogFormProductInVisible: false,
-        dialogFormCategoryInVisible: false,
-        dialogFormProductExVisible: false,
-        dialogFormCategoryExVisible: false,
         dialogFormContractVisible: false,
         dialogFormServiceVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
-        //
 
-        vendorFilter: "",
-        vendors: [],
         //пагинация в таблицах
         pagination: null,
         countRowTable: 100,
         countRowTable2: 950,
-        //поиски
-        searchExInvoiceNumber: "",
-        searchProductIncluded: "",
-        searchProductExcluded: "",
         //параметры для фильтров при запросах
         filterService: {},
         filterArticle: {},
-        filterProductExcluded: {},
-        filterProducerIncluded: {},
-        filterProducerExcluded: {},
-        filterBrandIncluded: {},
-        filterBrandExcluded: {},
-        filterVendorValue: {},
-        filterExInvoice: {},
+        filterCustomerValue: {},
         isFormValid: false,
     }),
 
     getters: {
         // getKu: (state) => state.tableData,
-        getExInvoiceAll: (state) => state.tableDataExInvoiceAll,
         getServiceAll: (state) => state.tableDataServiceAll,
         getManagerAll: (state) => state.tableDataManagerAll,
-        getProducersIn: (state) => state.producerIncluded,
-        getBrandsIn: (state) => state.brandIncluded,
-        getProductIn: (state) => state.productIncluded,
-        getProducersEx: (state) => state.producerIncluded,
-        getBrandsEx: (state) => state.brandIncluded,
-        getProductEx: (state) => state.productIncluded,
         getEntity: (state) => state.dataEntity,
-        // getEntityName: (state) => state.newEntityName,
         getEntityName: (state) => state.kuAddMain.newEntityName,
     },
 
@@ -156,11 +106,11 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 }
             }
         },
-        handleSelectionChange3(val: IProduct[]) {
-            this.multipleSelectionProduct = val;
+        handleSelectionChangeManager(val: IManagerForKu[]) {
+            this.multipleSelectionManager = val;
         },
-        handleSelectionChangeExInvoice(val: IExInvoiceForKu[]) {
-            this.multipleSelectionExInvoice = val;
+        handleSelectionChangeVendorAndContract(val: IVendorAndContract[]) {
+            this.multipleSelectionVendorAndContract = val;
         },
 
         //для разной пагинации
@@ -190,28 +140,6 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 });
             });
         },
-        // async submitForm(formEl: FormInstance | undefined) {
-        //     try {
-        //         if (!formEl) return;
-        //         await formEl.validate((valid, fields) => {
-        //             if (valid) {
-        //               console.log('submit!')
-        //             } else {
-        //               console.log('error submit!', fields)
-        //             }
-        //           })
-        //         // const { valid, fields } = await formEl.validate();
-        //         // if (valid) {
-        //         //     console.log('submit!');
-        //         //     ElMessage.success('Все верно.');
-        //         // } else {
-        //         //     console.log('error submit!', fields);
-        //         //     ElMessage.error('Ошибка валидации формы.');
-        //         // }
-        //     } catch (error) {
-        //         console.error('Ошибка при отправке формы:', error);
-        //     }
-        // },
         //получение данных о юр.лице для создания
         async fetchKuEntity(data: IEntityInKu) {
             try {
@@ -229,43 +157,44 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             }
         },
 
-        //получение данных о поставщиках для создания
+        //получение данных о клиентаъх для создания
         async fetchAllVendorIdForEntity() {
             try {
-                let allVendors: IVendorIdAndName[] = [];
+                let allVendors: ICustomerIdAndName[] = [];
                 let nextPage = 1;
                 let totalPages = 1;
                 while (nextPage <= totalPages) {
-                    const vendors = await VENDOR.getVendorsForEntityInKU({
+                    const vendors = await CUSTOMER.getCustomersForEntityInKU({
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
-                        entity_id: this.$state.filterVendorValue.entity_id,
+                        entity_id: this.$state.filterCustomerValue.entity_id,
                     });
                     allVendors = allVendors.concat(vendors.results);
                     totalPages = Math.ceil(vendors.count / this.$state.countRowTable2);
                     nextPage++;
                 }
-                console.log("Все данные о поставщиках:", allVendors);
-                this.$state.dataVendorId = allVendors;
+                console.log("Все данные о клиентах:", allVendors);
+                this.$state.dataCustomerId = allVendors;
 
             } catch (error) {
                 console.error(
-                    "Произошла ошибка при получении данных о поставщиках",
+                    "Произошла ошибка при получении данных о клиентах",
                     error
                 );
                 return Promise.reject(error);
             }
         },
+        //получение имени клиента
         async getVendorNameFromAPIWithFilter(page?: number) {
-            await VENDOR.getVendorsForEntityInKU({
+            await CUSTOMER.getCustomersForEntityInKU({
                 page_size: this.$state.countRowTable,
                 page,
-                vendor_id: this.$state.filterVendorValue.vendor_id,
+                customer_id: this.$state.filterCustomerValue.customer_id,
             })
                 .then((dataVendor) => {
-                    this.$state.kuAddMain.newVendorName = dataVendor.results[0].name;
+                    this.$state.kuAddMain.newCustomerName = dataVendor.results[0].name;
                     useKuIdStore().setKuIdVendorName(dataVendor.results[0].name)
-                    console.log('Получены данные vendorName:', this.$state.kuAddMain.newVendorName, useKuIdStore().kuIdVendorName);
+                    console.log('Получены данные vendorName:', this.$state.kuAddMain.newCustomerName, useKuIdStore().kuIdVendorName);
                     this.$state.pagination = {
                         count: dataVendor.count,
                         previous: dataVendor.previous,
@@ -275,21 +204,21 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 .catch((error) => Promise.reject(error));
         },
         setFilterVendor<
-            T extends keyof IParamVendorsForEntity,
-            U extends IParamVendorsForEntity[T],
+            T extends keyof IParamCustomersKU,
+            U extends IParamCustomersKU[T],
         >(field: T, value: U) {
-            this.$state.filterVendorValue[field] = value
+            this.$state.filterCustomerValue[field] = value
         },
-        removeFilterVendor<T extends keyof IParamVendorsForEntity>(field: T) {
-            if (this.$state.filterVendorValue) {
-                delete this.$state.filterVendorValue[field]
+        removeFilterVendor<T extends keyof IParamCustomersKU>(field: T) {
+            if (this.$state.filterCustomerValue) {
+                delete this.$state.filterCustomerValue[field]
             }
         },
 
 
         ////////////////////////////////////////////////////////////////////
 
-         //получение услуг
+        //получение услуг
         async getServiceFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
             this.setFilterValueServices('page', page);
             this.setFilterValueServices('sort_by', sort_by);
@@ -350,140 +279,25 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.$state.filterArticle[field] = value
         },
 
-///////////////////////////////////////////////////////////////////
-
-     
-
-      
-
-
-       
-
-
-        //////////////////////// ИСКЛЮЧЕННЫЕ УСЛОВИЯ   //////////////////////////////////////////////
-
-        //получение данных о товарах для условий с фильтром и поиск 
-        async getProductFromExcludedWithFilter(page?: number) {
-            this.setFilterProductEx('page', page);
-            this.setFilterProductEx('search', this.$state.searchProductExcluded);
-            this.setFilterProductEx('vendor_id', this.$state.kuAddMain.newVendorId);
-            await PRODUCT.getProductsList({
-                page_size: this.$state.countRowTable,
-                page,
-                search: this.$state.searchProductExcluded,
-                vendor_id: this.$state.filterProductExcluded.vendor_id
-            })
-                .then((product) => {
-                    console.log('Получены данные товаров:', product);
-                    this.$state.productExcluded = product.results;
-                    this.$state.pagination = {
-                        count: product.count,
-                        previous: product.previous,
-                        next: product.next,
-                    };
-                })
-                .catch((error) => {
-                    console.error('Ошибка при получении данных товаров:', error);
-                    return Promise.reject(error);
-                });
-        },
-        async performSearchProductEx(searchQuery: string) {
-            try {
-                this.setSearchProductEx(searchQuery);
-                await this.getProductFromExcludedWithFilter();
-            } catch (error) {
-                console.error('Ошибка при выполнении поиска в искл товарах ку_адд', error);
-            }
-        },
-        setSearchProductEx(query: string) {
-            this.$state.searchProductExcluded = query;
-        },
-        setFilterProductEx<
-            T extends keyof GetAllProducts,
-            U extends GetAllProducts[T],
-        >(field: T, value: U) {
-            this.$state.filterProductExcluded[field] = value
-        },
-        ////////////////////////////////////////////////////////////////////////////////////
-        //получение накладных
-        async getInvoicesFromAPIWithFilter(page?: number) {
-            console.log('Выполняется запрос искл.накладных с фильтрацией...');
-            await KU.getInvoicesList({
-                page_size: this.$state.countRowTable,
-                page,
-                searchNumber: this.$state.searchExInvoiceNumber,
-                entity_id: this.$state.filterExInvoice?.entity_id || [],
-                vendor_id: this.$state.filterExInvoice?.vendor_id,
-                start_date: this.$state.filterExInvoice?.start_date,
-                end_date: this.$state.filterExInvoice?.end_date,
-            })
-                .then((dataInvoice) => {
-                    console.log('Получены данные искл.накладных:', dataInvoice);
-                    this.$state.tableDataExInvoiceAll = dataInvoice.results;
-                    this.$state.pagination = {
-                        count: dataInvoice.count,
-                        previous: dataInvoice.previous,
-                        next: dataInvoice.next,
-                    };
-                })
-                .catch((error) => {
-                    console.error('Ошибка при получении данных искл. накладных:', error);
-                    return Promise.reject(error);
-                });
-        },
-        setFilterExInvoice<
-            T extends keyof GetParamExInvoicesForKu,
-            U extends GetParamExInvoicesForKu[T],
-        >(field: T, value: U) {
-            this.$state.filterExInvoice[field] = value
-        },
-        removeFilterExInvoice<T extends keyof GetParamExInvoicesForKu>(field: T) {
-            if (this.$state.filterExInvoice) {
-                delete this.$state.filterExInvoice[field]
-            }
-            console.log("фильтр накладных очищен")
-        },
-        //для поиска накладных по номеру накладной
-        async performSearchOfInvoice(searchQuery: string) {
-            try {
-                this.setSearchQuery(searchQuery);
-                await this.getInvoicesFromAPIWithFilter();
-            } catch (error) {
-                console.error('Ошибка при выполнении поиска по номеру накл.', error);
-            }
-        },
-        setSearchQuery(query: string) {
-            console.log('Устанавливается запрос поиска по номеру:', query);
-            this.$state.searchExInvoiceNumber = query;
-        },
-
-
         //очищение всего
         clearNewData() {
             // Очищаем таблицу условий
-            this.tableDataInRequirement.length = 0;
-            this.tableDataExRequirement.length = 0;
-            this.tableDataPercent.length = 0;
-            this.tableDataExInvoiceSelect.length = 0;
+            this.tableDataServiceSelect.length = 0;
             this.tableDataManagerSelect.length = 0;
             this.tableDataContract.length = 0;
-            this.tableDataExInvoiceAll.length = 0;
-            this.tableDataManagerAll.length = 0;
-            this.productIncluded.length = 0;
-            this.productExcluded.length = 0;
             // Значения v-model при создании
             this.kuAddMain.newType = '',
                 this.kuAddMain.newEntityId = '';
             this.kuAddMain.newEntityName = '';
-            this.kuAddMain.newVendorId = '';
-            this.kuAddMain.newVendorName = '';
+            this.kuAddMain.newSubsidiaries = false;
+            this.kuAddMain.newCustomerId = '';
+            this.kuAddMain.newCustomerName = '';
             this.kuAddMain.newDateStart = '';
             this.kuAddMain.newDateEnd = '';
             this.kuAddMain.newDateActual = '';
             this.kuAddMain.newDescription = '';
             this.kuAddMain.newContract = '';
             this.kuAddMain.newDocu_account = '';
-            this.kuAddMain.newDocu_name = '';
             this.kuAddMain.newDocu_number = '';
             this.kuAddMain.newDocu_date = '';
             this.kuAddMain.newDocu_subject = '';
@@ -497,31 +311,24 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.newOfDocEntity = '';
             this.valueService_nameContract = '';
             this.valueArticle_nameContract = '';
+            this.valueService_name = '';
+            this.valueArticle_name = '';
+            this.valueRatio = null;
             // Селекты для множественного выбора
-            this.multipleSelectionProduct = [];
-            this.multipleSelectionExInvoice = [];
+            this.multipleSelectionService = [];
+            this.multipleSelectionArticle = [];
+            this.multipleSelectionServiceSelect = [];
             this.multipleSelectionManager = [];
             this.multipleTableRef = null;
-
             // Сбрасываем флаги видимости диалоговых окон
-            this.dialogFormExInvoiceVisible = false;
-            this.dialogFormProductInVisible = false;
-            this.dialogFormCategoryInVisible = false;
-            this.dialogFormProductExVisible = false;
-            this.dialogFormCategoryExVisible = false;
             this.dialogFormManagersVisible = false;
             this.dialogFormContractVisible = false;
-
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
-
-            // Сбрасываем значения поисковых строк
-            this.searchExInvoiceNumber = '';
-            this.searchProductIncluded = '';
-            this.searchProductExcluded = '';
-
+            this.disableSubsidiaries = false;
             // очищение фильтров
             this.removeFilterVendor('entity_id');
+
 
         },
         //создание контракта

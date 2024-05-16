@@ -178,13 +178,13 @@ import { ref, onMounted, watch } from "vue";
 import type { IEntityInKu, IKuList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuStore } from "~~/stores/kuStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from 'dayjs';
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuStore()
 );
 const store = useKuStore();
-const store2 = useKuCAddStore();
+const store2 = useKuAddStore();
 const store3 = useKuIdStore();
 const visible = ref(false)
 const tableData = ref<IKuList[]>(getKu.value);
@@ -202,8 +202,8 @@ const rowDblclick = async (kuId: string) => {
   store3.fetchExInvoiceForKuId(kuId)
   store3.fetchOfficialForKuId(kuId)
 
-  console.log("СТАТУС", store3.kuIdStatus)
-  console.log("ПОСТАВЩИК", store3.kuIdVendorId)
+  // console.log("СТАТУС", store3.kuIdStatus)
+  // console.log("ПОСТАВЩИК", store3.kuIdVendorId)
 
   if (store3.kuIdStatus === "Создано") {
     const entity = store2.dataEntity.find(item => item.entity_id === store3.kuIdEntityId);

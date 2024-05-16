@@ -73,6 +73,8 @@ import type {
   IArticle,
   IParamCustomers,
   ICustomerReturnData,
+  ICustomerForEntityReturnData,
+  IParamCustomersKU,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -121,6 +123,10 @@ export const VENDOR = {
 };
 export const CUSTOMER = {
   getCustomersList: (params?: IParamCustomers): Promise<ICustomerReturnData> =>
+    $Get("api/customer_list/", { params, isBearer: false }),
+  getCustomersForEntityInKU: (
+    params?: IParamCustomersKU
+  ): Promise<ICustomerForEntityReturnData> =>
     $Get("api/customer_list/", { params, isBearer: false }),
 };
 
@@ -264,15 +270,13 @@ export const SERVICE = {
 
 export const KUC = {
   getKuList: (params: IParamKusC): Promise<IKusCReturnData> =>
-    $Get("api/ku_list/", { params, isBearer: false }),
+    $Get("api/ku_customer_list/", { params, isBearer: false }),
 
   //отправление
   postKu: (data: IKuCPost): Promise<IKuCList> =>
-    $Post("api/ku_create/", { data, isBearer: false }),
+    $Post("api/ku_customer_list/", { data, isBearer: false }),
   postKuServices: (data: IServicesPost): Promise<IServicesPost> =>
     $Post("api/included_condition_create/", { data, isBearer: false }),
-  postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
-    $Post("api/excluded_venddoc_list_create/", { data, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
     $Post("api/manager_create/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>

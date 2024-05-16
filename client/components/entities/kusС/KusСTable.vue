@@ -350,7 +350,7 @@ onMounted(async () => {
 });
 
 //фильтр клиента
-const Vendor = ref<string[]>(filterKuValue.value.vendor_id || []);
+const Vendor = ref<string[]>(filterKuValue.value.customer_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
 watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
   optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
@@ -365,7 +365,7 @@ onMounted(async () => {
 });
 const onVendorChange = async () => {
   store.pagination = null;
-  store.setFilterValue('vendor_id', Vendor.value);
+  store.setFilterValue('customer_id', Vendor.value);
   toggleTriggerFilter();
 };
 

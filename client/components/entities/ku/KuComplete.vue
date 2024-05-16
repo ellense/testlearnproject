@@ -1,6 +1,5 @@
 <template>
   <EntitiesKuMain />
-
   <div class="button_bottom">
     <el-button @click="addClose()" size="small">Назад</el-button>
     <el-button type="primary" @click="changeKuToBackend()" :loading="loading" size="small"
@@ -102,6 +101,7 @@ const disableButtonEditTooltip = computed(() => {
     ? 'Вы можете изменить только КУ в статусе "Создано".'
     : "";
 });
+
 const changeKuToBackend = async () => {
   try {
     if (!isFormValid()) {
@@ -294,7 +294,7 @@ const deleteInRequirement = () => {
 };
 //удаление вкл условий
 const deleteExRequirement = () => {
-  const selectedRows = store.tableDataExRequirementOrigin.map((row) => row.id);
+  const selectedRows = store.initialState.tableDataExRequirement.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteExRequirement({ id });
@@ -308,7 +308,7 @@ const deleteExRequirement = () => {
 };
 //удаление бонусов
 const deleteRequirementBonus = () => {
-  const selectedRows = store.tableDataPercentOrigin.map((row) => row.id);
+  const selectedRows = store.initialState.tableDataPercent.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteRequirementBonus({ id });
@@ -322,7 +322,7 @@ const deleteRequirementBonus = () => {
 };
 //удаление искл накладных
 const deleteExInvoice = () => {
-  const selectedRows = store.tableDataExInvoiceSelectOrigin.map((row) => row.id);
+  const selectedRows = store.initialState.tableDataExInvoiceSelect.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteExInvoiceForKuId({ id });
@@ -335,7 +335,7 @@ const deleteExInvoice = () => {
   return Promise.all(deletePromises);
 };
 const deleteManager = () => {
-  const selectedRows = store.tableDataManagerSelectOrigin.map((row) => row.id);
+  const selectedRows = store.initialState.tableDataManagerSelect.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteManager({ id });

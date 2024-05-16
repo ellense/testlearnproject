@@ -223,7 +223,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные вкл условий ку_айди:', tableData);
                     this.$state.tableDataInRequirement = tableData.results;
                     this.$state.initialState.tableDataInRequirement = this.$state.tableDataInRequirement.slice();
-                    console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
+                    // console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
                     console.log('initialState.tableDataInRequirement:', this.$state.initialState.tableDataInRequirement);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -245,7 +245,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные искл условий ку_айди:', tableData);
                     this.$state.tableDataExRequirement = tableData.results;
                     this.$state.initialState.tableDataExRequirement = this.$state.tableDataExRequirement.slice();
-                    console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
+                    // console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
                     console.log('initialState.tableDataExRequirement:', this.$state.initialState.tableDataExRequirement);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -268,7 +268,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные бонуса ку_айди:', tableData);
                     this.$state.tableDataPercent = tableData.results;
                     this.$state.initialState.tableDataPercent = this.$state.tableDataPercent.slice();
-                    console.log('tableDataPercent:', this.$state.tableDataPercent);
+                    // console.log('tableDataPercent:', this.$state.tableDataPercent);
                     console.log('initialState.tableDataPercent:', this.$state.tableDataPercent);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -291,7 +291,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные искл накладных ку_айди:', tableData);
                     this.$state.tableDataExInvoiceSelect = tableData.results;
                     this.$state.initialState.tableDataExInvoiceSelect = this.$state.tableDataExInvoiceSelect.slice();
-                    console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
+                    // console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
                     console.log('initialState.tableDataExInvoiceSelect:', this.$state.initialState.tableDataExInvoiceSelect);
                     this.$state.pagination = {
                         count: tableData.count,

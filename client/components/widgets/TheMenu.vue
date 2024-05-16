@@ -59,7 +59,7 @@
         <nuxt-link to="/customer">
           <el-menu-item index="12">
             <el-icon>
-              <Box />
+              <CreditCard />
             </el-icon>
             <span>Клиенты</span>
           </el-menu-item>
@@ -83,7 +83,7 @@
         <nuxt-link to="/service">
           <el-menu-item index="6">
             <el-icon>
-              <Memo />
+              <Notebook />
             </el-icon>
             <span>Услуги</span>
           </el-menu-item>
@@ -91,7 +91,7 @@
         <nuxt-link to="/article">
           <el-menu-item index="7">
             <el-icon>
-              <Memo />
+              <Tickets />
             </el-icon>
             <span>Статьи услуг</span>
           </el-menu-item>
@@ -99,7 +99,7 @@
         <nuxt-link to="/pricelist">
           <el-menu-item index="8">
             <el-icon>
-              <Memo />
+              <Money />
             </el-icon>
             <span>Прайс-лист услуг</span>
           </el-menu-item>
@@ -107,13 +107,12 @@
         <nuxt-link to="/place">
           <el-menu-item index="9">
             <el-icon>
-              <Memo />
+              <LocationInformation />
             </el-icon>
             <span>Места оказания услуг</span>
           </el-menu-item>
         </nuxt-link>
         <el-divider />
-        
 
         <el-menu-item index="14">
           <!-- <el-dropdown>
@@ -156,6 +155,11 @@ import {
   Memo,
   Box,
   ShoppingCartFull,
+  CreditCard,
+  Money,
+  LocationInformation,
+  Notebook,
+  Tickets,
 } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/stores/authStore";
