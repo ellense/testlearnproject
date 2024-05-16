@@ -26,10 +26,20 @@
       </el-table-column>
     </el-table>
     <el-dialog v-model="store.dialogFormVACVisible" title="Выбор поставщика" close-on-click-modal close-on-press-escape
-      draggable width="715px">
+      draggable width="455px">
       <el-scrollbar class="scrollTableFiltres">
         <el-form>
-          <el_form_item label-width="130" label="Код поставщика">
+          <el-form-item label-width="130" label="Код компании" prop="newEntityId">
+            <el-select v-model="kuMain.newEntityIdVAC" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" @change="onEntityChange">
+              <el-option v-for="item in optionsEntity" :key="item.label" :label="item.value" :value="item.value">
+                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label-width="130" label="Код поставщика">
             <el-select v-model="kuMain.newVendorIdVAC" size="small" placeholder="Выберите поставщика" clearable
               filterable style="width: 300px">
               <el-option v-for="item in optionsVendor" :key="item.value" :label="item.value" :value="item.value">
@@ -38,7 +48,7 @@
                     font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
               </el-option>
             </el-select>
-          </el_form_item>
+          </el-form-item>
         </el-form>
       </el-scrollbar>
       <template #footer>
@@ -52,7 +62,7 @@
 </template>
 
 <script setup lang="ts">
-import type { IVendorIdAndName } from "~/utils/types/directoryTypes";
+import type { IEntityInKu, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
@@ -60,13 +70,47 @@ import { Delete } from '@element-plus/icons-vue'
 const store = useKuAddStore();
 const kuMain = store.kuAddMain
 
+const optionsEntity = ref<Array<{ label: string; value: string }>>([]);
+watch(
+  () => store.dataEntity,
+  (dataEntity: IEntityInKu[]) => {
+    optionsEntity.value = dataEntity.map((item) => ({
+      label: item.name,
+      value: item.entity_id,
+    }));
+  }
+);
 onMounted(async () => {
-    try {
-        await store.fetchAllVendorIdForEntity();
-    } catch (error) {
-        console.error("Ошибка при загрузке данных поставщиков для VAC", error);
-    }
+  try {
+    await store.fetchKuEntity({
+      entity_id: "",
+      name: "",
+      merge_id: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных юр. лица", error);
+  }
 });
+const onEntityChange = async () => {
+  //для поставщика
+  store.dataVendorId = [];
+  kuMain.newVendorName = "";
+  store.setFilterVendor('entity_id', kuMain.newEntityIdVAC);
+  if (kuMain.newEntityIdVAC) { 
+    store.fetchAllVendorIdForEntity(); 
+    console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
+  } else {
+    store.removeFilterVendor("entity_id")
+  }
+};
+
+// onMounted(async () => {
+//     try {
+//         await store.fetchAllVendorIdForEntity();
+//     } catch (error) {
+//         console.error("Ошибка при загрузке данных поставщиков для VAC", error);
+//     }
+// });
 
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
@@ -77,18 +121,22 @@ const tableData = ref(store.tableDataVAC);
 
 //добавление строк
 const AddManagers = async () => {
-  const selectedRows = kuMain.newVendorIdVAC
-    console.log("выбранный поставщик", selectedRows)
-    await store.getVendorDetailFromApi(selectedRows);
+  const selectedEntity = optionsEntity.value.find(option => option.value === kuMain.newEntityIdVAC);
+  const entityName = selectedEntity ? selectedEntity.label : '';
+
+  const selectedVendor = optionsVendor.value.find(option => option.value === kuMain.newVendorIdVAC);
+  const vendorName = selectedVendor ? selectedVendor.label : '';
+
     store.tableDataVAC.push({
       type_partner: "Поставщик",
       vendor_id: kuMain.newVendorIdVAC,
-      vendor_name: store.valueVendorInfo[0].urastic_name,
+      vendor_name: vendorName,
       vendor_retention: "Все",
       vendor_status: "На удержании",
-      entity_id: store.valueVendorInfo[0].entity_id,
-      entity_name: store.valueVendorInfo[0].entity_name,
+      entity_id: kuMain.newEntityIdVAC,
+      entity_name: entityName
     });
+    kuMain.newEntityIdVAC = "";
     kuMain.newVendorIdVAC = "";
   store.dialogFormVACVisible = false;
 };
@@ -99,7 +147,5 @@ const deleteRow = (index: number) => {
 </script>
 
 <style scoped>
-.el-scrollbar__view {
-  width: 740px;
-}
+
 </style>

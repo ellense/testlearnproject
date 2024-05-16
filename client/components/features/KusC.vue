@@ -1,7 +1,6 @@
 <template>
   <EntitiesKusСButtons/>
   <EntitiesKusСTable/>
-  
 </template>
 
 <script lang="ts" setup></script>

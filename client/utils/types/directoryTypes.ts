@@ -299,6 +299,7 @@ export interface IKuAddMain {
   newKu_type: string;
   newPay_method: string;
   newVendorIdVAC: string;
+  newEntityIdVAC: string;
 }
 export interface IKuAddStore {
   //значения v-model при создании

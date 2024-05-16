@@ -49,6 +49,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             newKu_type: "",
             newPay_method: "",
             newVendorIdVAC: "",
+            newEntityIdVAC: "",
         },
         newOfFIOСounteragent: "",
         newOfPostСounteragent: "",
@@ -265,22 +266,22 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 delete this.$state.filterVendorValue[field]
             }
         },
-        async getVendorDetailFromApi(vendorId: string) {
-            try {
-              const results = await VENDOR.getVendorDetail({
-                vendor_id: vendorId,
-              });
-              this.$state.valueVendorInfo = [results];
-            //   this.$state.kuid = results.ku_id;
-            //   this.$state.vendorid = results.vendor_id;
-            //   this.$state.entityid = results.entity_id;
-              console.log("успешно получили данные вендор_айди", results);
-              console.log("добавили данные в valueVendorInfo[] ", this.$state.valueVendorInfo);
-            //   console.log("номер ку графика, поставщик, юр.лицо ", this.$state.kuid, ",", this.$state.vendorid, ",", this.$state.entityid);
-            } catch (error) {
-              console.error("Ошибка при получении данных вендор_айди:", error);
-            }
-          },
+        // async getVendorDetailFromApi(vendorId: string) {
+        //     try {
+        //       const results = await VENDOR.getVendorDetail({
+        //         vendor_id: vendorId,
+        //       });
+        //       this.$state.valueVendorInfo = [results];
+        //     //   this.$state.kuid = results.ku_id;
+        //     //   this.$state.vendorid = results.vendor_id;
+        //     //   this.$state.entityid = results.entity_id;
+        //       console.log("успешно получили данные вендор_айди", results);
+        //       console.log("добавили данные в valueVendorInfo[] ", this.$state.valueVendorInfo);
+        //     //   console.log("номер ку графика, поставщик, юр.лицо ", this.$state.kuid, ",", this.$state.vendorid, ",", this.$state.entityid);
+        //     } catch (error) {
+        //       console.error("Ошибка при получении данных вендор_айди:", error);
+        //     }
+        //   },
 
 
         ////////////////////////////////////////////////////////////////////
