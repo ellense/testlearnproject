@@ -35,7 +35,7 @@
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import type { IProduct } from "~/utils/types/directoryTypes";
+import type { IProduct } from "~/utils/types/productTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 
@@ -91,7 +91,7 @@ const AddProductItem = () => {
 
   selectedRows.forEach(row => {
     store.tableDataInRequirement.push({
-      in_prod_id: null,
+      id: null,
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,
@@ -103,17 +103,5 @@ const AddProductItem = () => {
   toggleSelection()
   store.dialogFormProductInVisible = false;
 };
-
-// //монтирование данных в таблицу
-// onMounted(async () => {
-//   try {
-//     loading.value = true; 
-//     await store.getProductFromIncludedWithFilter();
-//     loading.value = false;
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//     loading.value = false;
-//   }
-// });
 
 </script>

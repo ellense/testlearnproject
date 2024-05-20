@@ -1,83 +1,19 @@
+import type { GetAllInvoicesAndProductForGraphic, GetAllInvoicesForGraphicReturnData, GetAllProductsForGraphicReturnData, IGraphicNumeralsAndSumQty } from "~/utils/types/actTypes";
 import type { GetUserData } from "~/utils/types/authTypes";
-import type {
-  IEntity,
-  IEntityInKu,
-  IKuPost,
-  IKuId,
-  IParamInvoices,
-  IInvoicesReturnData,
-  GetAllProducts,
-  GetAllProductsReturnData,
-  IParamVendors,
-  IVendorsReturnData,
-  IParamVendorsForEntity,
-  IVendorsForEntityReturnData,
-  GetAllBrandsReturnData,
-  GetAllBrands,
-  GetAllProducer,
-  GetAllProducersReturnData,
-  IParamVendorsForEntityInVendor,
-  IVendorsForEntityInVendorReturnData,
-  EntityId,
-  IParamEntities,
-  IKuPostGraphic,
-  GetAllGraphic,
-  GetAllGraphicsReturnData,
-  IGraphicId,
-  IKuDeleteGraph,
-  IVendorId,
-  IKusReturnData,
-  IParamKus,
-  IParamKu_Id,
-  IKu_IdReturnData,
-  ITree,
-  IKuList,
-  IGraphicInfo,
-  GetAllInvoicesForGraphicReturnData,
-  GetAllInvoicesAndProductForGraphic,
-  GetAllProductsForGraphicReturnData,
-  IKuUpdate,
-  IRequirement,
-  GetAllCategory,
-  IPercentPost,
-  IExInvoiceForKuPost,
-  IManagerForKuPost,
-  IOfficialForKuPost,
-  IEntityFull,
-  IVendorFull,
-  GetPersentReturnData,
-  GetAllOfficialReturnData,
-  GetParamExInvoicesForKu,
-  GetExInvoicesForKuReturnData,
-  IParamKuId,
-  IRequirementPost,
-  IRequirementReturnData,
-  IContractPost,
-  IContractPromise,
-  IRequirementId,
-  IGraphicNumeralsAndSumQty,
-  IRequirementId2,
-  IRequirementReturnData2,
-  IOfficialForKu,
-  IParamServices,
-  IServicesReturnData,
-  IPlaceReturnData,
-  IPricelistReturnData,
-  IArticleReturnData,
-  IKuCPost,
-  IParamKusC,
-  IKusCReturnData,
-  IKuCList,
-  IServicesPost,
-  IService,
-  IArticle,
-  IParamCustomers,
-  ICustomerReturnData,
-  ICustomerForEntityReturnData,
-  IParamCustomersKU,
-  GetVACReturnData,
-  IVACPost,
-} from "~/utils/types/directoryTypes";
+import type { GetAllBrands, GetAllBrandsReturnData } from "~/utils/types/brandTypes";
+import type { IParamCustomers, ICustomerReturnData, IParamCustomersKU, ICustomerForEntityReturnData } from "~/utils/types/customerTypes";
+import type { IParamEntities, IEntity, IEntityInKu, EntityId, IEntityFull } from "~/utils/types/entityTypes";
+import type { GetAllGraphic, GetAllGraphicsReturnData, IGraphicId, IGraphicInfo } from "~/utils/types/graphicVendorTypes";
+import type { IParamInvoices, IInvoicesReturnData } from "~/utils/types/invoiceTypes";
+import type { IParamKusC, IKusCReturnData, IKuCList, IKuCPost } from "~/utils/types/kuCustomerTypes";
+import type { IParamKus, IKusReturnData, IParamKu_Id, IKu_IdReturnData, IKuPost, IKuList, IKuId, IKuUpdate, IKuDeleteGraph, IKuPostGraphic } from "~/utils/types/kuVendorTypes";
+import type { GetAllProducer, GetAllProducersReturnData } from "~/utils/types/producerTypes";
+import type { GetAllProducts, GetAllProductsReturnData } from "~/utils/types/productTypes";
+import type { IParamServices, IServicesReturnData, IPlaceReturnData, IPricelistReturnData, IArticleReturnData, IService, IArticle } from "~/utils/types/serviceTypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IExInvoiceForKuPost, IManagerForKuPost, IOfficialForKuPost, IContractPost, IContractPromise, IParamKuId, IRequirementReturnData, GetPersentReturnData, GetVACReturnData, IManagersReturnData, GetParamExInvoicesForKu, GetExInvoicesForKuReturnData, GetAllOfficialReturnData, IRequirementId, IOfficialForKu, IParamManagers, IServicesPost } from "~/utils/types/tabsKuTypes";
+import type { ITree, GetAllCategory } from "~/utils/types/treetypes";
+import type { IParamVendors, IVendorsReturnData, IParamVendorsForEntityInVendor, IVendorsForEntityInVendorReturnData, IVendorId, IParamVendorsForEntity, IVendorsForEntityReturnData, IVendorFull } from "~/utils/types/vendorTypes";
+
 const isBearer = true;
 
 export const AUTH = {
@@ -164,7 +100,7 @@ export const KU = {
   postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
     $Post("api/excluded_venddoc_list_create/", { data, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
-    $Post("api/manager_create/", { data, isBearer: false }),
+    $Post("api/manager_ku/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
     $Post("api/official_create/", { data, isBearer: false }),
   postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
@@ -176,14 +112,14 @@ export const KU = {
   //получение
   getKuInRequirements: (params: IParamKuId): Promise<IRequirementReturnData> =>
     $Get(`api/included_condition_list/`, { params, isBearer: false }),
-  getKuExRequirements: (params: IParamKuId): Promise<IRequirementReturnData2> =>
+  getKuExRequirements: (params: IParamKuId): Promise<IRequirementReturnData> =>
     $Get(`api/excluded_condition_list/`, { params, isBearer: false }),
   getKuRequirementBonus: (params: IParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
   getKuVAC: (params: IParamKuId): Promise<GetVACReturnData> =>
     $Get(`api/VAC/`, { params, isBearer: false }),
-  // getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
-  //   $Get(`api/excluded_venddoc_list_create/`, { params, isBearer: false }),
+  getKuManager: (params: IParamKuId): Promise<IManagersReturnData> =>
+    $Get(`api/manager_ku/`, { params, isBearer: false }),
   getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
     $Get(`api/excluded_venddoc_list_full/`, { params, isBearer: false }),
   getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
@@ -194,16 +130,16 @@ export const KU = {
     $Get("api/vend_doc_list", { params, isBearer: false }),
   // для редактирования
   deleteInRequirement: (data: IRequirementId) =>
-    $Delete(`api/included_condition_detail/${data.in_prod_id}/`, { data, isBearer: false }),
-  deleteExRequirement: (data: IRequirementId2) =>
+    $Delete(`api/included_condition_detail/${data.id}/`, { data, isBearer: false }),
+  deleteExRequirement: (data: IRequirementId) =>
     $Delete(`api/excluded_condition_detail/${data.id}/`, { data, isBearer: false }),
-  deleteRequirementBonus: (data: IRequirementId2) =>
+  deleteRequirementBonus: (data: IRequirementId) =>
     $Delete(`api/bonus_condition_detail/${data.id}/`, { data, isBearer: false }),
-  deleteVAC: (data: IRequirementId2) =>
+  deleteVAC: (data: IRequirementId) =>
     $Delete(`api/VAC_detail/${data.id}/`, { data, isBearer: false }),
-  deleteExInvoiceForKuId: (data: IRequirementId2) =>
+  deleteExInvoiceForKuId: (data: IRequirementId) =>
     $Delete(`api/excluded_venddoc_detail/${data.id}/`, { data, isBearer: false }),
-  deleteManager: (data: IRequirementId2) =>
+  deleteManager: (data: IRequirementId) =>
     $Delete(`api/manager_detail/${data.id}/`, { data, isBearer: false }),
   updateOfficial: (data: IOfficialForKu) =>
     $Put(`api/official_detail/${data.id}/`, { data, isBearer: false }),
@@ -241,6 +177,11 @@ export const BRAND = {
     $Get("api/brand_list/", { params, isBearer: false }),
 };
 
+export const MANAGER = {
+  getManager: (params?: IParamManagers): Promise<IManagersReturnData> =>
+    $Get("api/manager_list/", { params, isBearer: false }),
+};
+
 export const CATEGORY = {
   getCategory: (data: ITree): Promise<ITree> =>
     $Get("api/classifier_tree/", { data, isBearer: false }),
@@ -262,18 +203,6 @@ export const SERVICE = {
     $Post("api/service_list/", { data, isBearer: false }),
   postArticles: (data: IArticle): Promise<IArticle> =>
     $Post("api/article_list/", { data, isBearer: false }),
-  // getVendorsForEntityInVendor: (
-  //   params?: IParamVendorsForEntityInVendor
-  // ): Promise<IVendorsForEntityInVendorReturnData> =>
-  //   $Get("api/vendor_list/", { params, isBearer: false }),
-  // getVendorById: (): Promise<IVendorId[]> =>
-  //   $Get("api/vendor_list/", { isBearer: false }),
-  // getVendorsForEntityInKU: (
-  //   params?: IParamVendorsForEntity
-  // ): Promise<IVendorsForEntityReturnData> =>
-  //   $Get("api/vendor_filter/", { params, isBearer: false }),
-  // getVendorDetail: (data: IVendorId): Promise<IVendorFull> =>
-  //   $Get(`api/vendor_detail/${data.vendor_id}/`, { data, isBearer: false }),
 };
 
 export const KUC = {
@@ -281,19 +210,35 @@ export const KUC = {
     $Get("api/ku_customer_list/", { params, isBearer: false }),
   getKuIdList: (params: IParamKu_Id): Promise<IKu_IdReturnData> =>
     $Get("api/ku_customer_list/", { params, isBearer: false }),
+  getInfoKu: (data: IKuId): Promise<IKuCList> =>
+    $Get(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
 
   //отправление
   postKu: (data: IKuCPost): Promise<IKuCList> =>
-    $Post("api/ku_customer_list/", { data, isBearer: false }),
+    $Post("api/ku_customer_create/", { data, isBearer: false }),
   postKuServices: (data: IServicesPost): Promise<IServicesPost> =>
-    $Post("api/included_condition_create/", { data, isBearer: false }),
+    $Post("api/included_service_list/", { data, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
-    $Post("api/manager_create/", { data, isBearer: false }),
+    $Post("api/manager_ku_customer/", { data, isBearer: false }),
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
-    $Post("api/official_create/", { data, isBearer: false }),
+    $Post("api/official_customer_create/", { data, isBearer: false }),
   postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
     $Post("api/name_contact_create/", { data, isBearer: false }),
-  
+  //для получения в ku_id
+  getKuService: (params: IParamKuId): Promise<GetVACReturnData> =>
+    $Get(`api/VAC/`, { params, isBearer: false }),
+  getKuVAC: (params: IParamKuId): Promise<GetVACReturnData> =>
+    $Get(`api/VAC/`, { params, isBearer: false }),
+  getKuManager: (params: IParamKuId): Promise<IManagersReturnData> =>
+    $Get(`api/manager_ku_customer/`, { params, isBearer: false }),
+  getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
+    $Get(`api/official_create/`, { params, isBearer: false }),
+  //для изменения
+  deleteManager: (data: IRequirementId) =>
+    $Delete(`api/manager_customer_detail/${data.id}/`, { data, isBearer: false }),
+  updateOfficial: (data: IOfficialForKu) =>
+    $Put(`api/official_customer_detail/${data.id}/`, { data, isBearer: false }),
+
 };
 export const GRAPHICC = {
   getGraphic: (params?: GetAllGraphic): Promise<GetAllGraphicsReturnData> =>

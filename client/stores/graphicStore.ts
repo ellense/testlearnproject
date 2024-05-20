@@ -1,14 +1,9 @@
 import { defineStore } from 'pinia';
+import type { EntityId } from '~/utils/types/entityTypes';
+import type { IGraphic, GetAllGraphic } from '~/utils/types/graphicVendorTypes';
+import type { IKuList, IParamKu_Id, IKuId } from '~/utils/types/kuVendorTypes';
+import type { IGraphicStore } from '~/utils/types/storesTypes';
 
-import type {
-  IKuList,
-  IGraphic,
-  EntityId,
-  GetAllGraphic,
-  IKuId,
-  IParamKu_Id,
-  IGraphicStore,
-} from "~/utils/types/directoryTypes";
 
 export const useGraphicStore = defineStore("GraphicStore", {
   state: (): IGraphicStore => ({

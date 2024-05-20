@@ -4,7 +4,6 @@
     <el-button @click="addClose()" size="small">Отменить</el-button>
     <!-- <el-progress type="dashboard" :color="colors" :percentage="progress" v-if="progress !== 100" size="small" />/ -->
     <el-button type="primary" @click="createKU()" :loading="loading" size="small">Создать</el-button>
-    <!-- <el-button plain @click="open"> уведомление </el-button> -->
   </div>
 </template>
 
@@ -12,7 +11,6 @@
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuStore } from "~~/stores/kuStore";
 import dayjs from "dayjs";
-import type { IExInvoiceForKuPost, IKuList, IManagerForKuPost, IOfficialForKuPost, IPercentPost, IRequirementPost, IVACPost, IVendor } from "~/utils/types/directoryTypes";
 import { useRouter } from 'vue-router'
 const store = useKuAddStore();
 const loading = ref(false);
@@ -27,7 +25,7 @@ const clearDataBeforeLeave = () => {
   store.clearNewData()
 }
 
-// Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
+// Хук При попытке перехода на другую страницу в браузере
 onBeforeRouteLeave((to, from, next) => {
   if (store.tableDataInRequirement.length > 0 ||
     store.tableDataExRequirement.length > 0 ||
@@ -75,7 +73,6 @@ onBeforeRouteLeave((to, from, next) => {
   }
 })
 
-
 const colors = [
   { color: '#f56c6c', percentage: 20 },
   { color: '#e6a23c', percentage: 40 },
@@ -84,30 +81,11 @@ const colors = [
   { color: '#6f7ad3', percentage: 100 },
 ]
 import { ElNotification } from 'element-plus'
-
-const open = () => {
-  ElNotification({
-    title: 'Cоздание КУ',
-    dangerouslyUseHTMLString: true,
-    message: '<el-progress :percentage="progress" v-if="progress !== 100" size="small" />',
-    showClose: false,
-  })
-  ElMessage({
-    message: 'Коммерческое условие успешно создано.',
-    duration: 5000,
-    type: 'success',
-  })
-  // <strong>This is <i>HTML</i> string</strong>
-}
-
-
-
-
+import type { IKuList } from "~/utils/types/kuVendorTypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost, IOfficialForKuPost } from "~/utils/types/tabsKuTypes";
 
 const createKU = async () => {
-
   try {
-
     if (!(await store.isFormValid())) {
       // Если форма не валидна, выводим сообщение об ошибке и завершаем выполнение функции
       ElMessage({
@@ -138,26 +116,24 @@ const createKU = async () => {
     }
 
     loading.value = true;
-    // open()
 
-    const newItem = createNewItem();
-
-    const response = await KU.postKu(newItem);
+    const response = await KU.postKu(createNewItem());
     progress.value = 10;
     const responses = await postRequirements(response, store.tableDataInRequirement, KU.postKuInRequirement);
     progress.value = 20;
     const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirement);
     progress.value = 30;
-    const response3 = await postBonusRequirements(response, store.tableDataPercent);
+    const response3 = await postBonus(response, store.tableDataPercent);
     progress.value = 40;
     const response7 = await postVAC(response, store.tableDataVAC);
     progress.value = 50;
     const response4 = await postExInvoice(response, store.tableDataExInvoiceSelect);
     progress.value = 60;
-    const response5 = await postManagerItems(response, store.tableDataManagerSelect);
+    const response5 = await postManager(response, store.tableDataManagerSelect);
     progress.value = 70;
-    const response6 = await KU.postKuOfficial(createOfficialArray(response));
+    const response6 = await KU.postKuOfficial(postOfficial(response));
     progress.value = 80;
+
     const success = responses.every(response => response !== null);
     if (response && success) {
       handleSuccess(response, responses, response2, response3, response4, response5, response6, response7);
@@ -218,7 +194,7 @@ const postRequirements = async (response: IKuList, dataArray: any, postFunction:
   }));
 };
 
-const postBonusRequirements = async (response: IKuList, dataArray: any) => {
+const postBonus = async (response: IKuList, dataArray: any) => {
   const requirementsArray = dataArray.map((item: IPercentPost) => ({
     ku_key_id: response.ku_id,
     fix: item.fix,
@@ -258,11 +234,10 @@ const postVAC = async (response: IKuList, dataArray: any) => {
   }));
 };
 
-const postManagerItems = async (response: IKuList, dataArray: any) => {
+const postManager = async (response: IKuList, dataArray: any) => {
   const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
     ku_id: response.ku_id,
-    group: item.group,
-    discription: item.discription
+    id: item.id,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
@@ -291,7 +266,7 @@ const postExInvoice = async (response: IKuList, dataArray: any) => {
   }));
 };
 
-const createOfficialArray = (response: IKuList) => {
+const postOfficial = (response: IKuList) => {
   return {
     ku_id: response.ku_id,
     counterparty_name: store.newOfFIOСounteragent,
@@ -304,7 +279,7 @@ const createOfficialArray = (response: IKuList) => {
 };
 
 const handleSuccess = (response: IKuList, responses: any[], response2: any[], response3: any[], response4: any[], response5: any[], response6: IOfficialForKuPost, response7: any) => {
-  console.log("Экземпляр успешно отправлен на бэкенд:", response);
+  console.log("Экземпляр КУ успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
   console.log("исклУсловия успешно отправлены на бэкенд:", response2);
   console.log("бонус успешно отправлены на бэкенд:", response3);
@@ -394,17 +369,5 @@ const addClose = () => {
   display: flex;
   justify-content: flex-start;
 }
-
-.loading-cursor {
-  cursor: wait;
-  /* Установка курсора в виде элемента загрузки */
-}
-
-.el-popper {
-  min-width: 600px !important
-}
-
-.el-vl__window {
-  width: 100% !important
-}
 </style>
+~/utils/types/serviceTypes

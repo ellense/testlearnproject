@@ -1,8 +1,7 @@
 <template>
   <el-header>
-    <el-icon size="20px" color="#337ecc" class="icon" style="transition: 0.3s;"><Fold /></el-icon>
+    <!-- <el-icon size="20px" color="#337ecc" class="icon" style="transition: 0.3s;"><Fold /></el-icon> -->
     <div>
-      
       <h1>Управление коммерческими условиями контрагентов</h1>
     </div>
   </el-header>
@@ -20,7 +19,6 @@ import { Fold } from "@element-plus/icons-vue";
   display: flex;
   gap: 30px;
   align-items: center;
-  /* justify-content: space-between; */
   --el-header-height: 45px;
 }
 .icon:hover {

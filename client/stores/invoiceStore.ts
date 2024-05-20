@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
-import type { EntityId, IParamInvoices, IInvoiceStore } from "~/utils/types/directoryTypes";
+import type { EntityId } from "~/utils/types/entityTypes";
+import type { IParamInvoices } from "~/utils/types/invoiceTypes";
+import type { IInvoiceStore } from "~/utils/types/storesTypes";
 export const useInvoiceStore = defineStore("IInvoiceStore", {
   state: (): IInvoiceStore => ({
     dataInvoice: [],

@@ -38,17 +38,6 @@
       <el-button type="danger" plain @click="deleteGraphic()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonDeleteTooltip" size="small">Удалить</el-button>
     </div>
-    <!-- <div class="directoryBar_filter">
-      <el-select v-model="Ku" multiple clearable filterable collapse-tags collapse-tags-tooltip :max-collapse-tags="2"
-        placeholder="Фильтр по КУ" style="width: 300px" @change="changeKu" size="small">
-        <el-option v-for="item in KuList" :key="item" :label="item" :value="item" size="small"/>
-      </el-select>
-      <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-        :max-collapse-tags="3" placeholder="Фильтр по юр. лицу" style="width: 200px" @change="changeLegalEntity">
-        <el-option v-for="item in LegalEntityList" :key="item" :label="item" :value="item" />
-      </el-select>
-      <el-input v-model="searchQuery" placeholder="Фильтр по поставщику" style="width: 300px;" size="small"></el-input>
-    </div> -->
   </div>
 </template>
 
@@ -62,45 +51,6 @@ const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
   useGraphicStore().performSearchGraphic(newValue);
 });
-
-// //для фильтрации 
-// const { filterGraphicValue, legalEntity, KuParams } = storeToRefs(useGraphicStore())
-// const triggerFilter = ref<boolean>(true);
-// const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
-
-// //для фильтрации по юр лицам
-// const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
-// const LegalEntityList = ref<string[]>(legalEntity.value);
-
-// const changeLegalEntity = () => {
-//   useGraphicStore().pagination = null;
-//   useGraphicStore().setFilterValue('entity_id', LegalEntity.value);
-//   console.log('shopLegalEntity.value:', LegalEntity.value);
-
-//   toggleTriggerFilter();
-// };
-
-// watch(legalEntity, (value) => {
-//   LegalEntityList.value = value;
-// });
-
-// //для фильтрации по ку
-// const Ku = ref<string[]>(filterGraphicValue.value.ku_id || []);
-// const KuList = ref<string[]>(KuParams.value);
-
-// const changeKu = () => {
-//   useGraphicStore().pagination = null;
-//   useGraphicStore().setFilterValue('ku_id', Ku.value);
-//   toggleTriggerFilter();
-// };
-
-// watch(KuParams, (value) => {
-//   KuList.value = value;
-// });
-// //для фильтрации
-// watch(triggerFilter, () => {
-//   useGraphicStore().getGraphicsFromAPIWithFilter();
-// });
 
 onMounted(() => {
   useGraphicStore().getLegalEntityFilterForGraphicFromApi();

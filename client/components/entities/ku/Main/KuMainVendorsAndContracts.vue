@@ -62,11 +62,12 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IEntityInKu, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 const { getVAC } = storeToRefs(
   useKuIdStore()
 );

@@ -2,17 +2,16 @@
   <div class="login-container">
     <el-card class="login-card">
       <template #header>
-      
         <h1>Авторизация</h1>
-    
-    </template>
+      </template>
       <div class="auth-container__form">
         <el-form :model="form" @submit.prevent.stop="login">
           <el-form-item>
             <el-input v-model="form.username" placeholder="Введите логин" :prefix-icon="Message" />
           </el-form-item>
           <el-form-item>
-            <el-input v-model="form.password" placeholder="Введите пароль" show-password type="password" :prefix-icon="Lock" />
+            <el-input v-model="form.password" placeholder="Введите пароль" show-password type="password"
+              :prefix-icon="Lock" />
           </el-form-item>
           <el-form-item>
             <el-button native-type="submit" type="primary" :full-width="true" :scopes="'all'" :for-all="true"
@@ -71,10 +70,6 @@ const login = () => {
 </script>
 
 <style scoped>
-.el-form {
-  /* margin-top: 10px; */
-}
-
 .login-container {
   display: flex;
   height: 100vh;

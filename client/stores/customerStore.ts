@@ -1,5 +1,7 @@
 import { defineStore } from "pinia";
-import type { IVendor, IVendorStore, WithoutNullableKeys, IParamVendorsForEntityInVendor, EntityId, IParamCustomers, ICustomerStore } from "~/utils/types/directoryTypes";
+import type { IParamCustomers } from "~/utils/types/customerTypes";
+import type { EntityId } from "~/utils/types/entityTypes";
+import type { ICustomerStore } from "~/utils/types/storesTypes";
 
 export const useCustomerStore = defineStore("ICustomerStore", {
   state: (): ICustomerStore => ({
@@ -26,7 +28,6 @@ export const useCustomerStore = defineStore("ICustomerStore", {
       try {
         // Устанавливаем значение для поиска в хранилище
         this.setSearchQuery(searchQuery);
-        // Вызываем метод для получения данных с учетом поискового запроса
         await this.getCustomerFromAPIWithFilter();
       } catch (error) {
         console.error('Ошибка при выполнении поиска', error);
@@ -37,7 +38,7 @@ export const useCustomerStore = defineStore("ICustomerStore", {
       this.$state.search = query;
     },
 
-    //для фильтра
+    //для фильтра по юр лицу
     getJuristicPersonsFromApi() {
       ENTITY.getEntityById()
         .then((juristicPersons) => this.setJuristicPersons(juristicPersons))
@@ -75,7 +76,7 @@ export const useCustomerStore = defineStore("ICustomerStore", {
         sort_order,
       })
         .then((dataCustomer) => {
-          console.log('Получены данные поставщиков:', dataCustomer);
+          console.log('Получены данные клиентов:', dataCustomer);
           this.$state.dataCustomer = dataCustomer.results;
           this.$state.pagination = {
             count: dataCustomer.count,

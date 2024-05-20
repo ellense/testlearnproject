@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import type { IVendor } from "~/utils/types/directoryTypes";
+import type { IVendor } from "~/utils/types/vendorTypes";
 import { useVendorStore } from "~~/stores/vendorStore";
 const store = useVendorStore()
 const { getVendors, pagination, countRowTable } = storeToRefs(useVendorStore());
@@ -48,18 +48,6 @@ const paginationChange = (page: number) => {
   }
 };
 
-
-// const handleSortChange = async ({ prop, order }: { prop: string, order: string }) => {
-//   try {
-//     const sortField = prop; // поле, по которому сортируем
-//     const sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-//     console.log("(поле, порядок) = (", sortField,",", sortOrder, ")");
-//     // await useVendorStore().getVendorFromAPIWithFilter(undefined, sortField, sortOrder);
-//     await useVendorStore().getVendorFromAPIWithFilter();
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных", error);
-//   }
-// };
 const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
   try {
     store.pagination = null

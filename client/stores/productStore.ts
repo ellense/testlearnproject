@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { GetAllProducts, ProductStore } from "~/utils/types/directoryTypes";
+import type { ProductStore, GetAllProducts } from "~/utils/types/productTypes";
 
 export const useProductStore = defineStore("ProductStore", {
   state: (): ProductStore => ({

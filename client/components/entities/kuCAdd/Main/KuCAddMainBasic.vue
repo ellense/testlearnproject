@@ -72,7 +72,7 @@
               @change="onChangeAndValidateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Оплата</el-divider>
-          <el-form-item label-width="170" label="Общая сумма премии" prop="newDocu_account">
+          <el-form-item label-width="170" label="Общая сумма премии" prop="newPay_sum">
             <el-input v-model="kuMain.newPay_sum" size="small" clearable placeholder="Введите сумму премии"
               style="width: 300px">
             </el-input>
@@ -114,9 +114,6 @@
         
       </div>
     </el-form>
-    <!-- <el-button type="primary" @click="submitForm(ruleFormRef)">
-      Create
-    </el-button> -->
   </el-scrollbar>
 </template>
 
@@ -124,12 +121,10 @@
 import { reactive, ref } from 'vue'
 import dayjs from "dayjs";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
-import type {
-ICustomerIdAndName,
-  IEntityInKu,
-  IKuCAddMain,
-} from "~/utils/types/directoryTypes";
 import type { FormInstance, FormRules } from 'element-plus'
+import type { ICustomerIdAndName } from '~/utils/types/customerTypes';
+import type { IEntityInKu } from '~/utils/types/entityTypes';
+import type { IKuCAddMain } from '~/utils/types/storesTypes';
 const store = useKuCAddStore();
 const kuMain = store.kuAddMain
 const ruleFormRef = ref<FormInstance | null>(null);
@@ -180,6 +175,12 @@ const rules = reactive<FormRules<IKuCAddMain>>({
       trigger: 'change',
     },
   ],
+  newPay_sum: [
+    {
+      required: true,
+      trigger: 'change',
+    },
+  ],
   newPay_method: [
     {
       required: true,
@@ -187,12 +188,6 @@ const rules = reactive<FormRules<IKuCAddMain>>({
     },
   ],
   newDocu_account: [
-    {
-      required: true,
-      trigger: 'change',
-    },
-  ],
-  newPay_sum: [
     {
       required: true,
       trigger: 'change',

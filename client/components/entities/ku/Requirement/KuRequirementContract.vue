@@ -16,16 +16,6 @@
                 <el-table-column property="brand_code" label="Код" width="200" show-overflow-tooltip />
                 <el-table-column property="brand_name" label="Наименование" width="500" />
             </el-table-column>
-            <!-- <el-table-column prop="use_producer" label="Использовать производителя" width="120" align="center">
-                <template #default="{ row }">
-                    <el-checkbox v-model="row.use_producer" @change="onUseProducerChange(row)"></el-checkbox>
-                </template>
-</el-table-column>
-<el-table-column prop="use_brand" label="Использовать торговую марку" width="120" align="center">
-    <template #default="{ row }">
-                    <el-checkbox v-model="row.use_brand" @change="onUseBrandChange(row)"></el-checkbox>
-                </template>
-</el-table-column> -->
             <el-table-column fixed="right" label="Операция" align="center">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
@@ -83,7 +73,8 @@ import { ref } from "vue";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import type { IBrand, IContract, IProducer } from "~/utils/types/directoryTypes";
+import type { IBrand } from "~/utils/types/brandTypes";
+import type { IProducer } from "~/utils/types/producerTypes";
 
 const store = useKuIdStore();
 const store2 = useKuAddStore();
@@ -123,17 +114,6 @@ const addRow = async () => {
 const deleteRow = (index: number) => {
     store.tableDataContract.splice(index, 1);
 }
-
-const onUseProducerChange = (row: IContract) => {
-    const rowIndex = tableData.value.findIndex(item => item === row);
-    store.tableDataContract[rowIndex].use_producer = row.use_producer;
-    console.log("данные tableDataContract в хранилище изменены:", store.tableDataContract)
-};
-const onUseBrandChange = (row: IContract) => {
-    const rowIndex = tableData.value.findIndex(item => item === row);
-    store.tableDataContract[rowIndex].use_brand = row.use_brand;
-    console.log("данные tableDataContract в хранилище изменены:", store.tableDataContract)
-};
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 const options3 = ref<Array<{ label: string; value: string }>>([]);

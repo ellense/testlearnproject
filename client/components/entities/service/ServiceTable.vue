@@ -22,8 +22,8 @@
 import { storeToRefs } from "pinia";
 import { Delete } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IService } from "~/utils/types/directoryTypes";
 import { useServiceStore } from "~~/stores/serviceStore";
+import type { IService } from "~/utils/types/serviceTypes";
 
 const store = useServiceStore()
 const { getService, pagination, countRowTable } = storeToRefs(useServiceStore());

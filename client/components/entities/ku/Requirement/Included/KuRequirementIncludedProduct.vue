@@ -35,10 +35,10 @@
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, watch } from "vue";
-import type { IProduct } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import { useKuIdStore } from "~~/stores/kuIdStore";
+import type { IProduct } from "~/utils/types/productTypes";
 
 const store = useKuIdStore();
 const store2 = useKuAddStore();
@@ -93,7 +93,7 @@ const AddProductItem = () => {
 
   selectedRows.forEach(row => {
     store.tableDataInRequirement.push({
-      in_prod_id: null,
+      id: null,
       item_type: "Таблица",
       item_code: row.itemid,
       item_name: row.name,

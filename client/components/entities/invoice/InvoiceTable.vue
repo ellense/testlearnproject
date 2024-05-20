@@ -25,7 +25,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import type { IInvoice } from "~/utils/types/directoryTypes";
+import type { IInvoice } from "~/utils/types/invoiceTypes";
 import { useInvoiceStore } from "~~/stores/invoiceStore";
 const store = useInvoiceStore()
 const { getInvoices, pagination, countRowTable } = storeToRefs(
@@ -42,7 +42,7 @@ const handleSizeChange = async (val: number) => {
   try {
     await useInvoiceStore().getInvoicesFromAPIWithFilter();
   } catch (error) {
-    console.error("Ошибка при загрузке данных 11", error);
+    console.error("Ошибка при загрузке данных", error);
   }
 };
 const paginationChange = (page: number) => {
@@ -81,3 +81,4 @@ onMounted(async () => {
   }
 });
 </script>
+~/utils/types/serviceTypes

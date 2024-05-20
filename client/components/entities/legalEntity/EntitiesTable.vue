@@ -15,7 +15,7 @@
 import { ref, onMounted, watch } from "vue";
 import { storeToRefs } from "pinia";
 import { useEntityStore } from "@/stores/entityStore";
-import type { IEntity } from "~/utils/types/directoryTypes";
+import type { IEntity } from "~/utils/types/entityTypes";
 const { getEntities } = storeToRefs(useEntityStore());
 
 const tableData = ref<IEntity[]>(getEntities.value);

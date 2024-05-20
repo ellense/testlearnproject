@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import type { ICustomerFull } from "~/utils/types/directoryTypes";
+import type { ICustomerFull } from "~/utils/types/customerTypes";
 import { useCustomerStore } from "~~/stores/customerStore";
 const store = useCustomerStore()
 const { getCustomers, pagination, countRowTable } = storeToRefs(useCustomerStore());
@@ -84,3 +84,4 @@ onMounted(async () => {
   z-index: 9;
 }
 </style>
+~/utils/types/serviceTypes

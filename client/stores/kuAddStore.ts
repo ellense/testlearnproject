@@ -1,27 +1,16 @@
 import { defineStore } from "pinia";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import type { FormInstance } from 'element-plus'
+import type { IBrand, GetAllBrands } from "~/utils/types/brandTypes";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IKuList } from "~/utils/types/kuVendorTypes";
+import type { IProducer, GetAllProducer } from "~/utils/types/producerTypes";
+import type { IProduct, GetAllProducts } from "~/utils/types/productTypes";
+import type { IKuAddStore } from "~/utils/types/storesTypes";
+import type { IExInvoiceForKu, IManagerForKu, GetParamExInvoicesForKu, IParamManagers, IContractPost } from "~/utils/types/tabsKuTypes";
+import type { GetAllCategory, ITree } from "~/utils/types/treetypes";
+import type { IVendorIdAndName, IParamVendorsForEntity } from "~/utils/types/vendorTypes";
 
-import type {
-    IKuList,
-    IEntityInKu,
-    GetAllProducer,
-    IProducer,
-    GetAllProducts,
-    IProduct,
-    GetAllBrands,
-    IBrand,
-    IParamVendorsForEntity,
-    IKuAddStore,
-    IVendorId,
-    IExInvoiceForKu,
-    ITree,
-    GetAllCategory,
-    GetParamExInvoicesForKu,
-    IContractPost,
-    IVendorIdAndName,
-    IVendorAndContract,
-} from "~/utils/types/directoryTypes";
 
 export const useKuAddStore = defineStore("KuAddStore", {
     state: (): IKuAddStore => ({
@@ -127,6 +116,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         filterVendorValue: {},
         filterCategory: {},
         filterExInvoice: {},
+        filterManager: {},
         isFormValid: false,
     }),
 
@@ -166,6 +156,9 @@ export const useKuAddStore = defineStore("KuAddStore", {
         },
         handleSelectionChangeExInvoice(val: IExInvoiceForKu[]) {
             this.multipleSelectionExInvoice = val;
+        },
+        handleSelectionChangeManager(val: IManagerForKu[]) {
+            this.multipleSelectionManager = val;
         },
 
         //для разной пагинации
@@ -556,8 +549,32 @@ export const useKuAddStore = defineStore("KuAddStore", {
             console.log('Устанавливается запрос поиска по номеру:', query);
             this.$state.searchExInvoiceNumber = query;
         },
-
-
+        //получение менеджеров
+        async getManagersFromAPIWithFilter(page?: number) {
+            await MANAGER.getManager({
+                page_size: this.$state.countRowTable,
+                page,
+            })
+                .then((dataManager) => {
+                    console.log('Получены данные менеджеров:', dataManager);
+                    this.$state.tableDataManagerAll = dataManager.results;
+                    this.$state.pagination = {
+                        count: dataManager.count,
+                        previous: dataManager.previous,
+                        next: dataManager.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных менеджеров:', error);
+                    return Promise.reject(error);
+                });
+        },
+        setFilterManager<
+        T extends keyof IParamManagers,
+        U extends IParamManagers[T],
+    >(field: T, value: U) {
+        this.$state.filterManager[field] = value
+    },
         //очищение всего
         clearNewData() {
             // Очищаем таблицу условий

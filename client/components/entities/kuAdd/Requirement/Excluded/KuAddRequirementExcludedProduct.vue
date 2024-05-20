@@ -35,7 +35,7 @@
 import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { ref, onMounted, watch } from "vue";
-import type { IProduct } from "~/utils/types/directoryTypes";
+import type { IProduct } from "~/utils/types/productTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 

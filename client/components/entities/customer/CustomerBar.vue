@@ -26,7 +26,7 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { useVendorStore } from "~~/stores/vendorStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import type { IEntityInKu } from "~/utils/types/directoryTypes";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
 
 const { juristicPersons } = storeToRefs(useVendorStore());
 
@@ -86,3 +86,4 @@ onMounted(async () => {
 </script>
 
 <style scoped></style>
+~/utils/types/serviceTypes

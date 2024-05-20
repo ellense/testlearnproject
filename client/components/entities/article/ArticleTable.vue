@@ -22,8 +22,8 @@
 import { storeToRefs } from "pinia";
 import { Delete } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IArticle } from "~/utils/types/directoryTypes";
 import { useServiceStore } from "~~/stores/serviceStore";
+import type { IArticle } from "~/utils/types/serviceTypes";
 
 const store = useServiceStore()
 const { getArticle, pagination, countRowTable } = storeToRefs(useServiceStore());
@@ -88,3 +88,4 @@ const deleteRow = (index: number) => {
   z-index: 9;
 }
 </style>
+~/utils/types/serviceTypes

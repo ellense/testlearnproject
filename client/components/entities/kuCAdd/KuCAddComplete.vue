@@ -2,9 +2,7 @@
   <EntitiesKuCAddMain />
   <div class="button_bottom">
     <el-button @click="addClose()" size="small">Отменить</el-button>
-    <!-- <el-progress type="dashboard" :color="colors" :percentage="progress" v-if="progress !== 100" size="small" />/ -->
     <el-button type="primary" @click="createKU()" :loading="loading" size="small">Создать</el-button>
-    <!-- <el-button plain @click="open"> уведомление </el-button> -->
   </div>
 </template>
 
@@ -12,7 +10,6 @@
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { useKuCStore } from "~~/stores/kuCStore";
 import dayjs from "dayjs";
-import type { IExInvoiceForKuPost, IKuCList, IKuList, IManagerForKuPost, IOfficialForKuPost, IServiceAndArticle } from "~/utils/types/directoryTypes";
 import { useRouter } from 'vue-router'
 const store = useKuCAddStore();
 const loading = ref(false);
@@ -22,6 +19,8 @@ const kuMain = store.kuAddMain
 import { onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
+import type { IKuCList } from "~/utils/types/kuCustomerTypes";
+import type { IServicesPost, IOfficialForKuPost } from "~/utils/types/tabsKuTypes";
 
 const clearDataBeforeLeave = () => {
   store.clearNewData()
@@ -70,39 +69,8 @@ onBeforeRouteLeave((to, from, next) => {
   }
 })
 
-
-const colors = [
-  { color: '#f56c6c', percentage: 20 },
-  { color: '#e6a23c', percentage: 40 },
-  { color: '#5cb87a', percentage: 60 },
-  { color: '#1989fa', percentage: 80 },
-  { color: '#6f7ad3', percentage: 100 },
-]
-import { ElNotification } from 'element-plus'
-
-const open = () => {
-  ElNotification({
-    title: 'Cоздание КУ',
-    dangerouslyUseHTMLString: true,
-    message: '<el-progress :percentage="progress" v-if="progress !== 100" size="small" />',
-    showClose: false,
-  })
-  ElMessage({
-    message: 'Коммерческое условие успешно создано.',
-    duration: 5000,
-    type: 'success',
-  })
-  // <strong>This is <i>HTML</i> string</strong>
-}
-
-
-
-
-
 const createKU = async () => {
-
   try {
-
     if (!(await store.isFormValid())) {
       // Если форма не валидна, выводим сообщение об ошибке и завершаем выполнение функции
       ElMessage({
@@ -124,23 +92,15 @@ const createKU = async () => {
     }
 
     loading.value = true;
-    // open()
 
-    const newItem = createNewItem();
-    progress.value = 10;
-    const response = await KUC.postKu(newItem);
-    progress.value = 20;
-    const responses = await postRequirements(response, store.tableDataServiceSelect, KUC.postKuServices);
-    progress.value = 30;
-    progress.value = 40;
-    progress.value = 50;
-    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KUC.postKuManager);
-    progress.value = 60;
-    const response6 = await KUC.postKuOfficial(createOfficialArray(response));
-    progress.value = 70;
+    const response = await KUC.postKu(createNewItem())
+    const responses = await postRequirements(response, store.tableDataServiceSelect);
+    const response2 = await postManager(response, store.tableDataManagerSelect);
+    const response3 = await KUC.postKuOfficial(createOfficial(response));
+
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response5, response6);
+      handleSuccess(response, responses, response2, response3);
     } else {
       handleError();
     }
@@ -173,8 +133,8 @@ const createNewItem = () => {
   };
 };
 
-const postRequirements = async (response: IKuCList, dataArray: any, postFunction: any) => {
-  const requirementsArray = dataArray.map((item: { service_code: any; service_name: any; article_code: any; article_name: any; ratio: any; }) => ({
+const postRequirements = async (response: IKuCList, dataArray: any,) => {
+  const requirementsArray = dataArray.map((item: IServicesPost) => ({
     ku_id: response.ku_id,
     service_code: item.service_code,
     service_name: item.service_name,
@@ -185,7 +145,7 @@ const postRequirements = async (response: IKuCList, dataArray: any, postFunction
 
   return await Promise.all(requirementsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KUC.postKuServices(newItem);
     } catch (error) {
       console.error("Ошибка при отправке услуг на бэкенд:", error);
       return null;
@@ -194,7 +154,7 @@ const postRequirements = async (response: IKuCList, dataArray: any, postFunction
 };
 
 
-const postManagerItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
+const postManager = async (response: IKuCList, dataArray: any) => {
   const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
     ku_id: response.ku_id,
     group: item.group,
@@ -203,7 +163,7 @@ const postManagerItems = async (response: IKuCList, dataArray: any, postFunction
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KUC.postKuManager(newItem);
     } catch (error) {
       console.error("Ошибка при отправке данных на бэкенд:", error);
       return null;
@@ -211,23 +171,8 @@ const postManagerItems = async (response: IKuCList, dataArray: any, postFunction
   }));
 };
 
-const postItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { docid: any; }) => ({
-    ku_id: response.ku_id,
-    docid: item.docid,
-  }));
 
-  return await Promise.all(itemsArray.map(async (newItem: any) => {
-    try {
-      return await postFunction(newItem);
-    } catch (error) {
-      console.error("Ошибка при отправке данных на бэкенд:", error);
-      return null;
-    }
-  }));
-};
-
-const createOfficialArray = (response: IKuCList) => {
+const createOfficial = (response: IKuCList) => {
   return {
     ku_id: response.ku_id,
     counterparty_name: store.newOfFIOСounteragent,
@@ -239,11 +184,11 @@ const createOfficialArray = (response: IKuCList) => {
   };
 };
 
-const handleSuccess = (response: IKuCList, responses: any[], response5: any[], response6: IOfficialForKuPost) => {
+const handleSuccess = (response: IKuCList, responses: any[], response2: any[], response3: IOfficialForKuPost) => {
   console.log("КУ клиентов успешно отправлен на бэкенд:", response);
-  console.log("услуги успешно отправлены на бэкенд:", responses);
-  console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
-  console.log("Должн. лица успешно отправлены на бэкенд:", response6);
+  console.log("Услуги успешно отправлены на бэкенд:", responses);
+  console.log("Кат. менеджеры успешно отправлены на бэкенд:", response2);
+  console.log("Должн. лица успешно отправлены на бэкенд:", response3);
   useKuCStore().getKuFromAPIWithFilter();
   router.push("kuC");
   ElMessage({
@@ -318,18 +263,5 @@ const addClose = () => {
   margin: 20px 10px 0 0;
   display: flex;
   justify-content: flex-start;
-}
-
-.loading-cursor {
-  cursor: wait;
-  /* Установка курсора в виде элемента загрузки */
-}
-
-.el-popper {
-  min-width: 600px !important
-}
-
-.el-vl__window {
-  width: 100% !important
 }
 </style>

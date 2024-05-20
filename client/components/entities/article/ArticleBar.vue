@@ -4,7 +4,6 @@
     <h3>Статьи услуг</h3>
     <el-divider direction="vertical" />
     <el-button type="success" plain @click="store.dialogFormArticleVisible = true" size="small">Добавить</el-button>
-    <!-- <el-button type="primary" plain @click="" size="small">Создать отчет</el-button> -->
   </div>
     <div class="directoryBar_filter">
       <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;" :prefix-icon="Search" size="small"></el-input>

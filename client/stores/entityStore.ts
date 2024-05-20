@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import type { IEntityStore, IParamEntities, } from "~/utils/types/directoryTypes";
+import type { IParamEntities } from "~/utils/types/entityTypes";
+import type { IEntityStore } from "~/utils/types/storesTypes";
 
 export const useEntityStore = defineStore("IEntityStore", {
   state: (): IEntityStore => ({
@@ -18,7 +19,6 @@ export const useEntityStore = defineStore("IEntityStore", {
   actions: {
     async performSearch(searchQuery: string) {
       try {
-        console.log("Performing search with query:", searchQuery);
         this.setSearchQuery(searchQuery);
         await this.getEntityFromAPIWithFilter();
       } catch (error) {

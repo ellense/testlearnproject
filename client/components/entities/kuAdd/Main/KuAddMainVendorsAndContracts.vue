@@ -65,11 +65,13 @@
 </template>
 
 <script setup lang="ts">
-import type { IEntityInKu, IVendorAndContract, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import { Delete, DocumentRemove } from '@element-plus/icons-vue'
 import dayjs from "dayjs";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IVendorAndContract } from "~/utils/types/tabsKuTypes";
+import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 
 const store = useKuAddStore();
 const kuMain = store.kuAddMain

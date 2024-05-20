@@ -25,8 +25,8 @@
 import { storeToRefs } from "pinia";
 import VueResizable from 'vue-resizable'
 import { ref, onMounted, watch } from "vue";
-import type { IProduct } from "~/utils/types/directoryTypes";
 import { useProductStore } from "~~/stores/productStore";
+import type { IProduct } from "~/utils/types/productTypes";
 const store = useProductStore()
 const { getProducts, pagination, countRowTable } = storeToRefs(
   useProductStore()

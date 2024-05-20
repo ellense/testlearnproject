@@ -23,9 +23,9 @@
 import { localizedExcelTableLabel } from "~/composables/localizedExcelTable";
 import { storeToRefs } from "pinia";
 import { useReportStore } from "~~/stores/reportStore";
-import type { GraphicForExcelReportInvoice } from "~/utils/types/directoryTypes";
 import { excel, type Range } from "~/composables/excel";
 import { dayjs } from "element-plus";
+import type { GraphicForExcelReportInvoice } from "~/utils/types/actTypes";
 const { utils, writeFile, getBorderCell, getColumnById } = excel;
 const {
   getGraphicDone,
@@ -222,3 +222,4 @@ function exportAsExcel() {
 </script>
 
 <style scoped></style>
+~/utils/types/serviceTypes

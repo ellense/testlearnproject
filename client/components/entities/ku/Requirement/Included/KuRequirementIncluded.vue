@@ -36,7 +36,7 @@ import type { Action } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import type { IRequirement } from "~/utils/types/directoryTypes";
+import type { IRequirement } from "~/utils/types/tabsKuTypes";
 const { getKuInRequirement } = storeToRefs(
   useKuIdStore()
 );
@@ -51,7 +51,7 @@ const tableData = ref<IRequirement[]>(getKuInRequirement.value);
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {
         store.tableDataInRequirement.push({
-            in_prod_id: null,
+            id: null,
             item_type: "Все",
             item_code: "",
             item_name: "",
@@ -68,7 +68,7 @@ const onAddItem = () => {
                 if (action === 'confirm') { // Проверяем, что пользователь подтвердил удаление
                     store.tableDataInRequirement.length = 0;// Очищаем массив
                     store.tableDataInRequirement.push({
-                        in_prod_id: null,
+                        id: null,
                         item_type: "Все",
                         item_code: "",
                         item_name: "",
@@ -106,7 +106,6 @@ const deleteRow = (index: number) => {
     store.tableDataInRequirement.splice(index, 1);
     store.disableButtonsIncluded = false;
     console.log('tableDataInRequirement:', store.tableDataInRequirement);
-    console.log('tableDataInRequirementOrigin:', store.tableDataInRequirementOrigin);
 }
 
 const disableButtonTooltip = computed(() => {

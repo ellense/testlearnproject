@@ -33,9 +33,9 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue';
-import type { IPercent } from '~/utils/types/directoryTypes';
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { Delete } from '@element-plus/icons-vue'
+import type { IPercent } from '~/utils/types/tabsKuTypes';
 
 const store = useKuAddStore();
 
@@ -44,7 +44,6 @@ const tableData = ref(store.tableDataPercent);
 //добавление сложного процента
 const addRow = () => {
   tableData.value.push({ id: null, criterion: null, percent_sum: null, fix: false });
-  console.log("данные бонуса:", tableData.value)
   console.log("данные бонуса в хранилище:", store.tableDataPercent)
 };
 
@@ -53,23 +52,17 @@ const deleteRow = (index: number) => {
   store.tableDataPercent.splice(index, 1);
 }
 
-const onFixChange = (row: IPercent) => {
-  const rowIndex = tableData.value.findIndex(item => item === row);
-  store.tableDataPercent[rowIndex].fix = row.fix;
-  console.log("данные 1 бонуса в хранилище изменены:", store.tableDataPercent)
-};
+
 // Обработчик изменений в критерии
 const onCriteriaChange = (row: IPercent) => {
   const rowIndex = tableData.value.findIndex(item => item === row);
   store.tableDataPercent[rowIndex].criterion = row.criterion;
-  console.log("данные 2 бонуса в хранилище изменены:", store.tableDataPercent)
 };
 
 // Обработчик изменений в проценте/сумме за период
 const onPercentSummaChange = (row: IPercent) => {
   const rowIndex = tableData.value.findIndex(item => item === row);
   store.tableDataPercent[rowIndex].percent_sum = row.percent_sum;
-  console.log("данные 3 бонуса в хранилище изменены:", store.tableDataPercent)
 };
 </script>
 

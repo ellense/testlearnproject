@@ -7,7 +7,7 @@
     <el-table :data="tableData2" border style="width: 820px; margin-top: 10px;" height="40vh"
       empty-text="Добавьте категорийных менеджеров">
       <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
-      <el-table-column property="discription" label="Описание" width="400" sortable show-overflow-tooltip />
+      <el-table-column property="description" label="Описание" width="400" sortable show-overflow-tooltip />
       <el-table-column label="Операция" align="center">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
@@ -22,7 +22,7 @@
           @selection-change="store2.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="30" />
           <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
-          <el-table-column property="discription" label="Описание" width="350" show-overflow-tooltip />
+          <el-table-column property="description" label="Описание" width="350" show-overflow-tooltip />
 
         </el-table>
       </el-scrollbar>
@@ -43,11 +43,11 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IManagerForKu } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
+import type { IManagerForKu } from "~/utils/types/tabsKuTypes";
 const store = useKuIdStore();
 const store2 = useKuAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
@@ -101,7 +101,7 @@ const AddManagers = () => {
     store.tableDataManagerSelect.push({
       id: null,
       group: row.group,
-      discription: row.discription,
+      description: row.description,
     });
   });
   console.log("менеджеры", store.tableDataManagerSelect);

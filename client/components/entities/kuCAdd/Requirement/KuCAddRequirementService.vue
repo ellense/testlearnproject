@@ -29,7 +29,8 @@
                 <el-form-item label-width="130" label="Услуга">
                     <el-select v-model="store.valueService_name" size="small" placeholder="Выберите услугу" clearable
                         filterable style="width: 300px">
-                        <el-option v-for="item in optionsService" :key="item.value" :label="item.label" :value="item.value">
+                        <el-option v-for="item in optionsService" :key="item.value" :label="item.label"
+                            :value="item.value">
                             <span style="float: left;">{{ item.label }}</span>
                             <span style="float: right; color: var(--el-text-color-secondary);
                     font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
@@ -39,8 +40,8 @@
                                 Добавить
                             </el-button>
                             <template v-else>
-                                <el-input v-model="optionServiceId" class="option-input" placeholder="Введите код услуги"
-                                    size="small" />
+                                <el-input v-model="optionServiceId" class="option-input"
+                                    placeholder="Введите код услуги" size="small" />
                                 <el-input v-model="optionServiceName" class="option-input"
                                     placeholder="Введите наименование услуги" size="small" />
                                 <el-button type="primary" size="small" @click="onConfirmService">
@@ -54,7 +55,8 @@
                 <el-form-item label-width="130" label="Статья услуги">
                     <el-select v-model="store.valueArticle_name" size="small" placeholder="Выберите статью" clearable
                         filterable style="width: 300px">
-                        <el-option v-for="item in optionsArticle" :key="item.value" :label="item.label" :value="item.value">
+                        <el-option v-for="item in optionsArticle" :key="item.value" :label="item.label"
+                            :value="item.value">
                             <span style="float: left;">{{ item.label }}</span>
                             <span style="float: right; color: var(--el-text-color-secondary);
                     font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
@@ -64,8 +66,8 @@
                                 Добавить
                             </el-button>
                             <template v-else>
-                                <el-input v-model="optionArticleId" class="option-input" placeholder="Введите код статьи услуги"
-                                    size="small" />
+                                <el-input v-model="optionArticleId" class="option-input"
+                                    placeholder="Введите код статьи услуги" size="small" />
                                 <el-input v-model="optionArticleName" class="option-input"
                                     placeholder="Введите наименование статьи услуги" size="small" />
                                 <el-button type="primary" size="small" @click="onConfirmArticle">
@@ -93,10 +95,10 @@
 </template>
 
 <script setup lang="ts">
-import type { IArticle, IService } from "~/utils/types/directoryTypes";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
+import type { IService, IArticle } from "~/utils/types/serviceTypes";
 
 const store = useKuCAddStore();
 
@@ -110,6 +112,7 @@ onMounted(async () => {
         console.error("Ошибка при загрузке данных услуг", error);
     }
 });
+
 const optionsService = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store.tableDataServiceAll, (vendors: IService[]) => {
     optionsService.value = vendors.map(item => ({ label: item.service_name, value: item.service_code }));
@@ -119,6 +122,7 @@ watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
     optionsArticle.value = vendors.map(item => ({ label: item.article_name, value: item.article_code }));
 });
 
+//для добавления услуг в селекте
 const isAddingService = ref(false)
 const optionServiceId = ref('')
 const optionServiceName = ref('')
@@ -155,6 +159,7 @@ const clearService = () => {
     isAddingService.value = false
 }
 
+//для добавления статей услуг в селекте
 const isAddingArticle = ref(false)
 const optionArticleId = ref('')
 const optionArticleName = ref('')
@@ -190,24 +195,18 @@ const clearArticle = () => {
     optionArticleName.value = ''
     isAddingArticle.value = false
 }
-//добавление услуг
+
+//добавление строк
 const saveRow = async () => {
     if (store.valueService_name || store.valueArticle_name || store.valueRatio) {
-        // Находим объект с соответствующим значением article_code в options2
+        // Находим объект с соответствующим значением article_code в optionsArticle
         const selectedArticle = optionsArticle.value.find(option => option.value === store.valueArticle_name);
         // Получаем наименование статьи услуги из найденного объекта
         const articleName = selectedArticle ? selectedArticle.label : '';
 
-        // Находим объект с соответствующим значением service_code в options
         const selectedService = optionsService.value.find(option => option.value === store.valueService_name);
-        // Получаем наименование услуги из найденного объекта
-        const serviceName = selectedService ? selectedService.label : '';
+        const serviceName = selectedService ? selectedService.label : ''
 
-        console.log("valueService_id", store.valueService_name);
-        console.log("valueArticle_id", store.valueArticle_name);
-        console.log("valueRatio", store.valueRatio);
-
-        // Используем наименование услуги и статьи услуги для сохранения
         store.tableDataServiceSelect.push({
             service_code: store.valueService_name,
             service_name: serviceName,
@@ -216,7 +215,6 @@ const saveRow = async () => {
             ratio: store.valueRatio,
         });
 
-        console.log("оказываемые услуги", store.tableDataServiceSelect);
         store.dialogFormServiceVisible = false;
         store.valueRatio = null;
         store.valueService_name = "";
@@ -227,7 +225,7 @@ const saveRow = async () => {
 };
 
 
-//удаление менеджеров
+//удаление строк
 const deleteRow = (index: number) => {
     store.tableDataServiceSelect.splice(index, 1);
 }

@@ -1,5 +1,8 @@
 import { defineStore } from "pinia";
-import type { IVendor, IVendorStore, WithoutNullableKeys, IParamVendorsForEntityInVendor, EntityId } from "~/utils/types/directoryTypes";
+import type { EntityId } from "~/utils/types/entityTypes";
+import type { WithoutNullableKeys } from "~/utils/types/generalTypes";
+import type { IVendorStore } from "~/utils/types/storesTypes";
+import type { IVendor, IParamVendorsForEntityInVendor } from "~/utils/types/vendorTypes";
 
 export const useVendorStore = defineStore("IVendorStore", {
   state: (): IVendorStore => ({

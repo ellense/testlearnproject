@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
-import type { IParamServices, IServiceStore } from "~/utils/types/directoryTypes";
+import type { IParamServices } from "~/utils/types/serviceTypes";
+import type { IServiceStore } from "~/utils/types/storesTypes";
 
 export const useServiceStore = defineStore("IServiceStore", {
     state: (): IServiceStore => ({

@@ -72,7 +72,7 @@
 import { ref } from "vue";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
-import type { IArticle, IBrand, IContract, IProducer, IService } from "~/utils/types/directoryTypes";
+import type { IService, IArticle } from "~/utils/types/serviceTypes";
 
 const store = useKuCAddStore();
 const tableData = ref(store.tableDataContract);
@@ -86,9 +86,6 @@ const addRow = async () => {
         const selectedService = optionsService.value.find(option => option.value === store.valueService_nameContract);
         const serviceName = selectedService ? selectedService.label : '';
 
-        console.log("valueService_id", store.valueService_nameContract);
-        console.log("valueArticle_id", store.valueArticle_nameContract);
-
         // Используем наименование услуги и статьи услуги для сохранения
         store.tableDataContract.push({
             service_code: store.valueService_nameContract,
@@ -98,10 +95,9 @@ const addRow = async () => {
         });
 
         console.log("оказываемые услуги", store.tableDataServiceSelect);
-        store.dialogFormServiceVisible = false;
-        store.valueRatio = null;
-        store.valueService_name = "";
-        store.valueArticle_name = "";
+        store.dialogFormContractVisible = false;
+        store.valueService_nameContract = "";
+        store.valueArticle_nameContract = "";
     } else {
         ElMessage.error('Заполните минимум одно поле или нажмите "Отменить"');
     }
@@ -130,12 +126,13 @@ watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
 
 const FormContract = async () => {
     const newItem = {
-        vendor_name: store.kuAddMain.newVendorId,
-        ku_type: "",
+        vendor_name: store.kuAddMain.newCustomerId,
+        ku_type: "Услуга",
         provider_list: store.tableDataContract.map(item => item.service_code),
         brand_list: store.tableDataContract.map(item => item.article_code),
     }
     await store.createKuContract(newItem)
+    store.tableDataContract.length = 0;
 }
 </script>
 

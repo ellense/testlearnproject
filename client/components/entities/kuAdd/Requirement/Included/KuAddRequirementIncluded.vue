@@ -45,7 +45,7 @@ const kuRequirementList = ref(store.tableDataInRequirement);
 const onAddItem = () => {
     if (store.tableDataInRequirement.length === 0) {
         store.tableDataInRequirement.push({
-            in_prod_id: null,
+            id: null,
             item_type: "Все",
             item_code: "",
             item_name: "",
@@ -62,7 +62,7 @@ const onAddItem = () => {
                 if (action === 'confirm') { // Проверяем, что пользователь подтвердил удаление
                     store.tableDataInRequirement.length = 0;// Очищаем массив
                     store.tableDataInRequirement.push({
-                        in_prod_id: null,
+                        id: null,
                         item_type: "Все",
                         item_code: "",
                         item_name: "",

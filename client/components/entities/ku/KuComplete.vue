@@ -14,7 +14,7 @@ import { useKuStore } from "~~/stores/kuStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from "dayjs";
 import { ElMessage } from 'element-plus'
-import type { IExInvoiceForKuPost, IManagerForKuPost, IPercentPost, IRequirementPost, IVACPost } from "~/utils/types/directoryTypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost } from "~/utils/types/tabsKuTypes";
 
 const store = useKuIdStore();
 const router = useRouter();
@@ -252,8 +252,7 @@ const postVAC = async (response: any, dataArray: any) => {
 const postManagerItems = async (response: any, dataArray: any, postFunction: any) => {
   const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
     ku_id: response.ku_id,
-    group: item.group,
-    discription: item.discription
+    id: item.id,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
@@ -313,11 +312,11 @@ const handleSuccess = (response: any, responses: any[], response2: any[], respon
 
 //удаление вкл условий
 const deleteInRequirement = () => {
-  const selectedRows = store.initialState.tableDataInRequirement.map((row) => row.in_prod_id);
+  const selectedRows = store.initialState.tableDataInRequirement.map((row) => row.id);
   console.log("SSSselectedRows", selectedRows);
   const deletePromises = selectedRows.map(async (in_prod_id) => {
     try {
-      const results = await KU.deleteInRequirement({ in_prod_id });
+      const results = await KU.deleteInRequirement({ id });
       console.log("успешно удалилось вкл !!!!!!!!!!!!", results);
       return results;
     } catch (error) {
@@ -420,3 +419,4 @@ const deleteManager = () => {
   width: 100% !important
 }
 </style>
+~/utils/types/serviceTypes

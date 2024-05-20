@@ -1,11 +1,9 @@
 import { defineStore } from "pinia";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import _ from 'lodash';
-import type {
-    IProduct,
-    IContractPost,
-    IKuCIdStore,
-} from "~/utils/types/directoryTypes";
+import type { IProduct } from "~/utils/types/productTypes";
+import type { IKuCIdStore } from "~/utils/types/storesTypes";
+import type { IContractPost } from "~/utils/types/tabsKuTypes";
 
 export const useKuCIdStore = defineStore("KuCIdStore", {
     state: (): IKuCIdStore => ({
@@ -16,9 +14,7 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
         tableDataPercentOrigin: [],
         tableDataExInvoiceAll: [],
         tableDataExInvoiceSelect: [],
-        tableDataExInvoiceSelectOrigin: [],
         tableDataManagerSelect: [],
-        tableDataManagerSelectOrigin: [],
         tableDataContract: [],
         //v-model диалоговых форм
         dialogFormExInvoiceVisible: false,
@@ -139,7 +135,7 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
         //получение ku_id
         async getKuDetailFromApi(kuId: string) {
             try {
-                const results = await KU.getInfoKu({
+                const results = await KUC.getInfoKu({
                     ku_id: kuId,
                 });
                 this.$state.ku_id = results.ku_id;
@@ -147,44 +143,32 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                 this.$state.kuIdType = results.period;
                 this.$state.kuIdEntityId = results.entity_id
                 this.$state.kuIdEntityName = results.entity_name
-                this.$state.kuIdVendorId = results.vendor_id
-                this.$state.kuIdVendorName = results.vendor_name
+                this.$state.kuIdCustomerId = results.customer_id
+                this.$state.kuIdCustomerName = results.customer_name
                 this.$state.kuIdDateStart = results.date_start;
                 this.$state.kuIdDateEnd = new Date(results.date_end);
                 this.$state.kuIdDescription = results.description;
                 this.$state.kuIdContract = results.contract;
-                this.$state.kuIdProduct_type = results.product_type;
                 this.$state.kuIdDocu_account = results.docu_account;
-                this.$state.kuIdDocu_name = results.docu_name;
                 this.$state.kuIdDocu_number = results.docu_number;
                 this.$state.kuIdDocu_date = new Date(results.docu_date)
                 this.$state.kuIdDocu_subject = results.docu_subject;
-                this.$state.kuIdTax = results.tax;
-                this.$state.kuIdExclude_return = results.exclude_return;
-                this.$state.kuIdNegative_turnover = results.negative_turnover;
-                this.$state.kuIdKu_type = results.ku_type;
                 this.$state.kuIdPay_method = results.pay_method;
 
                 this.$state.initialState.kuIdStatus = results.status;
                 this.$state.initialState.kuIdType = results.period;
                 this.$state.initialState.kuIdEntityId = results.entity_id
                 this.$state.initialState.kuIdEntityName = results.entity_name
-                this.$state.initialState.kuIdVendorId = results.vendor_id
-                this.$state.initialState.kuIdVendorName = results.vendor_name
+                this.$state.initialState.kuIdCustomerId = results.customer_id
+                this.$state.initialState.kuIdCustomerName = results.customer_name
                 this.$state.initialState.kuIdDateStart = results.date_start;
                 this.$state.initialState.kuIdDateEnd = new Date(results.date_end);
                 this.$state.initialState.kuIdDescription = results.description;
                 this.$state.initialState.kuIdContract = results.contract;
-                this.$state.initialState.kuIdProduct_type = results.product_type;
                 this.$state.initialState.kuIdDocu_account = results.docu_account;
-                this.$state.initialState.kuIdDocu_name = results.docu_name;
                 this.$state.initialState.kuIdDocu_number = results.docu_number;
                 this.$state.initialState.kuIdDocu_date = new Date(results.docu_date)
                 this.$state.initialState.kuIdDocu_subject = results.docu_subject;
-                this.$state.initialState.kuIdTax = results.tax;
-                this.$state.initialState.kuIdExclude_return = results.exclude_return;
-                this.$state.initialState.kuIdNegative_turnover = results.negative_turnover;
-                this.$state.initialState.kuIdKu_type = results.ku_type;
                 this.$state.initialState.kuIdPay_method = results.pay_method;
 
                 console.log("успешно получили данные ку_айди", results);

@@ -57,7 +57,9 @@ import { ref, watch } from 'vue';
 import { useKuAddStore } from '~~/stores/kuAddStore';
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import type { ElTree } from 'element-plus'
-import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
+import type { ITree } from '~/utils/types/treeTypes';
+import type { IBrand } from '~/utils/types/brandTypes';
+import type { IProducer } from '~/utils/types/producerTypes';
 
 const store = useKuIdStore();
 const store2 = useKuAddStore();
@@ -196,3 +198,4 @@ const AddCategoryItem = async () => {
   margin: 20px 0 20px 0;
 }
 </style>
+~/utils/types/serviceTypes

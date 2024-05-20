@@ -36,7 +36,7 @@ import { ArrowDown } from '@element-plus/icons-vue'
 import { useKuStore } from "~~/stores/kuStore";
 import { useRouter } from "vue-router";
 import "dayjs/locale/ru";
-import type { IKuPostGraphic } from "~/utils/types/directoryTypes";
+import type { IKuPostGraphic } from "~/utils/types/kuVendorTypes";
 const store = useKuStore();
 const router = useRouter();
 const loading = ref(false);
@@ -93,28 +93,6 @@ const isDeleteButtonDisabled = computed(() => {
   return store.multipleSelection.length === 0;
 });
 
-// Функция удаления выбранных строк
-// const deleteKu = async () => {
-//   const selectedRows = store.multipleSelection.map((row) => row.ku_id);
-
-//   try {
-//     for (const ku_id of selectedRows) {
-//       const results = await KU.deleteKu({ ku_id });
-//       console.log("КУ успешно удалилось", results);
-//       store.tableData = store.tableData.filter(
-//         (row) => !selectedRows.includes(row.ku_id)
-//       );
-//       store.multipleSelection = [];
-//     }
-//     if (selectedRows.length == 1)
-//       ElMessage.success(`Коммерческое условие ${selectedRows} удалено`);
-//     else ElMessage.success(`Успешно удалены: ${selectedRows.join(", ")}`);
-//   } catch (error) {
-//     console.error("Ошибка при удалении ку:", error);
-//     ElMessage.error("Ошибка при удалении коммерческого условия");
-//   }
-
-// };
 const deleteKu = async () => {
   const selectedRows = store.multipleSelection.map((row) => row.ku_id);
 

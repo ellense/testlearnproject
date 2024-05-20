@@ -26,15 +26,13 @@ import { Search } from "@element-plus/icons-vue";
 import { storeToRefs } from "pinia";
 import { useVendorStore } from "~~/stores/vendorStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import type { IEntityInKu } from "~/utils/types/directoryTypes";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
 
 const { juristicPersons } = storeToRefs(useVendorStore());
 
 const { filterValue } = storeToRefs(useVendorStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
-// const shopLegalEntity = ref<string[]>(filterValue.value.entity_ids || []);
-// const shopLegalEntityList = ref<string[]>(juristicPersons.value);
 
 
 const searchQuery = ref('');
@@ -43,24 +41,11 @@ watch(searchQuery, (newValue: string) => {
   useVendorStore().performSearch(newValue);
 });
 
-// const changeShopLegalEntity = () => {
-//   useVendorStore().pagination = null;
-//   useVendorStore().setFilterValue('entity_ids', shopLegalEntity.value);
-//   console.log('shopLegalEntity.value:', shopLegalEntity.value);
-//   toggleTriggerFilter();
-// };
-
-// watch(juristicPersons, (value) => {
-//   shopLegalEntityList.value = value;
-// });
 
 watch(triggerFilter, () => {
   useVendorStore().getVendorFromAPIWithFilter();
 });
 
-// onMounted(() => {
-//   useVendorStore().getJuristicPersonsFromApi();
-// });
 const LegalEntity = ref<string[]>(filterValue.value.entity_ids || []);
 const optionsLegalEntity = ref<Array<{ label: string; value: string }>>([]);
 const changeLegalEntity = () => {

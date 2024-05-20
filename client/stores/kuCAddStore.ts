@@ -1,20 +1,14 @@
 import { defineStore } from "pinia";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import type { FormInstance } from 'element-plus'
+import type { ICustomerIdAndName, IParamCustomersKU } from "~/utils/types/customerTypes";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IKuList } from "~/utils/types/kuVendorTypes";
+import type { IParamServices } from "~/utils/types/serviceTypes";
+import type { IKuCAddStore } from "~/utils/types/storesTypes";
+import type { IManagerForKu, IVendorAndContract, IParamManagers, IContractPost } from "~/utils/types/tabsKuTypes";
+import type { IVendorIdAndName, IParamVendorsForEntity } from "~/utils/types/vendorTypes";
 
-import type {
-    IKuList,
-    IEntityInKu,
-    IContractPost,
-    IKuCAddStore,
-    IParamServices,
-    ICustomerIdAndName,
-    IParamCustomersKU,
-    IManagerForKu,
-    IVendorAndContract,
-    IVendorIdAndName,
-    IParamVendorsForEntity,
-} from "~/utils/types/directoryTypes";
 
 export const useKuCAddStore = defineStore("KuCAddStore", {
     state: (): IKuCAddStore => ({
@@ -37,8 +31,6 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             newDocu_subject: "",
             newPay_sum: null,
             newPay_method: "",
-            newVendorIdVAC: "",
-            newEntityIdVAC: "",
         },
         newOfFIOСounteragent: "",
         newOfPostСounteragent: "",
@@ -51,6 +43,8 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         valueService_name: "",
         valueArticle_name: "",
         valueRatio: null,
+        valueVendorIdVAC: "",
+        valueEntityIdVAC: "",
         //селекты для множественного выбора
         multipleSelectionService: [],
         multipleSelectionArticle: [],
@@ -87,6 +81,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         filterArticle: {},
         filterCustomerValue: {},
         filterVendorValue: {},
+        filterManager: {},
         isFormValid: false,
     }),
 
@@ -192,16 +187,16 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             }
         },
         setFilterVendor<
-        T extends keyof IParamVendorsForEntity,
-        U extends IParamVendorsForEntity[T],
-    >(field: T, value: U) {
-        this.$state.filterVendorValue[field] = value
-    },
-    removeFilterVendor<T extends keyof IParamVendorsForEntity>(field: T) {
-        if (this.$state.filterVendorValue) {
-            delete this.$state.filterVendorValue[field]
-        }
-    },
+            T extends keyof IParamVendorsForEntity,
+            U extends IParamVendorsForEntity[T],
+        >(field: T, value: U) {
+            this.$state.filterVendorValue[field] = value
+        },
+        removeFilterVendor<T extends keyof IParamVendorsForEntity>(field: T) {
+            if (this.$state.filterVendorValue) {
+                delete this.$state.filterVendorValue[field]
+            }
+        },
         //получение данных о клиентаъх для создания
         async fetchAllCustomerIdForEntity() {
             try {
@@ -229,7 +224,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 return Promise.reject(error);
             }
         },
-        
+
         //получение имени клиента
         async getCustomerNameFromAPIWithFilter(page?: number) {
             await CUSTOMER.getCustomersForEntityInKU({
@@ -324,7 +319,32 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         >(field: T, value: U) {
             this.$state.filterArticle[field] = value
         },
-
+        //получение менеджеров
+        async getManagersFromAPIWithFilter(page?: number) {
+            await MANAGER.getManager({
+                page_size: this.$state.countRowTable,
+                page,
+            })
+                .then((dataManager) => {
+                    console.log('Получены данные менеджеров:', dataManager);
+                    this.$state.tableDataManagerAll = dataManager.results;
+                    this.$state.pagination = {
+                        count: dataManager.count,
+                        previous: dataManager.previous,
+                        next: dataManager.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных менеджеров:', error);
+                    return Promise.reject(error);
+                });
+        },
+        setFilterManager<
+            T extends keyof IParamManagers,
+            U extends IParamManagers[T],
+        >(field: T, value: U) {
+            this.$state.filterManager[field] = value
+        },
         //очищение всего
         clearNewData() {
             // Очищаем таблицу условий

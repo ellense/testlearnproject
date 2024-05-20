@@ -1,12 +1,9 @@
 import { defineStore } from "pinia";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import _ from 'lodash';
-import type {
-    IProduct,
-    IKuIdStore,
-    IContractPost,
-    IExInvoiceForKu,
-} from "~/utils/types/directoryTypes";
+import type { IProduct } from "~/utils/types/productTypes";
+import type { IKuIdStore } from "~/utils/types/storesTypes";
+import type { IExInvoiceForKu, IContractPost } from "~/utils/types/tabsKuTypes";
 
 export const useKuIdStore = defineStore("KuIdStore", {
     state: (): IKuIdStore => ({

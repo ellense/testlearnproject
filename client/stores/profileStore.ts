@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { IProfile } from "~/utils/types/directoryTypes";
+import type { IProfile } from "~/utils/types/profileTypes";
 
 export const useProfileStore = defineStore("ProfileStore", {
   state: () => ({

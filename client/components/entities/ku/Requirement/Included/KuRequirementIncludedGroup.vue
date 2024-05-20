@@ -58,7 +58,9 @@ import { ref, watch } from 'vue';
 import { useKuAddStore } from '~~/stores/kuAddStore';
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import type { ElTree } from 'element-plus'
-import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
+import type { IBrand } from '~/utils/types/brandTypes';
+import type { ITree } from '~/utils/types/treeTypes';
+import type { IProducer } from '~/utils/types/producerTypes';
 
 const store = useKuIdStore();
 const store2 = useKuAddStore();
@@ -215,7 +217,7 @@ const AddCategoryItem = async () => {
 
     // Используем сохраненное значение selectedCategoryName
     store.tableDataInRequirement.push({
-      in_prod_id: null,
+      id: null,
       item_type: "Категория",
       item_code: value.value,
       item_name: selectedCategoryName, // Передаем имя выбранной категории
@@ -254,3 +256,4 @@ const AddCategoryItem = async () => {
   margin: 20px 0 20px 0;
 }
 </style>
+~/utils/types/serviceTypes

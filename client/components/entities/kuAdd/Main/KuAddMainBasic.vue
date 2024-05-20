@@ -148,13 +148,10 @@
 import { reactive, ref } from 'vue'
 import dayjs from "dayjs";
 import { useKuAddStore } from "~~/stores/kuAddStore";
-import type {
-  IEntityInKu,
-  IKuAddMain,
-  IVendorId,
-  IVendorIdAndName,
-} from "~/utils/types/directoryTypes";
 import type { FormInstance, FormRules } from 'element-plus'
+import type { IEntityInKu } from '~/utils/types/entityTypes';
+import type { IKuAddMain } from '~/utils/types/storesTypes';
+import type { IVendorIdAndName } from '~/utils/types/vendorTypes';
 const store = useKuAddStore();
 const kuMain = store.kuAddMain
 const ruleFormRef = ref<FormInstance | null>(null);

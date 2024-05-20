@@ -29,7 +29,7 @@ import { ref } from "vue";
 import { storeToRefs } from "pinia";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import type { IRequirement, IRequirement2 } from "~/utils/types/directoryTypes";
+import type { IRequirement } from "~/utils/types/tabsKuTypes";
 const { getKuExRequirement } = storeToRefs(
     useKuIdStore()
 );
@@ -40,7 +40,7 @@ const isEditButtonDisabled = computed(() => {
 
 
 const store = useKuIdStore();
-const tableData = ref<IRequirement2[]>(getKuExRequirement.value);
+const tableData = ref<IRequirement[]>(getKuExRequirement.value);
 watch(getKuExRequirement, (value) => {
     tableData.value = value || [];
 });

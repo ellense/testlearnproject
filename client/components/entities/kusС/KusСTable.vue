@@ -170,15 +170,16 @@
 </template>
 
 <script lang="ts" setup>
-import { Search } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
-import { Select, SemiSelect, Filter } from '@element-plus/icons-vue'
+import { Select, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
-import type { IEntityInKu, IKuCList, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuCStore } from "~~/stores/kuCStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from 'dayjs';
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IKuCList } from "~/utils/types/kuCustomerTypes";
+import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuCStore()
 );
@@ -463,12 +464,5 @@ const changeDateRange2 = (newDateRange: Date[]) => {
 
 </script>
 <style scoped>
-/* .column-header {
-  display: flex;
-  align-items: center;
-}
 
-.column-header .el-button {
-  margin-left: 5px;
-} */
 </style>

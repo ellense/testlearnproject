@@ -1,4 +1,7 @@
-import type { GetAllInvoicesAndProductForGraphic, IParamKuId, GraphicForExcelReportInvoice, GraphicForExcelReportProduct, IVendorFull, ReportStore } from "~/utils/types/directoryTypes";
+import type { GraphicForExcelReportInvoice, GetAllInvoicesAndProductForGraphic, GraphicForExcelReportProduct } from "~/utils/types/actTypes";
+import type { ReportStore } from "~/utils/types/storesTypes";
+import type { IParamKuId } from "~/utils/types/tabsKuTypes";
+
 
 export const useReportStore = defineStore("ReportStore", {
   state: (): ReportStore => ({

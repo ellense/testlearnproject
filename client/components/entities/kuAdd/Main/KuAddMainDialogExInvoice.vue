@@ -42,10 +42,10 @@
   
   <script setup lang="ts">
   import { storeToRefs } from "pinia";
-  import type { IExInvoiceForKu } from "~/utils/types/directoryTypes";
   import { useKuAddStore } from "~~/stores/kuAddStore";
   import { ElTable } from 'element-plus';
   import dayjs from "dayjs";
+import type { IExInvoiceForKu } from "~/utils/types/tabsKuTypes";
 
 
   const store = useKuAddStore();
@@ -136,4 +136,4 @@
     store.dialogFormExInvoiceVisible = false;
   };
   </script>
-  
+  ~/utils/types/serviceTypes

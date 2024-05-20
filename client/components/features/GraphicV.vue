@@ -2,7 +2,6 @@
   <EntitiesGraphicBar />
   <EntitiesGraphicReportInvoice/>
   <EntitiesGraphicReportProduct/>
-  <!-- <EntitiesGraphicReportActInvoice/> -->
   <EntitiesGraphicGraphicsTable />
   <EntitiesGraphicEditColumn/>
 </template>

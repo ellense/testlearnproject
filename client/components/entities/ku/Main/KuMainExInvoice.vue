@@ -64,12 +64,12 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IExInvoiceForKu } from "~/utils/types/directoryTypes";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
 import { Delete } from '@element-plus/icons-vue'
+import type { IExInvoiceForKu } from "~/utils/types/tabsKuTypes";
 const { getExInvoiceAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );

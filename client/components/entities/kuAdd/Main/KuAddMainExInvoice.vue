@@ -28,11 +28,11 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IExInvoiceForKu } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
 import { Delete } from '@element-plus/icons-vue'
+import type { IExInvoiceForKu } from "~/utils/types/tabsKuTypes";
 
 const store = useKuAddStore();
 const kuMain = store.kuAddMain

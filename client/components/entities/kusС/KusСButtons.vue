@@ -23,16 +23,6 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
-      <!-- <el-dropdown :disabled="isButtonsDisabled">
-        <el-button type="success" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
-          Создать отчет<el-icon class="el-icon--right"><arrow-down /></el-icon>
-        </el-button>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="" link size="small">Отчет по графику расчетов по КУ</el-button></el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown> -->
       <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonTooltip" size="small">Удалить</el-button>
 
@@ -46,7 +36,7 @@ import { ArrowDown } from '@element-plus/icons-vue'
 import { useKuCStore } from "~~/stores/kuCStore";
 import { useRouter } from "vue-router";
 import "dayjs/locale/ru";
-import type { IKuPostGraphic } from "~/utils/types/directoryTypes";
+import type { IKuPostGraphic } from "~/utils/types/kuVendorTypes";
 const store = useKuCStore();
 const router = useRouter();
 const loading = ref(false);

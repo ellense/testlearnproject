@@ -1,12 +1,8 @@
 import { defineStore } from "pinia";
+import type { EntityId } from "~/utils/types/entityTypes";
+import type { IKuList, IParamKus } from "~/utils/types/kuVendorTypes";
+import type { IKuStore } from "~/utils/types/storesTypes";
 
-import type {
-  IKuList,
-  IKuStore,
-  EntityId,
-  IParamKus,
-  IVendorId,
-} from "~/utils/types/directoryTypes";
 
 export const useKuStore = defineStore("KuStore", {
   state: (): IKuStore => ({

@@ -19,7 +19,6 @@
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        
         <el-divider content-position="left" style=" color: #337ecc;">КУ клиентов</el-divider>
         <nuxt-link to="kuC">
           <el-menu-item index="4">

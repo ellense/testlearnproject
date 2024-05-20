@@ -13,12 +13,10 @@
 
 <script setup lang="ts">
 import { ref, onMounted, watch } from 'vue';
-// import VueResizable from 'vue-resizable'
 import type { ElTree } from 'element-plus'
-import { storeToRefs } from "pinia";
-import type { ITree } from '~/utils/types/directoryTypes';
 import { useProductStore } from "~~/stores/productStore";
 import type { TreeNodeData } from 'element-plus/es/components/tree/src/tree.type';
+import type { ITree } from '~/utils/types/treeTypes';
 
 const treeData = ref<ITree[]>([]);
 const treeRef = ref<InstanceType<typeof ElTree>>()

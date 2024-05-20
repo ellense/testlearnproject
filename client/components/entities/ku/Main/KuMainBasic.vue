@@ -149,11 +149,8 @@ import { ref } from "vue";
 import dayjs from "dayjs";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
-import type {
-  IEntityInKu,
-  IVendorId,
-  IVendorIdAndName,
-} from "~/utils/types/directoryTypes";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 
 const store = useKuIdStore();
 const store2 = useKuAddStore();

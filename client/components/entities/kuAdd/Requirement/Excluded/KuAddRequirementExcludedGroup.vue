@@ -56,7 +56,10 @@
 import { ref, watch } from 'vue';
 import { useKuAddStore } from '~~/stores/kuAddStore';
 import type { ElTree } from 'element-plus'
-import type { IProducer, ITree, IBrand } from '~/utils/types/directoryTypes';
+import type { ITree } from '~/utils/types/treeTypes';
+import type { IBrand } from '~/utils/types/brandTypes';
+import type { IProducer } from '~/utils/types/producerTypes';
+
 
 const store = useKuAddStore();
 

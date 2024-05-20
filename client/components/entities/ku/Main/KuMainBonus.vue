@@ -36,9 +36,9 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import { storeToRefs } from "pinia";
-import type { IPercent } from '~/utils/types/directoryTypes';
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { Delete } from '@element-plus/icons-vue'
+import type { IPercent } from '~/utils/types/tabsKuTypes';
 const { getPercent } = storeToRefs(
   useKuIdStore()
 );

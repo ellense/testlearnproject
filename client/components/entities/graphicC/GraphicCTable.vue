@@ -243,8 +243,10 @@ import { Filter } from '@element-plus/icons-vue'
 import { useGraphicСStore } from "~~/stores/graphicСStore";
 import { storeToRefs } from "pinia";
 import dayjs from 'dayjs';
-import type { IEntityInKu, IGraphic, IVendorId, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuAddStore } from "~~/stores/kuAddStore";
+import type { IEntityInKu } from "~/utils/types/entityTypes";
+import type { IGraphic } from "~/utils/types/graphicVendorTypes";
+import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 const store = useGraphicСStore();
 const storeKuAdd = useKuAddStore();
 const { getGraphic, pagination, countRowTable } = storeToRefs(store);
@@ -548,3 +550,4 @@ const changeDateRange4 = (newDateRange: Date[]) => {
 };
 </script>
 <style scoped></style>
+~/utils/types/serviceTypes
