@@ -93,7 +93,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
       this.setFilterValue('search', this.$state.searchGraphic);
       this.setFilterValue('sort_by', sort_by);
       this.setFilterValue('sort_order', sort_order);
-      await GRAPHIC.getGraphic({
+      await GRAPHICC.getGraphic({
         page_size: this.$state.countRowTable,
         page,
         ku_id: this.$state.filterGraphicValue?.ku_id || [],

@@ -20,6 +20,7 @@ import type {
     GetParamExInvoicesForKu,
     IContractPost,
     IVendorIdAndName,
+    IVendorAndContract,
 } from "~/utils/types/directoryTypes";
 
 export const useKuAddStore = defineStore("KuAddStore", {
@@ -50,6 +51,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
             newPay_method: "",
             newVendorIdVAC: "",
             newEntityIdVAC: "",
+            newVendorIdExInvoice: "",
+            newVendorNameExInvoice: "",
         },
         newOfFIOСounteragent: "",
         newOfPostСounteragent: "",
@@ -84,7 +87,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         tableDataExInvoiceSelect: [],
         tableDataManagerAll: [],
         tableDataManagerSelect: [],
-        tableDataVAC:[],
+        tableDataVAC: [],
         dataEntity: [],
         dataVendorId: [],
         dataVendorName: [],
@@ -103,7 +106,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
         //
-        
+
         vendorFilter: "",
         vendors: [],
         //пагинация в таблицах
@@ -173,26 +176,26 @@ export const useKuAddStore = defineStore("KuAddStore", {
 
         setRuleFormRef(formRef: FormInstance | null) {
             this.ruleFormRef = formRef;
-          },
-          async isFormValid() {
+        },
+        async isFormValid() {
             return new Promise((resolve, reject) => {
-              if (!this.ruleFormRef) {
-                console.error('Form reference is not set');
-                reject(new Error('Form reference is not set'));
-                return;
-              }
-              this.ruleFormRef.validate((valid, fields) => {
-                if (valid) {
-                  console.log('Form is valid!');
-                  resolve(true);
-                } else {
-                  console.log('Form is invalid:', fields);
-                  resolve(false);
+                if (!this.ruleFormRef) {
+                    console.error('Form reference is not set');
+                    reject(new Error('Form reference is not set'));
+                    return;
                 }
-              });
+                this.ruleFormRef.validate((valid, fields) => {
+                    if (valid) {
+                        console.log('Form is valid!');
+                        resolve(true);
+                    } else {
+                        console.log('Form is invalid:', fields);
+                        resolve(false);
+                    }
+                });
             });
-          },
-          
+        },
+
         //получение данных о юр.лице для создания
         async fetchKuEntity(data: IEntityInKu) {
             try {
@@ -202,7 +205,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                     console.log("Все данные о юр. лицах:", result);
                 } else {
                     this.dataEntity = [];
-                    
+
                     console.error("Данные не получены или не являются массивом");
                 }
             } catch (error) {
@@ -245,6 +248,8 @@ export const useKuAddStore = defineStore("KuAddStore", {
             })
                 .then((dataVendor) => {
                     this.$state.kuAddMain.newVendorName = dataVendor.results[0].name;
+                    this.$state.kuAddMain.newVendorNameExInvoice = dataVendor.results[0].name;
+
                     useKuIdStore().setKuIdVendorName(dataVendor.results[0].name)
                     console.log('Получены данные vendorName:', this.$state.kuAddMain.newVendorName, useKuIdStore().kuIdVendorName);
                     this.$state.pagination = {
@@ -328,7 +333,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 console.error("Произошла ошибка при получении данных категорий", error);
             }
         },
-       
+
         //получение данных о производителе с фильтром
         async fetchAllProducersForInclided() {
             try {
@@ -415,7 +420,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         async getProductFromIncludedWithFilter(page?: number) {
             this.setFilterProductInRequirement('page', page);
             this.setFilterProductInRequirement('search', this.$state.searchProductIncluded);
-            
+
             await PRODUCT.getProductsList({
                 page_size: this.$state.countRowTable,
                 page,
@@ -499,7 +504,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         >(field: T, value: U) {
             this.$state.filterProductExcluded[field] = value
         },
-////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
         //получение накладных
         async getInvoicesFromAPIWithFilter(page?: number) {
             console.log('Выполняется запрос искл.накладных с фильтрацией...');
@@ -559,6 +564,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.tableDataInRequirement.length = 0;
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
+            this.tableDataVAC.length = 0
             this.tableDataExInvoiceSelect.length = 0;
             this.tableDataManagerSelect.length = 0;
             this.tableDataContract.length = 0;
@@ -568,7 +574,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.productExcluded.length = 0;
             // Значения v-model при создании
             this.kuAddMain.newType = '',
-            this.kuAddMain.newEntityId = '';
+                this.kuAddMain.newEntityId = '';
             this.kuAddMain.newEntityName = '';
             this.kuAddMain.newVendorId = '';
             this.kuAddMain.newVendorName = '';
@@ -630,15 +636,15 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.removeFilterCategory('vendor_id');
         },
         //создание контракта
-        async createKuContract(newItem:IContractPost ) {
+        async createKuContract(newItem: IContractPost) {
             try {
-              const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
-              console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
-              this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
+                const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+                console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
+                this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
             } catch (error) {
-              console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
-              // Можно обработать ошибку здесь, если нужно
+                console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
+                // Можно обработать ошибку здесь, если нужно
             }
-          },
+        },
     }
 });

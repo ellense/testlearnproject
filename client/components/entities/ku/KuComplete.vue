@@ -14,6 +14,7 @@ import { useKuStore } from "~~/stores/kuStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from "dayjs";
 import { ElMessage } from 'element-plus'
+import type { IExInvoiceForKuPost, IManagerForKuPost, IPercentPost, IRequirementPost, IVACPost } from "~/utils/types/directoryTypes";
 
 const store = useKuIdStore();
 const router = useRouter();
@@ -117,10 +118,21 @@ const changeKuToBackend = async () => {
       ElMessage.error('Добавьте минимум одно условие по товарам');
       return;
     }
+    if (store.tableDataPercent.length === 0) {
+      ElMessage.error('Добавьте минимум одно условие бонуса');
+      return;
+    }
+    if (store.kuIdFIOСounteragent.length === 0 &&
+      store.kuIdPostСounteragent.length === 0 &&
+      store.kuIdDocСounteragent.length === 0 &&
+      store.kuIdFIOEntity.length === 0 &&
+      store.kuIdPostEntity.length === 0 &&
+      store.kuIdDocEntity.length === 0) {
+      ElMessage.error('Добавьте должностные лица');
+      return;
+    }
 
     loading.value = true;
-
-
 
     const response = await KU.updateKu(createNewItem());
     deleteInRequirement()
@@ -129,8 +141,10 @@ const changeKuToBackend = async () => {
     const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirementChange);
     deleteRequirementBonus()
     const response3 = await postBonusRequirements(response, store.tableDataPercent);
+    deleteVAC()
+    const response7 = await postVAC(response, store.tableDataVAC);
     deleteExInvoice()
-    const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
+    const response4 = await postExInvoice(response, store.tableDataExInvoiceSelect);
     deleteManager()
     const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
 
@@ -176,7 +190,7 @@ const createNewItem = () => {
 };
 
 const postRequirements = async (response: any, dataArray: any, postFunction: any) => {
-  const requirementsArray = dataArray.map((item: { item_type: any; item_code: any; item_name: any; producer: any; brand: any; }) => ({
+  const requirementsArray = dataArray.map((item: IRequirementPost) => ({
     ku_id: response.ku_id,
     item_type: item.item_type,
     item_code: item.item_code,
@@ -196,7 +210,7 @@ const postRequirements = async (response: any, dataArray: any, postFunction: any
 };
 
 const postBonusRequirements = async (response: any, dataArray: any) => {
-  const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
+  const requirementsArray = dataArray.map((item: IPercentPost) => ({
     ku_key_id: response.ku_id,
     fix: item.fix,
     criterion: item.criterion !== null ? item.criterion : 0,
@@ -213,8 +227,30 @@ const postBonusRequirements = async (response: any, dataArray: any) => {
   }));
 };
 
+const postVAC = async (response: any, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: IVACPost) => ({
+    ku_key_id: response.ku_id,
+    type_partner: item.type_partner,
+      vendor_id: item.vendor_id,
+      vendor_name: item.vendor_name,
+      vendor_retention: item.vendor_retention,
+      vendor_status: item.vendor_status,
+      entity_id: item.entity_id,
+      entity_name: item.entity_name,
+  }));
+
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
+    try {
+      return await KU.postKuVAC(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке VAC на бэкенд:", error);
+      return null;
+    }
+  }));
+};
+
 const postManagerItems = async (response: any, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
+  const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
     ku_id: response.ku_id,
     group: item.group,
     discription: item.discription
@@ -230,17 +266,17 @@ const postManagerItems = async (response: any, dataArray: any, postFunction: any
   }));
 };
 
-const postItems = async (response: any, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { docid: any; }) => ({
+const postExInvoice = async (response: any, dataArray: any) => {
+  const itemsArray = dataArray.map((item: IExInvoiceForKuPost) => ({
     ku_id: response.ku_id,
     docid: item.docid,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KU.postKuExInvoices(newItem);
     } catch (error) {
-      console.error("Ошибка при отправке данных на бэкенд:", error);
+      console.error("Ошибка при отправке искл. накладных на бэкенд:", error);
       return null;
     }
   }));
@@ -309,6 +345,20 @@ const deleteExRequirement = () => {
 //удаление бонусов
 const deleteRequirementBonus = () => {
   const selectedRows = store.initialState.tableDataPercent.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KU.deleteVAC({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+//удаление поставщиков и договоров
+const deleteVAC = () => {
+  const selectedRows = store.initialState.tableDataVAC.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteRequirementBonus({ id });

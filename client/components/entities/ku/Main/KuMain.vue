@@ -2,9 +2,10 @@
     <el-tabs v-model="activeName" type="border-card" style="margin-right: 10px; height: 85vh;">
         <el-tab-pane label="Основное" name="first"><EntitiesKuMainBasic/></el-tab-pane>
         <el-tab-pane label="Условия бонуса" name="second"><EntitiesKuMainBonus/></el-tab-pane>
-        <el-tab-pane label="Исключенные накладные" name="third"><EntitiesKuMainExInvoice/></el-tab-pane>
-        <el-tab-pane label="Категорийные менеджеры" name="fourth"><EntitiesKuMainManagers/></el-tab-pane>
-        <el-tab-pane label="Должностные лица" name="fifth"><EntitiesKuMainOfficial/></el-tab-pane>
+        <el-tab-pane label="Поставщики и договоры" name="third"><EntitiesKuMainVendorsAndContracts/></el-tab-pane>
+        <el-tab-pane label="Исключенные накладные" name="fourth"><EntitiesKuMainExInvoice/></el-tab-pane>
+        <el-tab-pane label="Категорийные менеджеры" name="fifth"><EntitiesKuMainManagers/></el-tab-pane>
+        <el-tab-pane label="Должностные лица" name="sixth"><EntitiesKuMainOfficial/></el-tab-pane>
 
     <EntitiesKuRequirement />
     </el-tabs>

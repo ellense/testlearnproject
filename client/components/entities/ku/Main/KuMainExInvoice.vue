@@ -36,7 +36,7 @@
       </div>
       <el-scrollbar class="scrollTableFiltres">
         <el-table style="width: 100%" height="300" :data="tableData"
-          @selection-change="useKuAddStore().handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
+          @selection-change="store.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="40" />
           <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
           <el-table-column property="invoice_number" label="Номер" width="150" sortable show-overflow-tooltip />
@@ -44,7 +44,7 @@
           <el-table-column property="invoice_date" type="date" label="Дата" width="100" sortable
             show-overflow-tooltip />
           <el-table-column property="product_amount" label="Сумма" width="100" show-overflow-tooltip />
-          <el-table-column property="doc_id" label="Документ" show-overflow-tooltip />
+          <el-table-column property="docid" label="Документ" show-overflow-tooltip />
         </el-table>
       </el-scrollbar>
       <div v-if="pagination?.count" class="pagination">
@@ -70,11 +70,6 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
 import { Delete } from '@element-plus/icons-vue'
-const store = useKuIdStore();
-const isEditButtonDisabled = computed(() => {
-  return store.kuIdStatus !== 'Создано';
-});
-const kuStore = useKuAddStore();
 const { getExInvoiceAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
@@ -82,18 +77,27 @@ const { getIExInvoiceForKu } = storeToRefs(
   useKuIdStore()
 );
 
+const store = useKuIdStore();
+const kuStore = useKuAddStore();
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
+
 const tableData = ref<IExInvoiceForKu[]>(getExInvoiceAll.value);
 const loading = ref()
+
 watch(getExInvoiceAll, (value) => {
   tableData.value = value || [];
 });
+
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  useKuAddStore().setCountRowTable(val);
+  kuStore.setCountRowTable(val);
   try {
     loading.value = true;
-    await useKuAddStore().getInvoicesFromAPIWithFilter();
+    await kuStore.getInvoicesFromAPIWithFilter();
     loading.value = false;
   } catch (error) {
     console.error("Ошибка при загрузке данных искл.продуктов", error);
@@ -101,9 +105,9 @@ const handleSizeChange = async (val: number) => {
 };
 //пагинация
 const paginationChange = (page: number) => {
-  useKuAddStore().setFilterExInvoice('page', page);
+  kuStore.setFilterExInvoice('page', page);
   loading.value = true;
-  useKuAddStore().getInvoicesFromAPIWithFilter(page);
+  kuStore.getInvoicesFromAPIWithFilter(page);
   loading.value = false;;
 };
 //для поиска
@@ -150,7 +154,7 @@ const toggleSelection = (rows?: IExInvoiceForKu[]) => {
     multipleTableRef.value!.clearSelection()
   }
 }
-const tableData2 = ref<IExInvoiceForKu[]>(getIExInvoiceForKu.value);
+const tableData2 = ref(store.tableDataExInvoiceSelect);
 watch(getIExInvoiceForKu, (value) => {
   tableData2.value = value || [];
 });
@@ -158,6 +162,7 @@ watch(getIExInvoiceForKu, (value) => {
 //добавление условий
 const AddExInvoice = () => {
   const selectedRows = store.multipleSelectionExInvoice;
+  console.log("selectedRows", selectedRows);
 
   selectedRows.forEach(row => {
     store.tableDataExInvoiceSelect.push({
@@ -167,12 +172,12 @@ const AddExInvoice = () => {
       vendor_name: row.vendor_name,
       invoice_name: row.invoice_name,
       invoice_number: row.invoice_number,
-      invoice_date: new Date(row.invoice_date),
+      invoice_date: dayjs(row.invoice_date).format("DD.MM.YYYY"),
       product_amount: row.product_amount,
       docid: row.docid,
 
     });
-    console.log("искл.Накладные", useKuAddStore().tableDataExInvoiceSelect);
+    console.log("искл.Накладные", store.tableDataExInvoiceSelect);
   });
   toggleSelection()
   store.dialogFormExInvoiceVisible = false;

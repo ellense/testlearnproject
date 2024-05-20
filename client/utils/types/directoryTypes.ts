@@ -300,6 +300,8 @@ export interface IKuAddMain {
   newPay_method: string;
   newVendorIdVAC: string;
   newEntityIdVAC: string;
+  newVendorIdExInvoice: string;
+  newVendorNameExInvoice: string;
 }
 export interface IKuAddStore {
   //значения v-model при создании
@@ -406,6 +408,8 @@ export interface IInitialState {
   kuIdKu_type: string;
   kuIdPay_method: string;
   officialId: number | null;
+  kuIdEntityIdVAC: string
+  kuIdVendorIdVAC: string
   kuIdFIOСounteragent: string;
   kuIdPostСounteragent: string;
   kuIdDocСounteragent: string;
@@ -417,6 +421,7 @@ export interface IInitialState {
   tableDataInRequirement: IRequirement[];
   tableDataExRequirement: IRequirement2[];
   tableDataPercent: IPercent[];
+  tableDataVAC: IVendorAndContract[];
   tableDataExInvoiceSelect: IExInvoiceForKu[];
   tableDataManagerSelect: IManagerForKu[];
   tableDataContract: IContract[];
@@ -425,14 +430,10 @@ export interface IKuIdStore {
   //данные таблиц
   tableDataInRequirement: IRequirement[];
   tableDataExRequirement: IRequirement2[];
-  tableDataExRequirementOrigin: IRequirementOrigin2[];
   tableDataPercent: IPercent[];
-  tableDataPercentOrigin: IPercentOrigin[];
-  tableDataExInvoiceAll: IExInvoiceForKu[]
+  tableDataVAC: IVendorAndContract[]
   tableDataExInvoiceSelect: IExInvoiceForKu[]
-  tableDataExInvoiceSelectOrigin: IExInvoiceForKuOrigin[]
   tableDataManagerSelect: IManagerForKu[]
-  tableDataManagerSelectOrigin: IManagerForKuOrigin[]
   tableDataContract: IContract[],
   //v-model диалоговых форм
   dialogFormExInvoiceVisible: boolean
@@ -442,6 +443,7 @@ export interface IKuIdStore {
   dialogFormCategoryExVisible: boolean
   dialogFormManagersVisible: boolean
   dialogFormContractVisible: boolean
+  dialogFormVACVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   disableSubsidiaries: boolean
@@ -474,6 +476,8 @@ export interface IKuIdStore {
   kuIdKu_type: string;
   kuIdPay_method: string;
   officialId: number | null
+  kuIdEntityIdVAC: string
+  kuIdVendorIdVAC: string
   kuIdFIOСounteragent: string;
   kuIdPostСounteragent: string;
   kuIdDocСounteragent: string;
@@ -625,6 +629,7 @@ export interface GetPersentReturnData extends Pagination {
 
 //ПОСТАВЩИКИ И ДОГОВОРЫ
 export interface IVendorAndContract {
+  id: number | null;
   type_partner: string;
   vendor_id: string;
   vendor_name: string;
@@ -632,6 +637,19 @@ export interface IVendorAndContract {
   vendor_status: string
   entity_id: string
   entity_name: string
+}
+export interface IVACPost {
+  type_partner: string;
+  vendor_id: string;
+  vendor_name: string;
+  vendor_retention: string;
+  vendor_status: string
+  entity_id: string
+  entity_name: string
+  ku_key_id: string;
+}
+export interface GetVACReturnData extends Pagination {
+  results: IVendorAndContract[];
 }
 
 //искл. накладные
@@ -1071,6 +1089,8 @@ export interface IKuCAddMain {
   newDocu_subject: string;
   newPay_sum: number | null
   newPay_method: string;
+  newVendorIdVAC: string;
+  newEntityIdVAC: string;
 }
 export interface IKuCAddStore {
   //значения v-model при создании
@@ -1098,7 +1118,9 @@ export interface IKuCAddStore {
   tableDataContract: IContractService[]
   tableDataManagerAll: IManagerForKu[]
   tableDataManagerSelect: IManagerForKu[]
+  tableDataVAC: IVendorAndContract[]
   dataEntity: IEntityInKu[];
+  dataVendorId: IVendorIdAndName[]
   tableDataServiceAll: IService[]
   tableDataArticleAll: IArticle[]
   tableDataServiceSelect: IServiceAndArticle[]
@@ -1107,6 +1129,7 @@ export interface IKuCAddStore {
   dialogFormManagersVisible: boolean
   dialogFormContractVisible: boolean
   dialogFormServiceVisible: boolean
+  dialogFormVACVisible: boolean
   //дизэйбл кнопок
   disableButtonsIncluded: boolean
   disableSubsidiaries: boolean
@@ -1118,6 +1141,7 @@ export interface IKuCAddStore {
   filterService: IParamServices
   filterArticle: IParamServices
   filterCustomerValue: IParamCustomersKU
+  filterVendorValue: IParamVendorsForEntity
   isFormValid: boolean
 }
 export interface IInitialStateC {

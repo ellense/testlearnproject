@@ -32,8 +32,8 @@
           <el-form-item label-width="130" label="Код клиента" prop="newCustomerId">
             <div>
               <el-select v-model="kuMain.newCustomerId" size="small" placeholder="Выберите клинета" clearable
-                filterable style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
-                :title="disableSelectVendorTooltip">
+                filterable style="width: 300px" @change="onCustomerChange" :disabled="!kuMain.newEntityId"
+                :title="disableSelectCustomerTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
                   <span style="float: left;">{{ item.value }}</span>
                   <span style="float: right; color: var(--el-text-color-secondary);
@@ -127,10 +127,7 @@ import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import type {
 ICustomerIdAndName,
   IEntityInKu,
-  IKuAddMain,
   IKuCAddMain,
-  IVendorId,
-  IVendorIdAndName,
 } from "~/utils/types/directoryTypes";
 import type { FormInstance, FormRules } from 'element-plus'
 const store = useKuCAddStore();
@@ -266,8 +263,8 @@ onMounted(async () => {
 //вывод данных клинета
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.dataCustomerId, (vendors: ICustomerIdAndName[]) => {
-  options2.value = vendors.map(item => ({ label: item.name, value: item.customer_id }));
+watch(() => store.dataCustomerId, (customers: ICustomerIdAndName[]) => {
+  options2.value = customers.map(item => ({ label: item.name, value: item.customer_id }));
 });
 
 const onEntityChange = async () => {
@@ -300,16 +297,15 @@ const onEntityChange = async () => {
   store.dataCustomerId = [];
   kuMain.newCustomerName = "";
 
-  store.setFilterVendor('entity_id', kuMain.newEntityId);
+  store.setFilterCustomer('entity_id', kuMain.newEntityId);
   if (kuMain.newEntityId) { // Проверка, что выбрано юр. лицо
-    store.fetchAllVendorIdForEntity(); // Выполнить запрос с фильтром по производителям
+    store.fetchAllCustomerIdForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных клиента по фильтру юр.лица.');
   } else {
-    store.removeFilterVendor("entity_id")
+    store.removeFilterCustomer("entity_id")
     store.disableSubsidiaries = false;
     kuMain.newSubsidiaries = false;
   }
-  // store.removeFilterExInvoice("vendor_id")
 };
 
 const labelNewSubsidiaries = computed(() => {
@@ -321,11 +317,11 @@ const labelNewSubsidiaries = computed(() => {
   return 'Включить дочернии компании';
 });
 
-const onVendorChange = async () => {
+const onCustomerChange = async () => {
   kuMain.newCustomerName = "";
   if (kuMain.newCustomerId && kuMain.newCustomerId.length > 0) {
-    store.setFilterVendor('customer_id', kuMain.newCustomerId);
-    store.getVendorNameFromAPIWithFilter()
+    store.setFilterCustomer('customer_id', kuMain.newCustomerId);
+    store.getCustomerNameFromAPIWithFilter()
   } else {
   }
 
@@ -400,7 +396,7 @@ const resetDatesOnPeriodChange = () => {
   kuMain.newDateEnd = "";
 };
 // Функция сброса клиента
-const resetVendorOnEntityChange = () => {
+const resetCustomerOnEntityChange = () => {
   kuMain.newCustomerId = "";
 };
 // Обработчик изменения выбранного периода
@@ -412,12 +408,12 @@ watch(() => kuMain.newType, (newValue, oldValue) => {
 // Обработчик изменения выбранного юр.лица
 watch(() => kuMain.newEntityId, (newValue, oldValue) => {
   if (oldValue !== newValue) {
-    resetVendorOnEntityChange();
+    resetCustomerOnEntityChange();
   }
 });
 
 
-const disableSelectVendorTooltip = computed(() => {
+const disableSelectCustomerTooltip = computed(() => {
   return !kuMain.newEntityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
 });
 const disableSelectEntityTooltip = computed(() => {

@@ -356,9 +356,11 @@ const labelNewSubsidiaries = computed(() => {
 
 const onVendorChange = async () => {
   kuMain.newVendorName = "";
+  kuMain.newVendorNameExInvoice = "";
   if (kuMain.newVendorId && kuMain.newVendorId.length > 0) {
     store.setFilterVendor('vendor_id', kuMain.newVendorId);
     store.getVendorNameFromAPIWithFilter()
+    kuMain.newVendorIdExInvoice = kuMain.newVendorId
 
     try {
       console.log("поставщик:", kuMain.newVendorId);

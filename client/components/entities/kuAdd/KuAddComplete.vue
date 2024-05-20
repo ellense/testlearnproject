@@ -12,7 +12,7 @@
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuStore } from "~~/stores/kuStore";
 import dayjs from "dayjs";
-import type { IExInvoiceForKuPost, IKuList, IManagerForKuPost, IOfficialForKuPost } from "~/utils/types/directoryTypes";
+import type { IExInvoiceForKuPost, IKuList, IManagerForKuPost, IOfficialForKuPost, IPercentPost, IRequirementPost, IVACPost, IVendor } from "~/utils/types/directoryTypes";
 import { useRouter } from 'vue-router'
 const store = useKuAddStore();
 const loading = ref(false);
@@ -32,6 +32,7 @@ onBeforeRouteLeave((to, from, next) => {
   if (store.tableDataInRequirement.length > 0 ||
     store.tableDataExRequirement.length > 0 ||
     store.tableDataPercent.length > 0 ||
+    store.tableDataVAC.length > 0 ||
     store.tableDataExInvoiceSelect.length > 0 ||
     store.tableDataManagerSelect.length > 0 ||
     store.tableDataContract.length > 0 ||
@@ -149,15 +150,17 @@ const createKU = async () => {
     progress.value = 30;
     const response3 = await postBonusRequirements(response, store.tableDataPercent);
     progress.value = 40;
-    const response4 = await postItems(response, store.tableDataExInvoiceSelect, KU.postKuExInvoices);
+    const response7 = await postVAC(response, store.tableDataVAC);
     progress.value = 50;
-    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
+    const response4 = await postExInvoice(response, store.tableDataExInvoiceSelect);
     progress.value = 60;
-    const response6 = await KU.postKuOfficial(createOfficialArray(response));
+    const response5 = await postManagerItems(response, store.tableDataManagerSelect);
     progress.value = 70;
+    const response6 = await KU.postKuOfficial(createOfficialArray(response));
+    progress.value = 80;
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response2, response3, response4, response5, response6);
+      handleSuccess(response, responses, response2, response3, response4, response5, response6, response7);
     } else {
       handleError();
     }
@@ -196,7 +199,7 @@ const createNewItem = () => {
 };
 
 const postRequirements = async (response: IKuList, dataArray: any, postFunction: any) => {
-  const requirementsArray = dataArray.map((item: { item_type: any; item_code: any; item_name: any; producer: any; brand: any; }) => ({
+  const requirementsArray = dataArray.map((item: IRequirementPost) => ({
     ku_id: response.ku_id,
     item_type: item.item_type,
     item_code: item.item_code,
@@ -216,7 +219,7 @@ const postRequirements = async (response: IKuList, dataArray: any, postFunction:
 };
 
 const postBonusRequirements = async (response: IKuList, dataArray: any) => {
-  const requirementsArray = dataArray.map((item: { fix: any; criterion: any; percent_sum: any; }) => ({
+  const requirementsArray = dataArray.map((item: IPercentPost) => ({
     ku_key_id: response.ku_id,
     fix: item.fix,
     criterion: item.criterion !== null ? item.criterion : 0,
@@ -233,8 +236,30 @@ const postBonusRequirements = async (response: IKuList, dataArray: any) => {
   }));
 };
 
-const postManagerItems = async (response: IKuList, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
+const postVAC = async (response: IKuList, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: IVACPost) => ({
+    ku_key_id: response.ku_id,
+    type_partner: item.type_partner,
+      vendor_id: item.vendor_id,
+      vendor_name: item.vendor_name,
+      vendor_retention: item.vendor_retention,
+      vendor_status: item.vendor_status,
+      entity_id: item.entity_id,
+      entity_name: item.entity_name,
+  }));
+
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
+    try {
+      return await KU.postKuVAC(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке VAC на бэкенд:", error);
+      return null;
+    }
+  }));
+};
+
+const postManagerItems = async (response: IKuList, dataArray: any) => {
+  const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
     ku_id: response.ku_id,
     group: item.group,
     discription: item.discription
@@ -242,25 +267,25 @@ const postManagerItems = async (response: IKuList, dataArray: any, postFunction:
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await  KU.postKuManager(newItem);
     } catch (error) {
-      console.error("Ошибка при отправке данных на бэкенд:", error);
+      console.error("Ошибка при отправке менеджеров на бэкенд:", error);
       return null;
     }
   }));
 };
 
-const postItems = async (response: IKuList, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { docid: any; }) => ({
+const postExInvoice = async (response: IKuList, dataArray: any) => {
+  const itemsArray = dataArray.map((item: IExInvoiceForKuPost) => ({
     ku_id: response.ku_id,
     docid: item.docid,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KU.postKuExInvoices(newItem);
     } catch (error) {
-      console.error("Ошибка при отправке данных на бэкенд:", error);
+      console.error("Ошибка при отправке искл. накладных на бэкенд:", error);
       return null;
     }
   }));
@@ -278,11 +303,12 @@ const createOfficialArray = (response: IKuList) => {
   };
 };
 
-const handleSuccess = (response: IKuList, responses: any[], response2: any[], response3: any[], response4: any[], response5: any[], response6: IOfficialForKuPost) => {
+const handleSuccess = (response: IKuList, responses: any[], response2: any[], response3: any[], response4: any[], response5: any[], response6: IOfficialForKuPost, response7: any) => {
   console.log("Экземпляр успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
   console.log("исклУсловия успешно отправлены на бэкенд:", response2);
   console.log("бонус успешно отправлены на бэкенд:", response3);
+  console.log("поставщики и договоры успешно отправлены на бэкенд:", response7);
   console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
   console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
   console.log("Должн. лица успешно отправлены на бэкенд:", response6);
@@ -309,6 +335,7 @@ const addClose = () => {
     store.tableDataInRequirement.length > 0 ||
     store.tableDataExRequirement.length > 0 ||
     store.tableDataPercent.length > 0 ||
+    store.tableDataVAC.length > 0 ||
     store.tableDataExInvoiceSelect.length > 0 ||
     store.tableDataManagerSelect.length > 0 ||
     kuMain.newType !== '' ||

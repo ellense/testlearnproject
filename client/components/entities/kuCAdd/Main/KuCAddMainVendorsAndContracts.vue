@@ -1,12 +1,11 @@
 <template>
   <el-scrollbar height="40vh">
-    <!-- <h4>В разработке...</h4> -->
-    <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true"
+    <el-button size="small" type="primary" plain round @click="store.dialogFormVACVisible = true"
       class="buttonAdd">Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0"
+    <el-button size="small" type="danger" plain round @click="store.tableDataVAC.length = 0"
       class="buttonAdd">Удалить
       все</el-button>
-    <el-table :data="tableData2" border style="width: 100%; margin-top: 10px;" height="35vh"
+    <el-table :data="tableData" border style="width: 100%; margin-top: 10px;" height="35vh"
       empty-text="Добавьте поставщиков"  >
       <el-table-column property="type_partner" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">
@@ -26,24 +25,35 @@
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-model="store.dialogFormManagersVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
+    <el-dialog v-model="store.dialogFormVACVisible" title="Выбор поставщика" close-on-click-modal
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
-        <el-table style="width: 680px" height="300" :data="tableData" border
-          @selection-change="store.handleSelectionChangeVendorAndContract" ref="multipleTableRef" v-loading="loading">
-          <el-table-column type="selection" width="30" />
-          <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
-          <el-table-column property="discription" label="Описание" width="350" show-overflow-tooltip />
-        </el-table>
+        <el-form>
+          <el-form-item label-width="130" label="Код компании" prop="newEntityId">
+            <el-select v-model="kuMain.newEntityIdVAC" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" @change="onEntityChange">
+              <el-option v-for="item in optionsEntity" :key="item.label" :label="item.value" :value="item.value">
+                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label-width="130" label="Код поставщика">
+            <el-select v-model="kuMain.newVendorIdVAC" size="small" placeholder="Выберите поставщика" clearable
+              filterable style="width: 300px">
+              <el-option v-for="item in optionsVendor" :key="item.value" :label="item.value" :value="item.value">
+                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item>
+        </el-form>
       </el-scrollbar>
-      <div v-if="pagination?.count" class="pagination">
-        <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-          :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-          @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
-      </div>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="store.dialogFormManagersVisible = false">Отмена</el-button>
+          <el-button @click="store.dialogFormVACVisible = false">Отмена</el-button>
           <el-button @click="AddManagers()">Сохранить</el-button>
         </span>
       </template>
@@ -53,75 +63,83 @@
 
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
-import type { IManagerForKu } from "~/utils/types/directoryTypes";
+import type { IEntityInKu, IManagerForKu, IVendorIdAndName } from "~/utils/types/directoryTypes";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 
 const store = useKuCAddStore();
-const { getManagerAll, pagination, countRowTable } = storeToRefs(
-  store
+const kuMain = store.kuAddMain
+
+const optionsEntity = ref<Array<{ label: string; value: string }>>([]);
+watch(
+  () => store.dataEntity,
+  (dataEntity: IEntityInKu[]) => {
+    optionsEntity.value = dataEntity.map((item) => ({
+      label: item.name,
+      value: item.entity_id,
+    }));
+  }
 );
-const tableData = ref<IManagerForKu[]>(getManagerAll.value);
+onMounted(async () => {
+  try {
+    await store.fetchKuEntity({
+      entity_id: "",
+      name: "",
+      merge_id: "",
+    });
+  } catch (error) {
+    console.error("Ошибка при загрузке данных юр. лица", error);
+  }
+});
+const onEntityChange = async () => {
+  //для поставщика
+  store.dataVendorId = [];
+  store.setFilterVendor('entity_id', kuMain.newEntityIdVAC);
+  if (kuMain.newEntityIdVAC) { 
+    store.fetchAllVendorIdForEntity(); 
+    console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
+  } else {
+    store.removeFilterVendor("entity_id")
+  }
+};
 
-const loading = ref()
-
-watch(getManagerAll, (value) => {
-  tableData.value = value || [];
+const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
+watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
+  optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 
-const pageSize = ref(countRowTable);
-const handleSizeChange = async (val: number) => {
-  pageSize.value = val;
-  store.setCountRowTable(val);
-  try {
-    // await store.getProductFromExcludedWithFilter();
-  } catch (error) {
-    console.error("Ошибка при загрузке данных кат. менеджеров", error);
-  }
-};
-//пагинация
-const paginationChange = (page: number) => {
-  // store.setFilterExInvoice('page', page);
-  //   store.getProductFromExcludedWithFilter(page);
-};
+const tableData = ref(store.tableDataVAC);
 
-//для очистки выбора
-const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const toggleSelection = (rows?: IManagerForKu[]) => {
-  if (rows) {
-    rows.forEach((row) => {
-      multipleTableRef.value!.toggleRowSelection(row, false)
-    })
-  } else {
-    multipleTableRef.value!.clearSelection()
-  }
-}
-const tableData2 = ref(store.tableDataManagerSelect);
 
 //добавление условий
 const AddManagers = () => {
-  const selectedRows = store.multipleSelectionManager;
+  const selectedEntity = optionsEntity.value.find(option => option.value === kuMain.newEntityIdVAC);
+  const entityName = selectedEntity ? selectedEntity.label : '';
 
-  selectedRows.forEach(row => {
-    store.tableDataManagerSelect.push({
+  const selectedVendor = optionsVendor.value.find(option => option.value === kuMain.newVendorIdVAC);
+  const vendorName = selectedVendor ? selectedVendor.label : '';
+
+    store.tableDataVAC.push({
       id: null,
-      group: row.group,
-      discription: row.discription,
+      type_partner: "Поставщик",
+      vendor_id: kuMain.newVendorIdVAC,
+      vendor_name: vendorName,
+      vendor_retention: "Все",
+      vendor_status: "На удержании",
+      entity_id: kuMain.newEntityIdVAC,
+      entity_name: entityName
     });
-  });
-  console.log("менеджеры", store.tableDataManagerSelect);
-  toggleSelection()
-  store.dialogFormManagersVisible = false;
+    kuMain.newEntityIdVAC = "";
+    kuMain.newVendorIdVAC = "";
+  store.dialogFormVACVisible = false;
 };
 //удаление менеджеров
 const deleteRow = (index: number) => {
-  store.tableDataManagerSelect.splice(index, 1);
+  store.tableDataVAC.splice(index, 1);
 }
 </script>
 
 <style scoped>
-.el-scrollbar__view {
-  width: 740px;
-}
+
 </style>

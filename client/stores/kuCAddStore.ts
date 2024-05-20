@@ -12,6 +12,8 @@ import type {
     IParamCustomersKU,
     IManagerForKu,
     IVendorAndContract,
+    IVendorIdAndName,
+    IParamVendorsForEntity,
 } from "~/utils/types/directoryTypes";
 
 export const useKuCAddStore = defineStore("KuCAddStore", {
@@ -35,6 +37,8 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             newDocu_subject: "",
             newPay_sum: null,
             newPay_method: "",
+            newVendorIdVAC: "",
+            newEntityIdVAC: "",
         },
         newOfFIOСounteragent: "",
         newOfPostСounteragent: "",
@@ -58,15 +62,18 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         tableDataContract: [],
         tableDataManagerAll: [],
         tableDataManagerSelect: [],
+        tableDataVAC: [],
         tableDataServiceAll: [],
         tableDataArticleAll: [],
         tableDataServiceSelect: [],
         dataEntity: [],
+        dataVendorId: [],
         dataCustomerId: [],
         //v-model диалоговых форм
         dialogFormManagersVisible: false,
         dialogFormContractVisible: false,
         dialogFormServiceVisible: false,
+        dialogFormVACVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
@@ -79,6 +86,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         filterService: {},
         filterArticle: {},
         filterCustomerValue: {},
+        filterVendorValue: {},
         isFormValid: false,
     }),
 
@@ -156,9 +164,46 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 console.error("Произошла ошибка", error);
             }
         },
-
-        //получение данных о клиентаъх для создания
+        //получение данных о поставщиках для создания
         async fetchAllVendorIdForEntity() {
+            try {
+                let allVendors: IVendorIdAndName[] = [];
+                let nextPage = 1;
+                let totalPages = 1;
+                while (nextPage <= totalPages) {
+                    const vendors = await VENDOR.getVendorsForEntityInKU({
+                        page_size: this.$state.countRowTable2,
+                        page: nextPage,
+                        entity_id: this.$state.filterVendorValue.entity_id,
+                    });
+                    allVendors = allVendors.concat(vendors.results);
+                    totalPages = Math.ceil(vendors.count / this.$state.countRowTable2);
+                    nextPage++;
+                }
+                console.log("Все данные о поставщиках:", allVendors);
+                this.$state.dataVendorId = allVendors;
+
+            } catch (error) {
+                console.error(
+                    "Произошла ошибка при получении данных о поставщиках",
+                    error
+                );
+                return Promise.reject(error);
+            }
+        },
+        setFilterVendor<
+        T extends keyof IParamVendorsForEntity,
+        U extends IParamVendorsForEntity[T],
+    >(field: T, value: U) {
+        this.$state.filterVendorValue[field] = value
+    },
+    removeFilterVendor<T extends keyof IParamVendorsForEntity>(field: T) {
+        if (this.$state.filterVendorValue) {
+            delete this.$state.filterVendorValue[field]
+        }
+    },
+        //получение данных о клиентаъх для создания
+        async fetchAllCustomerIdForEntity() {
             try {
                 let allVendors: ICustomerIdAndName[] = [];
                 let nextPage = 1;
@@ -184,8 +229,9 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 return Promise.reject(error);
             }
         },
+        
         //получение имени клиента
-        async getVendorNameFromAPIWithFilter(page?: number) {
+        async getCustomerNameFromAPIWithFilter(page?: number) {
             await CUSTOMER.getCustomersForEntityInKU({
                 page_size: this.$state.countRowTable,
                 page,
@@ -203,13 +249,13 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 })
                 .catch((error) => Promise.reject(error));
         },
-        setFilterVendor<
+        setFilterCustomer<
             T extends keyof IParamCustomersKU,
             U extends IParamCustomersKU[T],
         >(field: T, value: U) {
             this.$state.filterCustomerValue[field] = value
         },
-        removeFilterVendor<T extends keyof IParamCustomersKU>(field: T) {
+        removeFilterCustomer<T extends keyof IParamCustomersKU>(field: T) {
             if (this.$state.filterCustomerValue) {
                 delete this.$state.filterCustomerValue[field]
             }
@@ -327,6 +373,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.disableButtonsIncluded = false;
             this.disableSubsidiaries = false;
             // очищение фильтров
+            this.removeFilterCustomer('entity_id');
             this.removeFilterVendor('entity_id');
 
 

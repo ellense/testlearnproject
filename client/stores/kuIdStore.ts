@@ -5,20 +5,17 @@ import type {
     IProduct,
     IKuIdStore,
     IContractPost,
+    IExInvoiceForKu,
 } from "~/utils/types/directoryTypes";
 
 export const useKuIdStore = defineStore("KuIdStore", {
     state: (): IKuIdStore => ({
         tableDataInRequirement: [],
         tableDataExRequirement: [],
-        tableDataExRequirementOrigin: [],
         tableDataPercent: [],
-        tableDataPercentOrigin: [],
-        tableDataExInvoiceAll: [],
+        tableDataVAC: [],
         tableDataExInvoiceSelect: [],
-        tableDataExInvoiceSelectOrigin: [],
         tableDataManagerSelect: [],
-        tableDataManagerSelectOrigin: [],
         tableDataContract: [],
         //v-model диалоговых форм
         dialogFormExInvoiceVisible: false,
@@ -28,6 +25,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         dialogFormCategoryExVisible: false,
         dialogFormManagersVisible: false,
         dialogFormContractVisible: false,
+        dialogFormVACVisible: false,
         //дизэйбл
         disableButtonsIncluded: false,
         disableSubsidiaries: false,
@@ -60,6 +58,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdKu_type: "",
         kuIdPay_method: "",
         officialId: null,
+        kuIdEntityIdVAC: "",
+        kuIdVendorIdVAC: "",
         kuIdFIOСounteragent: "",
         kuIdPostСounteragent: "",
         kuIdDocСounteragent: "",
@@ -93,6 +93,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
             kuIdKu_type: "",
             kuIdPay_method: "",
             officialId: null,
+            kuIdEntityIdVAC: "",
+            kuIdVendorIdVAC: "",
             kuIdFIOСounteragent: "",
             kuIdPostСounteragent: "",
             kuIdDocСounteragent: "",
@@ -104,6 +106,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
             tableDataInRequirement: [],
             tableDataExRequirement: [],
             tableDataPercent: [],
+            tableDataVAC: [],
             tableDataExInvoiceSelect: [],
             tableDataManagerSelect: [],
             tableDataContract: [],
@@ -124,6 +127,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         getKuInRequirement: (state) => state.tableDataInRequirement,
         getKuExRequirement: (state) => state.tableDataExRequirement,
         getPercent: (state) => state.tableDataPercent,
+        getVAC: (state) => state.tableDataVAC,
         getIExInvoiceForKu: (state) => state.tableDataExInvoiceSelect,
 
     },
@@ -135,6 +139,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
         },
         handleSelectionChangeProduct(val: IProduct[]) {
             this.multipleSelectionProduct = val;
+        },
+        handleSelectionChangeExInvoice(val: IExInvoiceForKu[]) {
+            this.multipleSelectionExInvoice = val;
         },
         //получение ku_id
         async getKuDetailFromApi(kuId: string) {
@@ -281,6 +288,29 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+        //получение поставщиков и договоров ku_id
+        async fetchVACForKuId(ku_id?: string, page?: number) {
+            await KU.getKuVAC({
+                ku_id, page_size: this.$state.countRowTable,
+                page,
+            })
+                .then((tableData) => {
+                    console.log('Получены данные поставщиков и договоров ку_айди:', tableData);
+                    this.$state.tableDataVAC = tableData.results;
+                    this.$state.initialState.tableDataVAC = this.$state.tableDataVAC.slice();
+                    // console.log('tableDataPercent:', this.$state.tableDataPercent);
+                    console.log('initialState.tableDataPercent:', this.$state.tableDataVAC);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных поставщиков и договоров ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
         //получение искл. накладных ku_id
         async fetchExInvoiceForKuId(ku_id?: string, page?: number) {
             await KU.getKuExInvoiceForKuId({
@@ -355,6 +385,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
             const tablesChanged3 = !_.isEqual(this.tableDataPercent, this.initialState.tableDataPercent);
             const tablesChanged4 = !_.isEqual(this.tableDataExInvoiceSelect, this.initialState.tableDataExInvoiceSelect);
             const tablesChanged5 = !_.isEqual(this.tableDataManagerSelect, this.initialState.tableDataManagerSelect);
+            const tablesChanged7 = !_.isEqual(this.tableDataVAC, this.initialState.tableDataVAC);
             const tablesChanged6 = !_.isEqual(this.tableDataContract, this.initialState.tableDataContract);
             return (
                 this.kuIdStatus !== this.initialState.kuIdStatus ||
@@ -392,7 +423,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 tablesChanged3 ||
                 tablesChanged4 ||
                 tablesChanged5 ||
-                tablesChanged6
+                tablesChanged6 ||
+                tablesChanged7
             );
         },
         clearData() {
@@ -401,6 +433,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
 
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
+            this.tableDataVAC.length = 0 
             this.tableDataExInvoiceSelect.length = 0;
             this.tableDataManagerSelect.length = 0;
             this.tableDataContract.length = 0;
@@ -412,6 +445,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.dialogFormCategoryExVisible = false;
             this.dialogFormManagersVisible = false;
             this.dialogFormContractVisible = false;
+            this.dialogFormVACVisible = false,
             // Сбрасываем флаги дизейбла кнопок
             this.disableButtonsIncluded = false;
 
@@ -443,6 +477,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdNegative_turnover = false;
             this.kuIdKu_type = '';
             this.kuIdPay_method = '';
+            this.kuIdEntityIdVAC = '';
+            this.kuIdVendorIdVAC = '';
             this.kuIdFIOСounteragent = '';
             this.kuIdPostСounteragent = '';
             this.kuIdDocСounteragent = '';
@@ -460,6 +496,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.initialState.tableDataInRequirement.length = 0;
             this.initialState.tableDataExRequirement.length = 0;
             this.initialState.tableDataPercent.length = 0;
+            this.initialState.tableDataVAC.length = 0;
             this.initialState.tableDataExInvoiceSelect.length = 0;
             this.initialState.tableDataManagerSelect.length = 0;
             this.initialState.tableDataContract.length = 0;

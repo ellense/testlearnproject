@@ -75,6 +75,8 @@ import type {
   ICustomerReturnData,
   ICustomerForEntityReturnData,
   IParamCustomersKU,
+  GetVACReturnData,
+  IVACPost,
 } from "~/utils/types/directoryTypes";
 const isBearer = true;
 
@@ -157,6 +159,8 @@ export const KU = {
     $Post("api/excluded_condition_create/", { data, isBearer: false }),
   postKuRequirementBonus: (data: IPercentPost): Promise<IPercentPost> =>
     $Post("api/bonus_condition/", { data, isBearer: false }),
+  postKuVAC: (data: IVACPost): Promise<IVACPost> =>
+    $Post("api/VAC/", { data, isBearer: false }),
   postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
     $Post("api/excluded_venddoc_list_create/", { data, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
@@ -176,6 +180,8 @@ export const KU = {
     $Get(`api/excluded_condition_list/`, { params, isBearer: false }),
   getKuRequirementBonus: (params: IParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
+  getKuVAC: (params: IParamKuId): Promise<GetVACReturnData> =>
+    $Get(`api/VAC/`, { params, isBearer: false }),
   // getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
   //   $Get(`api/excluded_venddoc_list_create/`, { params, isBearer: false }),
   getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
@@ -193,6 +199,8 @@ export const KU = {
     $Delete(`api/excluded_condition_detail/${data.id}/`, { data, isBearer: false }),
   deleteRequirementBonus: (data: IRequirementId2) =>
     $Delete(`api/bonus_condition_detail/${data.id}/`, { data, isBearer: false }),
+  deleteVAC: (data: IRequirementId2) =>
+    $Delete(`api/VAC_detail/${data.id}/`, { data, isBearer: false }),
   deleteExInvoiceForKuId: (data: IRequirementId2) =>
     $Delete(`api/excluded_venddoc_detail/${data.id}/`, { data, isBearer: false }),
   deleteManager: (data: IRequirementId2) =>
@@ -271,6 +279,8 @@ export const SERVICE = {
 export const KUC = {
   getKuList: (params: IParamKusC): Promise<IKusCReturnData> =>
     $Get("api/ku_customer_list/", { params, isBearer: false }),
+  getKuIdList: (params: IParamKu_Id): Promise<IKu_IdReturnData> =>
+    $Get("api/ku_customer_list/", { params, isBearer: false }),
 
   //отправление
   postKu: (data: IKuCPost): Promise<IKuCList> =>
@@ -284,4 +294,8 @@ export const KUC = {
   postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
     $Post("api/name_contact_create/", { data, isBearer: false }),
   
+};
+export const GRAPHICC = {
+  getGraphic: (params?: GetAllGraphic): Promise<GetAllGraphicsReturnData> =>
+    $Get("api/graph_customer_list/", { params, isBearer: false }),
 };
