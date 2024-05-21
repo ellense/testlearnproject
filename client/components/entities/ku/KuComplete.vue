@@ -177,7 +177,6 @@ const createNewItem = () => {
     contract: store.kuIdContract,
     product_type: store.kuIdProduct_type,
     docu_account: store.kuIdDocu_account,
-    docu_name: store.kuIdDocu_name,
     docu_number: store.kuIdDocu_number,
     docu_date: dayjs(store.kuIdDocu_date).format("YYYY-MM-DD"),
     docu_subject: store.kuIdDocu_subject,
@@ -313,8 +312,7 @@ const handleSuccess = (response: any, responses: any[], response2: any[], respon
 //удаление вкл условий
 const deleteInRequirement = () => {
   const selectedRows = store.initialState.tableDataInRequirement.map((row) => row.id);
-  console.log("SSSselectedRows", selectedRows);
-  const deletePromises = selectedRows.map(async (in_prod_id) => {
+  const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteInRequirement({ id });
       console.log("успешно удалилось вкл !!!!!!!!!!!!", results);

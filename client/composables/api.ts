@@ -10,8 +10,8 @@ import type { IParamKus, IKusReturnData, IParamKu_Id, IKu_IdReturnData, IKuPost,
 import type { GetAllProducer, GetAllProducersReturnData } from "~/utils/types/producerTypes";
 import type { GetAllProducts, GetAllProductsReturnData } from "~/utils/types/productTypes";
 import type { IParamServices, IServicesReturnData, IPlaceReturnData, IPricelistReturnData, IArticleReturnData, IService, IArticle } from "~/utils/types/serviceTypes";
-import type { IRequirementPost, IPercentPost, IVACPost, IExInvoiceForKuPost, IManagerForKuPost, IOfficialForKuPost, IContractPost, IContractPromise, IParamKuId, IRequirementReturnData, GetPersentReturnData, GetVACReturnData, IManagersReturnData, GetParamExInvoicesForKu, GetExInvoicesForKuReturnData, GetAllOfficialReturnData, IRequirementId, IOfficialForKu, IParamManagers, IServicesPost } from "~/utils/types/tabsKuTypes";
-import type { ITree, GetAllCategory } from "~/utils/types/treetypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IExInvoiceForKuPost, IManagerForKuPost, IOfficialForKuPost, IContractPost, IContractPromise, IParamKuId, IRequirementReturnData, GetPersentReturnData, GetVACReturnData, IManagersReturnData, GetParamExInvoicesForKu, GetExInvoicesForKuReturnData, GetAllOfficialReturnData, IRequirementId, IOfficialForKu, IParamManagers, IServicesPost, GetAllServiceReturnData } from "~/utils/types/tabsKuTypes";
+import type { ITree, GetAllCategory } from "~/utils/types/treeTypes";
 import type { IParamVendors, IVendorsReturnData, IParamVendorsForEntityInVendor, IVendorsForEntityInVendorReturnData, IVendorId, IParamVendorsForEntity, IVendorsForEntityReturnData, IVendorFull } from "~/utils/types/vendorTypes";
 
 const isBearer = true;
@@ -211,7 +211,7 @@ export const KUC = {
   getKuIdList: (params: IParamKu_Id): Promise<IKu_IdReturnData> =>
     $Get("api/ku_customer_list/", { params, isBearer: false }),
   getInfoKu: (data: IKuId): Promise<IKuCList> =>
-    $Get(`api/ku_detail/${data.ku_id}/`, { data, isBearer: false }),
+    $Get(`api/ku_customer_detail/${data.ku_id}/`, { data, isBearer: false }),
 
   //отправление
   postKu: (data: IKuCPost): Promise<IKuCList> =>
@@ -225,8 +225,8 @@ export const KUC = {
   postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
     $Post("api/name_contact_create/", { data, isBearer: false }),
   //для получения в ku_id
-  getKuService: (params: IParamKuId): Promise<GetVACReturnData> =>
-    $Get(`api/VAC/`, { params, isBearer: false }),
+  getKuService: (params: IParamKuId): Promise<GetAllServiceReturnData> =>
+    $Get(`api/included_service_list/`, { params, isBearer: false }),
   getKuVAC: (params: IParamKuId): Promise<GetVACReturnData> =>
     $Get(`api/VAC/`, { params, isBearer: false }),
   getKuManager: (params: IParamKuId): Promise<IManagersReturnData> =>

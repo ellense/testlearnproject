@@ -12,7 +12,7 @@ import type { IOfficialForKu, IParamKuId, IServiceAndArticle, IContractService, 
 import type { IBrand, GetAllBrands } from "./brandTypes";
 import type { IProducer, GetAllProducer } from "./producerTypes";
 import type { IProduct, GetAllProducts } from "./productTypes";
-import type { ITree, GetAllCategory } from "./treetypes";
+import type { ITree, GetAllCategory } from "./treeTypes";
 
 
 //юр лица
@@ -102,7 +102,6 @@ export interface IVendorStore {
     newContract: string;
     newProduct_type: string;
     newDocu_account: string;
-    newDocu_name: string;
     newDocu_number: string;
     newDocu_date: Date | string;
     newDocu_subject: string;
@@ -216,7 +215,6 @@ export interface IVendorStore {
     kuIdContract: string;
     kuIdProduct_type: string;
     kuIdDocu_account: string;
-    kuIdDocu_name: string;
     kuIdDocu_number: string;
     kuIdDocu_date: Date | string;
     kuIdDocu_subject: string;
@@ -234,6 +232,8 @@ export interface IVendorStore {
     kuIdFIOEntity: string;
     kuIdPostEntity: string;
     kuIdDocEntity: string;
+    kuIdVendorIdExInvoice:  string;
+    kuIdVendorNameExInvoice:  string;
     valueProducer_nameContract: string;
     valueBrand_nameContract: string;
     tableDataInRequirement: IRequirement[];
@@ -286,7 +286,6 @@ export interface IVendorStore {
     kuIdContract: string;
     kuIdProduct_type: string;
     kuIdDocu_account: string;
-    kuIdDocu_name: string;
     kuIdDocu_number: string;
     kuIdDocu_date: Date | string;
     kuIdDocu_subject: string;
@@ -304,6 +303,8 @@ export interface IVendorStore {
     kuIdFIOEntity: string;
     kuIdPostEntity: string;
     kuIdDocEntity: string;
+    kuIdVendorIdExInvoice:  string;
+    kuIdVendorNameExInvoice:  string;
     valueProducer_nameContract: string;
     valueBrand_nameContract: string;
     initialState: IInitialState;
@@ -473,6 +474,7 @@ export interface IVendorStore {
     kuIdFIOEntity: string;
     kuIdPostEntity: string;
     kuIdDocEntity: string;
+    officialId: number | null
     tableDataManagerSelect: IManagerForKu[];
     tableDataVAC: IVendorAndContract[]
     tableDataServiceSelect: IServiceAndArticle[]
@@ -485,19 +487,13 @@ export interface IVendorStore {
     tableDataServiceSelect: IServiceAndArticle[]
     tableDataContract: IContract[]
     //v-model диалоговых форм
-    dialogFormExInvoiceVisible: boolean
-    dialogFormProductInVisible: boolean
-    dialogFormCategoryInVisible: boolean
-    dialogFormProductExVisible: boolean
-    dialogFormCategoryExVisible: boolean
+    dialogFormVAC: boolean
+    dialogFormService: boolean
     dialogFormManagersVisible: boolean
     dialogFormContractVisible: boolean
     //дизэйбл кнопок
     disableButtonsIncluded: boolean
     disableSubsidiaries: boolean
-    //поиски
-    searchProductIncluded: string;
-    searchProductExcluded: string;
     //v-model атрибутов
     ku_id: string;
     kuIdStatus: string;
@@ -526,18 +522,16 @@ export interface IVendorStore {
     kuIdDocEntity: string;
     valueVendorIdVAC: string;
     valueEntityIdVAC: string;
-    valueProducer_nameContract: string;
-    valueBrand_nameContract: string;
+    valueService_nameContract: string;
+    valueArticle_nameContract: string;
+    valueService_name: string;
+    valueArticle_name: string;
+    valueRatio: number | null;
+    officialId: number | null
     initialState: IInitialStateC;
     //пагинация в таблицах
     pagination: Pagination | null;
     countRowTable: number;
-    //
-    multipleSelectionProduct: IProduct[];
-    multipleSelectionExInvoice: IExInvoiceForKu[]
-    multipleSelectionManager: IManagerForKu[]
-    multipleTableRef: Ref | null;
-    filterVendorValue: IParamVendorsForEntity
   }
 
   //график расчетов клиентов

@@ -18,13 +18,10 @@ export const useKuCStore = defineStore("KuCStore", {
     sortProp: "",
     sortOrder: "",
     legalEntity: [],
-    //поиски
-    search: "",
+    //параметры для фильтров при запросах
     filterEntityId: [],
     filterVendorId: [],
-    //параметры для фильтров при запросах
-    filterKuValue: {
-    },
+    filterKuValue: {},
   }),
 
   getters: {
@@ -59,7 +56,6 @@ export const useKuCStore = defineStore("KuCStore", {
     //получение КУ с фильтром
     async getKuFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
       this.setFilterValue('page', page);
-      this.setFilterValue('search', this.$state.search);
       this.setFilterValue('sort_by', sort_by);
       this.setFilterValue('sort_order', sort_order); 
       await KUC.getKuList({
@@ -73,7 +69,6 @@ export const useKuCStore = defineStore("KuCStore", {
         date_start_e: this.$state.filterKuValue?.date_start_e,
         date_end_s: this.$state.filterKuValue?.date_end_s,
         date_end_e: this.$state.filterKuValue?.date_end_e,
-        search: this.$state.search,
         sort_by,
         sort_order,
       })
@@ -104,19 +99,6 @@ export const useKuCStore = defineStore("KuCStore", {
       if (this.$state.filterKuValue) {
         delete this.$state.filterKuValue[field]
       }
-    },
-
-    //для поиска в ку
-    async performSearchKu(searchQuery: string) {   
-      try {
-        this.setSearchQueryKu(searchQuery);
-        await this.getKuFromAPIWithFilter();
-      } catch (error) {
-        console.error('Ошибка при выполнении поиска ку', error);
-      }
-    },
-    setSearchQueryKu(query: string) {
-      this.$state.search = query;
     },
 
 

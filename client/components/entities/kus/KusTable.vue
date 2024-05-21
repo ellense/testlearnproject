@@ -195,17 +195,15 @@ const loading = ref()
 //открывание и редактитрование ку
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
-  await store3.getKuDetailFromApi(kuId)
-  await store3.fetchInRequirementForKuId(kuId)
+  await store3.getKuDetail_API(kuId)
+  await store3.getInRequirementForKuId_API(kuId)
   router.push({ path: `/kuV/${kuId}` });
-  store3.fetchExRequirementForKuId(kuId)
-  store3.fetchBonusForKuId(kuId)
-  store3.fetchVACForKuId(kuId)
-  store3.fetchExInvoiceForKuId(kuId)
-  store3.fetchOfficialForKuId(kuId)
-
-  // console.log("СТАТУС", store3.kuIdStatus)
-  // console.log("ПОСТАВЩИК", store3.kuIdVendorId)
+  store3.getExRequirementForKuId_API(kuId)
+  store3.getBonusForKuId_API(kuId)
+  // store3.getVACForKuId_API(kuId)
+  store3.getExInvoiceForKuId_API(kuId)
+  store3.getOfficialForKuId_API(kuId)
+  store3.getManagerForKuId_API(kuId)
 
   if (store3.kuIdStatus === "Создано") {
     const entity = store2.dataEntity.find(item => item.entity_id === store3.kuIdEntityId);

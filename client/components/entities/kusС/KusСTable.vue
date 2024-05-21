@@ -32,12 +32,12 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column prop="entity_id" label="Код" width="90" sortable show-overflow-tooltip />
+        <el-table-column prop="entity" label="Код" width="90" sortable show-overflow-tooltip />
         <el-table-column prop="entity_name" label="Наименование" width="200" sortable show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Клиент" align="center">
         <template #header>
-          <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
+          <div class="column-header" :style="{ color: Customer.length > 0 ? '#409EFF' : 'inherit' }">
             Клиент
             <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
@@ -45,9 +45,9 @@
                     <Filter />
                   </el-icon></el-button>
               </template>
-              <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="2" :options="optionsVendor" popper-class="vendorPopper" style="width: 300px"
-                placeholder="Фильтр по клиенту" @change="onVendorChange" size="small">
+              <el-select-v2 v-model="Customer" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="2" :options="optionsCustomer" popper-class="vendorPopper" style="width: 300px"
+                placeholder="Фильтр по клиенту" @change="onCustomerChange" size="small">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                   <span style="
@@ -62,8 +62,8 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column prop="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
-        <el-table-column prop="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
+        <el-table-column prop="customer" label="Код" width="140" sortable show-overflow-tooltip />
+        <el-table-column prop="customer_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
       <el-table-column>
         <template #header>
@@ -109,7 +109,7 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column prop="" label="Сумма выплат" width="150" show-overflow-tooltip />
+      <el-table-column prop="pay_sum" label="Сумма выплат" width="150" show-overflow-tooltip />
       <el-table-column prop="graph_exists" label="График расчета" width="100" align="center" fixed="right">
         <template #header>
           <div class="column-header" :style="{ color: Graph.length > 0 ? '#409EFF' : 'inherit' }">
@@ -174,17 +174,19 @@ import { storeToRefs } from "pinia";
 import { Select, Filter } from '@element-plus/icons-vue'
 import { ref, onMounted, watch } from "vue";
 import { useKuCStore } from "~~/stores/kuCStore";
-import { useKuIdStore } from "~~/stores/kuIdStore";
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import dayjs from 'dayjs';
 import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IKuCList } from "~/utils/types/kuCustomerTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
+import type { ICustomerIdAndName } from "~/utils/types/customerTypes";
 const { getKu, pagination, countRowTable } = storeToRefs(
   useKuCStore()
 );
 const store = useKuCStore();
-const storeKuAdd = useKuAddStore();
+const storeId = useKuCIdStore();
+const storeKuAdd = useKuCAddStore();
 const visible = ref(false)
 const tableData = ref<IKuCList[]>(getKu.value);
 
@@ -193,61 +195,47 @@ const loading = ref()
 //открывание и редактитрование ку
 const rowDblclick = async (kuId: string) => {
   const router = useRouter();
-  await useKuIdStore().getKuDetailFromApi(kuId)
-  await useKuIdStore().fetchInRequirementForKuId(kuId)
-  router.push({ path: `/kuV/${kuId}` });
-  useKuIdStore().fetchExRequirementForKuId(kuId)
-  useKuIdStore().fetchBonusForKuId(kuId)
-  useKuIdStore().fetchExInvoiceForKuId(kuId)
-  useKuIdStore().fetchOfficialForKuId(kuId)
+  await storeId.getKuDetail_API(kuId)
+  await storeId.getServiceForKuId_API(kuId)
+  router.push({ path: `/kuC/${kuId}` });
+  storeId.getManagerForKuId_API(kuId)
+  storeId.getOfficialForKuId_API(kuId)
 
-  console.log("СТАТУС", useKuIdStore().kuIdStatus)
-  console.log("КЛИЕНТ", useKuIdStore().kuIdVendorId)
+  console.log("СТАТУС", storeId.kuIdStatus)
+  console.log("КЛИЕНТ", storeId.kuIdCustomerId)
 
-  if (useKuIdStore().kuIdStatus === "Создано") {
-    const entity = storeKuAdd.dataEntity.find(item => item.entity_id === useKuIdStore().kuIdEntityId);
+  if (storeId.kuIdStatus === "Создано") {
+    const entity = storeKuAdd.dataEntity.find(item => item.entity_id === storeId.kuIdEntityId);
   if (entity) {
     if (entity.merge_id) {
-      useKuIdStore().kuIdSubsidiaries = true;
+      storeId.kuIdSubsidiaries = true;
       console.log(`merge_id для выбранного юр. лица: ${entity.merge_id}`);
-      useKuIdStore().disableSubsidiaries = false;
+      storeId.disableSubsidiaries = false;
     } else {
       console.log('У выбранного юр. лица отсутствует merge_id');
-      useKuIdStore().disableSubsidiaries = true;
+      storeId.disableSubsidiaries = true;
     }
   } else {
     console.log('Выбранное юр. лицо не найдено в данных');
   }
-    if (useKuIdStore().kuIdVendorId && useKuIdStore().kuIdVendorId.length > 0) {
-      storeKuAdd.setFilterVendor('vendor_id', useKuIdStore().kuIdVendorId);
-      storeKuAdd.getVendorNameFromAPIWithFilter()
+    if (storeId.kuIdCustomerId && storeId.kuIdCustomerId.length > 0) {
+      storeKuAdd.setFilterVendor('vendor_id', storeId.kuIdCustomerId);
+      storeKuAdd.getCustomerNameFromAPIWithFilter()
       try {
-        storeKuAdd.setFilterVendor("entity_id", useKuIdStore().kuIdEntityId)
-        storeKuAdd.setFilterBrand("vendor_id", useKuIdStore().kuIdVendorId)
-        storeKuAdd.setFilterCategory("vendor_id", useKuIdStore().kuIdVendorId)
-        storeKuAdd.setFilterExInvoice("vendor_id", useKuIdStore().kuIdVendorId)
-        storeKuAdd.setFilterProducer("vendor_id", useKuIdStore().kuIdVendorId)
-        storeKuAdd.setFilterProductEx("vendor_id", useKuIdStore().kuIdVendorId)
-        storeKuAdd.setFilterProductInRequirement("vendor_id", useKuIdStore().kuIdVendorId)
+        storeKuAdd.setFilterVendor("entity_id", storeId.kuIdEntityId)
         await storeKuAdd.fetchKuEntity({
           entity_id: "",
           name: "",
           merge_id: "",
         });
-        await storeKuAdd.fetchAllVendorIdForEntity();
-        await storeKuAdd.fetchCategories();
-        await storeKuAdd.getProductFromIncludedWithFilter();
-        await storeKuAdd.fetchAllProducersForInclided();
-        await storeKuAdd.fetchAllBrandsForIncluded();
-        await storeKuAdd.getProductFromExcludedWithFilter();
-        await storeKuAdd.getInvoicesFromAPIWithFilter();
+        await storeKuAdd.fetchAllCustomerIdForEntity();
       } catch (error) {
-        console.error("Ошибка при загрузке данных товаров/производителей/брендов по фильтру клиента", error);
+        console.error("Ошибка при загрузке данных вкладок по фильтру клиента", error);
       }
 
     }
     else {
-      useKuIdStore().disableButtonsIncluded = true;
+      storeId.disableButtonsIncluded = true;
     }
   };
 }
@@ -351,22 +339,22 @@ onMounted(async () => {
 });
 
 //фильтр клиента
-const Vendor = ref<string[]>(filterKuValue.value.customer_id || []);
-const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
-  optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
+const Customer = ref<string[]>(filterKuValue.value.customer_id || []);
+const optionsCustomer = ref<Array<{ label: string; value: string }>>([]);
+watch(() => storeKuAdd.dataCustomerId, (vendors: ICustomerIdAndName[]) => {
+  optionsCustomer.value = vendors.map(item => ({ label: item.name, value: item.customer_id }));
 });
 
 onMounted(async () => {
   try {
-    await storeKuAdd.fetchAllVendorIdForEntity();
+    await storeKuAdd.fetchAllCustomerIdForEntity();
   } catch (error) {
     console.error("Ошибка при загрузке данных Клиента", error);
   }
 });
-const onVendorChange = async () => {
+const onCustomerChange = async () => {
   store.pagination = null;
-  store.setFilterValue('customer_id', Vendor.value);
+  store.setFilterValue('customer_id', Customer.value);
   toggleTriggerFilter();
 };
 

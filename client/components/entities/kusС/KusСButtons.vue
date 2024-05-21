@@ -163,7 +163,6 @@ const CancelKu = async () => {
   //   contract: selectedRows[0].contract,
   //   product_type: selectedRows[0].product_type,
   //   docu_account: selectedRows[0].docu_account,
-  //   docu_name: selectedRows[0].docu_name,
   //   docu_number: selectedRows[0].docu_number,
   //   docu_date: selectedRows[0].docu_date,
   //   docu_subject: selectedRows[0].docu_subject,
@@ -199,7 +198,6 @@ const ApproveKu = async () => {
   //   contract: selectedRows[0].contract,
   //   product_type: selectedRows[0].product_type,
   //   docu_account: selectedRows[0].docu_account,
-  //   docu_name: selectedRows[0].docu_name,
   //   docu_number: selectedRows[0].docu_number,
   //   docu_date: selectedRows[0].docu_date,
   //   docu_subject: selectedRows[0].docu_subject,
@@ -234,7 +232,6 @@ const СreatedKu = async () => {
   //   contract: selectedRows[0].contract,
   //   product_type: selectedRows[0].product_type,
   //   docu_account: selectedRows[0].docu_account,
-  //   docu_name: selectedRows[0].docu_name,
   //   docu_number: selectedRows[0].docu_number,
   //   docu_date: selectedRows[0].docu_date,
   //   docu_subject: selectedRows[0].docu_subject,
@@ -256,41 +253,41 @@ const СreatedKu = async () => {
 
 //создание графика
 const addGraphic = async () => {
-  const selectedRows = store.multipleSelection
-  if (selectedRows[0].status != "Действует") {
-    ElMessage.error("Создать график можно только для действующего коммерческого условия");
-    return;
-  }
-  const newItem: IKuPostGraphic = {
-    ku_id: selectedRows[0].ku_id,
-    entity_id: selectedRows[0].entity_id,
-    vendor_id: selectedRows[0].vendor_id,
-    period: selectedRows[0].period,
-    date_start: selectedRows[0].date_start,
-    date_end: selectedRows[0].date_end,
-    status: selectedRows[0].status,
-    graph_exists: selectedRows[0].graph_exists,
-  };
-  loading.value = true;
-  try {
-    const response = await GRAPHIC.postGraphic(newItem);
-    await store.getKuFromAPIWithFilter();
-    if (response) {
-      await store.getKuFromAPIWithFilter();
-      console.log("Экземпляр успешно отправлен на бэкенд:", response);
-      ElMessage.success(`График расчета для ${newItem.ku_id} успешно создан.`);
-    } else {
-      console.error("Не удалось отправить экземпляр на бэкенд");
-      ElMessage.error("Возникла ошибка. График расчета не создан.");
-    }
-  } catch (error) {
-    ElMessage.error("Возникла ошибка. График расчета не создан.");
-    console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
-    console.error("Ошибка при отправке экземпляра на бэкенд:", error);
-  } finally {
-    loading.value = false;
+  // const selectedRows = store.multipleSelection
+  // if (selectedRows[0].status != "Действует") {
+  //   ElMessage.error("Создать график можно только для действующего коммерческого условия");
+  //   return;
+  // }
+  // const newItem: IKuСPostGraphic = {
+  //   ku_id: selectedRows[0].ku_id,
+  //   entity: selectedRows[0].entity,
+  //   customer: selectedRows[0].customer,
+  //   period: selectedRows[0].period,
+  //   date_start: selectedRows[0].date_start,
+  //   date_end: selectedRows[0].date_end,
+  //   status: selectedRows[0].status,
+  //   graph_exists: selectedRows[0].graph_exists,
+  // };
+  // loading.value = true;
+  // try {
+  //   const response = await GRAPHIC.postGraphic(newItem);
+  //   await store.getKuFromAPIWithFilter();
+  //   if (response) {
+  //     await store.getKuFromAPIWithFilter();
+  //     console.log("Экземпляр успешно отправлен на бэкенд:", response);
+  //     ElMessage.success(`График расчета для ${newItem.ku_id} успешно создан.`);
+  //   } else {
+  //     console.error("Не удалось отправить экземпляр на бэкенд");
+  //     ElMessage.error("Возникла ошибка. График расчета не создан.");
+  //   }
+  // } catch (error) {
+  //   ElMessage.error("Возникла ошибка. График расчета не создан.");
+  //   console.log("Экземпляр успешно отправлен на бэкенд:", newItem);
+  //   console.error("Ошибка при отправке экземпляра на бэкенд:", error);
+  // } finally {
+  //   loading.value = false;
 
-  }
+  // }
 
 }
 

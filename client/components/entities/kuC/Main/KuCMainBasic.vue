@@ -1,13 +1,13 @@
 <template>
   <el-scrollbar height="40vh">
-    <el-form :model="kuMain" label-position="left" :rules="rules" status-icon ref="ruleFormRef" :show-message=false
+    <el-form :model="store" label-position="left" :rules="rules" status-icon ref="ruleFormRef" :show-message=false
       :hide-required-asterisk=true>
       <div class="kuAddMain">
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
-          <el-form-item label-width="130" label="Код компании" prop="newEntityId">
-            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
-              filterable style="width: 300px" @change="onEntityChange">
+          <el-form-item label-width="130" label="Код компании" prop="kuIdEntityId">
+            <el-select v-model="store.kuIdEntityId" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" @change="onEntityChange" :disabled="isEditButtonDisabled">
               <el-option v-for="item in optionsEntity" :key="item.label" :label="item.value" :value="item.value">
                 <span style="float: left;">{{ item.value }}</span>
                 <span style="float: right; color: var(--el-text-color-secondary);
@@ -15,25 +15,25 @@
               </el-option>
             </el-select>
           </el-form-item>
-          <el-form-item label-width="130" label="Название компании" prop="newEntityName">
-            <el-input v-model="kuMain.newEntityName" size="small" style="width: 300px">
+          <el-form-item label-width="130" label="Название компании" prop="kuIdEntityName">
+            <el-input v-model="store.kuIdEntityName" size="small" style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
           <el-form-item>
-            <el-checkbox v-model="kuMain.newSubsidiaries" :label="labelNewSubsidiaries" size="small"
+            <el-checkbox v-model="store.kuIdSubsidiaries" :label="labelNewSubsidiaries" size="small"
               :disabled="store.disableSubsidiaries" :title="disableSelectEntityTooltip" />
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Описание</el-divider>
           <el-form-item label-width="130" label="Описание">
-            <el-input v-model="kuMain.newDescription" size="small" placeholder="Введите описание" clearable
-              style="width: 300px">
+            <el-input v-model="store.kuIdDescription" size="small" placeholder="Введите описание" clearable
+              style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="130" label="Код клиента" prop="newCustomerId">
+          <el-form-item label-width="130" label="Код клиента" prop="kuIdCustomerId">
             <div>
-              <el-select v-model="kuMain.newCustomerId" size="small" placeholder="Выберите клинета" clearable
-                filterable style="width: 300px" @change="onCustomerChange" :disabled="!kuMain.newEntityId"
-                :title="disableSelectCustomerTooltip">
+              <el-select v-model="store.kuIdCustomerId" size="small" placeholder="Выберите клинета" clearable
+                filterable style="width: 300px" @change="onCustomerChange"
+                :title="disableSelectCustomerTooltip" :disabled="isEditButtonDisabled">
                 <el-option v-for="item in optionsCustomer" :key="item.value" :label="item.value" :value="item.value">
                   <span style="float: left;">{{ item.value }}</span>
                   <span style="float: right; color: var(--el-text-color-secondary);
@@ -43,16 +43,16 @@
             </div>
           </el-form-item>
           <el-form-item label-width="130" label="Контракт">
-            <el-input v-model="kuMain.newContract" size="small" placeholder="Введите контракт" clearable
-              style="width: 300px">
+            <el-input v-model="store.kuIdContract" size="small" placeholder="Введите контракт" clearable
+              style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Период действия</el-divider>
-          <el-form-item label-width="170" label="Тип периода" prop="newType">
-            <el-select v-model="kuMain.newType" size="small" clearable placeholder="Выберите тип периода"
-              style="width: 300px">
+          <el-form-item label-width="170" label="Тип периода" prop="kuIdType">
+            <el-select v-model="store.kuIdType" size="small" clearable placeholder="Выберите тип периода"
+              style="width: 300px" :disabled="isEditButtonDisabled">
               <el-option label="Месяц" value="Месяц"></el-option>
               <el-option label="Квартал" value="Квартал"></el-option>
               <el-option label="Полгода" value="Полгода"></el-option>
@@ -60,26 +60,26 @@
             </el-select>
           </el-form-item>
           <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
-            label-width="170" label="Начальная дата" prop="newDateStart">
-            <el-date-picker v-model="kuMain.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
-              @change="onChangeAndValidateDateStart"></el-date-picker>
+            label-width="170" label="Начальная дата" prop="kuIdDateStart">
+            <el-date-picker v-model="store.kuIdDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
+               clearable el-rowrable placeholder="Выберите начальную дату"
+              @change="onChangeAndValidateDateStart" :disabled="isEditButtonDisabled"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
-            label="Конечная дата" prop="newDateEnd">
-            <el-date-picker v-model="kuMain.newDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
-              @change="onChangeAndValidateDateEnd"></el-date-picker>
+            label="Конечная дата" prop="kuIdDateEnd">
+            <el-date-picker v-model="store.kuIdDateEnd" style="width: 300px" size="small"
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY"  clearable
+              @change="onChangeAndValidateDateEnd" :disabled="isEditButtonDisabled"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Оплата</el-divider>
-          <el-form-item label-width="170" label="Общая сумма премии" prop="newDocu_account">
-            <el-input v-model="kuMain.newPay_sum" size="small" clearable placeholder="Введите сумму премии"
-              style="width: 300px">
+          <el-form-item label-width="170" label="Общая сумма премии" prop="kuIdDocu_account">
+            <el-input v-model="store.kuIdPay_sum" size="small" clearable placeholder="Введите сумму премии"
+              style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Способ оплаты премии" prop="newPay_method">
-            <el-select v-model="kuMain.newPay_method" size="small" clearable placeholder="Выберите способ оплаты"
-              style="width: 300px">
+          <el-form-item label-width="170" label="Способ оплаты премии" prop="kuIdPay_method">
+            <el-select v-model="store.kuIdPay_method" size="small" clearable placeholder="Выберите способ оплаты"
+              style="width: 300px" :disabled="isEditButtonDisabled">
               <el-option label="Оплата" value="Оплата"></el-option>
               <el-option label="Взаимозачет" value="Взаимозачет"></el-option>
             </el-select>
@@ -87,28 +87,28 @@
         </div>
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Договор</el-divider>
-          <el-form-item label-width="170" label="Наименование клиента" prop="newCustomerName">
-            <el-input v-model="kuMain.newCustomerName" size="small" style="width: 300px">
+          <el-form-item label-width="170" label="Наименование клиента" prop="kuIdCustomerName">
+            <el-input v-model="store.kuIdCustomerName" size="small" style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Номер счета" prop="newDocu_account">
-            <el-input v-model="kuMain.newDocu_account" size="small" clearable placeholder="Введите номер счета"
-              style="width: 300px">
+          <el-form-item label-width="170" label="Номер счета" prop="kuIdDocu_account">
+            <el-input v-model="store.kuIdDocu_account" size="small" clearable placeholder="Введите номер счета"
+              style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Номер договора" prop="newDocu_number">
-            <el-input v-model="kuMain.newDocu_number" size="small" clearable placeholder="Введите номер договора"
-              style="width: 300px">
+          <el-form-item label-width="170" label="Номер договора" prop="kuIdDocu_number">
+            <el-input v-model="store.kuIdDocu_number" size="small" clearable placeholder="Введите номер договора"
+              style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Дата договора" prop="newDocu_date"
+          <el-form-item label-width="170" label="Дата договора" prop="kuIdDocu_date"
             :validate-status="docuDateValidation">
-            <el-date-picker v-model="kuMain.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
+            <el-date-picker v-model="store.kuIdDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
+               clearable el-rowrable placeholder="Выберите дату договора" :disabled="isEditButtonDisabled"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
-            <el-input v-model="kuMain.newDocu_subject" style="width: 300px" clearable :rows="4" size="small"
-              type="textarea" placeholder="Введите предмет договора" />
+            <el-input v-model="store.kuIdDocu_subject" style="width: 300px" clearable :rows="4" size="small"
+              type="textarea" placeholder="Введите предмет договора" :disabled="isEditButtonDisabled" />
           </el-form-item>
         </div>
         
@@ -121,79 +121,86 @@
 import { reactive, ref } from 'vue'
 import dayjs from "dayjs";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import type { FormInstance, FormRules } from 'element-plus'
 import type { ICustomerIdAndName } from '~/utils/types/customerTypes';
 import type { IEntityInKu } from '~/utils/types/entityTypes';
-import type { IKuCAddMain } from '~/utils/types/storesTypes';
-const store = useKuCAddStore();
-const kuMain = store.kuAddMain
+import type { IKuCIdStore } from '~/utils/types/storesTypes';
+
+const store = useKuCIdStore();
+const store2 = useKuCAddStore();
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
+
 const ruleFormRef = ref<FormInstance | null>(null);
 onMounted(() => {
-  store.setRuleFormRef(ruleFormRef.value);
+  store2.setRuleFormRef(ruleFormRef.value);
 });
-const rules = reactive<FormRules<IKuCAddMain>>({
+const rules = reactive<FormRules<IKuCIdStore>>({
 
-  newEntityId: [
+  kuIdEntityId: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newEntityName: [
+  kuIdEntityName: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newCustomerId: [
+  kuIdCustomerId: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newCustomerName: [
+  kuIdCustomerName: [
     { required: true, trigger: 'change' },
   ],
-  newType: [
+  kuIdType: [
     { required: true, trigger: 'change' },
   ],
-  newDateEnd: [
+  kuIdDateEnd: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newDateStart: [
+  kuIdDateStart: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newDocu_date: [
+  kuIdDocu_date: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newPay_method: [
+  kuIdPay_method: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newDocu_account: [
+  kuIdDocu_account: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newPay_sum: [
+  kuIdPay_sum: [
     {
       required: true,
       trigger: 'change',
     },
   ],
-  newDocu_number: [
+  kuIdDocu_number: [
     {
       required: true,
       trigger: 'change',
@@ -222,7 +229,7 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 //вывод данных юридического лица
 const optionsEntity = ref<Array<{ label: string; value: string }>>([]);
 watch(
-  () => store.dataEntity,
+  () => store2.dataEntity,
   (dataEntity: IEntityInKu[]) => {
     optionsEntity.value = dataEntity.map((item) => ({
       label: item.name,
@@ -232,7 +239,7 @@ watch(
 );
 onMounted(async () => {
   try {
-    await store.fetchKuEntity({
+    await store2.fetchKuEntity({
       entity_id: "",
       name: "",
       merge_id: "",
@@ -244,16 +251,16 @@ onMounted(async () => {
 
 //вывод данных клинета
 const optionsCustomer = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.dataCustomerId, (customers: ICustomerIdAndName[]) => {
+watch(() => store2.dataCustomerId, (customers: ICustomerIdAndName[]) => {
   optionsCustomer.value = customers.map(item => ({ label: item.name, value: item.customer_id }));
 });
 
 const onEntityChange = async () => {
   //для галочки
-  const entity = store.dataEntity.find(item => item.entity_id === kuMain.newEntityId);
+  const entity = store2.dataEntity.find(item => item.entity_id === store.kuIdEntityId);
   if (entity) {
     if (entity.merge_id) {
-      kuMain.newSubsidiaries = true;
+      store.kuIdSubsidiaries = true;
       console.log(`merge_id для выбранного юр. лица: ${entity.merge_id}`);
       store.disableSubsidiaries = false;
     } else {
@@ -265,32 +272,32 @@ const onEntityChange = async () => {
   }
 
   //для наимен. юр. лица
-  kuMain.newEntityName = "";
+  store.kuIdEntityName = "";
 
-  if (kuMain.newEntityId && kuMain.newEntityId.length > 0) {
-    const selectedEntity = optionsEntity.value.find(option => option.value === kuMain.newEntityId);
+  if (store.kuIdEntityId && store.kuIdEntityId.length > 0) {
+    const selectedEntity = optionsEntity.value.find(option => option.value === store.kuIdEntityId);
     if (selectedEntity) {
-      kuMain.newEntityName = selectedEntity.label;
+      store.kuIdEntityName = selectedEntity.label;
     }
   }
 
   //для клиента
-  store.dataCustomerId = [];
-  kuMain.newCustomerName = "";
+  store2.dataCustomerId = [];
+  store.kuIdCustomerName = "";
 
-  store.setFilterCustomer('entity_id', kuMain.newEntityId);
-  if (kuMain.newEntityId) { // Проверка, что выбрано юр. лицо
-    store.fetchAllCustomerIdForEntity(); // Выполнить запрос с фильтром по производителям
+  store2.setFilterCustomer('entity_id', store.kuIdEntityId);
+  if (store.kuIdEntityId) { // Проверка, что выбрано юр. лицо
+    store2.fetchAllCustomerIdForEntity(); // Выполнить запрос с фильтром по производителям
     console.log('Выполнен запрос на получение данных клиента по фильтру юр.лица.');
   } else {
-    store.removeFilterCustomer("entity_id")
+    store2.removeFilterCustomer("entity_id")
     store.disableSubsidiaries = false;
-    kuMain.newSubsidiaries = false;
+    store.kuIdSubsidiaries = false;
   }
 };
 
 const labelNewSubsidiaries = computed(() => {
-  const entity = store.dataEntity.find(item => item.entity_id === kuMain.newEntityId);
+  const entity = store2.dataEntity.find(item => item.entity_id === store.kuIdEntityId);
 
   if (entity && entity.merge_id) {
     return `Включить дочернии компании: ${entity.merge_id}`;
@@ -299,10 +306,10 @@ const labelNewSubsidiaries = computed(() => {
 });
 
 const onCustomerChange = async () => {
-  kuMain.newCustomerName = "";
-  if (kuMain.newCustomerId && kuMain.newCustomerId.length > 0) {
-    store.setFilterCustomer('customer_id', kuMain.newCustomerId);
-    store.getCustomerNameFromAPIWithFilter()
+  store.kuIdCustomerName = "";
+  if (store.kuIdCustomerId && store.kuIdCustomerId.length > 0) {
+    store2.setFilterCustomer('customer_id', store.kuIdCustomerId);
+    store2.getCustomerNameFromAPIWithFilter()
   } else {
   }
 
@@ -326,11 +333,11 @@ const periods: Record<string, number> = {
 
 // Функция проверки даты начала
 const onChangeAndValidateDateStart = async () => {
-  const startDate = dayjs(kuMain.newDateStart, 'DD.MM.YYYY');
-  const endDate = dayjs(kuMain.newDateEnd, 'DD.MM.YYYY');
+  const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
+  const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
 
   // Проверка на минимальную разницу в зависимости от выбранного периода
-  const minDiff = periods[kuMain.newType];
+  const minDiff = periods[store.kuIdType];
   if (startDate.isAfter(endDate)) {
     dateStartValidation.value = 'error';
     dateStartError.value = 'Начальная дата не может быть позже конечной даты.';
@@ -345,10 +352,10 @@ const onChangeAndValidateDateStart = async () => {
 
 // Функция проверки даты окончания
 const onChangeAndValidateDateEnd = async () => {
-  const startDate = dayjs(kuMain.newDateStart, 'DD.MM.YYYY');
-  const endDate = dayjs(kuMain.newDateEnd, 'DD.MM.YYYY');
+  const startDate = dayjs(store.kuIdDateStart, 'DD.MM.YYYY');
+  const endDate = dayjs(store.kuIdDateEnd, 'DD.MM.YYYY');
   // Проверка на минимальную разницу в зависимости от выбранного периода
-  const minDiff = periods[kuMain.newType];
+  const minDiff = periods[store.kuIdType];
   if (startDate.isAfter(endDate)) {
     dateEndValidation.value = 'error';
     dateEndError.value = 'Конечная дата не может быть раньше начальной даты.';
@@ -361,7 +368,7 @@ const onChangeAndValidateDateEnd = async () => {
   }
 };
 const validateDocuDate = () => {
-  if (!kuMain.newDocu_date) {
+  if (!store.kuIdDocu_date) {
     // Если поле не заполнено
     docuDateValidation.value = 'error';
   } else {
@@ -369,33 +376,33 @@ const validateDocuDate = () => {
   }
 };
 
-watch(() => kuMain.newDocu_date, validateDocuDate);
+watch(() => store.kuIdDocu_date, validateDocuDate);
 // Функция сброса дат при изменении периода
 const resetDatesOnPeriodChange = () => {
 
-  kuMain.newDateStart = "";
-  kuMain.newDateEnd = "";
+  store.kuIdDateStart = "";
+  store.kuIdDateEnd = "";
 };
 // Функция сброса клиента
 const resetCustomerOnEntityChange = () => {
-  kuMain.newCustomerId = "";
+  store.kuIdCustomerId = "";
 };
 // Обработчик изменения выбранного периода
-watch(() => kuMain.newType, (newValue, oldValue) => {
-  if (oldValue !== newValue) {
+watch(() => store.kuIdType, (kuIdValue, oldValue) => {
+  if (oldValue !== kuIdValue) {
     resetDatesOnPeriodChange();
   }
 });
 // Обработчик изменения выбранного юр.лица
-watch(() => kuMain.newEntityId, (newValue, oldValue) => {
-  if (oldValue !== newValue) {
+watch(() => store.kuIdEntityId, (kuIdValue, oldValue) => {
+  if (oldValue !== kuIdValue) {
     resetCustomerOnEntityChange();
   }
 });
 
 
 const disableSelectCustomerTooltip = computed(() => {
-  return !kuMain.newEntityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
+  return !store.kuIdEntityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
 });
 const disableSelectEntityTooltip = computed(() => {
   return store.disableSubsidiaries ? 'У выбранной компании нет дочерних компаний' : '';
@@ -414,8 +421,6 @@ const disableSelectEntityTooltip = computed(() => {
 .kuAddMainCol {
   display: flex;
   flex-direction: column;
-
-
 }
 
 .el-form-item {

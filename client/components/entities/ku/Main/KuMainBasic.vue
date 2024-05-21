@@ -69,13 +69,6 @@
               :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Название договора">
-            <el-select v-model="store.kuIdDocu_name" size="small" clearable style="width: 300px"
-              :disabled="isEditButtonDisabled" placeholder="">
-              <el-option label="Договор премий" value="Договор премий"></el-option>
-              <el-option label="Договор услуг" value="Договор услуг"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label-width="170" label="Номер договора">
             <el-input v-model="store.kuIdDocu_number" size="small" style="width: 300px"
               :disabled="isEditButtonDisabled">

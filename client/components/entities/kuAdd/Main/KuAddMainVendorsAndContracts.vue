@@ -142,17 +142,7 @@ const AddManagers = async () => {
 const deleteRow = (index: number) => {
   store.tableDataVAC.splice(index, 1);
 }
-//для очистки выбора
-const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const toggleSelection = (rows?: IVendorAndContract[]) => {
-  if (rows) {
-    rows.forEach((row) => {
-      multipleTableRef.value!.toggleRowSelection(row, false)
-    })
-  } else {
-    multipleTableRef.value!.clearSelection()
-  }
-}
+
 //получение накладных
 const ExInvoice = async (row: IVendorAndContract) => {
   if(kuMain.newDateStart || kuMain.newDateEnd) {
@@ -165,8 +155,7 @@ const ExInvoice = async (row: IVendorAndContract) => {
     store.dialogFormExInvoiceVisible = true
   } else{
     ElMessage.error("Выберите даты действия КУ на вкладке 'Основное'")
-  }
-    
+  } 
 }
 </script>
 

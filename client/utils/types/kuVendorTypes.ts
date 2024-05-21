@@ -16,7 +16,6 @@ export interface IKuList {
     contract: string;
     product_type: string;
     docu_account: string;
-    docu_name: string;
     docu_number: string;
     docu_date: Date | string;
     docu_subject: string;
@@ -40,7 +39,6 @@ export interface IKuList {
     contract: string;
     product_type: string;
     docu_account: string;
-    docu_name: string;
     docu_number: string;
     docu_date: Date | string;
     docu_subject: string;
@@ -72,7 +70,6 @@ export interface IKuList {
     contract: string;
     product_type: string;
     docu_account: string;
-    docu_name: string;
     docu_number: string;
     docu_date: Date | string;
     docu_subject: string;

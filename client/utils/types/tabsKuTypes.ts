@@ -196,3 +196,6 @@ export interface IContractService {
     article_name: string;
     ratio: number;
   }
+  export interface GetAllServiceReturnData extends Pagination {
+    results: IServiceAndArticle[];
+  }

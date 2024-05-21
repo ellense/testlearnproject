@@ -13,7 +13,7 @@ export interface ICustomerFull {
     bank_bik: string
     corr_account: string
     dir_party: number | null
-    entity_id: string
+    entity: string
     entity_name: string
   }
   export interface IParamCustomers {

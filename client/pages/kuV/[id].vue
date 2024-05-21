@@ -1,6 +1,6 @@
 <template>
     <el-scrollbar height="calc(100vh - 45px)">
-      <h3>Коммерческое условие {{ useKuIdStore().ku_id }}</h3>
+      <h3>Коммерческое условие поставщика {{ useKuIdStore().ku_id }}</h3>
       <FeaturesKuV />
     </el-scrollbar>
   </template>

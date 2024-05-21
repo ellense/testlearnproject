@@ -66,13 +66,7 @@
               style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Название договора" prop="newDocu_name">
-            <el-select v-model="kuMain.newDocu_name" size="small" clearable placeholder="Выберите название договора"
-              style="width: 300px">
-              <el-option label="Договор премий" value="Договор премий"></el-option>
-              <el-option label="Договор услуг" value="Договор услуг"></el-option>
-            </el-select>
-          </el-form-item>
+          
           <el-form-item label-width="170" label="Номер договора" prop="newDocu_number">
             <el-input v-model="kuMain.newDocu_number" size="small" clearable placeholder="Введите номер договора"
               style="width: 300px">
@@ -219,12 +213,6 @@ const rules = reactive<FormRules<IKuAddMain>>({
     },
   ],
   newDocu_account: [
-    {
-      required: true,
-      trigger: 'change',
-    },
-  ],
-  newDocu_name: [
     {
       required: true,
       trigger: 'change',

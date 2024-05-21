@@ -8,7 +8,7 @@
     <el-button size="small" type="danger" plain round @click="store.tableDataExInvoiceSelect.length = 0">Удалить
       все</el-button>
     <el-table :data="tableData2" border style="width: 1200px; margin-top: 10px;" height="33vh"
-      empty-text="Добавьте исключенные накладные" v-loading="loading">
+      empty-text="Добавьте исключенные накладные">
       <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
       <el-table-column property="invoice_number" label="Номер" width="200" show-overflow-tooltip />
       <el-table-column property="invoice_name" label="Наименование" width="200"  show-overflow-tooltip />
@@ -27,25 +27,13 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
 import { Delete } from '@element-plus/icons-vue'
-import type { IExInvoiceForKu } from "~/utils/types/tabsKuTypes";
 
 const store = useKuAddStore();
 const kuMain = store.kuAddMain
-const { getExInvoiceAll } = storeToRefs(
-  store
-);
-
-const tableData = ref<IExInvoiceForKu[]>(getExInvoiceAll.value);
-const loading = ref()
-
-watch(getExInvoiceAll, (value) => {
-  tableData.value = value || [];
-});
 
 //получение накладных
 const ExInvoice = async () => {

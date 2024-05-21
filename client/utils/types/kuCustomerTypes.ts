@@ -5,9 +5,9 @@ import type { IKuId } from "./kuVendorTypes";
 
 export interface IKuCList {
     ku_id: string;
-    entity_id: string;
+    entity: string;
     entity_name: string;
-    customer_id: string;
+    customer: string;
     customer_name: string;
     period: string;
     date_start: Date | string;
@@ -20,12 +20,12 @@ export interface IKuCList {
     docu_number: string;
     docu_date: Date | string;
     docu_subject: string;
-    pay_sum: string;
+    pay_sum: number | null;
     pay_method: string;
   }
   export interface IKuCPost {
-    entity_id: string;
-    customer_id: string;
+    entity: string;
+    customer: string;
     period: string;
     date_start: Date | string;
     date_end: Date | string;
@@ -41,8 +41,8 @@ export interface IKuCList {
   }
   export interface IKuCPostGraphic {
     ku_id: string;
-    entity_id: string;
-    customer_id: string;
+    entity: string;
+    customer: string;
     period: string;
     date_start: Date | string;
     date_end: Date | string;
@@ -52,19 +52,18 @@ export interface IKuCList {
   export interface IKuCUpdate {
     ku_id: string;
     status: string;
-    entity_id: string;
-    customer_id: string;
+    entity: string;
+    customer: string;
     period: string;
     date_start: Date | string;
     date_end: Date | string;
     description: string;
     contract: string;
     docu_account: string;
-    docu_name: string;
     docu_number: string;
     docu_date: Date | string;
     docu_subject: string;
-    pay_sum: string;
+    pay_sum: number | null;
     pay_method: string;
   }
   export interface IKuCStore {
@@ -73,7 +72,6 @@ export interface IKuCList {
     tableData: IKuCList[];
     pagination: Pagination | null;
     countRowTable: number;
-    search: string;
     sortProp: string;
     sortOrder: string;
     legalEntity: string[]

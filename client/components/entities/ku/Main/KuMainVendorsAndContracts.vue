@@ -19,6 +19,8 @@
       </el-table-column>
       <el-table-column align="center" label="Операция">
         <template #default="scope">
+          <el-button text type="success" :icon="DocumentRemove" size="small"
+            @click.prevent="ExInvoice(scope.row)">Исключить накладные</el-button>
           <el-button text type="danger" :icon="Delete" size="small"
             @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
         </template>
@@ -57,6 +59,7 @@
         </span>
       </template>
     </el-dialog>
+    <EntitiesKuMainDialogExInvoice/>
   </el-scrollbar>
 </template>
 
@@ -65,18 +68,20 @@ import { storeToRefs } from "pinia";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
-import { Delete } from '@element-plus/icons-vue'
+import dayjs from "dayjs";
+import { Delete,DocumentRemove } from '@element-plus/icons-vue'
 import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
+import type { IVendorAndContract } from "~/utils/types/tabsKuTypes";
 const { getVAC } = storeToRefs(
   useKuIdStore()
 );
 const store = useKuIdStore();
-const kuStore = useKuAddStore();
+const store2 = useKuAddStore();
 
 const optionsEntity = ref<Array<{ label: string; value: string }>>([]);
 watch(
-  () => kuStore.dataEntity,
+  () => store2.dataEntity,
   (dataEntity: IEntityInKu[]) => {
     optionsEntity.value = dataEntity.map((item) => ({
       label: item.name,
@@ -86,7 +91,7 @@ watch(
 );
 onMounted(async () => {
   try {
-    await kuStore.fetchKuEntity({
+    await store2.fetchKuEntity({
       entity_id: "",
       name: "",
       merge_id: "",
@@ -97,18 +102,18 @@ onMounted(async () => {
 });
 const onEntityChange = async () => {
   //для поставщика
-  kuStore.dataVendorId = [];
-  kuStore.setFilterVendor('entity_id', store.kuIdEntityIdVAC);
+  store2.dataVendorId = [];
+  store2.setFilterVendor('entity_id', store.kuIdEntityIdVAC);
   if (store.kuIdEntityIdVAC) { 
-    kuStore.fetchAllVendorIdForEntity(); 
+    store2.fetchAllVendorIdForEntity(); 
     console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
   } else {
-    kuStore.removeFilterVendor("entity_id")
+    store2.removeFilterVendor("entity_id")
   }
 };
 
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => kuStore.dataVendorId, (vendors: IVendorIdAndName[]) => {
+watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
   optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 
@@ -125,7 +130,7 @@ const AddManagers = async () => {
   const selectedVendor = optionsVendor.value.find(option => option.value === store.kuIdVendorIdVAC);
   const vendorName = selectedVendor ? selectedVendor.label : '';
 
-    kuStore.tableDataVAC.push({
+    store2.tableDataVAC.push({
       id: null,
       type_partner: "Поставщик",
       vendor_id: store.kuIdVendorIdVAC,
@@ -142,6 +147,20 @@ const AddManagers = async () => {
 //удаление строк
 const deleteRow = (index: number) => {
   store.tableDataVAC.splice(index, 1);
+}
+//получение накладных
+const ExInvoice = async (row: IVendorAndContract) => {
+  if(store.kuIdDateStart || store.kuIdDateEnd) {
+    store.kuIdVendorIdExInvoice = row.vendor_id
+    store.kuIdVendorNameExInvoice = row.vendor_name
+    store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"));
+    store2.setFilterExInvoice('end_date', dayjs(store.kuIdDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"));
+    store2.setFilterExInvoice('vendor_id', row.vendor_id);
+    await store2.getInvoicesFromAPIWithFilter();
+    store.dialogFormExInvoiceVisible = true
+  } else{
+    ElMessage.error("Выберите даты действия КУ на вкладке 'Основное'")
+  } 
 }
 </script>
 

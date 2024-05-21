@@ -8,7 +8,7 @@ import type { IProducer, GetAllProducer } from "~/utils/types/producerTypes";
 import type { IProduct, GetAllProducts } from "~/utils/types/productTypes";
 import type { IKuAddStore } from "~/utils/types/storesTypes";
 import type { IExInvoiceForKu, IManagerForKu, GetParamExInvoicesForKu, IParamManagers, IContractPost } from "~/utils/types/tabsKuTypes";
-import type { GetAllCategory, ITree } from "~/utils/types/treetypes";
+import type { GetAllCategory, ITree } from "~/utils/types/treeTypes";
 import type { IVendorIdAndName, IParamVendorsForEntity } from "~/utils/types/vendorTypes";
 
 
@@ -29,7 +29,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             newContract: "",
             newProduct_type: "",
             newDocu_account: "",
-            newDocu_name: "",
             newDocu_number: "",
             newDocu_date: "",
             newDocu_subject: "",
@@ -264,22 +263,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 delete this.$state.filterVendorValue[field]
             }
         },
-        // async getVendorDetailFromApi(vendorId: string) {
-        //     try {
-        //       const results = await VENDOR.getVendorDetail({
-        //         vendor_id: vendorId,
-        //       });
-        //       this.$state.valueVendorInfo = [results];
-        //     //   this.$state.kuid = results.ku_id;
-        //     //   this.$state.vendorid = results.vendor_id;
-        //     //   this.$state.entityid = results.entity_id;
-        //       console.log("успешно получили данные вендор_айди", results);
-        //       console.log("добавили данные в valueVendorInfo[] ", this.$state.valueVendorInfo);
-        //     //   console.log("номер ку графика, поставщик, юр.лицо ", this.$state.kuid, ",", this.$state.vendorid, ",", this.$state.entityid);
-        //     } catch (error) {
-        //       console.error("Ошибка при получении данных вендор_айди:", error);
-        //     }
-        //   },
 
 
         ////////////////////////////////////////////////////////////////////
@@ -602,7 +585,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.kuAddMain.newContract = '';
             this.kuAddMain.newProduct_type = '';
             this.kuAddMain.newDocu_account = '';
-            this.kuAddMain.newDocu_name = '';
             this.kuAddMain.newDocu_number = '';
             this.kuAddMain.newDocu_date = '';
             this.kuAddMain.newDocu_subject = '';

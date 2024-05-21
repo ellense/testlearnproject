@@ -46,7 +46,6 @@ onBeforeRouteLeave((to, from, next) => {
     kuMain.newContract !== '' ||
     kuMain.newProduct_type !== '' ||
     kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_name !== '' ||
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
@@ -162,7 +161,6 @@ const createNewItem = () => {
     contract: kuMain.newContract,
     product_type: kuMain.newProduct_type,
     docu_account: kuMain.newDocu_account,
-    docu_name: kuMain.newDocu_name,
     docu_number: kuMain.newDocu_number,
     docu_date: dayjs(kuMain.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
     docu_subject: kuMain.newDocu_subject,
@@ -325,7 +323,6 @@ const addClose = () => {
     kuMain.newContract !== '' ||
     kuMain.newProduct_type !== '' ||
     kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_name !== '' ||
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||

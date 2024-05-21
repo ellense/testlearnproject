@@ -45,7 +45,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdContract: "",
         kuIdProduct_type: "",
         kuIdDocu_account: "",
-        kuIdDocu_name: "",
         kuIdDocu_number: "",
         kuIdDocu_date: "",
         kuIdDocu_subject: "",
@@ -63,6 +62,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdFIOEntity: "",
         kuIdPostEntity: "",
         kuIdDocEntity: "",
+        kuIdVendorIdExInvoice: "",
+        kuIdVendorNameExInvoice: "",
         valueProducer_nameContract: "",
         valueBrand_nameContract: "",
         initialState: {
@@ -80,7 +81,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             kuIdContract: "",
             kuIdProduct_type: "",
             kuIdDocu_account: "",
-            kuIdDocu_name: "",
             kuIdDocu_number: "",
             kuIdDocu_date: "",
             kuIdDocu_subject: "",
@@ -98,6 +98,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
             kuIdFIOEntity: "",
             kuIdPostEntity: "",
             kuIdDocEntity: "",
+            kuIdVendorIdExInvoice: "",
+            kuIdVendorNameExInvoice: "",
             valueProducer_nameContract: "",
             valueBrand_nameContract: "",
             tableDataInRequirement: [],
@@ -126,6 +128,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         getPercent: (state) => state.tableDataPercent,
         getVAC: (state) => state.tableDataVAC,
         getIExInvoiceForKu: (state) => state.tableDataExInvoiceSelect,
+        getManagerForKu: (state) => state.tableDataManagerSelect,
 
     },
 
@@ -134,14 +137,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
         setKuIdVendorName(name: string) {
             this.kuIdVendorName = name;
         },
-        handleSelectionChangeProduct(val: IProduct[]) {
-            this.multipleSelectionProduct = val;
-        },
-        handleSelectionChangeExInvoice(val: IExInvoiceForKu[]) {
-            this.multipleSelectionExInvoice = val;
-        },
         //получение ku_id
-        async getKuDetailFromApi(kuId: string) {
+        async getKuDetail_API(kuId: string) {
             try {
                 const results = await KU.getInfoKu({
                     ku_id: kuId,
@@ -159,7 +156,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.kuIdContract = results.contract;
                 this.$state.kuIdProduct_type = results.product_type;
                 this.$state.kuIdDocu_account = results.docu_account;
-                this.$state.kuIdDocu_name = results.docu_name;
                 this.$state.kuIdDocu_number = results.docu_number;
                 this.$state.kuIdDocu_date = new Date(results.docu_date)
                 this.$state.kuIdDocu_subject = results.docu_subject;
@@ -181,7 +177,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.initialState.kuIdContract = results.contract;
                 this.$state.initialState.kuIdProduct_type = results.product_type;
                 this.$state.initialState.kuIdDocu_account = results.docu_account;
-                this.$state.initialState.kuIdDocu_name = results.docu_name;
                 this.$state.initialState.kuIdDocu_number = results.docu_number;
                 this.$state.initialState.kuIdDocu_date = new Date(results.docu_date)
                 this.$state.initialState.kuIdDocu_subject = results.docu_subject;
@@ -218,7 +213,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
         setSearchProductEx(query: string) {
             this.$state.searchProductExcluded = query;
         },
-        async fetchInRequirementForKuId(ku_id?: string, page?: number) {
+        async getInRequirementForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuInRequirements({
                 ku_id, page_size: this.$state.countRowTable,
                 page,
@@ -227,7 +222,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные вкл условий ку_айди:', tableData);
                     this.$state.tableDataInRequirement = tableData.results;
                     this.$state.initialState.tableDataInRequirement = this.$state.tableDataInRequirement.slice();
-                    // console.log('tableDataInRequirement:', this.$state.tableDataInRequirement);
                     console.log('initialState.tableDataInRequirement:', this.$state.initialState.tableDataInRequirement);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -240,7 +234,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
-        async fetchExRequirementForKuId(ku_id?: string, page?: number) {
+        async getExRequirementForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuExRequirements({
                 ku_id, page_size: this.$state.countRowTable,
                 page,
@@ -249,7 +243,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные искл условий ку_айди:', tableData);
                     this.$state.tableDataExRequirement = tableData.results;
                     this.$state.initialState.tableDataExRequirement = this.$state.tableDataExRequirement.slice();
-                    // console.log('tableDataExRequirement:', this.$state.tableDataExRequirement);
                     console.log('initialState.tableDataExRequirement:', this.$state.initialState.tableDataExRequirement);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -263,7 +256,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 });
         },
         //получение бонуса ku_id
-        async fetchBonusForKuId(ku_id?: string, page?: number) {
+        async getBonusForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuRequirementBonus({
                 ku_id, page_size: this.$state.countRowTable,
                 page,
@@ -272,7 +265,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные бонуса ку_айди:', tableData);
                     this.$state.tableDataPercent = tableData.results;
                     this.$state.initialState.tableDataPercent = this.$state.tableDataPercent.slice();
-                    // console.log('tableDataPercent:', this.$state.tableDataPercent);
                     console.log('initialState.tableDataPercent:', this.$state.tableDataPercent);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -286,7 +278,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 });
         },
         //получение поставщиков и договоров ku_id
-        async fetchVACForKuId(ku_id?: string, page?: number) {
+        async getVACForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuVAC({
                 ku_id, page_size: this.$state.countRowTable,
                 page,
@@ -295,7 +287,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные поставщиков и договоров ку_айди:', tableData);
                     this.$state.tableDataVAC = tableData.results;
                     this.$state.initialState.tableDataVAC = this.$state.tableDataVAC.slice();
-                    // console.log('tableDataPercent:', this.$state.tableDataPercent);
                     console.log('initialState.tableDataPercent:', this.$state.tableDataVAC);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -309,7 +300,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 });
         },
         //получение искл. накладных ku_id
-        async fetchExInvoiceForKuId(ku_id?: string, page?: number) {
+        async getExInvoiceForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuExInvoiceForKuId({
                 ku_id, page_size: this.$state.countRowTable,
                 page,
@@ -318,7 +309,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     console.log('Получены данные искл накладных ку_айди:', tableData);
                     this.$state.tableDataExInvoiceSelect = tableData.results;
                     this.$state.initialState.tableDataExInvoiceSelect = this.$state.tableDataExInvoiceSelect.slice();
-                    // console.log('tableDataExInvoiceSelect:', this.$state.tableDataExInvoiceSelect);
                     console.log('initialState.tableDataExInvoiceSelect:', this.$state.initialState.tableDataExInvoiceSelect);
                     this.$state.pagination = {
                         count: tableData.count,
@@ -331,8 +321,30 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+        //получение кат. менеджеров ku_id
+        async getManagerForKuId_API(ku_id?: string, page?: number) {
+            await KU.getKuManager({
+                ku_id, page_size: this.$state.countRowTable,
+                page,
+            })
+                .then((tableData) => {
+                    console.log('Получены данные менеджеров ку_айди:', tableData);
+                    this.$state.tableDataManagerSelect = tableData.results;
+                    this.$state.initialState.tableDataManagerSelect = this.$state.tableDataManagerSelect.slice();
+                    console.log('initialState.tableDataManagerSelect:', this.$state.initialState.tableDataManagerSelect);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных менеджеров ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
         //получение долж. лиц ku_id
-        async fetchOfficialForKuId(ku_id?: string, page?: number) {
+        async getOfficialForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuOfficial({
                 ku_id, page_size: this.$state.countRowTable,
                 page,
@@ -399,7 +411,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.kuIdContract !== this.initialState.kuIdContract ||
                 this.kuIdProduct_type !== this.initialState.kuIdProduct_type ||
                 this.kuIdDocu_account !== this.initialState.kuIdDocu_account ||
-                this.kuIdDocu_name !== this.initialState.kuIdDocu_name ||
                 this.kuIdDocu_number !== this.initialState.kuIdDocu_number ||
                 this.kuIdDocu_date !== this.initialState.kuIdDocu_date ||
                 this.kuIdDocu_subject !== this.initialState.kuIdDocu_subject ||
@@ -465,7 +476,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdContract = '';
             this.kuIdProduct_type = '';
             this.kuIdDocu_account = '';
-            this.kuIdDocu_name = '';
             this.kuIdDocu_number = '';
             this.kuIdDocu_date = '';
             this.kuIdDocu_subject = '';
@@ -511,7 +521,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.initialState.kuIdContract = '';
             this.initialState.kuIdProduct_type = '';
             this.initialState.kuIdDocu_account = '';
-            this.initialState.kuIdDocu_name = '';
             this.initialState.kuIdDocu_number = '';
             this.initialState.kuIdDocu_date = '';
             this.initialState.kuIdDocu_subject = '';

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useKuIdStore } from "~~/stores/kuIdStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import type { FormInstance } from 'element-plus'
 import type { ICustomerIdAndName, IParamCustomersKU } from "~/utils/types/customerTypes";
 import type { IEntityInKu } from "~/utils/types/entityTypes";
@@ -159,7 +159,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 console.error("Произошла ошибка", error);
             }
         },
-        //получение данных о поставщиках для создания
+        //получение данных о поставщиках для VAC
         async fetchAllVendorIdForEntity() {
             try {
                 let allVendors: IVendorIdAndName[] = [];
@@ -200,21 +200,21 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         //получение данных о клиентаъх для создания
         async fetchAllCustomerIdForEntity() {
             try {
-                let allVendors: ICustomerIdAndName[] = [];
+                let allCustomers: ICustomerIdAndName[] = [];
                 let nextPage = 1;
                 let totalPages = 1;
                 while (nextPage <= totalPages) {
-                    const vendors = await CUSTOMER.getCustomersForEntityInKU({
+                    const customers = await CUSTOMER.getCustomersForEntityInKU({
                         page_size: this.$state.countRowTable2,
                         page: nextPage,
                         entity_id: this.$state.filterCustomerValue.entity_id,
                     });
-                    allVendors = allVendors.concat(vendors.results);
-                    totalPages = Math.ceil(vendors.count / this.$state.countRowTable2);
+                    allCustomers = allCustomers.concat(customers.results);
+                    totalPages = Math.ceil(customers.count / this.$state.countRowTable2);
                     nextPage++;
                 }
-                console.log("Все данные о клиентах:", allVendors);
-                this.$state.dataCustomerId = allVendors;
+                console.log("Все данные о клиентах:", allCustomers);
+                this.$state.dataCustomerId = allCustomers;
 
             } catch (error) {
                 console.error(
@@ -232,14 +232,14 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 page,
                 customer_id: this.$state.filterCustomerValue.customer_id,
             })
-                .then((dataVendor) => {
-                    this.$state.kuAddMain.newCustomerName = dataVendor.results[0].name;
-                    useKuIdStore().setKuIdVendorName(dataVendor.results[0].name)
-                    console.log('Получены данные vendorName:', this.$state.kuAddMain.newCustomerName, useKuIdStore().kuIdVendorName);
+                .then((dataCustomer) => {
+                    this.$state.kuAddMain.newCustomerName = dataCustomer.results[0].name;
+                    useKuCIdStore().setKuIdCustomerName(dataCustomer.results[0].name)
+                    console.log('Получены данные customerName:', this.$state.kuAddMain.newCustomerName, useKuCIdStore().kuIdCustomerName);
                     this.$state.pagination = {
-                        count: dataVendor.count,
-                        previous: dataVendor.previous,
-                        next: dataVendor.next,
+                        count: dataCustomer.count,
+                        previous: dataCustomer.previous,
+                        next: dataCustomer.next,
                     };
                 })
                 .catch((error) => Promise.reject(error));

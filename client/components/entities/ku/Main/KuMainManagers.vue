@@ -19,7 +19,7 @@
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
         <el-table style="width: 680px" height="300" :data="tableData" border
-          @selection-change="store2.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading">
+          @selection-change="store2.handleSelectionChangeManager" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="30" />
           <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
           <el-table-column property="description" label="Описание" width="350" show-overflow-tooltip />
@@ -53,6 +53,9 @@ const store2 = useKuAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   useKuAddStore()
 );
+const { getManagerForKu } = storeToRefs(
+  useKuIdStore()
+);
 const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
 });
@@ -69,15 +72,15 @@ const handleSizeChange = async (val: number) => {
   pageSize.value = val;
   store2.setCountRowTable(val);
   try {
-    // await store2.getProductFromExcludedWithFilter();
+     await store2.getManagersFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных кат. менеджеров", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  // store2.setFilterExInvoice('page', page);
-  //   store2.getProductFromExcludedWithFilter(page);
+  store2.setFilterManager('page', page);
+    store2.getManagersFromAPIWithFilter(page);
 };
 
 //для очистки выбора
@@ -92,6 +95,9 @@ const toggleSelection = (rows?: IManagerForKu[]) => {
   }
 }
 const tableData2 = ref(store.tableDataManagerSelect);
+watch(getManagerForKu, (value) => {
+  tableData2.value = value || [];
+});
 
 //добавление условий
 const AddManagers = () => {

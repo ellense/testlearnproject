@@ -3,11 +3,11 @@ import type { Pagination } from "./generalTypes";
 //////////////////////////////////////////// график клиентов //////////////////////////////////////////////
 export interface IGraphicC {
     graph_id: number | null;
-    ku_id: string;
-    entity_id: string;
+    ku: string;
+    entity: string;
     entity_name: string;
-    vendor_id: string;
-    vendor_name: string;
+    customer: string;
+    customer_name: string;
     period: string;
     date_start: Date | string | null;
     date_end: Date | string | null;
@@ -22,11 +22,11 @@ export interface IGraphicC {
 
   export interface IGraphicСInfo {
     graph_id: number | null;
-    entity_id: string;
+    entity: string;
     entity_name: string;
-    ku_id: string;
-    vendor_id: string;
-    vendor_name: string;
+    ku: string;
+    customer: string;
+    customer_name: string;
     period: string;
     date_start: Date | string;
     date_end: Date | string;
@@ -43,7 +43,7 @@ export interface IGraphicC {
     page?: number;
     ku_id?: string[];
     entity_id?: string[];
-    vendor_id?: string[];
+    customer_id?: string[];
     status?: string[];
     period?: string[]
     date_start_s?: string,
