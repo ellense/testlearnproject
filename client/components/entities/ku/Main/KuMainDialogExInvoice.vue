@@ -15,7 +15,7 @@
     </div>
     <el-scrollbar class="scrollTableFiltres">
       <el-table style="width: 100%" height="300" :data="tableData"
-        @selection-change="store.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading" stripe>
+        @selection-change="store2.handleSelectionChangeExInvoice" ref="multipleTableRef" v-loading="loading" stripe>
         <el-table-column type="selection" width="40" />
         <el-table-column prop="invoice_id" label="ID" width="90" sortable show-overflow-tooltip />
         <el-table-column prop="invoice_number" label="Номер" width="150" sortable show-overflow-tooltip />
@@ -117,10 +117,10 @@ const toggleSelection = (rows?: IExInvoiceForKu[]) => {
 };
 
 const AddExInvoice = () => {
-  const selectedRows = store.multipleSelectionExInvoice;
+  const selectedRows = store2.multipleSelectionExInvoice;
   selectedRows.forEach(row => {
     store.tableDataExInvoiceSelect.push({
-      id: null,
+      id: row.id,
       invoice_id: row.invoice_id,
       vendor_id: row.vendor_id,
       vendor_name: row.vendor_name,

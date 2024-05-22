@@ -20,7 +20,7 @@ import { onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import type { IKuCList } from "~/utils/types/kuCustomerTypes";
-import type { IServicesPost, IOfficialForKuPost } from "~/utils/types/tabsKuTypes";
+import type { IServicesPost, IOfficialForKuPost, IManagerForKu, IServiceAndArticle } from "~/utils/types/tabsKuTypes";
 
 const clearDataBeforeLeave = () => {
   store.clearNewData()
@@ -94,7 +94,7 @@ const createKU = async () => {
     loading.value = true;
 
     const response = await KUC.postKu(createNewItem())
-    const responses = await postRequirements(response, store.tableDataServiceSelect);
+    const responses = await postService(response, store.tableDataServiceSelect);
     const response2 = await postManager(response, store.tableDataManagerSelect);
     const response3 = await KUC.postKuOfficial(createOfficial(response));
 
@@ -116,8 +116,8 @@ const createKU = async () => {
 
 const createNewItem = () => {
   return {
-    entity_id: kuMain.newEntityId,
-    customer_id: kuMain.newCustomerId,
+    entity: kuMain.newEntityId,
+    customer: kuMain.newCustomerId,
     period: kuMain.newType,
     date_start: dayjs(kuMain.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
     date_end: dayjs(kuMain.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
@@ -133,13 +133,11 @@ const createNewItem = () => {
   };
 };
 
-const postRequirements = async (response: IKuCList, dataArray: any,) => {
-  const requirementsArray = dataArray.map((item: IServicesPost) => ({
-    ku_id: response.ku_id,
-    service_code: item.service_code,
-    service_name: item.service_name,
-    article_code: item.article_code,
-    article_name: item.article_name,
+const postService = async (response: IKuCList, dataArray: any,) => {
+  const requirementsArray = dataArray.map((item: IServiceAndArticle) => ({
+    ku: response.ku_id,
+    service: item.service,
+    article: item.article,
     ratio: item.ratio,
   }));
 
@@ -155,10 +153,9 @@ const postRequirements = async (response: IKuCList, dataArray: any,) => {
 
 
 const postManager = async (response: IKuCList, dataArray: any) => {
-  const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
-    ku_id: response.ku_id,
-    group: item.group,
-    discription: item.discription
+  const itemsArray = dataArray.map((item: IManagerForKu) => ({
+    ku: response.ku_id,
+    manager: item.id,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {

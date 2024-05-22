@@ -5,36 +5,35 @@
                 <div class="kuAddMainCol">
                     <el-divider content-position="left" style=" color: #337ecc">Контрагент</el-divider>
                     <el-form-item label-width="200" label="ФИО">
-                        <el-input v-model="store.newOfFIOСounteragent" size="small" clearable
-                            placeholder="Введите в род. падеже" style="width: 300px">
+                        <el-input v-model="store.kuIdFIOСounteragent" size="small" clearable style="width: 300px"
+                            :disabled="isEditButtonDisabled">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Должность">
-                        <el-input v-model="store.newOfPostСounteragent" size="small" clearable
-                            placeholder="Введите в род. падеже" style="width: 300px">
+                        <el-input v-model="store.kuIdPostСounteragent" size="small" clearable style="width: 300px"
+                            :disabled="isEditButtonDisabled">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Уполномочивающий документ">
-                        <el-input v-model="store.newOfDocСounteragent" size="small" clearable
-                            placeholder="Введите в род. падеже" style="width: 300px">
+                        <el-input v-model="store.kuIdDocСounteragent" size="small" clearable style="width: 300px"
+                            :disabled="isEditButtonDisabled">
                         </el-input>
                     </el-form-item>
                 </div>
                 <div class="kuAddMainCol">
                     <el-divider content-position="left" style=" color: #337ecc">Юридическое лицо</el-divider>
                     <el-form-item label-width="200" label="ФИО">
-                        <el-input v-model="store.newOfFIOEntity" size="small" clearable style="width: 300px"
-                            placeholder="Введите в род. падеже">
+                        <el-input v-model="store.kuIdFIOEntity" size="small" clearable style="width: 300px"
+                            :disabled="isEditButtonDisabled">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Должность">
-                        <el-input v-model="store.newOfPostEntity" size="small" clearable
-                            placeholder="Введите в род. падеже" style="width: 300px">
+                        <el-input v-model="store.kuIdPostEntity" size="small" clearable style="width: 300px"
+                            :disabled="isEditButtonDisabled">
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Уполномочивающий документ">
-                        <el-input v-model="store.newOfDocEntity" size="small" clearable
-                            placeholder="Введите в род. падеже" style="width: 300px">
+                        <el-input v-model="store.kuIdDocEntity" size="small" clearable style="width: 300px" v>
                         </el-input>
                     </el-form-item>
                 </div>
@@ -45,8 +44,11 @@
 </template>
 
 <script setup lang="ts">
-import { useKuCAddStore } from "~~/stores/kuCAddStore";
-const store = useKuCAddStore();
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
+const store = useKuCIdStore();
+const isEditButtonDisabled = computed(() => {
+    return store.kuIdStatus !== 'Создано';
+});
 </script>
 
 <style scoped>

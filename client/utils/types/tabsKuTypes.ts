@@ -125,7 +125,8 @@ export interface IParamKuId {
   
   //кат. менеджеры
   export interface IManagerForKu {
-    id: number | null;
+    id: number | null
+    manager: number | null;
     group: string;
     description: string;
   }
@@ -138,8 +139,8 @@ export interface IParamKuId {
     results: IManagerForKu[];
   }
   export interface IManagerForKuPost {
-    ku_id: string
-    id: number | null;
+    ku: string
+    manager: number | null;
   }
   
   //должностные лица
@@ -182,18 +183,19 @@ export interface IContractService {
   }
   // оказываемые услуги
   export interface IServiceAndArticle {
+    id: number | null
+    service: number | null
     service_code: string;
     service_name: string;
+    article: number | null
     article_code: string;
     article_name: string;
     ratio: number | null;
   }
   export interface IServicesPost {
     ku_id: string;
-    service_code: string;
-    service_name: string;
-    article_code: string;
-    article_name: string;
+    service: string;
+    article: string;
     ratio: number;
   }
   export interface GetAllServiceReturnData extends Pagination {

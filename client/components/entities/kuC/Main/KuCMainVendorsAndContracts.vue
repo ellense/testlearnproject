@@ -1,9 +1,9 @@
 <template>
   <el-scrollbar height="40vh">
-    <el-button size="small" type="primary" plain round @click="store.dialogFormVACVisible = true"
-      class="buttonAdd">Добавить</el-button>
+    <el-button size="small" type="primary" plain round @click="store.dialogFormVAC = true"
+      class="buttonAdd" :disabled="isEditButtonDisabled">Добавить</el-button>
     <el-button size="small" type="danger" plain round @click="store.tableDataVAC.length = 0"
-      class="buttonAdd">Удалить
+      class="buttonAdd" :disabled="isEditButtonDisabled">Удалить
       все</el-button>
     <el-table :data="tableData" border style="width: 100%; margin-top: 10px;" height="35vh"
       empty-text="Добавьте поставщиков"  >
@@ -21,11 +21,11 @@
       <el-table-column align="center" label="Операция">
         <template #default="scope">
           <el-button text type="danger" :icon="Delete" size="small"
-            @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
+            @click.prevent="deleteRow(scope.$index)" :disabled="isEditButtonDisabled">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-dialog v-model="store.dialogFormVACVisible" title="Выбор поставщика" close-on-click-modal
+    <el-dialog v-model="store.dialogFormVAC" title="Выбор поставщика" close-on-click-modal
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
         <el-form>
@@ -53,7 +53,7 @@
       </el-scrollbar>
       <template #footer>
         <span class="dialog-footer">
-          <el-button @click="store.dialogFormVACVisible = false">Отмена</el-button>
+          <el-button @click="store.dialogFormVAC = false">Отмена</el-button>
           <el-button @click="AddManagers()">Сохранить</el-button>
         </span>
       </template>
@@ -63,17 +63,23 @@
 
 <script setup lang="ts">
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 
-const store = useKuCAddStore();
-const kuMain = store.kuAddMain
+const store = useKuCIdStore();
+const store2 = useKuCAddStore();;
+const kuMain = store2.kuAddMain
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+}); 
 
 const optionsEntity = ref<Array<{ label: string; value: string }>>([]);
 watch(
-  () => store.dataEntity,
+  () => store2.dataEntity,
   (dataEntity: IEntityInKu[]) => {
     optionsEntity.value = dataEntity.map((item) => ({
       label: item.name,
@@ -83,7 +89,7 @@ watch(
 );
 onMounted(async () => {
   try {
-    await store.fetchKuEntity({
+    await store2.fetchKuEntity({
       entity_id: "",
       name: "",
       merge_id: "",
@@ -94,18 +100,18 @@ onMounted(async () => {
 });
 const onEntityChange = async () => {
   //для поставщика
-  store.dataVendorId = [];
-  store.setFilterVendor('entity_id', store.valueEntityIdVAC);
+  store2.dataVendorId = [];
+  store2.setFilterVendor('entity_id', store.valueEntityIdVAC);
   if (store.valueEntityIdVAC) { 
-    store.fetchAllVendorIdForEntity(); 
+    store2.fetchAllVendorIdForEntity(); 
     console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
   } else {
-    store.removeFilterVendor("entity_id")
+    store2.removeFilterVendor("entity_id")
   }
 };
 
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
+watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
   optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
 
@@ -132,7 +138,7 @@ const AddManagers = () => {
     });
     store.valueEntityIdVAC = "";
     store.valueVendorIdVAC = "";
-  store.dialogFormVACVisible = false;
+  store.dialogFormVAC = false;
 };
 //удаление менеджеров
 const deleteRow = (index: number) => {

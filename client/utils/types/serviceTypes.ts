@@ -19,6 +19,11 @@ export interface IParamServices {
 }
 // Услуги
 export interface IService {
+  id: number | null
+  service_code: string;
+  service_name: string;
+}
+export interface IServicePost {
   service_code: string;
   service_name: string;
 }
@@ -28,6 +33,11 @@ export interface IServicesReturnData extends Pagination {
 
 //Статьи Услуг
 export interface IArticle {
+  id: number | null
+  article_code: string;
+  article_name: string;
+}
+export interface IArticlePost {
   article_code: string;
   article_name: string;
 }
@@ -37,6 +47,7 @@ export interface IArticleReturnData extends Pagination {
 
 // Прайслист статей услуг
 export interface IPricelist {
+  id: number | null
   date_action: Date | string
   date_expiration: Date | string;
   article_code: string;
@@ -50,6 +61,7 @@ export interface IPricelistReturnData extends Pagination {
 
 //места оказания услуг
 export interface IPlace {
+  id: number | null
   shop_code: string;
   shop_name: string;
   address: string;

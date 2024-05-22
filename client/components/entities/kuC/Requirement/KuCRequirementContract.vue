@@ -1,9 +1,9 @@
 <template>
         <el-button size="small" type="primary" plain round
-            @click="store.dialogFormContractVisible = true">Добавить</el-button>
-        <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0">Удалить
+            @click="store.dialogFormContractVisible = true" :disabled="isEditButtonDisabled">Добавить</el-button>
+        <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0" :disabled="isEditButtonDisabled">Удалить
             все</el-button>
-        <el-button size="small" type="success" plain round @click="FormContract()">Cформировать поле контакт</el-button>
+        <el-button size="small" type="success" plain round @click="FormContract()" :disabled="isEditButtonDisabled">Cформировать поле контакт</el-button>
     <div class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:30vh" height="30vh" :data="tableData" border
             empty-text="" >
@@ -19,7 +19,7 @@
             <el-table-column fixed="right" label="Операция" align="center">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
-                        style="width: 125px; height: 100%;">Удалить</el-button>
+                        style="width: 125px; height: 100%;" :disabled="isEditButtonDisabled">Удалить</el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -72,12 +72,18 @@
 import { ref } from "vue";
 import { Delete } from '@element-plus/icons-vue'
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import type { IService, IArticle } from "~/utils/types/serviceTypes";
 
-const store = useKuCAddStore();
-const tableData = ref(store.tableDataContract);
-//добавление строк
+const store = useKuCIdStore();
+const store2 = useKuCAddStore();
+const tableData = ref(store2.tableDataContract);
 
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
+
+//добавление строк
 const addRow = async () => {
     if (store.valueService_nameContract || store.valueArticle_nameContract) {
         const selectedArticle = optionsArticle.value.find(option => option.value === store.valueArticle_nameContract);
@@ -87,14 +93,14 @@ const addRow = async () => {
         const serviceName = selectedService ? selectedService.label : '';
 
         // Используем наименование услуги и статьи услуги для сохранения
-        store.tableDataContract.push({
+        store2.tableDataContract.push({
             service_code: store.valueService_nameContract,
             service_name: serviceName,
             article_code: store.valueArticle_nameContract,
             article_name: articleName,
         });
 
-        console.log("оказываемые услуги", store.tableDataServiceSelect);
+        console.log("оказываемые услуги", store2.tableDataServiceSelect);
         store.dialogFormContractVisible = false;
         store.valueService_nameContract = "";
         store.valueArticle_nameContract = "";
@@ -109,27 +115,27 @@ const deleteRow = (index: number) => {
 }
 onMounted(async () => {
     try {
-        await store.getServiceFromAPIWithFilter();
-        await store.getArticleFromAPIWithFilter();
+        await store2.getServiceFromAPIWithFilter();
+        await store2.getArticleFromAPIWithFilter();
     } catch (error) {
         console.error("Ошибка при загрузке данных услуг", error);
     }
 });
 const optionsService = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.tableDataServiceAll, (vendors: IService[]) => {
+watch(() => store2.tableDataServiceAll, (vendors: IService[]) => {
     optionsService.value = vendors.map(item => ({ label: item.service_name, value: item.service_code }));
 });
 const optionsArticle = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
+watch(() => store2.tableDataArticleAll, (vendors: IArticle[]) => {
     optionsArticle.value = vendors.map(item => ({ label: item.article_name, value: item.article_code }));
 });
 
 const FormContract = async () => {
     const newItem = {
-        vendor_name: store.kuAddMain.newCustomerId,
+        vendor_name: store.kuIdCustomerId,
         ku_type: "Услуга",
-        provider_list: store.tableDataContract.map(item => item.service_code),
-        brand_list: store.tableDataContract.map(item => item.article_code),
+        provider_list: store2.tableDataContract.map(item => item.service_code),
+        brand_list: store2.tableDataContract.map(item => item.article_code),
     }
     await store.createKuContract(newItem)
 }

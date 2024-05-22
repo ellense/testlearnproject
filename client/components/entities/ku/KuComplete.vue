@@ -14,7 +14,7 @@ import { useKuStore } from "~~/stores/kuStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from "dayjs";
 import { ElMessage } from 'element-plus'
-import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost } from "~/utils/types/tabsKuTypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost, IManagerForKu } from "~/utils/types/tabsKuTypes";
 
 const store = useKuIdStore();
 const router = useRouter();
@@ -141,18 +141,17 @@ const changeKuToBackend = async () => {
     const response2 = await postRequirements(response, store.tableDataExRequirement, KU.postKuExRequirementChange);
     deleteRequirementBonus()
     const response3 = await postBonusRequirements(response, store.tableDataPercent);
-    deleteVAC()
-    const response7 = await postVAC(response, store.tableDataVAC);
     deleteExInvoice()
     const response4 = await postExInvoice(response, store.tableDataExInvoiceSelect);
     deleteManager()
-    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KU.postKuManager);
-
+    const response5 = await postManager(response, store.tableDataManagerSelect);
     const response6 = await KU.updateOfficial(createOfficialArray());
+    deleteVAC()
+    const response7 = await postVAC(response, store.tableDataVAC);
 
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response2, response3, response4, response5, response6,);
+      handleSuccess(response, responses, response2, response3, response4, response5, response6, response7);
 
     }
   } catch (error) {
@@ -248,15 +247,15 @@ const postVAC = async (response: any, dataArray: any) => {
   }));
 };
 
-const postManagerItems = async (response: any, dataArray: any, postFunction: any) => {
+const postManager = async (response: any, dataArray: any) => {
   const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
-    ku_id: response.ku_id,
-    id: item.id,
+    ku: response.ku_id,
+    manager: item.manager,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KU.postKuManager(newItem);
     } catch (error) {
       console.error("Ошибка при отправке данных на бэкенд:", error);
       return null;
@@ -293,7 +292,7 @@ const createOfficialArray = () => {
   };
 };
 
-const handleSuccess = (response: any, responses: any[], response2: any[], response3: any, response4: any, response5: any, response6: any) => {
+const handleSuccess = (response: any, responses: any[], response2: any[], response3: any, response4: any, response5: any, response6: any, response7: any[]) => {
   router.push({ path: "/" });
   console.log("Экземпляр успешно отправлен на бэкенд:", response);
   console.log("вклУсловия успешно отправлены на бэкенд:", responses);
@@ -302,9 +301,14 @@ const handleSuccess = (response: any, responses: any[], response2: any[], respon
   console.log("Искл. накладные успешно отправлены на бэкенд:", response4);
   console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
   console.log("Должн. лица успешно отправлены на бэкенд:", response6);
+  console.log("Поставщики и договоры успешно отправлены на бэкенд:", response7);
   useKuStore().getKuFromAPIWithFilter();
   router.push({ path: "/" });
-  ElMessage.success("Коммерческое условие успешно изменено.");
+  ElMessage.success({
+    message: 'Коммерческое условие успешно изменено.',
+    duration: 5000,
+    type: 'success',
+  });
   store.clearData()
   useKuAddStore().clearNewData()
 };
@@ -312,6 +316,7 @@ const handleSuccess = (response: any, responses: any[], response2: any[], respon
 //удаление вкл условий
 const deleteInRequirement = () => {
   const selectedRows = store.initialState.tableDataInRequirement.map((row) => row.id);
+  console.log("selectedRows.вкл", selectedRows)
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteInRequirement({ id });
@@ -344,7 +349,7 @@ const deleteRequirementBonus = () => {
   const selectedRows = store.initialState.tableDataPercent.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
-      const results = await KU.deleteVAC({ id });
+      const results = await KU.deleteRequirementBonus({ id });
       return results;
     } catch (error) {
       console.error("Ошибка при удалении строки:", error);
@@ -358,7 +363,7 @@ const deleteVAC = () => {
   const selectedRows = store.initialState.tableDataVAC.map((row) => row.id);
   const deletePromises = selectedRows.map(async (id) => {
     try {
-      const results = await KU.deleteRequirementBonus({ id });
+      const results = await KU.deleteVAC({ id });
       return results;
     } catch (error) {
       console.error("Ошибка при удалении строки:", error);
@@ -370,9 +375,10 @@ const deleteVAC = () => {
 //удаление искл накладных
 const deleteExInvoice = () => {
   const selectedRows = store.initialState.tableDataExInvoiceSelect.map((row) => row.id);
+  console.log("selectedRows.накладные", selectedRows)
   const deletePromises = selectedRows.map(async (id) => {
     try {
-      const results = await KU.deleteExInvoiceForKuId({ id });
+      const results = await KU.deleteExInvoice({ id });
       return results;
     } catch (error) {
       console.error("Ошибка при удалении строки:", error);
@@ -381,8 +387,11 @@ const deleteExInvoice = () => {
   });
   return Promise.all(deletePromises);
 };
+//удаление менеджеров
 const deleteManager = () => {
   const selectedRows = store.initialState.tableDataManagerSelect.map((row) => row.id);
+  console.log("selectedRows.менеджеры", selectedRows)
+
   const deletePromises = selectedRows.map(async (id) => {
     try {
       const results = await KU.deleteManager({ id });

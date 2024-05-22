@@ -310,7 +310,10 @@ const onCustomerChange = async () => {
   if (store.kuIdCustomerId && store.kuIdCustomerId.length > 0) {
     store2.setFilterCustomer('customer_id', store.kuIdCustomerId);
     store2.getCustomerNameFromAPIWithFilter()
+    
   } else {
+    store2.setFilterCustomer("entity_id", store.kuIdEntityId)
+    await store2.fetchAllCustomerIdForEntity();
   }
 
 

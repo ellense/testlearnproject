@@ -1,62 +1,43 @@
 <template>
   <EntitiesKuCMain />
   <div class="button_bottom">
-    <el-button @click="addClose()" size="small">Отменить</el-button>
-    <el-button type="primary" @click="createKU()" :loading="loading" size="small">Создать</el-button>
+    <el-button @click="addClose()" size="small">Назад</el-button>
+    <el-button type="primary" @click="changeKuToBackend()" :loading="loading" size="small"
+      :disabled="isEditButtonDisabled">Изменить</el-button>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { useKuCStore } from "~~/stores/kuCStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import dayjs from "dayjs";
 import { useRouter } from 'vue-router'
-const store = useKuCAddStore();
+const store = useKuCIdStore();
+const store2 = useKuCAddStore();
 const loading = ref(false);
 const progress = ref(0);
 const router = useRouter()
-const kuMain = store.kuAddMain
 import { onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import type { IKuCList } from "~/utils/types/kuCustomerTypes";
-import type { IOfficialForKuPost } from "~/utils/types/tabsKuTypes";
+import type { IManagerForKu, IManagerForKuPost, IOfficialForKuPost, IServiceAndArticle, IServicesPost, IVACPost } from "~/utils/types/tabsKuTypes";
+import KuCAdd from "~/components/features/KuCAdd.vue";
 
 const clearDataBeforeLeave = () => {
-  store.clearNewData()
+  store.clearData()
+  store2.clearNewData()
 }
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
 
 // Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
 onBeforeRouteLeave((to, from, next) => {
-  if (
-    store.tableDataServiceSelect.length > 0 ||
-    store.tableDataManagerSelect.length > 0 ||
-    store.tableDataContract.length > 0 ||
-    kuMain.newType !== '' ||
-    kuMain.newEntityId !== '' ||
-    kuMain.newEntityName !== '' ||
-    kuMain.newCustomerId !== '' ||
-    kuMain.newCustomerName !== '' ||
-    kuMain.newDateStart !== '' ||
-    kuMain.newDateEnd !== '' ||
-    kuMain.newDateActual !== '' ||
-    kuMain.newDescription !== '' ||
-    kuMain.newContract !== '' ||
-    kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_number !== '' ||
-    kuMain.newDocu_date !== '' ||
-    kuMain.newDocu_subject !== '' ||
-    kuMain.newPay_sum !== null ||
-    kuMain.newPay_method !== '' ||
-    store.newOfFIOСounteragent !== '' ||
-    store.newOfPostСounteragent !== '' ||
-    store.newOfDocСounteragent !== '' ||
-    store.newOfFIOEntity !== '' ||
-    store.newOfDocEntity !== '' ||
-    store.valueService_nameContract !== '' ||
-    store.valueArticle_nameContract !== '') {
+  if (store.hasChanges() && store.$state.kuIdStatus === "Создано") {
     ElMessageBox.alert('Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.', 'Предупреждение', {
-
       type: 'warning'
     }).then(() => {
       clearDataBeforeLeave()
@@ -70,11 +51,9 @@ onBeforeRouteLeave((to, from, next) => {
 })
 
 
-const createKU = async () => {
-
+const changeKuToBackend = async () => {
   try {
-
-    if (!(await store.isFormValid())) {
+    if (!(await store2.isFormValid())) {
       // Если форма не валидна, выводим сообщение об ошибке и завершаем выполнение функции
       ElMessage({
         showClose: true,
@@ -84,27 +63,34 @@ const createKU = async () => {
       });
       return;
     }
-    if (store.newOfFIOСounteragent.length === 0 &&
-      store.newOfPostСounteragent.length === 0 &&
-      store.newOfDocСounteragent.length === 0 &&
-      store.newOfFIOEntity.length === 0 &&
-      store.newOfPostEntity.length === 0 &&
-      store.newOfDocEntity.length === 0) {
+    if (store.tableDataServiceSelect.length === 0) {
+      ElMessage.error('Добавьте минимум одну услугу');
+      return;
+    }
+    if (store.kuIdFIOСounteragent.length === 0 &&
+      store.kuIdPostСounteragent.length === 0 &&
+      store.kuIdDocСounteragent.length === 0 &&
+      store.kuIdFIOEntity.length === 0 &&
+      store.kuIdPostEntity.length === 0 &&
+      store.kuIdDocEntity.length === 0) {
       ElMessage.error('Добавьте должностные лица');
       return;
     }
 
     loading.value = true;
 
-    const newItem = createNewItem();
-    const response = await KUC.postKu(newItem);
-    const responses = await postRequirements(response, store.tableDataServiceSelect, KUC.postKuServices);
-    const response5 = await postManagerItems(response, store.tableDataManagerSelect, KUC.postKuManager);
-    const response6 = await KUC.postKuOfficial(createOfficialArray(response));
+    const response = await KUC.updateKu(createNewItem());
+    deleteService()
+    const responses = await postService(response, store.tableDataServiceSelect);
+    deleteManager()
+    const response2 = await postManager(response, store.tableDataManagerSelect);
+    deleteVAC()
+    const response3 = await postVAC(response, store.tableDataVAC);
+    const response4 = await KUC.updateOfficial(createOfficialArray());
 
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response5, response6);
+      handleSuccess(response, responses, response2, response3, response4);
     } else {
       handleError();
     }
@@ -115,41 +101,40 @@ const createKU = async () => {
     loading.value = false;
     progress.value = 100;
   }
-  store.clearNewData();
+  clearDataBeforeLeave()
 };
 
 const createNewItem = () => {
   return {
-    entity_id: kuMain.newEntityId,
-    customer_id: kuMain.newCustomerId,
-    period: kuMain.newType,
-    date_start: dayjs(kuMain.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"),
-    date_end: dayjs(kuMain.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"),
+    ku_id: store.ku_id,
+    entity: store.kuIdEntityId,
+    customer: store.kuIdCustomerId,
+    period: store.kuIdType,
+    date_start: dayjs(store.kuIdDateStart).format("YYYY-MM-DD"),
+    date_end: dayjs(store.kuIdDateEnd).format("YYYY-MM-DD"),
     status: "Создано",
-    description: kuMain.newDescription,
-    contract: kuMain.newContract,
-    docu_account: kuMain.newDocu_account,
-    docu_number: kuMain.newDocu_number,
-    docu_date: dayjs(kuMain.newDocu_date, "DD.MM.YYYY").format("YYYY-MM-DD"),
-    docu_subject: kuMain.newDocu_subject,
-    pay_sum: kuMain.newPay_sum,
-    pay_method: kuMain.newPay_method,
+    description: store.kuIdDescription,
+    contract: store.kuIdContract,
+    docu_account: store.kuIdDocu_account,
+    docu_number: store.kuIdDocu_number,
+    docu_date: dayjs(store.kuIdDocu_date).format("YYYY-MM-DD"),
+    docu_subject: store.kuIdDocu_subject,
+    pay_sum: store.kuIdPay_sum,
+    pay_method: store.kuIdPay_method,
   };
 };
 
-const postRequirements = async (response: IKuCList, dataArray: any, postFunction: any) => {
-  const requirementsArray = dataArray.map((item: { service_code: any; service_name: any; article_code: any; article_name: any; ratio: any; }) => ({
-    ku_id: response.ku_id,
-    service_code: item.service_code,
-    service_name: item.service_name,
-    article_code: item.article_code,
-    article_name: item.article_name,
+const postService = async (response: any, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: IServiceAndArticle) => ({
+    ku: response.ku_id,
+    service: item.service,
+    article: item.article,
     ratio: item.ratio,
   }));
 
   return await Promise.all(requirementsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KUC.postKuServices(newItem);
     } catch (error) {
       console.error("Ошибка при отправке услуг на бэкенд:", error);
       return null;
@@ -158,16 +143,15 @@ const postRequirements = async (response: IKuCList, dataArray: any, postFunction
 };
 
 
-const postManagerItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { group: any; discription: any; }) => ({
-    ku_id: response.ku_id,
-    group: item.group,
-    discription: item.discription
+const postManager = async (response: any, dataArray: any) => {
+  const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
+    ku: response.ku_id,
+    manager: item.manager,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KUC.postKuManager(newItem);
     } catch (error) {
       console.error("Ошибка при отправке данных на бэкенд:", error);
       return null;
@@ -175,84 +159,111 @@ const postManagerItems = async (response: IKuCList, dataArray: any, postFunction
   }));
 };
 
-const postItems = async (response: IKuCList, dataArray: any, postFunction: any) => {
-  const itemsArray = dataArray.map((item: { docid: any; }) => ({
-    ku_id: response.ku_id,
-    docid: item.docid,
+const postVAC = async (response: any, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: IVACPost) => ({
+    ku_key_id: response.ku_id,
+    type_partner: item.type_partner,
+    vendor_id: item.vendor_id,
+    vendor_name: item.vendor_name,
+    vendor_retention: item.vendor_retention,
+    vendor_status: item.vendor_status,
+    entity_id: item.entity_id,
+    entity_name: item.entity_name,
   }));
 
-  return await Promise.all(itemsArray.map(async (newItem: any) => {
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
     try {
-      return await postFunction(newItem);
+      return await KUC.postKuVAC(newItem);
     } catch (error) {
-      console.error("Ошибка при отправке данных на бэкенд:", error);
+      console.error("Ошибка при отправке VAC на бэкенд:", error);
       return null;
     }
   }));
 };
 
-const createOfficialArray = (response: IKuCList) => {
+
+const createOfficialArray = () => {
   return {
-    ku_id: response.ku_id,
-    counterparty_name: store.newOfFIOСounteragent,
-    counterparty_post: store.newOfPostСounteragent,
-    counterparty_docu: store.newOfDocСounteragent,
-    entity_name: store.newOfFIOEntity,
-    entity_post: store.newOfPostEntity,
-    entity_docu: store.newOfDocEntity,
+    id: store.officialId,
+    ku_id: store.ku_id,
+    counterparty_name: store.kuIdFIOСounteragent,
+    counterparty_post: store.kuIdPostСounteragent,
+    counterparty_docu: store.kuIdDocСounteragent,
+    entity_name: store.kuIdFIOEntity,
+    entity_post: store.kuIdPostEntity,
+    entity_docu: store.kuIdDocEntity,
   };
 };
 
-const handleSuccess = (response: IKuCList, responses: any[], response5: any[], response6: IOfficialForKuPost) => {
+const handleSuccess = (response: any, responses: any[], response2: any[], response3: any[], response4: any) => {
+  router.push({ path: "/kuC" });
   console.log("КУ клиентов успешно отправлен на бэкенд:", response);
   console.log("услуги успешно отправлены на бэкенд:", responses);
-  console.log("Кат. менеджеры успешно отправлены на бэкенд:", response5);
-  console.log("Должн. лица успешно отправлены на бэкенд:", response6);
+  console.log("Кат. менеджеры успешно отправлены на бэкенд:", response2);
+  console.log("Поставщики и договоры успешно отправлены на бэкенд:", response3);
+  console.log("Должн. лица успешно отправлены на бэкенд:", response4);
   useKuCStore().getKuFromAPIWithFilter();
-  router.push("kuC");
+  router.push({ path: "/kuC" });
   ElMessage({
-    message: 'Коммерческое условие успешно создано.',
+    message: 'Коммерческое условие успешно изменено.',
     duration: 5000,
     type: 'success',
   })
+  clearDataBeforeLeave
+};
+
+//удаление услуг
+const deleteService = () => {
+  const selectedRows = store.initialState.tableDataServiceSelect.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KUC.deleteService({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+//удаление поставщиков и договоров
+const deleteVAC = () => {
+  const selectedRows = store.initialState.tableDataVAC.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KUC.deleteVAC({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
+};
+//удаление менеджеров
+const deleteManager = () => {
+  const selectedRows = store.initialState.tableDataManagerSelect.map((row) => row.id);
+  const deletePromises = selectedRows.map(async (id) => {
+    try {
+      const results = await KUC.deleteManager({ id });
+      return results;
+    } catch (error) {
+      console.error("Ошибка при удалении строки:", error);
+      throw error;
+    }
+  });
+  return Promise.all(deletePromises);
 };
 
 const handleError = () => {
-  console.error("Не удалось отправить экземпляр или условия на бэкенд");
-  ElMessage.error("Возникла ошибка. Коммерческое условие не создано.");
+  console.error("Не удалось изменить экземпляр или условия на бэкенде");
+  ElMessage.error("Возникла ошибка. Коммерческое условие не изменено.");
 };
 
 
 //отменить
 const addClose = () => {
-  if (
-    // Проверяем наличие несохраненных данных
-    store.tableDataServiceSelect.length > 0 ||
-    store.tableDataManagerSelect.length > 0 ||
-    kuMain.newType !== '' ||
-    kuMain.newEntityId !== '' ||
-    kuMain.newEntityName !== '' ||
-    kuMain.newCustomerId !== '' ||
-    kuMain.newCustomerName !== '' ||
-    kuMain.newDateStart !== '' ||
-    kuMain.newDateEnd !== '' ||
-    kuMain.newDateActual !== '' ||
-    kuMain.newDescription !== '' ||
-    kuMain.newContract !== '' ||
-    kuMain.newDocu_account !== '' ||
-    kuMain.newDocu_number !== '' ||
-    kuMain.newDocu_date !== '' ||
-    kuMain.newDocu_subject !== '' ||
-    kuMain.newPay_sum !== null ||
-    kuMain.newPay_method !== '' ||
-    store.newOfFIOСounteragent !== '' ||
-    store.newOfPostСounteragent !== '' ||
-    store.newOfDocСounteragent !== '' ||
-    store.newOfFIOEntity !== '' ||
-    store.newOfDocEntity !== '' ||
-    store.valueService_nameContract !== '' ||
-    store.valueArticle_nameContract !== ''
-  ) {
+  if (store.hasChanges() && store.$state.kuIdStatus === "Создано") {
     // Если есть несохраненные данные, показываем диалоговое окно для подтверждения от пользователя
     ElMessageBox.alert(
       'Вы уверены, что хотите покинуть эту страницу? Все несохраненные данные будут потеряны.',
@@ -263,16 +274,15 @@ const addClose = () => {
         cancelButtonText: 'Отмена',
       }
     ).then(() => {
-      // Если пользователь подтвердил, переходим на другую страницу и очищаем данные
-      router.push("kuC");
-      store.clearNewData();
+      // router.push("kuC");
+      router.push({ path: "/kuC" });
+      clearDataBeforeLeave
     }).catch(() => {
-      // Если пользователь отменил, ничего не делаем
     });
   } else {
-    // Если нет несохраненных данных, просто переходим на другую страницу и очищаем данные
-    router.push("kuC");
-    store.clearNewData();
+    // router.push("kuC");
+    router.push({ path: "/kuC" });
+    clearDataBeforeLeave
   }
 };
 </script>

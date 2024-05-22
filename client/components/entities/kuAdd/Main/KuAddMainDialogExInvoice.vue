@@ -120,7 +120,7 @@ import type { IExInvoiceForKu } from "~/utils/types/tabsKuTypes";
     const selectedRows = store.multipleSelectionExInvoice;
     selectedRows.forEach(row => {
       store.tableDataExInvoiceSelect.push({
-        id: null,
+        id: row.id,
         invoice_id: row.invoice_id,
         vendor_id: row.vendor_id,
         vendor_name: row.vendor_name,

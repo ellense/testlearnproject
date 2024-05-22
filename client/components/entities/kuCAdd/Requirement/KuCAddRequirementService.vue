@@ -113,13 +113,13 @@ onMounted(async () => {
     }
 });
 
-const optionsService = ref<Array<{ label: string; value: string }>>([]);
+const optionsService = ref<Array<{ id: number | null; label: string; value: string }>>([]);
 watch(() => store.tableDataServiceAll, (vendors: IService[]) => {
-    optionsService.value = vendors.map(item => ({ label: item.service_name, value: item.service_code }));
+    optionsService.value = vendors.map(item => ({ id: item.id, label: item.service_name, value: item.service_code }));
 });
-const optionsArticle = ref<Array<{ label: string; value: string }>>([]);
+const optionsArticle = ref<Array<{ id: number | null; label: string; value: string }>>([]);
 watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
-    optionsArticle.value = vendors.map(item => ({ label: item.article_name, value: item.article_code }));
+    optionsArticle.value = vendors.map(item => ({ id: item.id, label: item.article_name, value: item.article_code }));
 });
 
 //для добавления услуг в селекте
@@ -134,6 +134,7 @@ const onAddServiceOption = () => {
 const onConfirmService = async () => {
     if (optionServiceName.value || optionServiceId.value) {
         optionsService.value.push({
+            id: null,
             label: optionServiceName.value,
             value: optionServiceId.value,
         })
@@ -171,6 +172,7 @@ const onAddArticleOption = () => {
 const onConfirmArticle = async () => {
     if (optionArticleName.value || optionArticleId.value) {
         optionsArticle.value.push({
+            id: null,
             label: optionArticleName.value,
             value: optionArticleId.value,
         })
@@ -207,9 +209,17 @@ const saveRow = async () => {
         const selectedService = optionsService.value.find(option => option.value === store.valueService_name);
         const serviceName = selectedService ? selectedService.label : ''
 
+        const selectedArticleId = optionsArticle.value.find(option => option.value === store.valueArticle_name);
+        const articleId = selectedArticleId ? selectedArticleId.id : null;
+
+        const selectedServiceId = optionsService.value.find(option => option.value === store.valueService_name);
+        const serviceId = selectedServiceId ? selectedServiceId.id : null;
         store.tableDataServiceSelect.push({
+            id: null,
             service_code: store.valueService_name,
+            service: serviceId,
             service_name: serviceName,
+            article: articleId,
             article_code: store.valueArticle_name,
             article_name: articleName,
             ratio: store.valueRatio,

@@ -55,8 +55,8 @@ const ExInvoice = async () => {
   if(store.kuIdDateStart || store.kuIdDateEnd) {
     store.kuIdVendorIdExInvoice = store.kuIdVendorId
     store.kuIdVendorNameExInvoice = store.kuIdVendorName
-    store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"));
-    store2.setFilterExInvoice('end_date', dayjs(store.kuIdDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"));
+    store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart).format("YYYY-MM-DD"));
+    store2.setFilterExInvoice('end_date', dayjs(store.kuIdDateEnd).format("YYYY-MM-DD"));
     store2.setFilterExInvoice('vendor_id', store.kuIdVendorId);
     await store2.getInvoicesFromAPIWithFilter();
     store.dialogFormExInvoiceVisible = true

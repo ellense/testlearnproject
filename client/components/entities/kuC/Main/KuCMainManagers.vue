@@ -1,24 +1,26 @@
 <template>
   <el-scrollbar height="40vh">
-    <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true" class="buttonAdd">Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0" class="buttonAdd">Удалить
+    <el-button size="small" type="primary" plain round @click="store.dialogFormManagersVisible = true" class="buttonAdd" :disabled="isEditButtonDisabled">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataManagerSelect.length = 0" class="buttonAdd" :disabled="isEditButtonDisabled">Удалить
       все</el-button>
-    <el-table :data="tableData2" border style="width: 820px; margin-top: 10px;" height="35vh"
+    <el-table :data="tableData2" border style="width: 920px; margin-top: 10px;" height="35vh"
       empty-text="Добавьте категорийных менеджеров">
+      <el-table-column property="manager" label="Код" width="100" show-overflow-tooltip />
       <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
       <el-table-column property="description" label="Описание" width="400" sortable show-overflow-tooltip />
       <el-table-column align="center" label="Операция">
         <template #default="scope">
-          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
+          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)" :disabled="isEditButtonDisabled">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
     <el-dialog v-model="store.dialogFormManagersVisible" title="Выбор исключенных накладных для КУ" close-on-click-modal
       close-on-press-escape draggable width="715px">
       <el-scrollbar class="scrollTableFiltres">
-        <el-table style="width: 680px" height="300" :data="tableData" border
-          @selection-change="store.handleSelectionChangeManager" ref="multipleTableRef" v-loading="loading">
+        <el-table style="width: 780px" height="300" :data="tableData" border
+          @selection-change="store2.handleSelectionChangeManager" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="30" />
+      <el-table-column property="manager" label="Код" width="100" show-overflow-tooltip />
           <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
           <el-table-column property="description" label="Описание" width="350" show-overflow-tooltip />
         </el-table>
@@ -41,17 +43,34 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 import type { IManagerForKu } from "~/utils/types/tabsKuTypes";
 
-const store = useKuCAddStore();
+const store = useKuCIdStore();
+const store2 = useKuCAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
-  store
+  store2
 );
+const { getManagerForKu } = storeToRefs(
+  useKuCIdStore()
+);
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
+
 const tableData = ref<IManagerForKu[]>(getManagerAll.value);
 
 const loading = ref()
+
+onMounted(async () => {
+  try {
+    await store2.getManagersFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при загрузке данных менеджеров", error);
+  }
+});
 
 watch(getManagerAll, (value) => {
   tableData.value = value || [];
@@ -60,17 +79,17 @@ watch(getManagerAll, (value) => {
 const pageSize = ref(countRowTable);
 const handleSizeChange = async (val: number) => {
   pageSize.value = val;
-  store.setCountRowTable(val);
+  store2.setCountRowTable(val);
   try {
-    // await store.getProductFromExcludedWithFilter();
+     await store2.getManagersFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при загрузке данных кат. менеджеров", error);
   }
 };
 //пагинация
 const paginationChange = (page: number) => {
-  // store.setFilterExInvoice('page', page);
-  //   store.getProductFromExcludedWithFilter(page);
+  store2.setFilterManager('page', page);
+  store2.getManagersFromAPIWithFilter(page);
 };
 
 //для очистки выбора
@@ -86,13 +105,18 @@ const toggleSelection = (rows?: IManagerForKu[]) => {
 }
 const tableData2 = ref(store.tableDataManagerSelect);
 
+watch(getManagerForKu, (value) => {
+  tableData2.value = value || [];
+});
+
 //добавление условий
 const AddManagers = () => {
-  const selectedRows = store.multipleSelectionManager;
+  const selectedRows = store2.multipleSelectionManager;
 
   selectedRows.forEach(row => {
     store.tableDataManagerSelect.push({
-      id: null,
+      id: row.id,
+      manager: row.manager,
       group: row.group,
       description: row.description,
     });

@@ -1,7 +1,7 @@
 <template>
     <el-button size="small" type="primary" plain round
-        @click="store.dialogFormServiceVisible = true">Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataServiceSelect.length = 0">Удалить
+        @click="store.dialogFormService = true" :disabled="isEditButtonDisabled">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataServiceSelect.length = 0" :disabled="isEditButtonDisabled">Удалить
         все</el-button>
     <div class="scrollTableRequirement">
         <el-table :data="tableData2" border style="width: 100%; height:30vh" height="30vh" empty-text="Добавьте услуги">
@@ -17,12 +17,12 @@
             <el-table-column align="center" label="Операция">
                 <template #default="scope">
                     <el-button text type="danger" :icon="Delete" size="small"
-                        @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
+                        @click.prevent="deleteRow(scope.$index)" :disabled="isEditButtonDisabled">Удалить</el-button>
                 </template>
             </el-table-column>
         </el-table>
     </div>
-    <el-dialog v-model="store.dialogFormServiceVisible" title="Выбор оказываемых услуг" close-on-click-modal
+    <el-dialog v-model="store.dialogFormService" title="Выбор оказываемых услуг" close-on-click-modal
         close-on-press-escape draggable width="715px">
         <el-scrollbar class="scrollTableFiltres">
             <el-form>
@@ -85,7 +85,7 @@
         </el-scrollbar>
         <template #footer>
             <span class="dialog-footer">
-                <el-button @click="store.dialogFormServiceVisible = false">Отмена</el-button>
+                <el-button @click="store.dialogFormService = false">Отмена</el-button>
                 <el-button @click="saveRow()">Сохранить</el-button>
             </span>
         </template>
@@ -94,29 +94,35 @@
 
 <script setup lang="ts">
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 import type { IService, IArticle } from "~/utils/types/serviceTypes";
 
-const store = useKuCAddStore();
+const store = useKuCIdStore();
+const store2 = useKuCAddStore();
+
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
 
 const tableData2 = ref(store.tableDataServiceSelect);
 
 onMounted(async () => {
     try {
-        await store.getServiceFromAPIWithFilter();
-        await store.getArticleFromAPIWithFilter();
+        await store2.getServiceFromAPIWithFilter();
+        await store2.getArticleFromAPIWithFilter();
     } catch (error) {
         console.error("Ошибка при загрузке данных услуг", error);
     }
 });
-const optionsService = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.tableDataServiceAll, (vendors: IService[]) => {
-    optionsService.value = vendors.map(item => ({ label: item.service_name, value: item.service_code }));
+const optionsService = ref<Array<{id: number | null; label: string; value: string }>>([]);
+watch(() => store2.tableDataServiceAll, (vendors: IService[]) => {
+    optionsService.value = vendors.map(item => ({ id: item.id, label: item.service_name, value: item.service_code }));
 });
-const optionsArticle = ref<Array<{ label: string; value: string }>>([]);
-watch(() => store.tableDataArticleAll, (vendors: IArticle[]) => {
-    optionsArticle.value = vendors.map(item => ({ label: item.article_name, value: item.article_code }));
+const optionsArticle = ref<Array<{id: number | null; label: string; value: string }>>([]);
+watch(() => store2.tableDataArticleAll, (vendors: IArticle[]) => {
+    optionsArticle.value = vendors.map(item => ({ id: item.id, label: item.article_name, value: item.article_code }));
 });
 
 const isAddingService = ref(false)
@@ -130,6 +136,7 @@ const onAddServiceOption = () => {
 const onConfirmService = async () => {
     if (optionServiceName.value || optionServiceId.value) {
         optionsService.value.push({
+            id: null,
             label: optionServiceName.value,
             value: optionServiceId.value,
         })
@@ -141,7 +148,7 @@ const onConfirmService = async () => {
         try {
             const response = await SERVICE.postServices(data);
             console.log("услуга успешно отправлена:", response);
-            await store.getServiceFromAPIWithFilter();
+            await store2.getServiceFromAPIWithFilter();
         } catch (error) {
             console.error("Ошибка при добавлении услуг на сервер", error);
         }
@@ -166,6 +173,7 @@ const onAddArticleOption = () => {
 const onConfirmArticle = async () => {
     if (optionArticleName.value || optionArticleId.value) {
         optionsArticle.value.push({
+            id: null,
             label: optionArticleName.value,
             value: optionArticleId.value,
         })
@@ -176,10 +184,10 @@ const onConfirmArticle = async () => {
 
         try {
             const response = await SERVICE.postArticles(data);
-            console.log("услуга успешно отправлена:", response);
-            await store.getArticleFromAPIWithFilter();
+            console.log("статья услуги успешно отправлена:", response);
+            await store2.getArticleFromAPIWithFilter();
         } catch (error) {
-            console.error("Ошибка при добавлении услуг на сервер", error);
+            console.error("Ошибка при добавлении статьи услуги на сервер", error);
         }
         clearArticle()
     }
@@ -198,10 +206,15 @@ const saveRow = async () => {
         // Получаем наименование статьи услуги из найденного объекта
         const articleName = selectedArticle ? selectedArticle.label : '';
 
-        // Находим объект с соответствующим значением service_code в options
         const selectedService = optionsService.value.find(option => option.value === store.valueService_name);
-        // Получаем наименование услуги из найденного объекта
         const serviceName = selectedService ? selectedService.label : '';
+
+        const selectedArticleId = optionsArticle.value.find(option => option.value === store.valueArticle_name);
+        const articleId = selectedArticleId ? selectedArticleId.id : null;
+
+        const selectedServiceId = optionsService.value.find(option => option.value === store.valueService_name);
+        const serviceId = selectedServiceId ? selectedServiceId.id : null;
+
 
         console.log("valueService_id", store.valueService_name);
         console.log("valueArticle_id", store.valueArticle_name);
@@ -209,15 +222,18 @@ const saveRow = async () => {
 
         // Используем наименование услуги и статьи услуги для сохранения
         store.tableDataServiceSelect.push({
+            id: null,
             service_code: store.valueService_name,
+            service: serviceId,
             service_name: serviceName,
+            article: articleId,
             article_code: store.valueArticle_name,
             article_name: articleName,
             ratio: store.valueRatio,
         });
 
         console.log("оказываемые услуги", store.tableDataServiceSelect);
-        store.dialogFormServiceVisible = false;
+        store.dialogFormService = false;
         store.valueRatio = null;
         store.valueService_name = "";
         store.valueArticle_name = "";

@@ -1,8 +1,8 @@
 <template>
   <el-scrollbar height="45vh">
     <el-button size="small" type="primary" plain round @click="store.dialogFormVACVisible = true"
-      class="buttonAdd">Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataVAC.length = 0" class="buttonAdd">Удалить
+      class="buttonAdd" :disabled="isEditButtonDisabled">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataVAC.length = 0" class="buttonAdd" :disabled="isEditButtonDisabled">Удалить
       все</el-button>
     <el-table :data="tableData" border style="width: 100%; margin-top: 10px;" height="40vh"
       empty-text="Добавьте поставщиков">
@@ -79,6 +79,10 @@ const { getVAC } = storeToRefs(
 const store = useKuIdStore();
 const store2 = useKuAddStore();
 
+const isEditButtonDisabled = computed(() => {
+  return store.kuIdStatus !== 'Создано';
+});
+
 const optionsEntity = ref<Array<{ label: string; value: string }>>([]);
 watch(
   () => store2.dataEntity,
@@ -130,7 +134,7 @@ const AddManagers = async () => {
   const selectedVendor = optionsVendor.value.find(option => option.value === store.kuIdVendorIdVAC);
   const vendorName = selectedVendor ? selectedVendor.label : '';
 
-    store2.tableDataVAC.push({
+    store.tableDataVAC.push({
       id: null,
       type_partner: "Поставщик",
       vendor_id: store.kuIdVendorIdVAC,
@@ -153,8 +157,8 @@ const ExInvoice = async (row: IVendorAndContract) => {
   if(store.kuIdDateStart || store.kuIdDateEnd) {
     store.kuIdVendorIdExInvoice = row.vendor_id
     store.kuIdVendorNameExInvoice = row.vendor_name
-    store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"));
-    store2.setFilterExInvoice('end_date', dayjs(store.kuIdDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"));
+    store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart).format("YYYY-MM-DD"));
+    store2.setFilterExInvoice('end_date', dayjs(store.kuIdDateEnd).format("YYYY-MM-DD"));
     store2.setFilterExInvoice('vendor_id', row.vendor_id);
     await store2.getInvoicesFromAPIWithFilter();
     store.dialogFormExInvoiceVisible = true

@@ -201,9 +201,6 @@ const rowDblclick = async (kuId: string) => {
   storeId.getManagerForKuId_API(kuId)
   storeId.getOfficialForKuId_API(kuId)
 
-  console.log("СТАТУС", storeId.kuIdStatus)
-  console.log("КЛИЕНТ", storeId.kuIdCustomerId)
-
   if (storeId.kuIdStatus === "Создано") {
     const entity = storeKuAdd.dataEntity.find(item => item.entity_id === storeId.kuIdEntityId);
   if (entity) {
@@ -221,17 +218,17 @@ const rowDblclick = async (kuId: string) => {
     if (storeId.kuIdCustomerId && storeId.kuIdCustomerId.length > 0) {
       storeKuAdd.setFilterVendor('vendor_id', storeId.kuIdCustomerId);
       storeKuAdd.getCustomerNameFromAPIWithFilter()
-      try {
-        storeKuAdd.setFilterVendor("entity_id", storeId.kuIdEntityId)
-        await storeKuAdd.fetchKuEntity({
-          entity_id: "",
-          name: "",
-          merge_id: "",
-        });
-        await storeKuAdd.fetchAllCustomerIdForEntity();
-      } catch (error) {
-        console.error("Ошибка при загрузке данных вкладок по фильтру клиента", error);
-      }
+      // try {
+      //   storeKuAdd.setFilterCustomer("entity_id", storeId.kuIdEntityId)
+      //   await storeKuAdd.fetchKuEntity({
+      //     entity_id: "",
+      //     name: "",
+      //     merge_id: "",
+      //   });
+      //   await storeKuAdd.fetchAllCustomerIdForEntity();
+      // } catch (error) {
+      //   console.error("Ошибка при загрузке данных вкладок по фильтру клиента", error);
+      // }
 
     }
     else {
