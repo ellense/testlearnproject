@@ -6,6 +6,7 @@ import type { IKuCList } from '~/utils/types/kuCustomerTypes';
 import type { IKuList, IParamKu_Id, IKuId } from '~/utils/types/kuVendorTypes';
 import type { IPlace, IService } from '~/utils/types/serviceTypes';
 import type { IGraphicСStore } from '~/utils/types/storesTypes';
+import type { IParamKuId } from '~/utils/types/tabsKuTypes';
 
 export const useGraphicСStore = defineStore("GraphicСStore", {
   state: (): IGraphicСStore => ({
@@ -40,19 +41,20 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
       customer: "",
       customer_name: "",
       period: "",
-      date_start:  "",
-      date_end:  "",
+      date_start: "",
+      date_end: "",
       graph_exists: false,
       status: "",
       description: "",
       contract: "",
       docu_account: "",
       docu_number: "",
-      docu_date:  "",
+      docu_date: "",
       docu_subject: "",
-      pay_sum:  null,
+      pay_sum: null,
       pay_method: "",
     },
+    official: [],
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: false,
     dialogFormShopAndServiceVisible: false,
@@ -91,6 +93,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
     //параметры для фильтров при запросах
     KuParams: [],
     filterGraphicValue: {},
+    filterValueOfficial: {},
   }),
 
   getters: {
@@ -167,7 +170,6 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
           return Promise.reject(error);
         });
     },
-
     setFilterValue<
       T extends keyof GetAllGraphicС,
       U extends GetAllGraphicС[T],
@@ -179,6 +181,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
         delete this.$state.filterGraphicValue[field]
       }
     },
+
     //получение графика детеил для акта
     async getGraphicDetailFromApi(grapId: number | null) {
       try {
@@ -191,6 +194,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
         console.error("Ошибка при получении данных график_айди:", error);
       }
     },
+
     //получение ку детеил для акта
     async getKuDetailFromApi(kuId: string) {
       try {
@@ -202,6 +206,36 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
       } catch (error) {
         console.error("Ошибка при получении данных ку_айди:", error);
       }
+    },
+
+    //получение должн. лиц для акта
+    async getKuOfficialDetailFromApi(ku_id?: string, page?: number) {
+      this.setFilterValueOfficial('ku_id', ku_id);
+      await KUC.getKuOfficial({
+        ku_id,
+        page_size: this.$state.countRowTable,
+        page,
+      })
+        .then((tableData) => {
+          console.log('Получены данные должн. лиц:', tableData);
+          this.$state.official = tableData.results;
+          console.log('official:', this.$state.official);
+          this.$state.pagination = {
+            count: tableData.count,
+            previous: tableData.previous,
+            next: tableData.next,
+          };
+        })
+        .catch((error) => {
+          console.error('Ошибка при получении данных должн. лиц:', error);
+          return Promise.reject(error);
+        });
+    },
+    setFilterValueOfficial<
+      T extends keyof IParamKuId,
+      U extends IParamKuId[T],
+    >(field: T, value: U) {
+      this.$state.filterValueOfficial[field] = value
     },
 
     //получения юр лица для фильтра в графике

@@ -547,6 +547,7 @@ export interface IVendorStore {
     dataGraphic: IGraphicC[];
     graphicId: IGraphicC
     kuId: IKuCList
+    official: IOfficialForKu[]
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: boolean;
     dialogFormShopAndServiceVisible: boolean;
@@ -569,6 +570,7 @@ export interface IVendorStore {
     //параметры для фильтров при запросах
     KuParams: string[]
     filterGraphicValue: GetAllGraphicС
+    filterValueOfficial: IParamKuId
   }
 
   

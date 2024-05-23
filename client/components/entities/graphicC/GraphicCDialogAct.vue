@@ -150,6 +150,7 @@ const createAct = async () => {
         await store.getGraphicDetailFromApi(selectedRows[0]);
         const graphic = store.graphicId;
         await store.getKuDetailFromApi(graphic.ku)
+    await store.getKuOfficialDetailFromApi(graphic.ku)
         console.log("date_start_ku", store.kuId.date_start)
         console.log("date_end_ku", store.kuId.date_end)
         if (!graphic) {
@@ -157,52 +158,44 @@ const createAct = async () => {
           return;
         }
 
-        //   loadFile("/templates/templateOfAct.docx", async (error, content) => {
-        //     if (error) {
-        //       throw error;
-        //     }
-        //     const zip = new PizZip(content);
-        //     const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-        //     doc.render({
-        //       vendor_name: useReportStore().vendor.urastic_name,
-        //       counterparty_post: useReportStore().official[0].counterparty_post,
-        //       counterparty_name: useReportStore().official[0].counterparty_name,
-        //       counterparty_docu: useReportStore().official[0].counterparty_docu,
-        //       entity_name: useReportStore().entity.urastic_name,
-        //       entity_post: useReportStore().official[0].entity_post,
-        //       entity_fio: useReportStore().official[0].entity_name,
-        //       entity_docu: useReportStore().official[0].entity_docu,
+          loadFile("/templates/templateOfActCustomer.docx", async (error, content) => {
+            if (error) {
+              throw error;
+            }
+            const zip = new PizZip(content);
+            const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
+            doc.render({
+              customer_name: graphic.customer_name,
+              entity_name: graphic.entity_name,
 
-        //       date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
-        //       date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
-        //       sum_calc: useReportStore().graphic[0].sum_calc,
-        //       percent: useReportStore().graphic[0].percent,
-        //       sum_bonus: useReportStore().graphic[0].sum_bonus,
+              counterparty_post: store.official[0].counterparty_post,
+              counterparty_name: store.official[0].counterparty_name,
+              counterparty_docu: store.official[0].counterparty_docu,
+              entity_post: store.official[0].entity_post,
+              entity_fio: store.official[0].entity_name,
+              entity_docu: store.official[0].entity_docu,
 
-        //       inn_kpp: useReportStore().vendor.inn_kpp,
-        //       urastic_adress: useReportStore().vendor.urastic_adress,
-        //       account: useReportStore().vendor.account,
-        //       bank_name: useReportStore().vendor.bank_name,
-        //       bank_bik: useReportStore().vendor.bank_bik,
-        //       corr_account: useReportStore().vendor.corr_account,
+              date_start: dayjs(graphic.date_start).format('DD.MM.YYYY'),
+              date_end: dayjs(graphic.date_end).format('DD.MM.YYYY'),
+              date_accrual: dayjs(graphic.date_accrual).format('DD.MM.YYYY'),
+              sum_bonus: graphic.sum_bonus,
 
-        //       inn_kpp2: useReportStore().entity.inn_kpp,
-        //       urastic_adress2: useReportStore().entity.urastic_address,
-        //       account2: useReportStore().entity.account,
-        //       bank_name2: useReportStore().entity.bank_name,
-        //       bank_bik2: useReportStore().entity.bank_bink,
-        //       corr_account2: useReportStore().entity.corr_account,
+              date_startKu: dayjs(store.kuId.date_start).format('DD.MM.YYYY'),
+              date_endKu: dayjs(store.kuId.date_end).format('DD.MM.YYYY'),
 
-        //       numerals: useReportStore().numerals,
-        //       sumQty: useReportStore().sumQty
-        //     });
+            //   article_name: useReportStore().vendor.inn_kpp,
+            //   shop_name: useReportStore().vendor.urastic_adress,
+            //   address: useReportStore().vendor.account,
+            //   qty: useReportStore().vendor.bank_name,
+            //   sum_price: useReportStore().vendor.bank_bik,
+            });
 
-        //     const out = doc.getZip().generate({
-        //       type: "blob",
-        //       mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        //     });
-        //     saveAs(out, "Акт предоставления вознаграждения по " + useReportStore().kuid + " поставщика " + useReportStore().vendor.urastic_name + ".docx");
-        //   });
+            const out = doc.getZip().generate({
+              type: "blob",
+              mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+            });
+            saveAs(out, "Приложение к договору по " + graphic.ku + " клиента " + graphic.customer_name + ".docx");
+          });
 
       } catch (error) {
         console.error("Произошла ошибка:", error);

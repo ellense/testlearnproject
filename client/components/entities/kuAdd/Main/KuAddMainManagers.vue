@@ -102,6 +102,7 @@ const AddManagers = () => {
   selectedRows.forEach(row => {
     store.tableDataManagerSelect.push({
       id: row.id,
+      manager: row.manager,
       group: row.group,
       description: row.description,
     });
