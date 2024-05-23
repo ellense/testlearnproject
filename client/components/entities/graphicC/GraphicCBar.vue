@@ -9,7 +9,7 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="renderDoc()" link size="small">Приложение к договору</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="store.dialogFormShopAndServiceVisible = true" link size="small" :disabled="isButtonsDisabledAct">Приложение к договору</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -34,42 +34,16 @@
 
 <script setup lang="ts">
 import { ArrowDown } from '@element-plus/icons-vue'
-import { storeToRefs } from "pinia";
-import { useReportStore } from "~~/stores/reportStore";
 import { useGraphicСStore } from "~~/stores/graphicСStore";
+import { dayjs } from "element-plus";
+
 
 const store = useGraphicСStore()
-//для поиска
-const searchQuery = ref('');
-watch(searchQuery, (newValue: string) => {
-  store.performSearchGraphic(newValue);
-});
-
 
 onMounted(() => {
   store.getLegalEntityFilterForGraphicFromApi();
   store.getKuIdFilterForGraphicFromApi();
 });
-
-const createReportInvoice = async () => {
-  useReportStore().dialogFormReportInvoice = true
-  const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
-  console.log("selectedRows[0]:", selectedRows[0])
-  useReportStore().getGraphicDetailFromApi(selectedRows[0])
-  useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
-  useReportStore().fetchAllInvoices(selectedRows[0])
-  // useReportStore().getInvoiceDetailForGraphicFromAPIWithFilter(selectedRows[0])
-
-}
-const createReportProduct = async () => {
-  useReportStore().dialogFormReportProduct = true
-  const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
-  console.log("selectedRows[0]:", selectedRows[0])
-  useReportStore().getGraphicDetailFromApi(selectedRows[0])
-  useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
-  useReportStore().fetchAllProducts(selectedRows[0])
-
-}
 
 //начисление графика
 const AccruedGraphic = async () => {
@@ -77,12 +51,12 @@ const AccruedGraphic = async () => {
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
-    ku_id: selectedRows[0].ku_id,
+    ku: selectedRows[0].ku,
     status: "Начислено",
-    entity_id: selectedRows[0].entity_id,
+    entity: selectedRows[0].entity,
     entity_name: selectedRows[0].entity_name,
-    vendor_name: selectedRows[0].vendor_name,
-    vendor_id: selectedRows[0].vendor_id,
+    customer_name: selectedRows[0].customer_name,
+    customer: selectedRows[0].customer,
     period: selectedRows[0].period,
     date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
     date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
@@ -94,7 +68,7 @@ const AccruedGraphic = async () => {
   };
 
   try {
-    const response = await GRAPHIC.updateGraphic(data);
+    const response = await GRAPHICC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
     await store.getGraphicsFromAPIWithFilter();
   } catch (error) {
@@ -108,20 +82,16 @@ const ApproveGraphic = async () => {
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
-    ku_id: selectedRows[0].ku_id,
+    ku: selectedRows[0].ku,
     status: "Утверждено",
-    entity_id: selectedRows[0].entity_id,
+    entity: selectedRows[0].entity,
     entity_name: selectedRows[0].entity_name,
-    vendor_name: selectedRows[0].vendor_name,
-    vendor_id: selectedRows[0].vendor_id,
+    customer_name: selectedRows[0].customer_name,
+    customer: selectedRows[0].customer,
     period: selectedRows[0].period,
-
     date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
     date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
     date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
-    // date_start: selectedRows[0].date_start,
-    // date_end: selectedRows[0].date_end,
-    // date_calc: selectedRows[0].date_calc,
     percent: selectedRows[0].percent,
     sum_calc: selectedRows[0].sum_calc,
     sum_bonus: selectedRows[0].sum_bonus,
@@ -129,7 +99,7 @@ const ApproveGraphic = async () => {
   };
 
   try {
-    const response = await GRAPHIC.updateGraphic(data);
+    const response = await GRAPHICC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
     await store.getGraphicsFromAPIWithFilter();
   } catch (error) {
@@ -145,7 +115,7 @@ const deleteGraphic = async () => {
   const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
   try {
     for (const graph_id of selectedRows) {
-      const results = await GRAPHIC.deleteGraphic({ graph_id });
+      const results = await GRAPHICC.deleteGraphic({ graph_id });
       console.log("успешно удалилось", results);
     }
   } catch (error) {
@@ -176,94 +146,6 @@ const isButtonsDisabledAct = computed(() => {
 });
 
 
-//для АКТА ПРЕДОСТАВЛЕНИЯ ВОЗНАГРАЖДЕНИЯ
-import Docxtemplater from "docxtemplater";
-import PizZip from "pizzip";
-import { dayjs } from "element-plus";
-import PizZipUtils from "pizzip/utils/index.js";
-import { saveAs } from "file-saver";
-
-function loadFile(url: string, callback: (error: any, content: any) => void) {
-  PizZipUtils.getBinaryContent(url, callback);
-}
-
-
-const renderDoc = async () => {
-  try {
-    const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
-    console.log("selectedRows[0]:", selectedRows[0])
-    await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
-    await useReportStore().getNumeralsGraphFromApi(selectedRows[0]);
-    console.log("useReportStore().graphic[0].ku_id", useReportStore().graphic[0].ku_id)
-    await useReportStore().getKuOfficialDetailFromApi(useReportStore().graphic[0].ku_id)
-    // await useReportStore().getKuOfficialDetailFromApi(useReportStore().kuid)
-    await useReportStore().getVendorDetailFromApi(useReportStore().vendorid)
-    await useReportStore().getEntityDetailFromApi(useReportStore().entityid)
-    console.log("inn_kpp", useReportStore().vendor.inn_kpp,)
-    console.log("urastic_adress2", useReportStore().entity.urastic_address,)
-    console.log("bank_bik2", useReportStore().entity.bank_bink,)
-    const graphic = useReportStore().graphic[0];
-    if (!graphic) {
-      console.error("Ошибка: данные не загружены");
-      return;
-    }
-    if (useReportStore().vendor && useReportStore().entity) {
-      console.log("inn_kpp", useReportStore().vendor.inn_kpp);
-      console.log("urastic_adress2", useReportStore().entity.urastic_address);
-      console.log("bank_bik2", useReportStore().entity.bank_bink);
-      loadFile("/templates/templateOfAct.docx", async (error, content) => {
-        if (error) {
-          throw error;
-        }
-        const zip = new PizZip(content);
-        const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
-        doc.render({
-          vendor_name: useReportStore().vendor.urastic_name,
-          counterparty_post: useReportStore().official[0].counterparty_post,
-          counterparty_name: useReportStore().official[0].counterparty_name,
-          counterparty_docu: useReportStore().official[0].counterparty_docu,
-          entity_name: useReportStore().entity.urastic_name,
-          entity_post: useReportStore().official[0].entity_post,
-          entity_fio: useReportStore().official[0].entity_name,
-          entity_docu: useReportStore().official[0].entity_docu,
-
-          date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
-          date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
-          sum_calc: useReportStore().graphic[0].sum_calc,
-          percent: useReportStore().graphic[0].percent,
-          sum_bonus: useReportStore().graphic[0].sum_bonus,
-
-          inn_kpp: useReportStore().vendor.inn_kpp,
-          urastic_adress: useReportStore().vendor.urastic_adress,
-          account: useReportStore().vendor.account,
-          bank_name: useReportStore().vendor.bank_name,
-          bank_bik: useReportStore().vendor.bank_bik,
-          corr_account: useReportStore().vendor.corr_account,
-
-          inn_kpp2: useReportStore().entity.inn_kpp,
-          urastic_adress2: useReportStore().entity.urastic_address,
-          account2: useReportStore().entity.account,
-          bank_name2: useReportStore().entity.bank_name,
-          bank_bik2: useReportStore().entity.bank_bink,
-          corr_account2: useReportStore().entity.corr_account,
-
-          numerals: useReportStore().numerals,
-          sumQty: useReportStore().sumQty
-        });
-
-        const out = doc.getZip().generate({
-          type: "blob",
-          mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        });
-        saveAs(out, "Акт предоставления вознаграждения по " + useReportStore().kuid + " поставщика " + useReportStore().vendor.urastic_name + ".docx");
-      });
-    } else {
-      console.log("Данные вендора или энтити ещё не загружены");
-    }
-  } catch (error) {
-    console.error("Произошла ошибка:", error);
-  }
-};
 </script>
 
 <style scoped></style>

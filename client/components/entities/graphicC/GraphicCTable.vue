@@ -22,7 +22,7 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column fixed property="ku_id" width="95" sortable show-overflow-tooltip></el-table-column>
+        <el-table-column fixed property="ku" width="95" sortable show-overflow-tooltip></el-table-column>
       </el-table-column>
       <el-table-column label="Юридическое лицо" align="center">
         <template #header>
@@ -51,12 +51,12 @@
           </div>
         </template>
         <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
-        <el-table-column property="entity_name" label="Наименование" width="170"  show-overflow-tooltip />
+        <el-table-column property="entity_name" label="Наименование" width="260"  show-overflow-tooltip />
       </el-table-column>
-      <el-table-column label="Поставщик" align="center">
+      <el-table-column label="Клиент" align="center">
         <template #header>
           <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
-            Поставщик
+            Клиент
             <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"><el-icon>
@@ -65,7 +65,7 @@
               </template>
               <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
                 :max-collapse-tags="3" :options="optionsVendor" popper-class="vendorPopper" style="width: 300px"
-                placeholder="Фильтр по поставщику" @change="onVendorChange" size="small">
+                placeholder="Фильтр по клиенту" @change="onVendorChange" size="small">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                   <span style="
@@ -80,8 +80,8 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="vendor_id" label="Код" width="120" sortable show-overflow-tooltip />
-        <el-table-column property="vendor_name" label="Наименование" width="200" show-overflow-tooltip />
+        <el-table-column property="customer" label="Код" width="120" sortable show-overflow-tooltip />
+        <el-table-column property="customer_name" label="Наименование" width="300" show-overflow-tooltip />
       </el-table-column>
       <el-table-column prop="period" width="105">
         <template #header>
@@ -197,8 +197,8 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <el-table-column fixed="right" property="sum_calc" label="База расчета" width="100" show-overflow-tooltip />
-      <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip />
+      <!-- <el-table-column fixed="right" property="sum_calc" label="База расчета" width="100" show-overflow-tooltip />
+      <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip /> -->
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
       <el-table-column fixed="right" prop="sum_approved" label="Начислено" width="100" show-overflow-tooltip>
         <template #default="scope">
@@ -243,15 +243,15 @@ import { Filter } from '@element-plus/icons-vue'
 import { useGraphicСStore } from "~~/stores/graphicСStore";
 import { storeToRefs } from "pinia";
 import dayjs from 'dayjs';
-import { useKuAddStore } from "~~/stores/kuAddStore";
+import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import type { IEntityInKu } from "~/utils/types/entityTypes";
-import type { IGraphic } from "~/utils/types/graphicVendorTypes";
+import type { IGraphicC } from "~/utils/types/graphicCustomerTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 const store = useGraphicСStore();
-const storeKuAdd = useKuAddStore();
+const storeKuAdd = useKuCAddStore();
 const { getGraphic, pagination, countRowTable } = storeToRefs(store);
 const loading = ref()
-const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseEvent) => {
+const handleCellDblClick = (row: IGraphicC, column: any, cell: any, event: MouseEvent) => {
   if (column.property === 'sum_approved') {
     if (row.status === 'Начислено') {
       store.editApproved = row.sum_approved;
@@ -264,9 +264,9 @@ const handleCellDblClick = (row: IGraphic, column: any, cell: any, event: MouseE
   }
 };
 
-const tableData = ref<IGraphic[]>(getGraphic.value)
+const tableData = ref<IGraphicC[]>(getGraphic.value)
 
-const filterTag2 = (value: string, row: IGraphic) => {
+const filterTag2 = (value: string, row: IGraphicC) => {
   return row.period === value
 }
 

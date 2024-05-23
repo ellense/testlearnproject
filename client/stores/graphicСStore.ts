@@ -1,27 +1,32 @@
 import { defineStore } from 'pinia';
 import type { EntityId } from '~/utils/types/entityTypes';
+import type { GetAllGraphicС, IGraphicC } from '~/utils/types/graphicCustomerTypes';
 import type { IGraphic, GetAllGraphic } from '~/utils/types/graphicVendorTypes';
+import type { IKuCList } from '~/utils/types/kuCustomerTypes';
 import type { IKuList, IParamKu_Id, IKuId } from '~/utils/types/kuVendorTypes';
+import type { IService } from '~/utils/types/serviceTypes';
 import type { IGraphicСStore } from '~/utils/types/storesTypes';
 
 export const useGraphicСStore = defineStore("GraphicСStore", {
   state: (): IGraphicСStore => ({
     //селекты для множественного выбора
     multipleSelectionGraphic: [],
+    multipleSelectionService: [],
     multipleTableRef: null,
     //данные 
     dataGraphic: [],
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: false,
+    dialogFormShopAndServiceVisible: false,
     //утверждено
     editApproved: null,
     selectedRowEditApproved: {
       graph_id: null,
-      ku_id: "",
-      entity_id: "",
+      ku: "",
+      entity: "",
       entity_name: "",
-      vendor_id: "",
-      vendor_name: "",
+      customer: "",
+      customer_name: "",
       period: "",
       date_start: "",
       date_end: "",
@@ -48,8 +53,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
     searchGraphic: "",
     //параметры для фильтров при запросах
     KuParams: [],
-    filterGraphicValue: {
-    },
+    filterGraphicValue: {},
   }),
 
   getters: {
@@ -61,7 +65,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
     setMultipleTableRef(ref: Ref) {
       this.multipleTableRef = ref;
     },
-    toggleSelection(evt: MouseEvent, rows?: IKuList[] | undefined) {
+    toggleSelection(evt: MouseEvent, rows?: IKuCList[] | undefined) {
       if (this.multipleTableRef) {
         if (rows) {
           rows.forEach((row) => {
@@ -72,8 +76,11 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
         }
       }
     },
-    handleSelectionChange2(val: IGraphic[]) {
+    handleSelectionChange2(val: IGraphicC[]) {
       this.multipleSelectionGraphic = val;
+    },
+    handleSelectionChangeService(val: IService[]) {
+      this.multipleSelectionService = val;
     },
 
     //для разной пагинации
@@ -92,7 +99,7 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
         page,
         ku_id: this.$state.filterGraphicValue?.ku_id || [],
         entity_id: this.$state.filterGraphicValue?.entity_id || [],
-        vendor_id: this.$state.filterGraphicValue?.vendor_id || [],
+        customer_id: this.$state.filterGraphicValue?.customer_id || [],
         status: this.$state.filterGraphicValue?.status || [],
         period: this.$state.filterGraphicValue?.period || [],
         date_start_s: this.$state.filterGraphicValue?.date_start_s,
@@ -123,29 +130,15 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
     },
 
     setFilterValue<
-      T extends keyof GetAllGraphic,
-      U extends GetAllGraphic[T],
+      T extends keyof GetAllGraphicС,
+      U extends GetAllGraphicС[T],
     >(field: T, value: U) {
       this.$state.filterGraphicValue[field] = value
     },
-    removeFilterValue<T extends keyof GetAllGraphic>(field: T) {
+    removeFilterValue<T extends keyof GetAllGraphicС>(field: T) {
       if (this.$state.filterGraphicValue) {
         delete this.$state.filterGraphicValue[field]
       }
-    },
-
-    //для поиска в графике
-    async performSearchGraphic(searchQuery: string) {
-      try {
-        this.setSearchQueryGraphic(searchQuery);
-        await this.getGraphicsFromAPIWithFilter();
-      } catch (error) {
-        console.error('Ошибка при выполнении поиска ку', error);
-      }
-    },
-    setSearchQueryGraphic(query: string) {
-      console.log('Устанавливается запрос поиска гр:', query);
-      this.$state.searchGraphic = query;
     },
 
 

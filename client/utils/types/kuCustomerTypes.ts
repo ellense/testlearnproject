@@ -41,13 +41,6 @@ export interface IKuCList {
   }
   export interface IKuCPostGraphic {
     ku_id: string;
-    entity: string;
-    customer: string;
-    period: string;
-    date_start: Date | string;
-    date_end: Date | string;
-    status: string;
-    graph_exists: boolean | string
   }
   export interface IKuCUpdate {
     ku_id: string;

@@ -3,9 +3,10 @@ import type { GetUserData } from "~/utils/types/authTypes";
 import type { GetAllBrands, GetAllBrandsReturnData } from "~/utils/types/brandTypes";
 import type { IParamCustomers, ICustomerReturnData, IParamCustomersKU, ICustomerForEntityReturnData } from "~/utils/types/customerTypes";
 import type { IParamEntities, IEntity, IEntityInKu, EntityId, IEntityFull } from "~/utils/types/entityTypes";
+import type { GetAllGraphicС, GetAllGraphicСsReturnData, IGraphicСInfo } from "~/utils/types/graphicCustomerTypes";
 import type { GetAllGraphic, GetAllGraphicsReturnData, IGraphicId, IGraphicInfo } from "~/utils/types/graphicVendorTypes";
 import type { IParamInvoices, IInvoicesReturnData } from "~/utils/types/invoiceTypes";
-import type { IParamKusC, IKusCReturnData, IKuCList, IKuCPost, IKuCUpdate } from "~/utils/types/kuCustomerTypes";
+import type { IParamKusC, IKusCReturnData, IKuCList, IKuCPost, IKuCUpdate, IKuCPostGraphic } from "~/utils/types/kuCustomerTypes";
 import type { IParamKus, IKusReturnData, IParamKu_Id, IKu_IdReturnData, IKuPost, IKuList, IKuId, IKuUpdate, IKuDeleteGraph, IKuPostGraphic } from "~/utils/types/kuVendorTypes";
 import type { GetAllProducer, GetAllProducersReturnData } from "~/utils/types/producerTypes";
 import type { GetAllProducts, GetAllProductsReturnData } from "~/utils/types/productTypes";
@@ -214,6 +215,8 @@ export const KUC = {
     $Get(`api/ku_customer_detail/${data.ku_id}/`, { data, isBearer: false }),
   updateKu: (data: IKuCUpdate) =>
     $Put(`api/ku_customer_detail/${data.ku_id}/`, { data, isBearer: false }),
+  deleteKu: (data: IKuId) =>
+    $Delete(`api/ku_customer_detail/${data.ku_id}`, { data, isBearer: false }),
 
   //отправление
   postKu: (data: IKuCPost): Promise<IKuCList> =>
@@ -247,8 +250,18 @@ export const KUC = {
   updateOfficial: (data: IOfficialForKu) =>
     $Put(`api/official_customer_detail/${data.id}/`, { data, isBearer: false }),
 
+  deleteGraphRow: (params: IKuDeleteGraph) =>
+    $Delete("api/graph_customer_list/", { params, isBearer: false }),
 };
 export const GRAPHICC = {
-  getGraphic: (params?: GetAllGraphic): Promise<GetAllGraphicsReturnData> =>
+  getGraphic: (params?: GetAllGraphicС): Promise<GetAllGraphicСsReturnData> =>
     $Get("api/graph_customer_list/", { params, isBearer: false }),
+  postGraphic: (data: IKuCPostGraphic): Promise<IKuCPostGraphic> =>
+    $Post("api/graph_create_customer/", { data, isBearer: false }),
+  deleteGraphic: (data: IGraphicId) =>
+    $Delete(`api/graph_customer_detail/${data.graph_id}/`, { data, isBearer: false }),
+  getInfoGraphic: (data: IGraphicId): Promise<IGraphicСInfo> =>
+    $Get(`api/graph_customer_detail/${data.graph_id}/`, { data, isBearer: false }),
+  updateGraphic: (data: IGraphicСInfo) =>
+    $Put(`api/graph_customer_detail/${data.graph_id}/`, { data, isBearer: false }),
 };

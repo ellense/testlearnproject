@@ -13,6 +13,7 @@ import type { IBrand, GetAllBrands } from "./brandTypes";
 import type { IProducer, GetAllProducer } from "./producerTypes";
 import type { IProduct, GetAllProducts } from "./productTypes";
 import type { ITree, GetAllCategory } from "./treeTypes";
+import type { GetAllGraphicС, IGraphicC } from "./graphicCustomerTypes";
 
 
 //юр лица
@@ -537,12 +538,14 @@ export interface IVendorStore {
   //график расчетов клиентов
   export interface IGraphicСStore {
     //селекты для множественного выбора
-    multipleSelectionGraphic: IGraphic[];
+    multipleSelectionGraphic: IGraphicC[];
+    multipleSelectionService: IService[];
     multipleTableRef: Ref | null;
     //данные таблиц
-    dataGraphic: IGraphic[];
+    dataGraphic: IGraphicC[];
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: boolean;
+    dialogFormShopAndServiceVisible: boolean;
     //
     vendorFilter: string;
     vendors: IVendorIdAndName[];
@@ -556,12 +559,12 @@ export interface IVendorStore {
     searchGraphic: string;
     //
     editApproved: number | null;
-    selectedRowEditApproved: IGraphic;
+    selectedRowEditApproved: IGraphicC;
     //
     legalEntity: string[]
     //параметры для фильтров при запросах
     KuParams: string[]
-    filterGraphicValue: GetAllGraphic
+    filterGraphicValue: GetAllGraphicС
   }
 
   
