@@ -218,18 +218,6 @@ const rowDblclick = async (kuId: string) => {
     if (storeId.kuIdCustomerId && storeId.kuIdCustomerId.length > 0) {
       storeKuAdd.setFilterVendor('vendor_id', storeId.kuIdCustomerId);
       storeKuAdd.getCustomerNameFromAPIWithFilter()
-      // try {
-      //   storeKuAdd.setFilterCustomer("entity_id", storeId.kuIdEntityId)
-      //   await storeKuAdd.fetchKuEntity({
-      //     entity_id: "",
-      //     name: "",
-      //     merge_id: "",
-      //   });
-      //   await storeKuAdd.fetchAllCustomerIdForEntity();
-      // } catch (error) {
-      //   console.error("Ошибка при загрузке данных вкладок по фильтру клиента", error);
-      // }
-
     }
     else {
       storeId.disableButtonsIncluded = true;
@@ -364,6 +352,7 @@ const optionsStatus = ref<Array<{ label: string; value: string }>>([
   { label: 'Отменено', value: 'Отменено' }
 ]);
 const onStatusChange = async () => {
+  store.pagination = null;
   store.setFilterValue('status', Status.value);
   toggleTriggerFilter();
 };
@@ -375,6 +364,7 @@ const optionsGraph = ref<Array<{ label: string; value: string }>>([
   { label: 'Нет', value: 'False' },
 ]);
 const onGraphChange = async () => {
+  store.pagination = null;
   store.setFilterValue('graph_exists', Graph.value);
   toggleTriggerFilter();
 };

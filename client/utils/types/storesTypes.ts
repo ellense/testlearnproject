@@ -14,6 +14,7 @@ import type { IProducer, GetAllProducer } from "./producerTypes";
 import type { IProduct, GetAllProducts } from "./productTypes";
 import type { ITree, GetAllCategory } from "./treeTypes";
 import type { GetAllGraphicС, IGraphicC } from "./graphicCustomerTypes";
+import type { IKuCList } from "./kuCustomerTypes";
 
 
 //юр лица
@@ -540,9 +541,12 @@ export interface IVendorStore {
     //селекты для множественного выбора
     multipleSelectionGraphic: IGraphicC[];
     multipleSelectionService: IService[];
+    multipleSelectionPlace: IPlace[];
     multipleTableRef: Ref | null;
     //данные таблиц
     dataGraphic: IGraphicC[];
+    graphicId: IGraphicC
+    kuId: IKuCList
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: boolean;
     dialogFormShopAndServiceVisible: boolean;

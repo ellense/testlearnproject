@@ -13,7 +13,6 @@ export interface IGraphicC {
     date_end: Date | string | null;
     date_calc: Date | string | null;
     date_accrual: Date | string | null;
-    percent: number | null;
     sum_calc: number | null;
     sum_bonus: number | null;
     sum_approved: number | null;
@@ -31,6 +30,7 @@ export interface IGraphicC {
     date_start: Date | string;
     date_end: Date | string;
     date_calc: Date | string;
+    date_accrual: Date | string | null;
     percent: number | null;
     sum_calc: number | null;
     sum_bonus: number | null;

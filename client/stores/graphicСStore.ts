@@ -4,7 +4,7 @@ import type { GetAllGraphicС, IGraphicC } from '~/utils/types/graphicCustomerTy
 import type { IGraphic, GetAllGraphic } from '~/utils/types/graphicVendorTypes';
 import type { IKuCList } from '~/utils/types/kuCustomerTypes';
 import type { IKuList, IParamKu_Id, IKuId } from '~/utils/types/kuVendorTypes';
-import type { IService } from '~/utils/types/serviceTypes';
+import type { IPlace, IService } from '~/utils/types/serviceTypes';
 import type { IGraphicСStore } from '~/utils/types/storesTypes';
 
 export const useGraphicСStore = defineStore("GraphicСStore", {
@@ -12,9 +12,47 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
     //селекты для множественного выбора
     multipleSelectionGraphic: [],
     multipleSelectionService: [],
+    multipleSelectionPlace: [],
     multipleTableRef: null,
     //данные 
     dataGraphic: [],
+    graphicId: {
+      graph_id: null,
+      ku: "",
+      entity: "",
+      entity_name: "",
+      customer: "",
+      customer_name: "",
+      period: "",
+      date_start: null,
+      date_end: null,
+      date_calc: null,
+      date_accrual: null,
+      sum_calc: null,
+      sum_bonus: null,
+      sum_approved: null,
+      status: "",
+    },
+    kuId: {
+      ku_id: "",
+      entity: "",
+      entity_name: "",
+      customer: "",
+      customer_name: "",
+      period: "",
+      date_start:  "",
+      date_end:  "",
+      graph_exists: false,
+      status: "",
+      description: "",
+      contract: "",
+      docu_account: "",
+      docu_number: "",
+      docu_date:  "",
+      docu_subject: "",
+      pay_sum:  null,
+      pay_method: "",
+    },
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: false,
     dialogFormShopAndServiceVisible: false,
@@ -32,7 +70,6 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
       date_end: "",
       date_calc: "",
       date_accrual: "",
-      percent: null,
       sum_calc: null,
       sum_bonus: null,
       sum_approved: null,
@@ -82,7 +119,9 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
     handleSelectionChangeService(val: IService[]) {
       this.multipleSelectionService = val;
     },
-
+    handleSelectionChangePlace(val: IPlace[]) {
+      this.multipleSelectionPlace = val;
+    },
     //для разной пагинации
     setCountRowTable(count: number) {
       this.$state.countRowTable = count;
@@ -140,7 +179,30 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
         delete this.$state.filterGraphicValue[field]
       }
     },
-
+    //получение графика детеил для акта
+    async getGraphicDetailFromApi(grapId: number | null) {
+      try {
+        const results = await GRAPHICC.getInfoGraphic({
+          graph_id: grapId,
+        });
+        this.$state.graphicId = results;
+        console.log("успешно получили данные график_айди", results);
+      } catch (error) {
+        console.error("Ошибка при получении данных график_айди:", error);
+      }
+    },
+    //получение ку детеил для акта
+    async getKuDetailFromApi(kuId: string) {
+      try {
+        const results = await KUC.getInfoKu({
+          ku_id: kuId,
+        });
+        this.$state.kuId = results;
+        console.log("успешно получили данные ку_айди", results);
+      } catch (error) {
+        console.error("Ошибка при получении данных ку_айди:", error);
+      }
+    },
 
     //получения юр лица для фильтра в графике
     getLegalEntityFilterForGraphicFromApi() {

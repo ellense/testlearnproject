@@ -51,11 +51,11 @@
           </div>
         </template>
         <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
-        <el-table-column property="entity_name" label="Наименование" width="260"  show-overflow-tooltip />
+        <el-table-column property="entity_name" label="Наименование" width="230"  show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Клиент" align="center">
         <template #header>
-          <div class="column-header" :style="{ color: Vendor.length > 0 ? '#409EFF' : 'inherit' }">
+          <div class="column-header" :style="{ color: Customer.length > 0 ? '#409EFF' : 'inherit' }">
             Клиент
             <el-popover placement="bottom" :width="325" trigger="click">
               <template #reference>
@@ -63,9 +63,9 @@
                     <Filter />
                   </el-icon></el-button>
               </template>
-              <el-select-v2 v-model="Vendor" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="3" :options="optionsVendor" popper-class="vendorPopper" style="width: 300px"
-                placeholder="Фильтр по клиенту" @change="onVendorChange" size="small">
+              <el-select-v2 v-model="Customer" multiple clearable filterable collapse-tags collapse-tags-tooltip
+                :max-collapse-tags="3" :options="optionsCustomer" popper-class="vendorPopper" style="width: 300px"
+                placeholder="Фильтр по клиенту" @change="onCustomerChange" size="small">
                 <template #default="{ item }" class="selectVendorInKuAdd">
                   <span style="margin-right: 8px">{{ item.label }}</span>
                   <span style="
@@ -81,7 +81,7 @@
           </div>
         </template>
         <el-table-column property="customer" label="Код" width="120" sortable show-overflow-tooltip />
-        <el-table-column property="customer_name" label="Наименование" width="300" show-overflow-tooltip />
+        <el-table-column property="customer_name" label="Наименование" width="230" show-overflow-tooltip />
       </el-table-column>
       <el-table-column prop="period" width="105">
         <template #header>
@@ -197,8 +197,7 @@
           </template>
         </el-table-column>
       </el-table-column>
-      <!-- <el-table-column fixed="right" property="sum_calc" label="База расчета" width="100" show-overflow-tooltip />
-      <el-table-column fixed="right" property="percent" label="Процент" width="90" show-overflow-tooltip /> -->
+      <el-table-column fixed="right" property="sum_calc" label="Сумма выплат" width="100" show-overflow-tooltip />
       <el-table-column fixed="right" property="sum_bonus" label="Расчитано" width="100" show-overflow-tooltip />
       <el-table-column fixed="right" prop="sum_approved" label="Начислено" width="100" show-overflow-tooltip>
         <template #default="scope">
@@ -247,6 +246,7 @@ import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IGraphicC } from "~/utils/types/graphicCustomerTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
+import type { ICustomerIdAndName } from "~/utils/types/customerTypes";
 const store = useGraphicСStore();
 const storeKuAdd = useKuCAddStore();
 const { getGraphic, pagination, countRowTable } = storeToRefs(store);
@@ -389,20 +389,21 @@ onMounted(async () => {
   }
 });
 //фильтр поставщика
-const Vendor = ref<string[]>(filterGraphicValue.value.vendor_id || []);
-const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
-watch(() => storeKuAdd.dataVendorId, (vendors: IVendorIdAndName[]) => {
-  optionsVendor.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
+const Customer = ref<string[]>(filterGraphicValue.value.customer_id || []);
+const optionsCustomer = ref<Array<{ label: string; value: string }>>([]);
+watch(() => storeKuAdd.dataCustomerId, (vendors: ICustomerIdAndName[]) => {
+  optionsCustomer.value = vendors.map(item => ({ label: item.name, value: item.customer_id }));
 });
 onMounted(async () => {
   try {
-    await storeKuAdd.fetchAllVendorIdForEntity();
+    await storeKuAdd.fetchAllCustomerIdForEntity();
   } catch (error) {
-    console.error("Ошибка при загрузке данных поставщика", error);
+    console.error("Ошибка при загрузке данных Клиента", error);
   }
 });
-const onVendorChange = async () => {
-  store.setFilterValue('vendor_id', Vendor.value);
+const onCustomerChange = async () => {
+  store.pagination = null;
+  store.setFilterValue('customer_id', Customer.value);
   toggleTriggerFilter();
 };
 //фильтр по периоду
@@ -426,6 +427,7 @@ const optionsStatus = ref<Array<{ label: string; value: string }>>([
   { label: 'Утверждено', value: 'Утверждено' },
 ]);
 const onStatusChange = async () => {
+  store.pagination = null;
   store.setFilterValue('status', Status.value);
   toggleTriggerFilter();
 };
@@ -550,4 +552,3 @@ const changeDateRange4 = (newDateRange: Date[]) => {
 };
 </script>
 <style scoped></style>
-~/utils/types/serviceTypes
