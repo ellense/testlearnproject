@@ -22,7 +22,7 @@
                     </div>
                 </el-tab-pane>
                 <el-tab-pane label="Магазины" name="second">
-                    <el-scrollbar class="scrollTable">
+                    <!-- <el-scrollbar class="scrollTable">
                         <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading"
                             border @sort-change="handleSortChange" stripe>
                             <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
@@ -44,7 +44,7 @@
                             :page-count="Math.ceil(pagination.count / pageSize)"
                             layout="sizes, prev, pager, next, total" @size-change="handleSizeChange"
                             @current-change="paginationChange" :total="pagination.count" />
-                    </div>
+                    </div> -->
                 </el-tab-pane>
             </el-tabs>
         </div>
