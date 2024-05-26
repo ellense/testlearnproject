@@ -37,6 +37,9 @@ export interface ICustomerFull {
     customer_id: string
     name: string;
   }
+  export interface ICustomerId {
+    customer_id: string
+  }
   
   export interface ICustomerForEntityReturnData extends Pagination {
     results: ICustomerIdAndName[]

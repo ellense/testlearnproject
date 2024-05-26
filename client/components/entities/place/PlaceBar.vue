@@ -4,7 +4,6 @@
     <h3>Услуги</h3>
     <el-divider direction="vertical" />
     <el-button type="success" plain @click="store.dialogFormPlaceVisible = true" size="small">Добавить</el-button>
-    <!-- <el-button type="primary" plain @click="" size="small">Создать отчет</el-button> -->
   </div>
     <div class="directoryBar_filter">
       <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;" :prefix-icon="Search" size="small"></el-input>
@@ -51,11 +50,28 @@ watch(searchQuery, (newValue: string) => {
 });
 
 const saveRow = async () => {
-  tableData.value.push({ shop_code: store.newShop_id , shop_name: store.newShop_name, address: store.newAddress });
-  console.log("данные услуг :", store.tableDataPlace)
+  const data = {
+    shop_code: store.newShop_id, 
+    shop_name: store.newShop_name, 
+    address: store.newAddress
+  };
+
+  try {
+    const response = await SERVICE.postPlace(data);
+    console.log("магазин успешно отправлен:", response);
+    store.pagination = null
+    await store.getPlaceFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при добавлении магазина на сервер", error);
+  }
+
   store.dialogFormPlaceVisible = false
-  store.pagination = null
-  await store.getPlaceFromAPIWithFilter();
+
+  // tableData.value.push({ shop_code: store.newShop_id , shop_name: store.newShop_name, address: store.newAddress });
+  // console.log("данные услуг :", store.tableDataPlace)
+  // store.dialogFormPlaceVisible = false
+  // store.pagination = null
+  // await store.getPlaceFromAPIWithFilter();
 }
 </script>
 

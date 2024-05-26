@@ -6,7 +6,7 @@
       <el-table-column prop="address" label="Адрес"  show-overflow-tooltip sortable />
       <el-table-column label="Операция" align="center" width="200">
         <template #default="scope">
-          <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.$index)"
+          <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.row)"
             >Удалить</el-button>
         </template>
       </el-table-column>
@@ -69,6 +69,7 @@ watch(getPlace, (value) => {
 });
 
 onMounted(async () => {
+  
   try {
     loading.value = true; 
     await store.getPlaceFromAPIWithFilter();
@@ -79,8 +80,42 @@ onMounted(async () => {
   }
 });
 
-const deleteRow = (index: number) => {
-  store.tableDataPlace.splice(index, 1);
+const deleteRow = async (row: IPlace) => {
+  try {
+    await ElMessageBox.confirm(
+      'Вы уверены, что хотите удалить этот элемент?',
+      'Подтверждение удаления',
+      {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning',
+      }
+    );
+  const id = row.id;
+  if (id !== null) {
+    try {
+      await SERVICE.deletePlace({id});
+      store.tableDataPlace = store.tableDataPlace.filter(item => item.id !== id);
+      ElMessage({
+          type: 'success',
+          message: 'Элемент успешно удален!'
+        });
+    } catch (error) {
+      console.error("Ошибка при удалении места на бэкенд:", error);
+      ElMessage({
+          type: 'error',
+          message: 'Ошибка при удалении элемента!'
+        });
+    }
+  } else {
+    console.error("ID строки не может быть null");
+  }
+} catch {
+    ElMessage({
+      type: 'info',
+      message: 'Удаление отменено'
+    });
+  }
 }
 </script>
 

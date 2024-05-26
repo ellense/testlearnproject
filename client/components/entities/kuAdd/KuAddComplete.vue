@@ -81,7 +81,7 @@ const colors = [
 ]
 import { ElNotification } from 'element-plus'
 import type { IKuList } from "~/utils/types/kuVendorTypes";
-import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost, IOfficialForKuPost, IManagerForKu } from "~/utils/types/tabsKuTypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost, IOfficialForKuPost, IManagerForKu, IManager } from "~/utils/types/tabsKuTypes";
 
 const createKU = async () => {
   try {
@@ -233,15 +233,13 @@ const postVAC = async (response: IKuList, dataArray: any) => {
 };
 
 const postManager = async (response: IKuList, dataArray: any) => {
-  const itemsArray = dataArray.map((item: IManagerForKu) => ({
+  const itemsArray = dataArray.map((item: IManager) => ({
     ku: response.ku_id,
     manager: item.id,
   }));
 
   return await Promise.all(itemsArray.map(async (newItem: any) => {
     try {
-      console.log("itemsArray",itemsArray)
-      console.log("dataArray",dataArray)
       return await  KU.postKuManager(newItem);
     } catch (error) {
       console.error("Ошибка при отправке менеджеров на бэкенд:", error);

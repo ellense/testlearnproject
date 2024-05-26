@@ -9,7 +9,7 @@
       <el-table-column label="Единица измерения" prop="unit"  show-overflow-tooltip sortable />
       <el-table-column label="Операция" align="center" width="200">
         <template #default="scope">
-          <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.$index)"
+          <el-button text type="danger" :icon="Delete" size="small"  @click.prevent="deleteRow(scope.row)"
             >Удалить</el-button>
         </template>
       </el-table-column>
@@ -82,8 +82,45 @@ onMounted(async () => {
   }
 });
 
-const deleteRow = (index: number) => {
-  store.tableDataPricelist.splice(index, 1);
+const deleteRow = async (row: IPricelist) => {
+  try {
+    await ElMessageBox.confirm(
+      'Вы уверены, что хотите удалить этот элемент?',
+      'Подтверждение удаления',
+      {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning',
+      }
+    );
+
+    const id = row.id;
+
+    if (id !== null) {
+
+      try {
+        await SERVICE.deletePricelist({id});
+        store.tableDataPricelist = store.tableDataPricelist.filter(item => item.id !== id);
+        ElMessage({
+          type: 'success',
+          message: 'Элемент успешно удален!'
+        });
+      } catch (error) {
+        console.error("Ошибка при удалении прайслиста на бэкенд:", error);
+        ElMessage({
+          type: 'error',
+          message: 'Ошибка при удалении элемента!'
+        });
+      }
+    } else {
+      console.error("ID строки не может быть null");
+    }
+  } catch {
+    ElMessage({
+      type: 'info',
+      message: 'Удаление отменено'
+    });
+  }
 }
 </script>
 

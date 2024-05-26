@@ -7,7 +7,7 @@ import type { IKuList } from "~/utils/types/kuVendorTypes";
 import type { IProducer, GetAllProducer } from "~/utils/types/producerTypes";
 import type { IProduct, GetAllProducts } from "~/utils/types/productTypes";
 import type { IKuAddStore } from "~/utils/types/storesTypes";
-import type { IExInvoiceForKu, IManagerForKu, GetParamExInvoicesForKu, IParamManagers, IContractPost } from "~/utils/types/tabsKuTypes";
+import type { IExInvoiceForKu, IManagerForKu, GetParamExInvoicesForKu, IParamManagers, IContractPost, IManager } from "~/utils/types/tabsKuTypes";
 import type { GetAllCategory, ITree } from "~/utils/types/treeTypes";
 import type { IVendorIdAndName, IParamVendorsForEntity } from "~/utils/types/vendorTypes";
 
@@ -156,7 +156,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         handleSelectionChangeExInvoice(val: IExInvoiceForKu[]) {
             this.multipleSelectionExInvoice = val;
         },
-        handleSelectionChangeManager(val: IManagerForKu[]) {
+        handleSelectionChangeManager(val: IManager[]) {
             this.multipleSelectionManager = val;
         },
 

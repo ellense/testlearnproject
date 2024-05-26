@@ -124,6 +124,11 @@ export interface IParamKuId {
   }
   
   //кат. менеджеры
+  export interface IManager {
+    id: number | null
+    group: string;
+    description: string;
+  }
   export interface IManagerForKu {
     id: number | null
     manager: number | null;
@@ -136,6 +141,9 @@ export interface IParamKuId {
     ku_id?: string;
   }
   export interface IManagersReturnData extends Pagination {
+    results: IManager[];
+  }
+  export interface IManagersKuReturnData extends Pagination {
     results: IManagerForKu[];
   }
   export interface IManagerForKuPost {

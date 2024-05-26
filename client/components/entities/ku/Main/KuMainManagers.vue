@@ -22,7 +22,7 @@
         <el-table style="width: 780px" height="300" :data="tableData" border
           @selection-change="store2.handleSelectionChangeManager" ref="multipleTableRef" v-loading="loading">
           <el-table-column type="selection" width="30" />
-          <el-table-column property="manager" label="Код" width="100" show-overflow-tooltip />
+          <el-table-column property="id" label="Код" width="100" show-overflow-tooltip />
           <el-table-column property="group" label="Группа категорийных менеджеров" width="300" show-overflow-tooltip />
           <el-table-column property="description" label="Описание" width="350" show-overflow-tooltip />
 
@@ -49,7 +49,7 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
-import type { IManagerForKu } from "~/utils/types/tabsKuTypes";
+import type { IManager, IManagerForKu } from "~/utils/types/tabsKuTypes";
 const store = useKuIdStore();
 const store2 = useKuAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
@@ -61,7 +61,7 @@ const { getManagerForKu } = storeToRefs(
 const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
 });
-const tableData = ref<IManagerForKu[]>(getManagerAll.value);
+const tableData = ref<IManager[]>(getManagerAll.value);
 
 const loading = ref()
 
@@ -114,8 +114,8 @@ const AddManagers = () => {
 
   selectedRows.forEach(row => {
     store.tableDataManagerSelect.push({
-      id: row.id,
-      manager: row.manager,
+      id: null,
+      manager: row.id,
       group: row.group,
       description: row.description,
     });

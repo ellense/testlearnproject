@@ -248,7 +248,7 @@ const postVAC = async (response: any, dataArray: any) => {
 };
 
 const postManager = async (response: any, dataArray: any) => {
-  const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
+  const itemsArray = dataArray.map((item: IManagerForKu) => ({
     ku: response.ku_id,
     manager: item.manager,
   }));

@@ -45,13 +45,13 @@ import { storeToRefs } from "pinia";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
-import type { IManagerForKu } from "~/utils/types/tabsKuTypes";
+import type { IManager, IManagerForKu } from "~/utils/types/tabsKuTypes";
 
 const store = useKuCAddStore();
 const { getManagerAll, pagination, countRowTable } = storeToRefs(
   store
 );
-const tableData = ref<IManagerForKu[]>(getManagerAll.value);
+const tableData = ref<IManager[]>(getManagerAll.value);
 
 const loading = ref()
 
@@ -84,7 +84,7 @@ const paginationChange = (page: number) => {
 
 //для очистки выбора
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
-const toggleSelection = (rows?: IManagerForKu[]) => {
+const toggleSelection = (rows?: IManager[]) => {
   if (rows) {
     rows.forEach((row) => {
       multipleTableRef.value!.toggleRowSelection(row, false)
@@ -102,7 +102,6 @@ const AddManagers = () => {
   selectedRows.forEach(row => {
     store.tableDataManagerSelect.push({
       id: row.id,
-      manager: row.manager,
       group: row.group,
       description: row.description,
     });

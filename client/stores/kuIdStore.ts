@@ -330,6 +330,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 .then((tableData) => {
                     console.log('Получены данные менеджеров ку_айди:', tableData);
                     this.$state.tableDataManagerSelect = tableData.results;
+                    
                     this.$state.initialState.tableDataManagerSelect = this.$state.tableDataManagerSelect.slice();
                     console.log('initialState.tableDataManagerSelect:', this.$state.initialState.tableDataManagerSelect);
                     this.$state.pagination = {

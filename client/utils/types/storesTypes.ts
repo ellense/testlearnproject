@@ -8,7 +8,7 @@ import type { IKuList, IParamKus } from "./kuVendorTypes";
 import type { IVendor, IParamVendorsForEntityInVendor, IVendorId, IParamVendorsForEntity, IVendorIdAndName, IVendorName, IVendorFull } from "./vendorTypes";
 import type { GraphicForExcelReportInvoice, GraphicForExcelReportProduct, GetAllInvoicesAndProductForGraphic } from "./actTypes";
 import type { IGraphic, GetAllGraphic, IGraphicInfo } from "./graphicVendorTypes";
-import type { IOfficialForKu, IParamKuId, IServiceAndArticle, IContractService, GetParamExInvoicesForKu, IContract, IExInvoiceForKu, IManagerForKu, IParamManagers, IPercent, IRequirement, IVendorAndContract } from "./tabsKuTypes";
+import type { IOfficialForKu, IParamKuId, IServiceAndArticle, IContractService, GetParamExInvoicesForKu, IContract, IExInvoiceForKu, IManagerForKu, IParamManagers, IPercent, IRequirement, IVendorAndContract, IManager } from "./tabsKuTypes";
 import type { IBrand, GetAllBrands } from "./brandTypes";
 import type { IProducer, GetAllProducer } from "./producerTypes";
 import type { IProduct, GetAllProducts } from "./productTypes";
@@ -139,7 +139,7 @@ export interface IVendorStore {
     //селекты для множественного выбора
     multipleSelectionProduct: IProduct[];
     multipleSelectionExInvoice: IExInvoiceForKu[]
-    multipleSelectionManager: IManagerForKu[]
+    multipleSelectionManager: IManager[]
     multipleTableRef: Ref | null;
     //данные таблиц
     brandIncluded: IBrand[];
@@ -154,8 +154,8 @@ export interface IVendorStore {
     tableDataPercent: IPercent[];
     tableDataExInvoiceAll: IExInvoiceForKu[]
     tableDataExInvoiceSelect: IExInvoiceForKu[]
-    tableDataManagerAll: IManagerForKu[]
-    tableDataManagerSelect: IManagerForKu[]
+    tableDataManagerAll: IManager[]
+    tableDataManagerSelect: IManager[]
     tableDataVAC: IVendorAndContract[]
     dataEntity: IEntityInKu[];
     // dataVendorId: IVendorId[];
@@ -316,7 +316,7 @@ export interface IVendorStore {
     //
     multipleSelectionProduct: IProduct[];
     multipleSelectionExInvoice: IExInvoiceForKu[]
-    multipleSelectionManager: IManagerForKu[]
+    multipleSelectionManager: IManager[]
     multipleTableRef: Ref | null;
     filterVendorValue: IParamVendorsForEntity
   }
@@ -416,13 +416,13 @@ export interface IVendorStore {
     multipleSelectionService: IService[];
     multipleSelectionArticle: IArticle[];
     multipleSelectionServiceSelect: IServiceAndArticle[];
-    multipleSelectionManager: IManagerForKu[]
+    multipleSelectionManager: IManager[]
     multipleSelectionVendorAndContract: IVendorAndContract[]
     multipleTableRef: Ref | null;
     //данные таблиц
     tableDataContract: IContractService[]
-    tableDataManagerAll: IManagerForKu[]
-    tableDataManagerSelect: IManagerForKu[]
+    tableDataManagerAll: IManager[]
+    tableDataManagerSelect: IManager[]
     tableDataVAC: IVendorAndContract[]
     dataEntity: IEntityInKu[];
     dataVendorId: IVendorIdAndName[]
@@ -540,14 +540,18 @@ export interface IVendorStore {
   export interface IGraphicСStore {
     //селекты для множественного выбора
     multipleSelectionGraphic: IGraphicC[];
-    multipleSelectionService: IService[];
+    multipleSelectionArticle: IArticle[];
     multipleSelectionPlace: IPlace[];
     multipleTableRef: Ref | null;
     //данные таблиц
+    tableDataArticleSelect: IArticle[],
+    tableDataPlaceSelect: IPlace[],
     dataGraphic: IGraphicC[];
     graphicId: IGraphicC
     kuId: IKuCList
     official: IOfficialForKu[]
+    customer: ICustomerFull[],
+    entity: IEntityFull[],
     //v-model диалоговых форм
     dialogFormEditApprovedVisible: boolean;
     dialogFormShopAndServiceVisible: boolean;

@@ -91,11 +91,11 @@
             <el-input v-model="kuMain.newCustomerName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Номер счета" prop="newDocu_account">
+          <!-- <el-form-item label-width="170" label="Номер счета" prop="newDocu_account">
             <el-input v-model="kuMain.newDocu_account" size="small" clearable placeholder="Введите номер счета"
               style="width: 300px">
             </el-input>
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label-width="170" label="Номер договора" prop="newDocu_number">
             <el-input v-model="kuMain.newDocu_number" size="small" clearable placeholder="Введите номер договора"
               style="width: 300px">

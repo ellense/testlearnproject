@@ -163,6 +163,7 @@ export const useServiceStore = defineStore("IServiceStore", {
                 search: this.$state.searchPricelist,
                 sort_by,
                 sort_order,
+                article_code: this.$state.filterValuePricelist.article_code
             })
                 .then((tableData) => {
                     console.log('Получены данные прайслиста:', tableData);

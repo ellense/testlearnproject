@@ -5,13 +5,13 @@
             <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
                 <el-tab-pane label="Услуги" name="first">
                     <el-scrollbar class="scrollTable">
-                        <el-table :data="tableData" style="width: 100%" height="300px" v-loading="loading"
-                            border stripe @selection-change="store.handleSelectionChangeService" ref="multipleTableRef">
+                        <el-table :data="tableData" style="width: 100%" height="300px" v-loading="loading" border stripe
+                            @selection-change="store.handleSelectionChangeArticle" ref="multipleTableRef">
                             <el-table-column property="selection" type="selection" width="30" show-overflow-tooltip />
-                            <el-table-column label="Код услуги" prop="service_code" width="400" show-overflow-tooltip
+                            <el-table-column label="Код статьи" prop="article_code" width="400" show-overflow-tooltip
                                 sortable />
-                            <el-table-column prop="service_name" label="Наименование  услуги" show-overflow-tooltip
-                                sortable />
+                            <el-table-column prop="article_name" label="Наименование статьи услуги"
+                                show-overflow-tooltip sortable />
                         </el-table>
                     </el-scrollbar>
                     <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
@@ -23,8 +23,8 @@
                 </el-tab-pane>
                 <el-tab-pane label="Магазины" name="second">
                     <el-scrollbar class="scrollTable">
-                        <el-table :data="tableData2" style="width: 100%" height="300px"
-                            v-loading="loading" border @sort-change="store.handleSelectionChangePlace" stripe>
+                        <el-table :data="tableData2" style="width: 100%" height="300px" v-loading="loading" border
+                            @selection-change="store.handleSelectionChangePlace" ref="multipleTableRef" stripe>
                             <el-table-column property="selection" type="selection" width="30" show-overflow-tooltip />
                             <el-table-column label="Код магазина" prop="shop_code" width="200" show-overflow-tooltip
                                 sortable />
@@ -45,6 +45,7 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="store.dialogFormShopAndServiceVisible = false">Отмена</el-button>
+                <!-- <el-button @click="saveSelect()">Сохранить</el-button> -->
                 <el-button @click="createAct()">Сформировать акт</el-button>
             </span>
         </template>
@@ -52,12 +53,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import { storeToRefs } from "pinia";
 import type { TabsPaneContext } from 'element-plus'
 import { useGraphicСStore } from "~~/stores/graphicСStore";
 import { useServiceStore } from "~~/stores/serviceStore";
-import type { IService } from "~/utils/types/serviceTypes";
+import type { IArticle, IService } from "~/utils/types/serviceTypes";
 import type { IPlace } from "~/utils/types/serviceTypes";
 
 const store = useGraphicСStore()
@@ -69,8 +70,8 @@ const handleClick = (tab: TabsPaneContext, event: Event) => {
     console.log(tab, event)
 }
 
-const { getService, getPlace, pagination, countRowTable } = storeToRefs(store2);
-const tableData = ref<IService[]>(getService.value);
+const { getArticle, getPlace, pagination, countRowTable } = storeToRefs(store2);
+const tableData = ref<IArticle[]>(getArticle.value);
 const tableData2 = ref<IPlace[]>(getPlace.value);
 
 const loading = ref()
@@ -112,7 +113,7 @@ const paginationChange2 = (page: number) => {
         console.error("Ошибка при загрузке данных", error);
     }
 };
-watch(getService, (value) => {
+watch(getArticle, (value) => {
     tableData.value = value || [];
 });
 watch(getPlace, (value) => {
@@ -122,7 +123,7 @@ watch(getPlace, (value) => {
 onMounted(async () => {
     try {
         loading.value = true;
-        await store2.getServiceFromAPIWithFilter();
+        await store2.getArticleFromAPIWithFilter();
         await store2.getPlaceFromAPIWithFilter();
         loading.value = false;
     } catch (error) {
@@ -144,63 +145,87 @@ function loadFile(url: string, callback: (error: any, content: any) => void) {
 
 
 const createAct = async () => {
-      try {
+    try {
         const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
-        console.log("selectedRows[0]:", selectedRows[0])
         await store.getGraphicDetailFromApi(selectedRows[0]);
         const graphic = store.graphicId;
-        await store.getKuDetailFromApi(graphic.ku)
-    await store.getKuOfficialDetailFromApi(graphic.ku)
-        console.log("date_start_ku", store.kuId.date_start)
-        console.log("date_end_ku", store.kuId.date_end)
+        await store.getKuDetailFromApi(graphic.ku);
+        await store.getKuOfficialDetailFromApi(graphic.ku);
+        await store.getCustomerDetailFromApi(store.kuId.customer);
+        await store.getEntityDetailFromApi(store.kuId.entity);
+
+        store2.setFilterValuePricelist("article_code", store.multipleSelectionArticle[0].article_code);
+        await store2.getPricelistFromAPIWithFilter();
+       
+
         if (!graphic) {
-          console.error("Ошибка: данные графика не загружены");
-          return;
+            console.error("Ошибка: данные графика не загружены");
+            return;
         }
 
-          loadFile("/templates/templateOfActCustomer.docx", async (error, content) => {
+        // Проверка на наличие значения graphic.sum_bonus и данных прайс-листа
+        const sum_bonus = graphic.sum_bonus ?? 0;
+        const priceList = store2.tableDataPricelist;
+        if (!priceList || priceList.length === 0 || !priceList[0].price) {
+            ElMessage.error("Ошибка: данные прайс-листа не загружены или отсутствуют");
+            return;
+        }
+
+        const price = priceList[0].price;
+        const qty = sum_bonus ? parseFloat((sum_bonus / price).toFixed(2)) : 0;
+
+        loadFile("/templates/templateOfActCustomer.docx", async (error, content) => {
             if (error) {
-              throw error;
+                throw error;
             }
             const zip = new PizZip(content);
             const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
             doc.render({
-              customer_name: graphic.customer_name,
-              entity_name: graphic.entity_name,
+                customer_name: store.customer[0].urastic_name,
+                entity_name: store.entity[0].urastic_name,
 
-              counterparty_post: store.official[0].counterparty_post,
-              counterparty_name: store.official[0].counterparty_name,
-              counterparty_docu: store.official[0].counterparty_docu,
-              entity_post: store.official[0].entity_post,
-              entity_fio: store.official[0].entity_name,
-              entity_docu: store.official[0].entity_docu,
+                counterparty_post: store.official[0].counterparty_post,
+                counterparty_name: store.official[0].counterparty_name,
+                counterparty_docu: store.official[0].counterparty_docu,
+                entity_post: store.official[0].entity_post,
+                entity_fio: store.official[0].entity_name,
+                entity_docu: store.official[0].entity_docu,
 
-              date_start: dayjs(graphic.date_start).format('DD.MM.YYYY'),
-              date_end: dayjs(graphic.date_end).format('DD.MM.YYYY'),
-              date_accrual: dayjs(graphic.date_accrual).format('DD.MM.YYYY'),
-              sum_bonus: graphic.sum_bonus,
+                date_start: dayjs(graphic.date_start).format('DD.MM.YYYY'),
+                date_end: dayjs(graphic.date_end).format('DD.MM.YYYY'),
+                date_accrual: dayjs(graphic.date_accrual).format('DD.MM.YYYY'),
+                sum_bonus: graphic.sum_bonus,
+                date_startKu: dayjs(store.kuId.date_start).format('DD.MM.YYYY'),
+                date_endKu: dayjs(store.kuId.date_end).format('DD.MM.YYYY'),
+                article_name: store.multipleSelectionArticle[0].article_name,
+                sum_price: price,
+                shop_name: store.multipleSelectionPlace[0].shop_name,
 
-              date_startKu: dayjs(store.kuId.date_start).format('DD.MM.YYYY'),
-              date_endKu: dayjs(store.kuId.date_end).format('DD.MM.YYYY'),
-
-            //   article_name: useReportStore().vendor.inn_kpp,
-            //   shop_name: useReportStore().vendor.urastic_adress,
-            //   address: useReportStore().vendor.account,
-            //   qty: useReportStore().vendor.bank_name,
-            //   sum_price: useReportStore().vendor.bank_bik,
+                address: store.multipleSelectionPlace[0].address,
+                qty: qty
             });
 
             const out = doc.getZip().generate({
-              type: "blob",
-              mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+                type: "blob",
+                mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
             });
-            saveAs(out, "Приложение к договору по " + graphic.ku + " клиента " + graphic.customer_name + ".docx");
-          });
+            saveAs(out, "Приложение к договору по " + graphic.ku + " клиента " + store.customer[0].urastic_name + ".docx");
+        });
+        store.tableDataArticleSelect.length = 0
+        store.tableDataPlaceSelect.length = 0
 
-      } catch (error) {
+    } catch (error) {
         console.error("Произошла ошибка:", error);
-      }
-};
+    }
+}; 
+
+//https://docxtemplater.com/docs/tag-types/#creating-multiple-table-rows - динамически добавлять строки в таблицу
+
+
+
+
+
+
 </script>
 
 <style scoped></style>

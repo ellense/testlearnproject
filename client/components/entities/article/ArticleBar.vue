@@ -1,34 +1,37 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-    <h3>Статьи услуг</h3>
-    <el-divider direction="vertical" />
-    <el-button type="success" plain @click="store.dialogFormArticleVisible = true" size="small">Добавить</el-button>
-  </div>
+      <h3>Статьи услуг</h3>
+      <el-divider direction="vertical" />
+      <el-button type="success" plain @click="store.dialogFormArticleVisible = true" size="small">Добавить</el-button>
+    </div>
     <div class="directoryBar_filter">
-      <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;" :prefix-icon="Search" size="small"></el-input>
+      <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;"
+        :prefix-icon="Search" size="small"></el-input>
     </div>
   </div>
 
   <el-dialog v-model="store.dialogFormArticleVisible" title="Новая статья услуг" close-on-click-modal
-      close-on-press-escape draggable width="715px">
-      <el-scrollbar class="scrollTableFiltres">
-        <el-form >
-          <el-form-item label-width="200" label="Код статьи услуги">
-            <el-input v-model="store.newArticle_id" placeholder="Введите код" style=" width: 300px;" size="small"></el-input>
-          </el-form-item>
-          <el-form-item label-width="200" label="Наименование статьи услуги">
-            <el-input v-model="store.newArticle_name" placeholder="Введите наименование" style=" width: 300px;" size="small"></el-input>
-          </el-form-item>
-        </el-form>
-      </el-scrollbar>
-      <template #footer>
-        <span class="dialog-footer">
-          <el-button @click="store.dialogFormArticleVisible = false">Отмена</el-button>
-          <el-button @click="saveRow()">Сохранить</el-button>
-        </span>
-      </template>
-    </el-dialog>
+    close-on-press-escape draggable width="715px">
+    <el-scrollbar class="scrollTableFiltres">
+      <el-form>
+        <el-form-item label-width="200" label="Код статьи услуги">
+          <el-input v-model="store.newArticle_id" placeholder="Введите код" style=" width: 300px;"
+            size="small"></el-input>
+        </el-form-item>
+        <el-form-item label-width="200" label="Наименование статьи услуги">
+          <el-input v-model="store.newArticle_name" placeholder="Введите наименование" style=" width: 300px;"
+            size="small"></el-input>
+        </el-form-item>
+      </el-form>
+    </el-scrollbar>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button @click="store.dialogFormArticleVisible = false">Отмена</el-button>
+        <el-button @click="saveRow()">Сохранить</el-button>
+      </span>
+    </template>
+  </el-dialog>
 
 </template>
 
@@ -47,11 +50,21 @@ watch(searchQuery, (newValue: string) => {
 });
 
 const saveRow = async () => {
-  tableData.value.push({ article_code: store.newArticle_id , article_name: store.newArticle_name, });
-  console.log("данные статей услуг :", store.tableDataArticle)
+  const data = {
+    article_code: store.newArticle_id,
+    article_name: store.newArticle_name,
+  };
+
+  try {
+    const response = await SERVICE.postArticles(data);
+    console.log("статья услуги успешно отправлена:", response);
+    store.pagination = null
+    await store.getArticleFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при добавлении статьи услуги на сервер", error);
+  }
+
   store.dialogFormArticleVisible = false
-  store.pagination = null
-  await store.getArticleFromAPIWithFilter();
 }
 </script>
 

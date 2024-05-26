@@ -4,7 +4,6 @@
       <h3>Прайслист статей услуг</h3>
       <el-divider direction="vertical" />
       <el-button type="success" plain @click="store.dialogFormPricelistVisible = true" size="small">Добавить</el-button>
-      <!-- <el-button type="primary" plain @click="" size="small">Создать отчет</el-button> -->
     </div>
     <div class="directoryBar_filter">
       <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;"
@@ -66,11 +65,25 @@ watch(searchQuery, (newValue: string) => {
 });
 
 const saveRow = async () => {
-  tableData.value.push({ article_code: store.newPriceArticle_id, article_name: store.newPriceArticle_name, unit: store.newPricMeasure_unit, price: store.newPriceCost, date_expiration: store.newPriceExpiration_date, date_action: store.newPriceDate,  });
-  console.log("данные прайслиста:", store.tableDataPricelist)
+  const data = {
+    article_code: store.newPriceArticle_id,
+    article_name: store.newPriceArticle_name,
+    unit: store.newPricMeasure_unit, 
+    price: store.newPriceCost, 
+    date_expiration: store.newPriceExpiration_date, 
+    date_action: store.newPriceDate,
+  };
+
+  try {
+    const response = await SERVICE.postPricelist(data);
+    console.log("прайс успешно отправлен:", response);
+    store.pagination = null
+    await store.getPricelistFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при добавлении прайса на сервер", error);
+  }
+
   store.dialogFormPricelistVisible = false
-  store.pagination = null
-  await store.getPricelistFromAPIWithFilter();
 }
 
 </script>

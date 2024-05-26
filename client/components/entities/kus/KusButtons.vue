@@ -94,6 +94,16 @@ const isDeleteButtonDisabled = computed(() => {
 });
 
 const deleteKu = async () => {
+  try {
+    await ElMessageBox.confirm(
+      'Вы действительно хотите удалить коммерческое условие без возможности восстановления?',
+      'Подтверждение удаления',
+      {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning',
+      }
+    );
   const selectedRows = store.multipleSelection.map((row) => row.ku_id);
 
   try {
@@ -104,22 +114,6 @@ const deleteKu = async () => {
         const message = `В статусе "${kuDetails.status}" удалить КУ невозможно`;
         console.error(message);
         ElMessage.error(message);
-        return
-      }
-
-      // Если есть несохраненные данные, показываем диалоговое окно для подтверждения от пользователя
-      const confirmResult = await ElMessageBox.confirm(
-        'Вы действительно хотите удалить коммерческое условие без возможности восстановления?',
-        'Предупреждение',
-        {
-          type: 'warning',
-          confirmButtonText: 'Да',
-          cancelButtonText: 'Нет',
-        }
-      );
-
-      if (!confirmResult) {
-        // Если пользователь отказался от удаления, пропускаем текущую итерацию цикла
         return
       }
 
@@ -142,7 +136,13 @@ const deleteKu = async () => {
     console.error("Ошибка при удалении ку:", error);
     ElMessage.error("Ошибка при удалении коммерческого условия");
   }
-};
+} catch {
+    ElMessage({
+      type: 'info',
+      message: 'Удаление отменено'
+    });
+  }
+}
 
 
 

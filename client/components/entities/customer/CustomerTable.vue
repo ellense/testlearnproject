@@ -5,7 +5,7 @@
       <el-table-column prop="name" label="Наименование" width="220" show-overflow-tooltip sortable />
       <el-table-column prop="urastic_name" label="Полное наименование" width="300" show-overflow-tooltip sortable />
       <el-table-column label="Юридическое лицо" align="center">
-        <el-table-column prop="entity_id" label="Код" width="160" show-overflow-tooltip sortable />
+        <el-table-column prop="entity" label="Код" width="160" show-overflow-tooltip sortable />
         <el-table-column prop="entity_name" label="Наименование" width="190" show-overflow-tooltip  />
       </el-table-column>
       <el-table-column prop="director_name" label="Директор" width="170" show-overflow-tooltip  />

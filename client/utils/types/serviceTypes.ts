@@ -12,6 +12,7 @@ import type { Pagination } from "./generalTypes";
 ///////////////////////////////////// Справочники по услугам ///////////////////////////////////////////
 export interface IParamServices {
   page_size?: number
+  article_code?: string
   page?: number
   search?: string;
   sort_by?: string;
@@ -47,9 +48,17 @@ export interface IArticleReturnData extends Pagination {
 
 // Прайслист статей услуг
 export interface IPricelist {
-  id: number | null
+  id: number | null 
   date_action: Date | string
   date_expiration: Date | string;
+  article_code: string;
+  article_name: string;
+  price: number | null;
+  unit: string;
+}
+export interface IPricelistPost {
+  date_action: Date | string
+  date_expiration: Date | string | null;
   article_code: string;
   article_name: string;
   price: number | null;
@@ -62,6 +71,11 @@ export interface IPricelistReturnData extends Pagination {
 //места оказания услуг
 export interface IPlace {
   id: number | null
+  shop_code: string;
+  shop_name: string;
+  address: string;
+}
+export interface IPlacePost {
   shop_code: string;
   shop_name: string;
   address: string;
