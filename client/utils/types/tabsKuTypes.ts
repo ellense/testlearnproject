@@ -72,22 +72,22 @@ export interface IParamKuId {
   export interface IVendorAndContract {
     id: number | null;
     type_partner: string;
-    vendor_id: string;
+    vendor: string;
     vendor_name: string;
-    vendor_retention: string;
-    vendor_status: string
-    entity_id: string
+    retention: string;
+    status: string
+    entity: string
     entity_name: string
   }
   export interface IVACPost {
     type_partner: string;
-    vendor_id: string;
+    vendor: string;
     vendor_name: string;
-    vendor_retention: string;
-    vendor_status: string
-    entity_id: string
+    retention: string;
+    status: string
+    entity: string
     entity_name: string
-    ku_key_id: string;
+    ku: string;
   }
   export interface GetVACReturnData extends Pagination {
     results: IVendorAndContract[];

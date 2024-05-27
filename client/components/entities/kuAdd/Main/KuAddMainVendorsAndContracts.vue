@@ -8,13 +8,13 @@
       empty-text="Добавьте поставщиков">
       <el-table-column property="type_partner" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">
-        <el-table-column property="vendor_id" label="Код" width="150" show-overflow-tooltip />
+        <el-table-column property="vendor" label="Код" width="150" show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="300" show-overflow-tooltip />
-        <el-table-column property="vendor_retention" label="Удержание" width="100" show-overflow-tooltip />
+        <el-table-column property="retention" label="Удержание" width="100" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="vendor_status" label="Статус" width="150" show-overflow-tooltip />
+      <el-table-column property="status" label="Статус" width="150" show-overflow-tooltip />
       <el-table-column label="Юридическое лицо" align="center">
-        <el-table-column property="entity_id" label="Код" width="100" show-overflow-tooltip />
+        <el-table-column property="entity" label="Код" width="100" show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="300" show-overflow-tooltip />
       </el-table-column>
       <el-table-column align="center" label="Операция">
@@ -127,11 +127,11 @@ const AddManagers = async () => {
   store.tableDataVAC.push({
     id: null,
     type_partner: "Поставщик",
-    vendor_id: kuMain.newVendorIdVAC,
+    vendor: kuMain.newVendorIdVAC,
     vendor_name: vendorName,
-    vendor_retention: "Все",
-    vendor_status: "На удержании",
-    entity_id: kuMain.newEntityIdVAC,
+    retention: "Все",
+    status: "На удержании",
+    entity: kuMain.newEntityIdVAC,
     entity_name: entityName
   });
   kuMain.newEntityIdVAC = "";
@@ -146,11 +146,11 @@ const deleteRow = (index: number) => {
 //получение накладных
 const ExInvoice = async (row: IVendorAndContract) => {
   if(kuMain.newDateStart || kuMain.newDateEnd) {
-    kuMain.newVendorIdExInvoice = row.vendor_id
+    kuMain.newVendorIdExInvoice = row.vendor
     kuMain.newVendorNameExInvoice = row.vendor_name
     store.setFilterExInvoice('start_date', dayjs(kuMain.newDateStart).format("YYYY-MM-DD"));
     store.setFilterExInvoice('end_date', dayjs(kuMain.newDateEnd).format("YYYY-MM-DD"));
-    store.setFilterExInvoice('vendor_id', row.vendor_id);
+    store.setFilterExInvoice('vendor_id', row.vendor);
     await store.getInvoicesFromAPIWithFilter();
     store.dialogFormExInvoiceVisible = true
   } else{

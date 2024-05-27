@@ -168,6 +168,28 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                     return Promise.reject(error);
                 });
         },
+        //получение поставщиков и договоров ku_id
+        async getVACForKuId_API(ku_id?: string, page?: number) {
+            await KUC.getKuVAC({
+                ku_id, page_size: this.$state.countRowTable,
+                page,
+            })
+                .then((tableData) => {
+                    console.log('Получены данные поставщиков и договоров ку_айди:', tableData);
+                    this.$state.tableDataVAC = tableData.results;
+                    this.$state.initialState.tableDataVAC = this.$state.tableDataVAC.slice();
+                    console.log('initialState.tableDataPercent:', this.$state.tableDataVAC);
+                    this.$state.pagination = {
+                        count: tableData.count,
+                        previous: tableData.previous,
+                        next: tableData.next,
+                    };
+                })
+                .catch((error) => {
+                    console.error('Ошибка при получении данных поставщиков и договоров ку_айди:', error);
+                    return Promise.reject(error);
+                });
+        },
         async getManagerForKuId_API(ku_id?: string, page?: number) {
             await KUC.getKuManager({
                 ku_id, page_size: this.$state.countRowTable,

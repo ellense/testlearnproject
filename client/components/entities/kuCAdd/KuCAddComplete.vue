@@ -20,7 +20,7 @@ import { onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
 import type { IKuCList } from "~/utils/types/kuCustomerTypes";
-import type { IServicesPost, IOfficialForKuPost, IManagerForKu, IServiceAndArticle } from "~/utils/types/tabsKuTypes";
+import type { IServicesPost, IOfficialForKuPost, IManagerForKu, IServiceAndArticle, IVACPost } from "~/utils/types/tabsKuTypes";
 
 const clearDataBeforeLeave = () => {
   store.clearNewData()
@@ -97,10 +97,11 @@ const createKU = async () => {
     const responses = await postService(response, store.tableDataServiceSelect);
     const response2 = await postManager(response, store.tableDataManagerSelect);
     const response3 = await KUC.postKuOfficial(createOfficial(response));
+    const response4 = await postVAC(response, store.tableDataVAC);
 
     const success = responses.every(response => response !== null);
     if (response && success) {
-      handleSuccess(response, responses, response2, response3);
+      handleSuccess(response, responses, response2, response3, response4 );
     } else {
       handleError();
     }
@@ -168,6 +169,27 @@ const postManager = async (response: IKuCList, dataArray: any) => {
   }));
 };
 
+const postVAC = async (response: IKuCList, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: IVACPost) => ({
+    ku: response.ku_id,
+    type_partner: item.type_partner,
+      vendor: item.vendor,
+      vendor_name: item.vendor_name,
+      retention: item.retention,
+      status: item.status,
+      entity: item.entity,
+      entity_name: item.entity_name,
+  }));
+
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
+    try {
+      return await KUC.postKuVAC(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке VAC на бэкенд:", error);
+      return null;
+    }
+  }));
+};
 
 const createOfficial = (response: IKuCList) => {
   return {
@@ -181,11 +203,12 @@ const createOfficial = (response: IKuCList) => {
   };
 };
 
-const handleSuccess = (response: IKuCList, responses: any[], response2: any[], response3: IOfficialForKuPost) => {
+const handleSuccess = (response: IKuCList, responses: any[], response2: any[], response3: IOfficialForKuPost, response4: any) => {
   console.log("КУ клиентов успешно отправлен на бэкенд:", response);
   console.log("Услуги успешно отправлены на бэкенд:", responses);
   console.log("Кат. менеджеры успешно отправлены на бэкенд:", response2);
   console.log("Должн. лица успешно отправлены на бэкенд:", response3);
+  console.log("поставщики и договоры успешно отправлены на бэкенд:", response4);
   useKuCStore().getKuFromAPIWithFilter();
   router.push("kuC");
   ElMessage({

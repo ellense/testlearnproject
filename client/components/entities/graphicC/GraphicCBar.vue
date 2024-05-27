@@ -1,7 +1,7 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <h3>Графики расчетов</h3>
+      <h3>Графики расчетов КУ клиентов</h3>
       <el-divider direction="vertical" />
       <el-dropdown :disabled="isButtonsDisabled">
         <el-button type="success" plain :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
@@ -112,11 +112,26 @@ const ApproveGraphic = async () => {
 
 //удаление графиков
 const deleteGraphic = async () => {
+  try {
+    await ElMessageBox.confirm(
+      'Вы действительно хотите удалить график расчета без возможности восстановления?',
+      'Подтверждение удаления',
+      {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning',
+      }
+    );
   const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
   try {
     for (const graph_id of selectedRows) {
       const results = await GRAPHICC.deleteGraphic({ graph_id });
       console.log("успешно удалилось", results);
+      if (selectedRows.length === 1) {
+        ElMessage.success(`График расчета ${selectedRows} успешно удален`);
+      } else {
+        ElMessage.success(`Успешно удалены графики №: ${selectedRows.join(", ")}`);
+      }
     }
   } catch (error) {
     console.error("Ошибка при удалении строк:", error);
@@ -127,7 +142,13 @@ const deleteGraphic = async () => {
     );
     store.multipleSelectionGraphic = [];
   }
-};
+} catch {
+    ElMessage({
+      type: 'info',
+      message: 'Удаление отменено'
+    });
+  }
+}
 const isButtonsDisabled = computed(() => {
   return store.multipleSelectionGraphic.length > 1 || store.multipleSelectionGraphic.length === 0;
 });

@@ -6,11 +6,11 @@
       :disabled="isEditButtonDisabled" class="buttonAdd">Удалить все</el-button>
     <el-table :data="tableData" border style="width: 720px; margin-top: 10px;" height="40vh"
       empty-text="Добавьте условия бонуса">
-      <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
+      <!-- <el-table-column prop="fix" label="Фиксированная сумма" width="200" align="center">
         <template #default="{ row }">
           <el-checkbox v-model="row.fix" @change="onFixChange(row)" :disabled="isEditButtonDisabled"></el-checkbox>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column prop="criterion" label="Критерий в руб." width="200">
         <template #default="{ row }">
           <el-input v-model="row.criterion" @change="onCriteriaChange(row)" clearable size="small"

@@ -8,21 +8,21 @@
       empty-text="Добавьте поставщиков">
       <el-table-column property="type_partner" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">
-        <el-table-column property="vendor_id" label="Код" width="150" show-overflow-tooltip />
+        <el-table-column property="vendor" label="Код" width="150" show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="200" show-overflow-tooltip />
-        <el-table-column property="vendor_retention" label="Удержание" width="100" show-overflow-tooltip />
+        <el-table-column property="retention" label="Удержание" width="100" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column property="vendor_status" label="Статус" width="150" show-overflow-tooltip />
+      <el-table-column property="status" label="Статус" width="150" show-overflow-tooltip />
       <el-table-column label="Юридическое лицо" align="center">
-        <el-table-column property="entity_id" label="Код" width="100" show-overflow-tooltip />
+        <el-table-column property="entity" label="Код" width="100" show-overflow-tooltip />
         <el-table-column property="entity_name" label="Наименование" width="200" show-overflow-tooltip />
       </el-table-column>
       <el-table-column align="center" label="Операция">
         <template #default="scope">
           <el-button text type="success" :icon="DocumentRemove" size="small"
-            @click.prevent="ExInvoice(scope.row)">Исключить накладные</el-button>
+            @click.prevent="ExInvoice(scope.row)" :disabled="isEditButtonDisabled">Исключить накладные</el-button>
           <el-button text type="danger" :icon="Delete" size="small"
-            @click.prevent="deleteRow(scope.$index)">Удалить</el-button>
+            @click.prevent="deleteRow(scope.$index)" :disabled="isEditButtonDisabled">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -137,11 +137,11 @@ const AddManagers = async () => {
     store.tableDataVAC.push({
       id: null,
       type_partner: "Поставщик",
-      vendor_id: store.kuIdVendorIdVAC,
+      vendor: store.kuIdVendorIdVAC,
       vendor_name: vendorName,
-      vendor_retention: "Все",
-      vendor_status: "На удержании",
-      entity_id: store.kuIdEntityIdVAC,
+      retention: "Все",
+      status: "На удержании",
+      entity: store.kuIdEntityIdVAC,
       entity_name: entityName
     });
     store.kuIdEntityIdVAC = "";
@@ -155,11 +155,11 @@ const deleteRow = (index: number) => {
 //получение накладных
 const ExInvoice = async (row: IVendorAndContract) => {
   if(store.kuIdDateStart || store.kuIdDateEnd) {
-    store.kuIdVendorIdExInvoice = row.vendor_id
+    store.kuIdVendorIdExInvoice = row.vendor
     store.kuIdVendorNameExInvoice = row.vendor_name
     store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart).format("YYYY-MM-DD"));
     store2.setFilterExInvoice('end_date', dayjs(store.kuIdDateEnd).format("YYYY-MM-DD"));
-    store2.setFilterExInvoice('vendor_id', row.vendor_id);
+    store2.setFilterExInvoice('vendor_id', row.vendor);
     await store2.getInvoicesFromAPIWithFilter();
     store.dialogFormExInvoiceVisible = true
   } else{

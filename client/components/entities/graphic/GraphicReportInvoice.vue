@@ -66,7 +66,7 @@ const columnTable: ColumnTable[] = [
     width: 100,
   },
   {
-    field: "invoicestatus",
+    field: "invoice_status",
     label: "Статус документа",
     type: "string",
     width: 100,
@@ -94,6 +94,10 @@ watch(getInvoiceInfo, (value) => {
   tableDataReport.value = value || [];
   console.log("Новые данные invoices получены из хранилища:", tableDataReport.value);
 });
+
+const getStatusText = (status: string): string => {
+  return status === "1" ? "Счет-фактура" : "";
+};
 
 
 function exportAsExcel() {
@@ -222,4 +226,3 @@ function exportAsExcel() {
 </script>
 
 <style scoped></style>
-~/utils/types/serviceTypes

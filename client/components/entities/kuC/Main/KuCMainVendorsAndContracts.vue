@@ -9,13 +9,13 @@
       empty-text="Добавьте поставщиков"  >
       <el-table-column property="type_partner" label="Тип партнера" width="150" show-overflow-tooltip />
       <el-table-column label="Поставщик" align="center">
-      <el-table-column property="vendor_id" label="Код" width="200" show-overflow-tooltip />
+      <el-table-column property="vendor" label="Код" width="200" show-overflow-tooltip />
       <el-table-column property="vendor_name" label="Наименование" width="300"  show-overflow-tooltip />
-      <el-table-column property="vendor_retention" label="Удержание" width="150"  show-overflow-tooltip />
-      <el-table-column property="vendor_status" label="Статус" width="200"  show-overflow-tooltip />
+      <el-table-column property="retention" label="Удержание" width="150"  show-overflow-tooltip />
+      <el-table-column property="status" label="Статус" width="200"  show-overflow-tooltip />
     </el-table-column>
       <el-table-column label="Юридическое лицо"  align="center">
-      <el-table-column property="entity_id" label="Код" width="150"  show-overflow-tooltip />
+      <el-table-column property="entity" label="Код" width="150"  show-overflow-tooltip />
       <el-table-column property="entity_name" label="Наименование" width="300"  show-overflow-tooltip />
     </el-table-column>
       <el-table-column align="center" label="Операция">
@@ -62,13 +62,16 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useKuCAddStore } from "~~/stores/kuCAddStore";
 import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import { ElTable } from 'element-plus'
 import { Delete } from '@element-plus/icons-vue'
 import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
-
+const { getVACForKu } = storeToRefs(
+  useKuCIdStore()
+);
 const store = useKuCIdStore();
 const store2 = useKuCAddStore();;
 const kuMain = store2.kuAddMain
@@ -116,7 +119,9 @@ watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
 });
 
 const tableData = ref(store.tableDataVAC);
-
+watch(getVACForKu, (value) => {
+  tableData.value = value || [];
+});
 
 //добавление условий
 const AddManagers = () => {
@@ -129,11 +134,11 @@ const AddManagers = () => {
     store.tableDataVAC.push({
       id: null,
       type_partner: "Поставщик",
-      vendor_id: store.valueVendorIdVAC,
+      vendor: store.valueVendorIdVAC,
       vendor_name: vendorName,
-      vendor_retention: "Все",
-      vendor_status: "На удержании",
-      entity_id: store.valueEntityIdVAC,
+      retention: "Все",
+      status: "На удержании",
+      entity: store.valueEntityIdVAC,
       entity_name: entityName
     });
     store.valueEntityIdVAC = "";

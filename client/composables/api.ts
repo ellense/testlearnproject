@@ -99,7 +99,7 @@ export const KU = {
   postKuRequirementBonus: (data: IPercentPost): Promise<IPercentPost> =>
     $Post("api/bonus_condition/", { data, isBearer: false }),
   postKuVAC: (data: IVACPost): Promise<IVACPost> =>
-    $Post("api/VAC/", { data, isBearer: false }),
+    $Post("api/included_vendor_create/", { data, isBearer: false }),
   postKuExInvoices: (data: IExInvoiceForKuPost): Promise<IExInvoiceForKuPost> =>
     $Post("api/excluded_venddoc_list_create/", { data, isBearer: false }),
   postKuManager: (data: IManagerForKuPost): Promise<IManagerForKuPost> =>
@@ -120,11 +120,11 @@ export const KU = {
   getKuRequirementBonus: (params: IParamKuId): Promise<GetPersentReturnData> =>
     $Get(`api/bonus_condition/`, { params, isBearer: false }),
   getKuVAC: (params: IParamKuId): Promise<GetVACReturnData> =>
-    $Get(`api/VAC/`, { params, isBearer: false }),
+    $Get(`api/included_vendor_create/`, { params, isBearer: false }),
   getKuManager: (params: IParamKuId): Promise<IManagersKuReturnData> =>
     $Get(`api/manager_ku/`, { params, isBearer: false }),
   getKuExInvoiceForKuId: (params: GetParamExInvoicesForKu): Promise<GetExInvoicesForKuReturnData> =>
-    $Get(`api/excluded_venddoc_list_full/`, { params, isBearer: false }),
+    $Get(`api/excluded_venddoc_list_create/`, { params, isBearer: false }),
   getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
     $Get(`api/official_create/`, { params, isBearer: false }),
   getInvoicesList: (
@@ -139,7 +139,7 @@ export const KU = {
   deleteRequirementBonus: (data: IRequirementId) =>
     $Delete(`api/bonus_condition_detail/${data.id}/`, { data, isBearer: false }),
   deleteVAC: (data: IRequirementId) =>
-    $Delete(`api/VAC_detail/${data.id}/`, { data, isBearer: false }),
+    $Delete(`api/included_vendor_detail/${data.id}/`, { data, isBearer: false }),
   deleteExInvoice: (data: IRequirementId) =>
     $Delete(`api/excluded_venddoc_detail/${data.id}/`, { data, isBearer: false }),
   deleteManager: (data: IRequirementId) =>
@@ -243,14 +243,14 @@ export const KUC = {
   postKuOfficial: (data: IOfficialForKuPost): Promise<IOfficialForKuPost> =>
     $Post("api/official_customer_create/", { data, isBearer: false }),
   postKuVAC: (data: IVACPost): Promise<IVACPost> =>
-    $Post("api/VAC/", { data, isBearer: false }),
+    $Post("api/included_vendor_customer_create/", { data, isBearer: false }),
   postKuContractCreate: (data: IContractPost): Promise<IContractPromise> =>
     $Post("api/name_contact_create/", { data, isBearer: false }),
   //для получения в ku_id
   getKuService: (params: IParamKuId): Promise<GetAllServiceReturnData> =>
     $Get(`api/included_service_list/`, { params, isBearer: false }),
   getKuVAC: (params: IParamKuId): Promise<GetVACReturnData> =>
-    $Get(`api/VAC/`, { params, isBearer: false }),
+    $Get(`api/included_vendor_customer_create/`, { params, isBearer: false }),
   getKuManager: (params: IParamKuId): Promise<IManagersKuReturnData> =>
     $Get(`api/manager_ku_customer/`, { params, isBearer: false }),
   getKuOfficial: (params: IParamKuId): Promise<GetAllOfficialReturnData> =>
@@ -259,7 +259,7 @@ export const KUC = {
   deleteService: (data: IRequirementId) =>
     $Delete(`api/included_service_detail/${data.id}/`, { data, isBearer: false }),
   deleteVAC: (data: IRequirementId) =>
-      $Delete(`api/VAC_detail/${data.id}/`, { data, isBearer: false }),
+      $Delete(`api/included_vendor_customer_detail/${data.id}/`, { data, isBearer: false }),
   deleteManager: (data: IRequirementId) =>
     $Delete(`api/manager_ku_customer_detail/${data.id}/`, { data, isBearer: false }),
   updateOfficial: (data: IOfficialForKu) =>

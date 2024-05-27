@@ -164,7 +164,7 @@ const createAct = async () => {
         }
 
         // Проверка на наличие значения graphic.sum_bonus и данных прайс-листа
-        const sum_bonus = graphic.sum_bonus ?? 0;
+        const sum_approved = graphic.sum_approved ?? 0;
         const priceList = store2.tableDataPricelist;
         if (!priceList || priceList.length === 0 || !priceList[0].price) {
             ElMessage.error("Ошибка: данные прайс-листа не загружены или отсутствуют");
@@ -172,7 +172,7 @@ const createAct = async () => {
         }
 
         const price = priceList[0].price;
-        const qty = sum_bonus ? parseFloat((sum_bonus / price).toFixed(2)) : 0;
+        const qty = sum_approved ? parseFloat((sum_approved / price).toFixed(2)) : 0;
 
         loadFile("/templates/templateOfActCustomer.docx", async (error, content) => {
             if (error) {
@@ -194,7 +194,7 @@ const createAct = async () => {
                 date_start: dayjs(graphic.date_start).format('DD.MM.YYYY'),
                 date_end: dayjs(graphic.date_end).format('DD.MM.YYYY'),
                 date_accrual: dayjs(graphic.date_accrual).format('DD.MM.YYYY'),
-                sum_bonus: graphic.sum_bonus,
+                sum_approved: graphic.sum_approved,
                 date_startKu: dayjs(store.kuId.date_start).format('DD.MM.YYYY'),
                 date_endKu: dayjs(store.kuId.date_end).format('DD.MM.YYYY'),
                 article_name: store.multipleSelectionArticle[0].article_name,

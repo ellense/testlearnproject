@@ -152,6 +152,10 @@ export const useReportStore = defineStore("ReportStore", {
     //получение всех накладных по фильтру для 1 акта
     async fetchAllInvoices(graph_id?: number | null,) {
       try {
+        const getStatusText = (status: string): string => {
+          return status === "1" ? "Счет-фактура" : "";
+        };
+    
         let allInvoices: GraphicForExcelReportInvoice[] = [];
         let nextPage = 1;
         let totalPages = 1;
@@ -161,7 +165,13 @@ export const useReportStore = defineStore("ReportStore", {
             page: nextPage,
             graph_id,
           });
-          allInvoices = allInvoices.concat(invoice.results);
+          
+          // Преобразование статуса перед сохранением данных
+          const transformedInvoices = invoice.results.map(invoice => ({
+            ...invoice,
+            invoice_status: getStatusText(invoice.invoice_status)
+          }));
+          allInvoices = allInvoices.concat(transformedInvoices);
           totalPages = Math.ceil(invoice.count / this.$state.countRowTable);
           nextPage++;
         }

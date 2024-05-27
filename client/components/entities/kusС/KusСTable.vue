@@ -200,6 +200,8 @@ const rowDblclick = async (kuId: string) => {
   router.push({ path: `/kuC/${kuId}` });
   storeId.getManagerForKuId_API(kuId)
   storeId.getOfficialForKuId_API(kuId)
+  storeId.getVACForKuId_API(kuId)
+
 
   if (storeId.kuIdStatus === "Создано") {
     const entity = storeKuAdd.dataEntity.find(item => item.entity_id === storeId.kuIdEntityId);

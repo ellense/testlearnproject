@@ -200,7 +200,7 @@ const rowDblclick = async (kuId: string) => {
   router.push({ path: `/kuV/${kuId}` });
   store3.getExRequirementForKuId_API(kuId)
   store3.getBonusForKuId_API(kuId)
-  // store3.getVACForKuId_API(kuId)
+  store3.getVACForKuId_API(kuId)
   store3.getExInvoiceForKuId_API(kuId)
   store3.getOfficialForKuId_API(kuId)
   store3.getManagerForKuId_API(kuId)

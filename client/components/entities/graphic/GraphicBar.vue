@@ -1,7 +1,7 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <h3>Графики расчетов</h3>
+      <h3>Графики расчетов КУ поставщиков</h3>
       <el-divider direction="vertical" />
       <!-- <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
         :title="disableButtonTooltip" style="margin: 0;" size="small">Утвердить</el-button> -->
@@ -148,11 +148,25 @@ const ApproveGraphic = async () => {
 
 //удаление графиков
 const deleteGraphic = async () => {
+  try {
+    await ElMessageBox.confirm(
+      'Вы действительно хотите удалить график расчета без возможности восстановления?',
+      'Подтверждение удаления',
+      {
+        confirmButtonText: 'Да',
+        cancelButtonText: 'Нет',
+        type: 'warning',
+      }
+    );
   const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
   try {
     for (const graph_id of selectedRows) {
       const results = await GRAPHIC.deleteGraphic({ graph_id });
-      console.log("успешно удалилось", results);
+      if (selectedRows.length === 1) {
+        ElMessage.success(`График расчета ${selectedRows} успешно удален`);
+      } else {
+        ElMessage.success(`Успешно удалены графики №: ${selectedRows.join(", ")}`);
+      }
     }
   } catch (error) {
     console.error("Ошибка при удалении строк:", error);
@@ -163,7 +177,13 @@ const deleteGraphic = async () => {
     );
     useGraphicStore().multipleSelectionGraphic = [];
   }
-};
+} catch {
+    ElMessage({
+      type: 'info',
+      message: 'Удаление отменено'
+    });
+  }
+}
 const isButtonsDisabled = computed(() => {
   return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0;
 });
@@ -217,6 +237,7 @@ const renderDoc = async () => {
       console.log("inn_kpp", useReportStore().vendor.inn_kpp);
       console.log("urastic_adress2", useReportStore().entity.urastic_address);
       console.log("bank_bik2", useReportStore().entity.bank_bink);
+
       loadFile("/templates/templateOfAct.docx", async (error, content) => {
         if (error) {
           throw error;
@@ -237,7 +258,7 @@ const renderDoc = async () => {
           date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
           sum_calc: useReportStore().graphic[0].sum_calc,
           percent: useReportStore().graphic[0].percent,
-          sum_bonus: useReportStore().graphic[0].sum_bonus,
+          sum_approved: useReportStore().graphic[0].sum_approved,
 
           inn_kpp: useReportStore().vendor.inn_kpp,
           urastic_adress: useReportStore().vendor.urastic_adress,

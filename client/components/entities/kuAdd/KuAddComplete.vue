@@ -212,13 +212,13 @@ const postBonus = async (response: IKuList, dataArray: any) => {
 
 const postVAC = async (response: IKuList, dataArray: any) => {
   const requirementsArray = dataArray.map((item: IVACPost) => ({
-    ku_key_id: response.ku_id,
+    ku: response.ku_id,
     type_partner: item.type_partner,
-      vendor_id: item.vendor_id,
+      vendor: item.vendor,
       vendor_name: item.vendor_name,
-      vendor_retention: item.vendor_retention,
-      vendor_status: item.vendor_status,
-      entity_id: item.entity_id,
+      retention: item.retention,
+      status: item.status,
+      entity: item.entity,
       entity_name: item.entity_name,
   }));
 

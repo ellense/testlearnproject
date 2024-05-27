@@ -33,7 +33,7 @@
                         </el-input>
                     </el-form-item>
                     <el-form-item label-width="200" label="Уполномочивающий документ">
-                        <el-input v-model="store.kuIdDocEntity" size="small" clearable style="width: 300px" v>
+                        <el-input v-model="store.kuIdDocEntity" size="small" clearable style="width: 300px" :disabled="isEditButtonDisabled">
                         </el-input>
                     </el-form-item>
                 </div>
