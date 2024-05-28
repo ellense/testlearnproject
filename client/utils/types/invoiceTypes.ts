@@ -16,7 +16,8 @@ export interface IInvoice {
     page_size?: number;
     page?: number;
     entity_id?: string[];
-    search?: string;
+    vendor_id?: string[];
+    searchNumber?: string;
     start_date?: string,
     end_date?: string,
     sort_by?: string;

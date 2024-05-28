@@ -40,8 +40,20 @@ import type { GraphicForExcelReportProduct } from "~/utils/types/actTypes";
   }
   const columnTable: ColumnTable[] = [
   {
-      field: "category_name",
+      field: "category_name_l2",
       label: "Категория",
+      type: "string",
+      width: 300,
+    },
+  {
+      field: "category_name_l3",
+      label: "Группа",
+      type: "string",
+      width: 300,
+    },
+  {
+      field: "category_name_l4",
+      label: "Подгруппа",
       type: "string",
       width: 300,
     },
@@ -80,6 +92,14 @@ import type { GraphicForExcelReportProduct } from "~/utils/types/actTypes";
       summ: true,
       summary: 'sum',
       style: { fontWeight: 'bold' }
+    },
+    {
+      field: "amount",
+      label: "Сумма с НДС",
+      type: "number",
+      width: 150,
+      summ: true,
+      summary: 'sum',
     },
   ];
 

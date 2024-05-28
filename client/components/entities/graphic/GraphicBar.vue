@@ -3,8 +3,6 @@
     <div class="directoryBar_filter">
       <h3>Графики расчетов КУ поставщиков</h3>
       <el-divider direction="vertical" />
-      <!-- <el-button type="success" plain @click="ApproveGraphic()" :disabled="isButtonsDisabled"
-        :title="disableButtonTooltip" style="margin: 0;" size="small">Утвердить</el-button> -->
       <el-dropdown :disabled="isButtonsDisabledAct">
         <el-button type="success" plain :disabled="isButtonsDisabledAct" :title="disableButtonTooltip" size="small">
           Создать акт<el-icon class="el-icon--right"><arrow-down /></el-icon>
@@ -28,9 +26,13 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="AccruedGraphic()" link type="primary"
+            <el-dropdown-item><el-button @click="plannedGraphic()" link type="info"
+                size="small">Запланировано</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="calculatedGraphic()" link type="warning"
+                size="small">Рассчитано</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="accruedGraphic()" link type="primary"
                 size="small">Начислено</el-button></el-dropdown-item>
-            <el-dropdown-item><el-button @click="ApproveGraphic()" link type="success"
+            <el-dropdown-item><el-button @click="approveGraphic()" link type="success"
                 size="small">Утверждено</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
@@ -64,7 +66,6 @@ const createReportInvoice = async () => {
   useReportStore().getGraphicDetailFromApi(selectedRows[0])
   useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
   useReportStore().fetchAllInvoices(selectedRows[0])
-  // useReportStore().getInvoiceDetailForGraphicFromAPIWithFilter(selectedRows[0])
 
 }
 const createReportProduct = async () => {
@@ -77,8 +78,74 @@ const createReportProduct = async () => {
 
 }
 
+//запланированный график
+const plannedGraphic = async () => {
+  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  console.log("selectedRows статус", selectedRows)
+  const data = {
+    graph_id: selectedRows[0].graph_id,
+    ku_id: selectedRows[0].ku_id,
+    status: "Запланировано",
+    entity_id: selectedRows[0].entity_id,
+    entity_name: selectedRows[0].entity_name,
+    vendor_name: selectedRows[0].vendor_name,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
+    date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
+    date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
+    percent: selectedRows[0].percent,
+    sum_calc: selectedRows[0].sum_calc,
+    sum_bonus: selectedRows[0].sum_bonus,
+    sum_approved: selectedRows[0].sum_approved,
+  };
+
+  try {
+    const response = await GRAPHIC.updateGraphic(data);
+    console.log("Статус графика успешно обновлен :", response);
+    ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Запланировано" `);
+    useGraphicStore().pagination = null
+    await useGraphicStore().getGraphicsFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса грфика:", error);
+  }
+};
+
+//рассчитанный график
+const calculatedGraphic = async () => {
+  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  console.log("selectedRows статус", selectedRows)
+  const data = {
+    graph_id: selectedRows[0].graph_id,
+    ku_id: selectedRows[0].ku_id,
+    status: "Рассчитано",
+    entity_id: selectedRows[0].entity_id,
+    entity_name: selectedRows[0].entity_name,
+    vendor_name: selectedRows[0].vendor_name,
+    vendor_id: selectedRows[0].vendor_id,
+    period: selectedRows[0].period,
+    date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
+    date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
+    date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
+    percent: selectedRows[0].percent,
+    sum_calc: selectedRows[0].sum_calc,
+    sum_bonus: selectedRows[0].sum_bonus,
+    sum_approved: selectedRows[0].sum_approved,
+  };
+
+  try {
+    const response = await GRAPHIC.updateGraphic(data);
+    console.log("Статус графика успешно обновлен :", response);
+    ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Рассчитано" `);
+    useGraphicStore().pagination = null
+    await useGraphicStore().getGraphicsFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса грфика:", error);
+  }
+};
+
 //начисление графика
-const AccruedGraphic = async () => {
+const accruedGraphic = async () => {
   const selectedRows = useGraphicStore().multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
@@ -102,6 +169,8 @@ const AccruedGraphic = async () => {
   try {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
+    ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Начислено" `);
+    useGraphicStore().pagination = null
     await useGraphicStore().getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
@@ -109,7 +178,7 @@ const AccruedGraphic = async () => {
 };
 
 //утверждение графика
-const ApproveGraphic = async () => {
+const approveGraphic = async () => {
   const selectedRows = useGraphicStore().multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
@@ -125,9 +194,6 @@ const ApproveGraphic = async () => {
     date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
     date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
     date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
-    // date_start: selectedRows[0].date_start,
-    // date_end: selectedRows[0].date_end,
-    // date_calc: selectedRows[0].date_calc,
     percent: selectedRows[0].percent,
     sum_calc: selectedRows[0].sum_calc,
     sum_bonus: selectedRows[0].sum_bonus,
@@ -137,6 +203,8 @@ const ApproveGraphic = async () => {
   try {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
+    ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Утверждено" `);
+    useGraphicStore().pagination = null
     await useGraphicStore().getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
@@ -158,26 +226,26 @@ const deleteGraphic = async () => {
         type: 'warning',
       }
     );
-  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
-  try {
-    for (const graph_id of selectedRows) {
-      const results = await GRAPHIC.deleteGraphic({ graph_id });
-      if (selectedRows.length === 1) {
-        ElMessage.success(`График расчета ${selectedRows} успешно удален`);
-      } else {
-        ElMessage.success(`Успешно удалены графики №: ${selectedRows.join(", ")}`);
+    const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+    try {
+      for (const graph_id of selectedRows) {
+        const results = await GRAPHIC.deleteGraphic({ graph_id });
+        if (selectedRows.length === 1) {
+          ElMessage.success(`График расчета ${selectedRows} успешно удален`);
+        } else {
+          ElMessage.success(`Успешно удалены графики №: ${selectedRows.join(", ")}`);
+        }
       }
+    } catch (error) {
+      console.error("Ошибка при удалении строк:", error);
+      ElMessage.error("Ошибка при удалении графика");
+    } finally {
+      useGraphicStore().dataGraphic = useGraphicStore().dataGraphic.filter(
+        (row) => !selectedRows.includes(row.graph_id)
+      );
+      useGraphicStore().multipleSelectionGraphic = [];
     }
-  } catch (error) {
-    console.error("Ошибка при удалении строк:", error);
-    ElMessage.error("Ошибка при удалении графика");
-  } finally {
-    useGraphicStore().dataGraphic = useGraphicStore().dataGraphic.filter(
-      (row) => !selectedRows.includes(row.graph_id)
-    );
-    useGraphicStore().multipleSelectionGraphic = [];
-  }
-} catch {
+  } catch {
     ElMessage({
       type: 'info',
       message: 'Удаление отменено'
@@ -198,7 +266,7 @@ const disableButtonDeleteTooltip = computed(() => {
 });
 
 const isButtonsDisabledAct = computed(() => {
-  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0 || useGraphicStore().multipleSelectionGraphic[0].status!=="Утверждено";
+  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0 || useGraphicStore().multipleSelectionGraphic[0].status !== "Утверждено";
 });
 
 

@@ -14,13 +14,17 @@ import type { Pagination } from "./generalTypes";
     purch_date: Date | string;
     invoice_status: string;
     product_amount: number | null;
+    total_qty: number | null;
   }
   export interface GraphicForExcelReportProduct {
     product_id: string;
     amount: number | null;
+    amount_vat: number | null;
     product_qty: number | null;
     product_name: string;
-    category_name: string;
+    category_name_l4: string;
+    category_name_l3: string;
+    category_name_l2: string;
     producer_name: string;
   }
   export interface GetAllInvoicesAndProductForGraphic {

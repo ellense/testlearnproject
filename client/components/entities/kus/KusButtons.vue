@@ -178,6 +178,8 @@ const CancelKu = async () => {
     console.log("строки графика успешно удалены:", response);
     const response2 = await KU.updateKu(data2);
     console.log("строки графика успешно удалены:", response2);
+    ElMessage.success(`Статус ${selectedRows[0].ku_id} успешно изменен на "Отменено" `);
+    store.pagination = null
     await store.getKuFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при удалении строк графика:", error);
@@ -212,6 +214,8 @@ const ApproveKu = async () => {
   try {
     const response = await KU.updateKu(data);
     console.log("Статус успешно обновлен:", response);
+    ElMessage.success(`Статус ${selectedRows[0].ku_id} успешно изменен на "Действует" `);
+    store.pagination = null
     await store.getKuFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса:", error);
@@ -242,11 +246,12 @@ const СreatedKu = async () => {
     ku_type: selectedRows[0].ku_type,
     pay_method: selectedRows[0].pay_method,
   };
-
   try {
     const response = await KU.updateKu(data);
     console.log("Статус успешно обновлен:", response);
-    await store.getKuFromAPIWithFilter();
+    ElMessage.success(`Статус ${selectedRows[0].ku_id} успешно изменен на "Создано" `);
+    store.pagination = null
+    store.getKuFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса:", error);
   }

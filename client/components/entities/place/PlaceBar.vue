@@ -1,7 +1,7 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-    <h3>Услуги</h3>
+    <h3>Места оказания услуг</h3>
     <el-divider direction="vertical" />
     <el-button type="success" plain @click="store.dialogFormPlaceVisible = true" size="small">Добавить</el-button>
   </div>

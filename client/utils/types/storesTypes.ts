@@ -60,7 +60,7 @@ export interface IVendorStore {
     countRowTable: number;
     sortProp: string;
     sortOrder: string;
-    search: string;
+    searchNumber: string;
     legalEntity: string[]
     // vendor: string[]
     vendor: IVendorId[]

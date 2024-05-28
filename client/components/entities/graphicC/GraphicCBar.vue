@@ -19,6 +19,10 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
+            <el-dropdown-item><el-button @click="plannedGraphic()" link type="info"
+                size="small">Запланировано</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="calculatedGraphic()" link type="warning"
+                size="small">Рассчитано</el-button></el-dropdown-item>
             <el-dropdown-item><el-button @click="AccruedGraphic()" link type="primary"
                 size="small">Начислено</el-button></el-dropdown-item>
             <el-dropdown-item><el-button @click="ApproveGraphic()" link type="success"
@@ -44,6 +48,72 @@ onMounted(() => {
   store.getLegalEntityFilterForGraphicFromApi();
   store.getKuIdFilterForGraphicFromApi();
 });
+
+//запланированный график
+const plannedGraphic = async () => {
+  const selectedRows = store.multipleSelectionGraphic
+  console.log("selectedRows статус", selectedRows)
+  const data = {
+    graph_id: selectedRows[0].graph_id,
+    ku: selectedRows[0].ku,
+    status: "Запланировано",
+    entity: selectedRows[0].entity,
+    entity_name: selectedRows[0].entity_name,
+    customer_name: selectedRows[0].customer_name,
+    customer: selectedRows[0].customer,
+    period: selectedRows[0].period,
+    date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
+    date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
+    date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
+    date_accrual: dayjs(selectedRows[0].date_accrual).format("YYYY-MM-DD"),
+    sum_calc: selectedRows[0].sum_calc,
+    sum_bonus: selectedRows[0].sum_bonus,
+    sum_approved: selectedRows[0].sum_approved,
+  };
+
+  try {
+    const response = await GRAPHICC.updateGraphic(data);
+    console.log("Статус графика успешно обновлен :", response);
+    ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Запланировано" `);
+    store.pagination = null
+    await store.getGraphicsFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса грфика:", error);
+  }
+};
+
+//рассчитанный график
+const calculatedGraphic = async () => {
+  const selectedRows = store.multipleSelectionGraphic
+  console.log("selectedRows статус", selectedRows)
+  const data = {
+    graph_id: selectedRows[0].graph_id,
+    ku: selectedRows[0].ku,
+    status: "Рассчитано",
+    entity: selectedRows[0].entity,
+    entity_name: selectedRows[0].entity_name,
+    customer_name: selectedRows[0].customer_name,
+    customer: selectedRows[0].customer,
+    period: selectedRows[0].period,
+    date_start: dayjs(selectedRows[0].date_start).format("YYYY-MM-DD"),
+    date_end: dayjs(selectedRows[0].date_end).format("YYYY-MM-DD"),
+    date_calc: dayjs(selectedRows[0].date_calc).format("YYYY-MM-DD"),
+    date_accrual: dayjs(selectedRows[0].date_accrual).format("YYYY-MM-DD"),
+    sum_calc: selectedRows[0].sum_calc,
+    sum_bonus: selectedRows[0].sum_bonus,
+    sum_approved: selectedRows[0].sum_approved,
+  };
+
+  try {
+    const response = await GRAPHICC.updateGraphic(data);
+    console.log("Статус графика успешно обновлен :", response);
+    ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Рассчитано" `);
+    store.pagination = null
+    await store.getGraphicsFromAPIWithFilter();
+  } catch (error) {
+    console.error("Ошибка при обновлении статуса грфика:", error);
+  }
+};
 
 //начисление графика
 const AccruedGraphic = async () => {

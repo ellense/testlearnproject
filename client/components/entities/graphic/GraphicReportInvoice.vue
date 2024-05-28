@@ -72,7 +72,7 @@ const columnTable: ColumnTable[] = [
     width: 100,
   },
   {
-    field: "",
+    field: "total_qty",
     label: "Кол-во (шт,л,кг.)",
     type: "number",
     width: 100,
