@@ -96,13 +96,13 @@
           <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
             label-width="170" label="Начальная дата" prop="newDateStart">
             <el-date-picker v-model="kuMain.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
+               clearable el-rowrable placeholder="Выберите начальную дату"
               @change="onChangeAndValidateDateStart"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
             label="Конечная дата" prop="newDateEnd">
             <el-date-picker v-model="kuMain.newDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY"  clearable
               @change="onChangeAndValidateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
@@ -355,7 +355,7 @@ const periods: Record<string, number> = {
 
 // Функция проверки даты начала
 const onChangeAndValidateDateStart = async () => {
-  store.setFilterExInvoice('start_date', dayjs(kuMain.newDateStart, "DD.MM.YYYY").format("YYYY-MM-DD"));
+  store.setFilterExInvoice('start_date', dayjs(kuMain.newDateStart).format("YYYY-MM-DD"));
   await store.getInvoicesFromAPIWithFilter();
   const startDate = dayjs(kuMain.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(kuMain.newDateEnd, 'DD.MM.YYYY');
@@ -376,7 +376,7 @@ const onChangeAndValidateDateStart = async () => {
 
 // Функция проверки даты окончания
 const onChangeAndValidateDateEnd = async () => {
-  store.setFilterExInvoice('end_date', dayjs(kuMain.newDateEnd, "DD.MM.YYYY").format("YYYY-MM-DD"));
+  store.setFilterExInvoice('end_date', dayjs(kuMain.newDateEnd).format("YYYY-MM-DD"));
   await store.getInvoicesFromAPIWithFilter();
   const startDate = dayjs(kuMain.newDateStart, 'DD.MM.YYYY');
   const endDate = dayjs(kuMain.newDateEnd, 'DD.MM.YYYY');
