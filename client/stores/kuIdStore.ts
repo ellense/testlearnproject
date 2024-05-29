@@ -51,7 +51,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
         kuIdTax: false,
         kuIdExclude_return: false,
         kuIdNegative_turnover: false,
-        kuIdKu_type: "",
         kuIdPay_method: "",
         officialId: null,
         kuIdEntityIdVAC: "",
@@ -87,7 +86,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             kuIdTax: false,
             kuIdExclude_return: false,
             kuIdNegative_turnover: false,
-            kuIdKu_type: "",
             kuIdPay_method: "",
             officialId: null,
             kuIdEntityIdVAC: "",
@@ -137,6 +135,9 @@ export const useKuIdStore = defineStore("KuIdStore", {
         setKuIdVendorName(name: string) {
             this.kuIdVendorName = name;
         },
+        setKuIdCustomerCode(code: string) {
+            this.kuIdDocu_account = code;
+        },
         //получение ku_id
         async getKuDetail_API(kuId: string) {
             try {
@@ -162,7 +163,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.kuIdTax = results.tax;
                 this.$state.kuIdExclude_return = results.exclude_return;
                 this.$state.kuIdNegative_turnover = results.negative_turnover;
-                this.$state.kuIdKu_type = results.ku_type;
                 this.$state.kuIdPay_method = results.pay_method;
 
                 this.$state.initialState.kuIdStatus = results.status;
@@ -183,7 +183,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
                 this.$state.initialState.kuIdTax = results.tax;
                 this.$state.initialState.kuIdExclude_return = results.exclude_return;
                 this.$state.initialState.kuIdNegative_turnover = results.negative_turnover;
-                this.$state.initialState.kuIdKu_type = results.ku_type;
                 this.$state.initialState.kuIdPay_method = results.pay_method;
 
                 console.log("успешно получили данные ку_айди", results);
@@ -483,7 +482,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
             this.kuIdTax = false;
             this.kuIdExclude_return = false;
             this.kuIdNegative_turnover = false;
-            this.kuIdKu_type = '';
             this.kuIdPay_method = '';
             this.kuIdEntityIdVAC = '';
             this.kuIdVendorIdVAC = '';

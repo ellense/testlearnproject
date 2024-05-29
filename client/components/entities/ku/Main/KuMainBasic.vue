@@ -117,13 +117,6 @@
             <el-checkbox v-model="store.kuIdNegative_turnover" label="Отрицательный товарооборот" size="small"
               :disabled="isEditButtonDisabled" />
           </el-form-item>
-          <el-form-item label-width="170" label="Тип коммерческого условия">
-            <el-select v-model="store.kuIdKu_type" size="small" clearable style="width: 300px"
-              :disabled="isEditButtonDisabled" placeholder="">
-              <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
-              <el-option label="Услуга" value="Услуга"></el-option>
-            </el-select>
-          </el-form-item>
           <el-form-item label-width="170" label="Способ оплаты премии">
             <el-select v-model="store.kuIdPay_method" size="small" clearable style="width: 300px"
               :disabled="isEditButtonDisabled" placeholder="">

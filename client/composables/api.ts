@@ -59,6 +59,8 @@ export const VENDOR = {
     $Get("api/vendor_filter/", { params, isBearer: false }),
   getVendorDetail: (data: IVendorId): Promise<IVendorFull> =>
     $Get(`api/vendor_detail/${data.vendor_id}/`, { data, isBearer: false }),
+  getCustomerForVendorInKU: (data: IVendorId, params?: IParamVendorsForEntity ): Promise<ICustomerId> =>
+    $Get(`api/get_customer_dir_party/${data.vendor_id}/`, { data, params, isBearer: false }),
 };
 export const CUSTOMER = {
   getCustomersList: (params?: IParamCustomers): Promise<ICustomerReturnData> =>

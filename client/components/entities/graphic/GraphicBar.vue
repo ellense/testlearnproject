@@ -48,39 +48,43 @@ import { ArrowDown } from '@element-plus/icons-vue'
 import { storeToRefs } from "pinia";
 import { useGraphicStore } from "~~/stores/graphicStore";
 import { useReportStore } from "~~/stores/reportStore";
+
+const store = useGraphicStore();
+const store2 = useReportStore();
+
 //для поиска
 const searchQuery = ref('');
 watch(searchQuery, (newValue: string) => {
-  useGraphicStore().performSearchGraphic(newValue);
+  store.performSearchGraphic(newValue);
 });
 
 onMounted(() => {
-  useGraphicStore().getLegalEntityFilterForGraphicFromApi();
-  useGraphicStore().getKuIdFilterForGraphicFromApi();
+  store.getLegalEntityFilterForGraphicFromApi();
+  store.getKuIdFilterForGraphicFromApi();
 });
 
 const createReportInvoice = async () => {
-  useReportStore().dialogFormReportInvoice = true
-  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+  store2.dialogFormReportInvoice = true
+  const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
   console.log("selectedRows[0]:", selectedRows[0])
-  useReportStore().getGraphicDetailFromApi(selectedRows[0])
-  useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
-  useReportStore().fetchAllInvoices(selectedRows[0])
+  store2.getGraphicDetailFromApi(selectedRows[0])
+  store2.setFilterValueInvoices("graph_id", selectedRows[0]);
+  store2.fetchAllInvoices(selectedRows[0])
 
 }
 const createReportProduct = async () => {
-  useReportStore().dialogFormReportProduct = true
-  const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+  store2.dialogFormReportProduct = true
+  const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
   console.log("selectedRows[0]:", selectedRows[0])
-  useReportStore().getGraphicDetailFromApi(selectedRows[0])
-  useReportStore().setFilterValueInvoices("graph_id", selectedRows[0]);
-  useReportStore().fetchAllProducts(selectedRows[0])
+  store2.getGraphicDetailFromApi(selectedRows[0])
+  store2.setFilterValueInvoices("graph_id", selectedRows[0]);
+  store2.fetchAllProducts(selectedRows[0])
 
 }
 
 //запланированный график
 const plannedGraphic = async () => {
-  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  const selectedRows = store.multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
@@ -104,8 +108,8 @@ const plannedGraphic = async () => {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
     ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Запланировано" `);
-    useGraphicStore().pagination = null
-    await useGraphicStore().getGraphicsFromAPIWithFilter();
+    store.pagination = null
+    await store.getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
   }
@@ -113,7 +117,7 @@ const plannedGraphic = async () => {
 
 //рассчитанный график
 const calculatedGraphic = async () => {
-  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  const selectedRows = store.multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
@@ -137,8 +141,8 @@ const calculatedGraphic = async () => {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
     ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Рассчитано" `);
-    useGraphicStore().pagination = null
-    await useGraphicStore().getGraphicsFromAPIWithFilter();
+    store.pagination = null
+    await store.getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
   }
@@ -146,7 +150,7 @@ const calculatedGraphic = async () => {
 
 //начисление графика
 const accruedGraphic = async () => {
-  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  const selectedRows = store.multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
@@ -170,8 +174,8 @@ const accruedGraphic = async () => {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
     ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Начислено" `);
-    useGraphicStore().pagination = null
-    await useGraphicStore().getGraphicsFromAPIWithFilter();
+    store.pagination = null
+    await store.getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
   }
@@ -179,7 +183,7 @@ const accruedGraphic = async () => {
 
 //утверждение графика
 const approveGraphic = async () => {
-  const selectedRows = useGraphicStore().multipleSelectionGraphic
+  const selectedRows = store.multipleSelectionGraphic
   console.log("selectedRows статус", selectedRows)
   const data = {
     graph_id: selectedRows[0].graph_id,
@@ -204,8 +208,8 @@ const approveGraphic = async () => {
     const response = await GRAPHIC.updateGraphic(data);
     console.log("Статус графика успешно обновлен :", response);
     ElMessage.success(`Статус ${selectedRows[0].graph_id} успешно изменен на "Утверждено" `);
-    useGraphicStore().pagination = null
-    await useGraphicStore().getGraphicsFromAPIWithFilter();
+    store.pagination = null
+    await store.getGraphicsFromAPIWithFilter();
   } catch (error) {
     console.error("Ошибка при обновлении статуса грфика:", error);
   }
@@ -226,7 +230,7 @@ const deleteGraphic = async () => {
         type: 'warning',
       }
     );
-    const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+    const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
     try {
       for (const graph_id of selectedRows) {
         const results = await GRAPHIC.deleteGraphic({ graph_id });
@@ -240,10 +244,10 @@ const deleteGraphic = async () => {
       console.error("Ошибка при удалении строк:", error);
       ElMessage.error("Ошибка при удалении графика");
     } finally {
-      useGraphicStore().dataGraphic = useGraphicStore().dataGraphic.filter(
+      store.dataGraphic = store.dataGraphic.filter(
         (row) => !selectedRows.includes(row.graph_id)
       );
-      useGraphicStore().multipleSelectionGraphic = [];
+      store.multipleSelectionGraphic = [];
     }
   } catch {
     ElMessage({
@@ -253,20 +257,20 @@ const deleteGraphic = async () => {
   }
 }
 const isButtonsDisabled = computed(() => {
-  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0;
+  return store.multipleSelectionGraphic.length > 1 || store.multipleSelectionGraphic.length === 0;
 });
 const isDeleteButtonDisabled = computed(() => {
-  return useGraphicStore().multipleSelectionGraphic.length === 0;
+  return store.multipleSelectionGraphic.length === 0;
 });
 const disableButtonTooltip = computed(() => {
-  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите только один график' : '';
+  return store.multipleSelectionGraphic.length > 1 || store.multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите только один график' : '';
 });
 const disableButtonDeleteTooltip = computed(() => {
-  return useGraphicStore().multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';
+  return store.multipleSelectionGraphic.length === 0 ? 'Кнопка заблокирована. Для доступа выберите график/и' : '';
 });
 
 const isButtonsDisabledAct = computed(() => {
-  return useGraphicStore().multipleSelectionGraphic.length > 1 || useGraphicStore().multipleSelectionGraphic.length === 0 || useGraphicStore().multipleSelectionGraphic[0].status !== "Утверждено";
+  return store.multipleSelectionGraphic.length > 1 || store.multipleSelectionGraphic.length === 0 || store.multipleSelectionGraphic[0].status !== "Утверждено";
 });
 
 
@@ -284,27 +288,27 @@ function loadFile(url: string, callback: (error: any, content: any) => void) {
 
 const renderDoc = async () => {
   try {
-    const selectedRows = useGraphicStore().multipleSelectionGraphic.map((row) => row.graph_id);
+    const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
     console.log("выбранный график", selectedRows[0])
-    await useReportStore().getGraphicDetailFromApi(selectedRows[0]);
-    await useReportStore().getNumeralsGraphFromApi(selectedRows[0]);
-    console.log("useReportStore().graphic[0].ku_id", useReportStore().graphic[0].ku_id)
-    await useReportStore().getKuOfficialDetailFromApi(useReportStore().graphic[0].ku_id)
-    // await useReportStore().getKuOfficialDetailFromApi(useReportStore().kuid)
-    await useReportStore().getVendorDetailFromApi(useReportStore().vendorid)
-    await useReportStore().getEntityDetailFromApi(useReportStore().entityid)
-    console.log("inn_kpp", useReportStore().vendor.inn_kpp,)
-    console.log("urastic_adress2", useReportStore().entity.urastic_address,)
-    console.log("bank_bik2", useReportStore().entity.bank_bink,)
-    const graphic = useReportStore().graphic[0];
+    await store2.getGraphicDetailFromApi(selectedRows[0]);
+    await store2.getNumeralsGraphFromApi(selectedRows[0]);
+    console.log("store2.graphic[0].ku_id", store2.graphic[0].ku_id)
+    await store2.getKuOfficialDetailFromApi(store2.graphic[0].ku_id)
+    await store2.getKuDetailFromApi(store2.graphic[0].ku_id)
+    await store2.getVendorDetailFromApi(store2.vendorid)
+    await store2.getEntityDetailFromApi(store2.entityid)
+    console.log("inn_kpp", store2.vendor.inn_kpp,)
+    console.log("urastic_adress2", store2.entity.urastic_address,)
+    console.log("bank_bik2", store2.entity.bank_bink,)
+    const graphic = store2.graphic[0];
     if (!graphic) {
       console.error("Ошибка: данные не загружены");
       return;
     }
-    if (useReportStore().vendor && useReportStore().entity) {
-      console.log("inn_kpp", useReportStore().vendor.inn_kpp);
-      console.log("urastic_adress2", useReportStore().entity.urastic_address);
-      console.log("bank_bik2", useReportStore().entity.bank_bink);
+    if (store2.vendor && store2.entity) {
+      console.log("inn_kpp", store2.vendor.inn_kpp);
+      console.log("urastic_adress2", store2.entity.urastic_address);
+      console.log("bank_bik2", store2.entity.bank_bink);
 
       loadFile("/templates/templateOfAct.docx", async (error, content) => {
         if (error) {
@@ -313,44 +317,46 @@ const renderDoc = async () => {
         const zip = new PizZip(content);
         const doc = new Docxtemplater(zip, { paragraphLoop: true, linebreaks: true });
         doc.render({
-          vendor_name: useReportStore().vendor.urastic_name,
-          counterparty_post: useReportStore().official[0].counterparty_post,
-          counterparty_name: useReportStore().official[0].counterparty_name,
-          counterparty_docu: useReportStore().official[0].counterparty_docu,
-          entity_name: useReportStore().entity.urastic_name,
-          entity_post: useReportStore().official[0].entity_post,
-          entity_fio: useReportStore().official[0].entity_name,
-          entity_docu: useReportStore().official[0].entity_docu,
+          vendor_name: store2.vendor.urastic_name,
+          counterparty_post: store2.official[0].counterparty_post,
+          counterparty_name: store2.official[0].counterparty_name,
+          counterparty_docu: store2.official[0].counterparty_docu,
+          entity_name: store2.entity.urastic_name,
+          entity_post: store2.official[0].entity_post,
+          entity_fio: store2.official[0].entity_name,
+          entity_docu: store2.official[0].entity_docu,
 
-          date_start: dayjs(useReportStore().graphic[0].date_start).format('DD.MM.YYYY'),
-          date_end: dayjs(useReportStore().graphic[0].date_end).format('DD.MM.YYYY'),
-          sum_calc: useReportStore().graphic[0].sum_calc,
-          percent: useReportStore().graphic[0].percent,
-          sum_approved: useReportStore().graphic[0].sum_approved,
+          date_start: dayjs(store2.graphic[0].date_start).format('DD.MM.YYYY'),
+          date_end: dayjs(store2.graphic[0].date_end).format('DD.MM.YYYY'),
+          sum_calc: store2.graphic[0].sum_calc,
+          percent: store2.graphic[0].percent,
+          sum_approved: store2.graphic[0].sum_approved,
 
-          inn_kpp: useReportStore().vendor.inn_kpp,
-          urastic_adress: useReportStore().vendor.urastic_adress,
-          account: useReportStore().vendor.account,
-          bank_name: useReportStore().vendor.bank_name,
-          bank_bik: useReportStore().vendor.bank_bik,
-          corr_account: useReportStore().vendor.corr_account,
+          inn_kpp: store2.vendor.inn_kpp,
+          urastic_adress: store2.vendor.urastic_adress,
+          account: store2.vendor.account,
+          bank_name: store2.vendor.bank_name,
+          bank_bik: store2.vendor.bank_bik,
+          corr_account: store2.vendor.corr_account,
 
-          inn_kpp2: useReportStore().entity.inn_kpp,
-          urastic_adress2: useReportStore().entity.urastic_address,
-          account2: useReportStore().entity.account,
-          bank_name2: useReportStore().entity.bank_name,
-          bank_bik2: useReportStore().entity.bank_bink,
-          corr_account2: useReportStore().entity.corr_account,
+          inn_kpp2: store2.entity.inn_kpp,
+          urastic_adress2: store2.entity.urastic_address,
+          account2: store2.entity.account,
+          bank_name2: store2.entity.bank_name,
+          bank_bik2: store2.entity.bank_bink,
+          corr_account2: store2.entity.corr_account,
 
-          numerals: useReportStore().numerals,
-          sumQty: useReportStore().sumQty
+          numerals: store2.numerals,
+          sumQty: store2.sumQty,
+          docu_number: store2.kuId.docu_number,
+          docu_date: dayjs(store2.kuId.docu_date).format('DD.MM.YYYY'),
         });
 
         const out = doc.getZip().generate({
           type: "blob",
           mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
         });
-        saveAs(out, "Акт предоставления вознаграждения по " + useReportStore().kuid + " поставщика " + useReportStore().vendor.urastic_name + ".docx");
+        saveAs(out, "Акт предоставления вознаграждения по " + store2.kuid + " поставщика " + store2.vendor.urastic_name + ".docx");
       });
     } else {
       console.log("Данные вендора или энтити ещё не загружены");

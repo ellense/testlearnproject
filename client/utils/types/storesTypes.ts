@@ -110,7 +110,6 @@ export interface IVendorStore {
     newTax: boolean;
     newExclude_return: boolean;
     newNegative_turnover: boolean;
-    newKu_type: string;
     newPay_method: string;
     newVendorIdVAC: string;
     newEntityIdVAC: string;
@@ -223,7 +222,6 @@ export interface IVendorStore {
     kuIdTax: boolean;
     kuIdExclude_return: boolean;
     kuIdNegative_turnover: boolean;
-    kuIdKu_type: string;
     kuIdPay_method: string;
     officialId: number | null;
     kuIdEntityIdVAC: string
@@ -294,7 +292,6 @@ export interface IVendorStore {
     kuIdTax: boolean
     kuIdExclude_return: boolean
     kuIdNegative_turnover: boolean
-    kuIdKu_type: string;
     kuIdPay_method: string;
     officialId: number | null
     kuIdEntityIdVAC: string
@@ -366,6 +363,7 @@ export interface IVendorStore {
     entityid: string
     vendor: IVendorFull
     entity: IEntityFull
+    kuId: IKuList
     official: IOfficialForKu[]
     numerals: string
     sumQty: number | null

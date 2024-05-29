@@ -51,7 +51,7 @@
           </div>
         </template>
         <el-table-column property="entity_id" label="Код" width="65" sortable show-overflow-tooltip />
-        <el-table-column property="entity_name" label="Наименование" width="230"  show-overflow-tooltip />
+        <el-table-column property="entity_name" label="Наименование" width="230" show-overflow-tooltip />
       </el-table-column>
       <el-table-column label="Клиент" align="center">
         <template #header>
@@ -83,7 +83,7 @@
         <el-table-column property="customer" label="Код" width="120" sortable show-overflow-tooltip />
         <el-table-column property="customer_name" label="Наименование" width="230" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column prop="period" width="105">
+      <el-table-column prop="period" width="100">
         <template #header>
           <div class="column-header" :style="{ color: Period.length > 0 ? '#409EFF' : 'inherit' }">
             Период расчета
@@ -153,8 +153,7 @@
       </el-table-column>
       <el-table-column>
         <template #header>
-          <div class="column-header" :style="{ color: dateRange3 ? '#409EFF' : 'inherit' }" style="display: flex;
-  align-items: center;">
+          <div class="column-header" :style="{ color: dateRange3 ? '#409EFF' : 'inherit' }">
             Начисления дата
             <el-popover placement="bottom" :width="400" :visible="popoverVisible3">
               <template #reference>
@@ -168,7 +167,7 @@
             </el-popover>
           </div>
         </template>
-        <el-table-column property="date_accrual" sortable width="85" show-overflow-tooltip>
+        <el-table-column property="date_accrual" sortable width="90" show-overflow-tooltip>
           <template #default="{ row }">
             <span>{{ formatOkDate(row.date_accrual) }}</span>
           </template>
@@ -176,19 +175,18 @@
       </el-table-column>
       <el-table-column>
         <template #header>
-          <div class="column-header" :style="{ color: dateRange4 ? '#409EFF' : 'inherit' }" style="display: flex;
-  align-items: center;">
+          <div class="column-header" :style="{ color: dateRange4 ? '#409EFF' : 'inherit' }">
             Дата и время расчета
-            <!-- <el-popover placement="bottom" :width="400" :visible="popoverVisible4">
+            <el-popover placement="bottom" :width="400" :visible="popoverVisible4">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"
                   @click="popoverVisible4 = !popoverVisible4"><el-icon>
                     <Filter />
                   </el-icon></el-button>
               </template>
-  <el-date-picker v-model="dateRange4" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
-    end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange4" />
-  </el-popover> -->
+              <el-date-picker v-model="dateRange4" type="daterange" format="DD.MM.YYYY" start-placeholder="Начало"
+                end-placeholder="Окончание" :clearable="true" size="small" @change="changeDateRange4" />
+            </el-popover>
           </div>
         </template>
         <el-table-column property="date_calc" width="130" sortable show-overflow-tooltip>
@@ -310,12 +308,12 @@ const paginationChange = (page: number) => {
 
 };
 
-const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
+const handleSortChange = async ({ page, prop, order }: { page: number, prop: string, order: string }) => {
   try {
     store.pagination = null
     store.sortProp = prop; // поле, по которому сортируем
     store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    console.log("(поле, порядок) = (", store.sortProp, ",", store.sortOrder, ")");
     await store.getGraphicsFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);

@@ -61,12 +61,12 @@
             <el-input v-model="kuMain.newVendorName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Номер счета" prop="newDocu_account">
+          <el-form-item label-width="170" label="Номер счета">
             <el-input v-model="kuMain.newDocu_account" size="small" clearable placeholder="Введите номер счета"
               style="width: 300px">
             </el-input>
           </el-form-item>
-          
+
           <el-form-item label-width="170" label="Номер договора" prop="newDocu_number">
             <el-input v-model="kuMain.newDocu_number" size="small" clearable placeholder="Введите номер договора"
               style="width: 300px">
@@ -115,13 +115,6 @@
           <el-form-item>
             <el-checkbox v-model="kuMain.newNegative_turnover" label="Отрицательный товарооборот" size="small" />
           </el-form-item>
-          <!-- <el-form-item label-width="170" label="Тип коммерческого условия" prop="newKu_type">
-            <el-select v-model="kuMain.newKu_type" size="small" clearable placeholder="Выберите тип КУ"
-              style="width: 300px">
-              <el-option label="Ретро-бонус" value="Ретро-бонус"></el-option>
-              <el-option label="Услуга" value="Услуга"></el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item label-width="170" label="Способ оплаты премии" prop="newPay_method">
             <el-select v-model="kuMain.newPay_method" size="small" clearable placeholder="Выберите способ оплаты"
               style="width: 300px">
@@ -132,9 +125,6 @@
         </div>
       </div>
     </el-form>
-    <!-- <el-button type="primary" @click="submitForm(ruleFormRef)">
-      Create
-    </el-button> -->
   </el-scrollbar>
 </template>
 
@@ -200,19 +190,7 @@ const rules = reactive<FormRules<IKuAddMain>>({
       trigger: 'change',
     },
   ],
-  newKu_type: [
-    {
-      required: true,
-      trigger: 'change',
-    },
-  ],
   newPay_method: [
-    {
-      required: true,
-      trigger: 'change',
-    },
-  ],
-  newDocu_account: [
     {
       required: true,
       trigger: 'change',
@@ -243,19 +221,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
     }
   })
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 //вывод данных юридического лица
 const options = ref<Array<{ label: string; value: string }>>([]);
@@ -305,6 +270,8 @@ const onEntityChange = async () => {
 
   //для наимен. юр. лица
   kuMain.newEntityName = "";
+  kuMain.newDocu_account = "";
+
 
   if (kuMain.newEntityId && kuMain.newEntityId.length > 0) {
     const selectedEntity = options.value.find(option => option.value === kuMain.newEntityId);
@@ -342,9 +309,11 @@ const labelNewSubsidiaries = computed(() => {
 const onVendorChange = async () => {
   kuMain.newVendorName = "";
   kuMain.newVendorNameExInvoice = "";
+  kuMain.newDocu_account = "";
   if (kuMain.newVendorId && kuMain.newVendorId.length > 0) {
     store.setFilterVendor('vendor_id', kuMain.newVendorId);
     store.getVendorNameFromAPIWithFilter()
+    store.getCustomerCodeFromAPIWithFilter(kuMain.newVendorId)
     kuMain.newVendorIdExInvoice = kuMain.newVendorId
 
     try {
@@ -367,8 +336,6 @@ const onVendorChange = async () => {
     store.removeFilterExInvoice("vendor_id")
     store.tableDataExInvoiceAll.length = 0
   }
-
-
 };
 
 // Проверка полей формы

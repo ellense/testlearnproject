@@ -141,7 +141,7 @@ const onProducerChange = async () => {
 const FormContract = async () => {
     const newItem = {
         vendor_name: store.kuIdVendorId,
-        ku_type: store.kuIdKu_type,
+        ku_type: "Ретро-бонус",
         provider_list: store.tableDataContract.map(item => item.producer_name),
         brand_list: store.tableDataContract.map(item => item.brand_name),
     }

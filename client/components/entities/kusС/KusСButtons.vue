@@ -23,6 +23,8 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-button type="primary" plain @click="copyKu(store.multipleSelection[0].ku_id)" :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
+          Копировать КУ</el-button>
       <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonTooltip" size="small">Удалить</el-button>
 
@@ -34,10 +36,14 @@
 import { storeToRefs } from "pinia";
 import { ArrowDown } from '@element-plus/icons-vue'
 import { useKuCStore } from "~~/stores/kuCStore";
+import { useKuCIdStore } from "~~/stores/kuCIdStore";
 import { useRouter } from "vue-router";
-import "dayjs/locale/ru";
-import type { IKuCPostGraphic } from "~/utils/types/kuCustomerTypes";
+import dayjs from "dayjs";
+import type { IKuCList, IKuCPostGraphic } from "~/utils/types/kuCustomerTypes";
+import type { IServiceAndArticle } from "~/utils/types/tabsKuTypes";
 const store = useKuCStore();
+const store2 = useKuCIdStore();
+
 const router = useRouter();
 const loading = ref(false);
 const { legalEntity } = storeToRefs(useKuCStore());
@@ -265,6 +271,92 @@ const addGraphic = async () => {
 
 }
 
+const copyKu = async (kuId: string) => {
+  await store2.getKuDetail_API(kuId)
+  store2.getServiceForKuId_API(kuId)
+  store2.getOfficialForKuId_API(kuId)
+    
+    const response = await KUC.postKu(createNewItem());
+    const responses = await postService(response, store2.tableDataServiceSelect);
+    const response2 = await KUC.postKuOfficial(createOfficial(response));
+
+    const success = responses.every(response => response !== null);
+    if (response && success) {
+      handleSuccess(response, responses, response2);
+    } else {
+      handleError();
+    }
+  
+  store2.clearData();
+};
+
+const createNewItem = () => {
+  return {
+    entity: store2.kuIdEntityId,
+    customer: store2.kuIdCustomerId,
+    period: store2.kuIdType,
+    date_start: dayjs(store2.kuIdDateStart).format("YYYY-MM-DD"),
+    date_end: dayjs(store2.kuIdDateEnd).format("YYYY-MM-DD"),
+    status: "Создано",
+    description: store2.kuIdDescription,
+    contract: store2.kuIdContract,
+    docu_account: store2.kuIdDocu_account,
+    docu_number: store2.kuIdDocu_number,
+    docu_date: dayjs(store2.kuIdDocu_date).format("YYYY-MM-DD"),
+    docu_subject: store2.kuIdDocu_subject,
+    pay_sum: store2.kuIdPay_sum,
+    pay_method: store2.kuIdPay_method,
+  };
+};
+
+const postService = async (response: IKuCList, dataArray: any,) => {
+  const requirementsArray = dataArray.map((item: IServiceAndArticle) => ({
+    ku: response.ku_id,
+    service: item.service,
+    article: item.article,
+    ratio: item.ratio,
+  }));
+
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
+    try {
+      return await KUC.postKuServices(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке услуг на бэкенд:", error);
+      return null;
+    }
+  }));
+};
+
+
+
+const createOfficial = (response: IKuCList) => {
+  return {
+    ku_id: response.ku_id,
+    counterparty_name: store2.kuIdFIOСounteragent,
+    counterparty_post: store2.kuIdPostСounteragent,
+    counterparty_docu: store2.kuIdDocСounteragent,
+    entity_name: store2.kuIdFIOEntity,
+    entity_post: store2.kuIdPostEntity,
+    entity_docu: store2.kuIdDocEntity,
+  };
+};
+
+const handleSuccess = (response: IKuCList, responses: any[], response2: any ) => {
+  console.log("Экземпляр КУ успешно отправлен на бэкенд:", response);
+  console.log("услуги успешно отправлены на бэкенд:", responses);
+  console.log("Должн. лица успешно отправлены на бэкенд:", response2);
+  store.getKuFromAPIWithFilter();
+  ElMessage({
+    message: 'Коммерческое условие успешно скопировано.',
+    duration: 5000,
+    type: 'success',
+  })
+};
+
+const handleError = () => {
+  console.error("Не удалось отправить экземпляр или условия на бэкенд");
+  ElMessage.error("Возникла ошибка. Коммерческое условие не скопировано.");
+};
 
 const disableButtonTooltip = computed(() => {
   return store.multipleSelection.length > 1 || store.multipleSelection.length === 0 ? 'Кнопка заблокирована. Для доступа выберите КУ' : '';

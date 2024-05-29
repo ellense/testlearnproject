@@ -1,7 +1,7 @@
 <template>
   <div class="directoryBar">
     <div class="directoryBar_filter">
-      <h3>Коммерческие условия поставщиков</h3>
+      <h3>Коммерческие условия клиентов</h3>
       <el-divider direction="vertical" />
       <el-button type="success" plain @click="redirectToCreatePage" size="small">Создать
         КУ</el-button>
@@ -23,6 +23,8 @@
           </el-dropdown-menu>
         </template>
       </el-dropdown>
+      <el-button type="primary" plain @click="copyKu(store.multipleSelection[0].ku_id)" :disabled="isButtonsDisabled" :title="disableButtonTooltip" size="small">
+          Копировать КУ</el-button>
       <el-button type="danger" plain @click="deleteKu()" :disabled="isDeleteButtonDisabled"
         :title="disableButtonTooltip" size="small">Удалить</el-button>
 
@@ -34,10 +36,15 @@
 import { storeToRefs } from "pinia";
 import { ArrowDown } from '@element-plus/icons-vue'
 import { useKuStore } from "~~/stores/kuStore";
+import { useKuIdStore } from "~~/stores/kuIdStore";
 import { useRouter } from "vue-router";
 import "dayjs/locale/ru";
-import type { IKuPostGraphic } from "~/utils/types/kuVendorTypes";
+import type { IKuList, IKuPostGraphic } from "~/utils/types/kuVendorTypes";
+import { dayjs } from "element-plus";
+// import { handleError } from "vue";
+import type { IRequirementPost, IPercentPost, IManager } from "~/utils/types/tabsKuTypes";
 const store = useKuStore();
+const store2 = useKuIdStore();
 const router = useRouter();
 const loading = ref(false);
 const { legalEntity } = storeToRefs(store);
@@ -170,7 +177,6 @@ const CancelKu = async () => {
     tax: selectedRows[0].tax,
     exclude_return: selectedRows[0].exclude_return,
     negative_turnover: selectedRows[0].negative_turnover,
-    ku_type: selectedRows[0].ku_type,
     pay_method: selectedRows[0].pay_method,
   };
   try {
@@ -207,7 +213,6 @@ const ApproveKu = async () => {
     tax: selectedRows[0].tax,
     exclude_return: selectedRows[0].exclude_return,
     negative_turnover: selectedRows[0].negative_turnover,
-    ku_type: selectedRows[0].ku_type,
     pay_method: selectedRows[0].pay_method,
   };
 
@@ -243,7 +248,6 @@ const СreatedKu = async () => {
     tax: selectedRows[0].tax,
     exclude_return: selectedRows[0].exclude_return,
     negative_turnover: selectedRows[0].negative_turnover,
-    ku_type: selectedRows[0].ku_type,
     pay_method: selectedRows[0].pay_method,
   };
   try {
@@ -297,6 +301,119 @@ const addGraphic = async () => {
 
 }
 
+const copyKu = async (kuId: string) => {
+  await store2.getKuDetail_API(kuId)
+  store2.getInRequirementForKuId_API(kuId)
+  store2.getExRequirementForKuId_API(kuId)
+  store2.getBonusForKuId_API(kuId)
+  store2.getOfficialForKuId_API(kuId)
+    
+    const response = await KU.postKu(createNewItem());
+    const responses = await postRequirements(response, store2.tableDataInRequirement, KU.postKuInRequirement);
+    const response2 = await postRequirements(response, store2.tableDataExRequirement, KU.postKuExRequirement);
+    const response3 = await postBonus(response, store2.tableDataPercent);
+    const response4 = await KU.postKuOfficial(postOfficial(response));
+
+    const success = responses.every(response => response !== null);
+    if (response && success) {
+      handleSuccess(response, responses, response2, response3, response4);
+    } else {
+      handleError();
+    }
+  
+  store2.clearData();
+};
+
+const createNewItem = () => {
+  return {
+    entity_id: store2.kuIdEntityId,
+    vendor_id: store2.kuIdVendorId,
+    period: store2.kuIdType,
+    date_start: dayjs(store2.kuIdDateStart).format("YYYY-MM-DD"),
+    date_end: dayjs(store2.kuIdDateEnd).format("YYYY-MM-DD"),
+    status: "Создано",
+    description: store2.kuIdDescription,
+    contract: store2.kuIdContract,
+    product_type: store2.kuIdProduct_type,
+    docu_account: store2.kuIdDocu_account,
+    docu_number: store2.kuIdDocu_number,
+    docu_date: dayjs(store2.kuIdDocu_date).format("YYYY-MM-DD"),
+    docu_subject: store2.kuIdDocu_subject,
+    tax: store2.kuIdTax,
+    exclude_return: store2.kuIdExclude_return,
+    negative_turnover: store2.kuIdNegative_turnover,
+    pay_method: store2.kuIdPay_method,
+  };
+};
+
+const postRequirements = async (response: IKuList, dataArray: any, postFunction: any) => {
+  const requirementsArray = dataArray.map((item: IRequirementPost) => ({
+    ku_id: response.ku_id,
+    item_type: item.item_type,
+    item_code: item.item_code,
+    item_name: item.item_name,
+    producer: item.producer,
+    brand: item.brand,
+  }));
+
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
+    try {
+      return await postFunction(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке условия на бэкенд:", error);
+      return null;
+    }
+  }));
+};
+
+const postBonus = async (response: IKuList, dataArray: any) => {
+  const requirementsArray = dataArray.map((item: IPercentPost) => ({
+    ku_key_id: response.ku_id,
+    fix: item.fix,
+    criterion: item.criterion !== null ? item.criterion : 0,
+    percent_sum: item.percent_sum,
+  }));
+
+  return await Promise.all(requirementsArray.map(async (newItem: any) => {
+    try {
+      return await KU.postKuRequirementBonus(newItem);
+    } catch (error) {
+      console.error("Ошибка при отправке бонуса на бэкенд:", error);
+      return null;
+    }
+  }));
+};
+
+const postOfficial = (response: IKuList) => {
+  return {
+    ku_id: response.ku_id,
+    counterparty_name: store2.kuIdFIOСounteragent,
+    counterparty_post: store2.kuIdPostСounteragent,
+    counterparty_docu: store2.kuIdDocСounteragent,
+    entity_name: store2.kuIdFIOEntity,
+    entity_post: store2.kuIdPostEntity,
+    entity_docu: store2.kuIdDocEntity,
+  };
+};
+
+const handleSuccess = (response: IKuList, responses: any[], response2: any[], response3: any[], response4: any, ) => {
+  console.log("Экземпляр КУ успешно отправлен на бэкенд:", response);
+  console.log("вклУсловия успешно отправлены на бэкенд:", responses);
+  console.log("исклУсловия успешно отправлены на бэкенд:", response2);
+  console.log("бонус успешно отправлены на бэкенд:", response3);
+  console.log("Должн. лица успешно отправлены на бэкенд:", response4);
+  useKuStore().getKuFromAPIWithFilter();
+  ElMessage({
+    message: 'Коммерческое условие успешно скопировано.',
+    duration: 5000,
+    type: 'success',
+  })
+};
+
+const handleError = () => {
+  console.error("Не удалось отправить экземпляр или условия на бэкенд");
+  ElMessage.error("Возникла ошибка. Коммерческое условие не скопировано.");
+};
 
 const disableButtonTooltip = computed(() => {
   return store.multipleSelection.length > 1 || store.multipleSelection.length === 0 ? 'Кнопка заблокирована. Для доступа выберите КУ' : '';

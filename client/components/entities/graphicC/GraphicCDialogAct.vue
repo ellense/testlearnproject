@@ -202,7 +202,11 @@ const createAct = async () => {
                 shop_name: store.multipleSelectionPlace[0].shop_name,
 
                 address: store.multipleSelectionPlace[0].address,
-                qty: qty
+                qty: qty,
+
+                docu_number: store.kuId.docu_number,
+                docu_date: dayjs(store.kuId.docu_date).format('DD.MM.YYYY'),
+
             });
 
             const out = doc.getZip().generate({

@@ -49,7 +49,6 @@ onBeforeRouteLeave((to, from, next) => {
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
-    kuMain.newKu_type !== '' ||
     kuMain.newPay_method !== '' ||
     store.newOfFIOСounteragent !== '' ||
     store.newOfPostСounteragent !== '' ||
@@ -167,7 +166,6 @@ const createNewItem = () => {
     tax: kuMain.newTax,
     exclude_return: kuMain.newExclude_return,
     negative_turnover: kuMain.newNegative_turnover,
-    ku_type: kuMain.newKu_type,
     pay_method: kuMain.newPay_method,
   };
 };
@@ -326,7 +324,6 @@ const addClose = () => {
     kuMain.newDocu_number !== '' ||
     kuMain.newDocu_date !== '' ||
     kuMain.newDocu_subject !== '' ||
-    kuMain.newKu_type !== '' ||
     kuMain.newPay_method !== '' ||
     store.newOfFIOСounteragent !== '' ||
     store.newOfPostСounteragent !== '' ||

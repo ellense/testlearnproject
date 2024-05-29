@@ -182,7 +182,6 @@ const createNewItem = () => {
     tax: store.kuIdTax,
     exclude_return: store.kuIdExclude_return,
     negative_turnover: store.kuIdNegative_turnover,
-    ku_type: store.kuIdKu_type,
     pay_method: store.kuIdPay_method,
   };
 };

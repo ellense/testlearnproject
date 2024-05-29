@@ -45,6 +45,29 @@ export const useReportStore = defineStore("ReportStore", {
       corr_account: "",
       merge_id: "",
     },
+    kuId: {
+      ku_id: "",
+      entity_id: "",
+      entity_name: "",
+      vendor_id: "",
+      vendor_name: "",
+      period: "",
+      date_start: "",
+      date_end: "",
+      graph_exists: false,
+      status: "",
+      description: "",
+      contract: "",
+      product_type: "",
+      docu_account: "",
+      docu_number: "",
+      docu_date: "",
+      docu_subject: "",
+      tax: false,
+      exclude_return: false,
+      negative_turnover: false,
+      pay_method: "",
+    },
     official: [],
     numerals: "",
     sumQty: null,
@@ -146,6 +169,18 @@ export const useReportStore = defineStore("ReportStore", {
         console.log("добавили данные в entity ", this.$state.entity);
       } catch (error) {
         console.error("Ошибка при получении данных энтитифулл:", error);
+      }
+    },
+    //получение ку детеил для 3 акта
+    async getKuDetailFromApi(kuId: string) {
+      try {
+        const results = await KU.getInfoKu({
+          ku_id: kuId,
+        });
+        this.$state.kuId = results;
+        console.log("успешно получили данные ку_айди", results);
+      } catch (error) {
+        console.error("Ошибка при получении данных ку_айди:", error);
       }
     },
 

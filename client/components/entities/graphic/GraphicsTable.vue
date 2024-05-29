@@ -83,7 +83,7 @@
         <el-table-column property="vendor_id" label="Код" width="120" sortable show-overflow-tooltip />
         <el-table-column property="vendor_name" label="Наименование" width="200" show-overflow-tooltip />
       </el-table-column>
-      <el-table-column prop="period" width="105">
+      <el-table-column prop="period" width="100">
         <template #header>
           <div class="column-header" :style="{ color: Period.length > 0 ? '#409EFF' : 'inherit' }">
             Период расчета
@@ -111,7 +111,7 @@
         <template #header>
           <div class="column-header" :style="{ color: dateRange ? '#409EFF' : 'inherit' }">
             Начальная дата
-            <el-popover placement="bottom" :width="400" :visible="popoverVisible">
+            <el-popover placement="bottom" :width="400" :visible="popoverVisible" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"
                   @click="popoverVisible = !popoverVisible"><el-icon>
@@ -133,7 +133,7 @@
         <template #header>
           <div class="column-header" :style="{ color: dateRange2 ? '#409EFF' : 'inherit' }">
             Конечная дата
-            <el-popover placement="bottom" :width="400" :visible="popoverVisible2">
+            <el-popover placement="bottom" :width="400" :visible="popoverVisible2" trigger="click">
               <template #reference>
                 <el-button style="background-color: transparent; border:none; padding: 10px"
                   @click="popoverVisible2 = !popoverVisible2"><el-icon>
@@ -175,7 +175,7 @@
       </el-table-column>
       <el-table-column>
         <template #header>
-          <div class="column-header" :style="{ color: dateRange4 ? '#409EFF' : 'inherit' }" style="display: flex; align-items: center;">
+          <div class="column-header" :style="{ color: dateRange4 ? '#409EFF' : 'inherit' }">
             Дата и время расчета
             <el-popover placement="bottom" :width="400" :visible="popoverVisible4">
               <template #reference>

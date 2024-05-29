@@ -35,7 +35,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             newTax: false,
             newExclude_return: false,
             newNegative_turnover: false,
-            newKu_type: "",
             newPay_method: "",
             newVendorIdVAC: "",
             newEntityIdVAC: "",
@@ -261,6 +260,19 @@ export const useKuAddStore = defineStore("KuAddStore", {
         removeFilterVendor<T extends keyof IParamVendorsForEntity>(field: T) {
             if (this.$state.filterVendorValue) {
                 delete this.$state.filterVendorValue[field]
+            }
+        },
+        async getCustomerCodeFromAPIWithFilter(vendorId: string) {
+            try {
+                const results = await VENDOR.getCustomerForVendorInKU({
+                    vendor_id: vendorId,
+                });
+                this.$state.kuAddMain.newDocu_account = results.customer_id;
+
+                useKuIdStore().setKuIdCustomerCode(results.customer_id)
+                console.log('Получены данные CustomerCode:', this.$state.kuAddMain.newDocu_account, useKuIdStore().kuIdDocu_account);
+            } catch (error) {
+                console.error("Ошибка при получении данных CustomerCode:", error);
             }
         },
 
@@ -553,11 +565,11 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 });
         },
         setFilterManager<
-        T extends keyof IParamManagers,
-        U extends IParamManagers[T],
-    >(field: T, value: U) {
-        this.$state.filterManager[field] = value
-    },
+            T extends keyof IParamManagers,
+            U extends IParamManagers[T],
+        >(field: T, value: U) {
+            this.$state.filterManager[field] = value
+        },
         //очищение всего
         clearNewData() {
             // Очищаем таблицу условий
@@ -591,7 +603,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.kuAddMain.newTax = false;
             this.kuAddMain.newExclude_return = false;
             this.kuAddMain.newNegative_turnover = false;
-            this.kuAddMain.newKu_type = '';
             this.kuAddMain.newPay_method = '';
             this.newOfFIOСounteragent = '';
             this.newOfPostСounteragent = '';

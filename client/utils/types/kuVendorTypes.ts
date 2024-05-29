@@ -22,7 +22,6 @@ export interface IKuList {
     tax: boolean;
     exclude_return: boolean;
     negative_turnover: boolean;
-    ku_type: string;
     pay_method: string;
   }
   export interface IKuId {
@@ -45,7 +44,6 @@ export interface IKuList {
     tax: boolean;
     exclude_return: boolean;
     negative_turnover: boolean;
-    ku_type: string;
     pay_method: string;
   }
   export interface IKuPostGraphic {
@@ -76,7 +74,6 @@ export interface IKuList {
     tax: boolean;
     exclude_return: boolean;
     negative_turnover: boolean;
-    ku_type: string;
     pay_method: string;
   }
   export interface IKuDeleteGraph {
