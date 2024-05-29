@@ -75,7 +75,7 @@
           <el-form-item label-width="170" label="Дата договора" prop="newDocu_date"
             :validate-status="docuDateValidation">
             <el-date-picker v-model="kuMain.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
+               clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
             <el-input v-model="kuMain.newDocu_subject" style="width: 300px" clearable :rows="4" size="small"

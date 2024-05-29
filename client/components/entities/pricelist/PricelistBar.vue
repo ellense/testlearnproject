@@ -16,7 +16,7 @@
       <el-form>
         <el-form-item label-width="200" label="Действует с">
           <el-date-picker v-model="store.newPriceDate" style="width: 300px" size="small" placeholder="Выберите дату"
-            format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable></el-date-picker>
+            format="DD.MM.YYYY"  clearable></el-date-picker>
         </el-form-item>
         <el-form-item label-width="200" label="Истечение срока">
           <el-input v-model="store.newPriceExpiration_date" placeholder="Введите дату истечения срока"

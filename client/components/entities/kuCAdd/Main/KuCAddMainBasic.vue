@@ -62,13 +62,13 @@
           <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
             label-width="170" label="Начальная дата" prop="newDateStart">
             <el-date-picker v-model="kuMain.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите начальную дату"
+               clearable el-rowrable placeholder="Выберите начальную дату"
               @change="onChangeAndValidateDateStart"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
             label="Конечная дата" prop="newDateEnd">
             <el-date-picker v-model="kuMain.newDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY" value-format="DD.MM.YYYY" clearable
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY" clearable
               @change="onChangeAndValidateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Оплата</el-divider>
@@ -104,7 +104,7 @@
           <el-form-item label-width="170" label="Дата договора" prop="newDocu_date"
             :validate-status="docuDateValidation">
             <el-date-picker v-model="kuMain.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
-              value-format="DD.MM.YYYY" clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
+               clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
             <el-input v-model="kuMain.newDocu_subject" style="width: 300px" clearable :rows="4" size="small"
