@@ -178,6 +178,12 @@ export const useReportStore = defineStore("ReportStore", {
           ku_id: kuId,
         });
         this.$state.kuId = results;
+        // Изменяем значение product_type в зависимости от текущего значения
+        if (results.product_type === "Продовольственные") {
+          results.product_type = "продовольственных";
+        } else if (results.product_type === "Непродовольственные") {
+          results.product_type = "непродовольственных";
+        }
         console.log("успешно получили данные ку_айди", results);
       } catch (error) {
         console.error("Ошибка при получении данных ку_айди:", error);
@@ -190,7 +196,7 @@ export const useReportStore = defineStore("ReportStore", {
         const getStatusText = (status: string): string => {
           return status === "1" ? "Счет-фактура" : "";
         };
-    
+
         let allInvoices: GraphicForExcelReportInvoice[] = [];
         let nextPage = 1;
         let totalPages = 1;
@@ -200,7 +206,7 @@ export const useReportStore = defineStore("ReportStore", {
             page: nextPage,
             graph_id,
           });
-          
+
           // Преобразование статуса перед сохранением данных
           const transformedInvoices = invoice.results.map(invoice => ({
             ...invoice,

@@ -348,6 +348,7 @@ const renderDoc = async () => {
 
           numerals: store2.numerals,
           sumQty: store2.sumQty,
+          product_type: store2.kuId.product_type,
           docu_number: store2.kuId.docu_number,
           docu_date: dayjs(store2.kuId.docu_date).format('DD.MM.YYYY'),
         });

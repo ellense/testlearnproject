@@ -5,16 +5,36 @@
       <div class="kuAddMain">
         <div class="kuAddMainCol">
           <el-divider content-position="left" style=" color: #337ecc">Идентификация</el-divider>
-          <el-form-item label-width="130" label="Код компании" prop="newEntityId">
+          <el-form-item label-width="130"  label="Код компании" prop="newEntityId">
             <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
               filterable style="width: 300px" @change="onEntityChange">
               <el-option v-for="item in options" :key="item.label" :label="item.value" :value="item.value">
-                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: left;">{{ item.label }}</span>
                 <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
               </el-option>
             </el-select>
           </el-form-item>
+          <!-- <el-form-item label-width="130" label="Код компании" prop="newEntityId">
+            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" :filter-method="filterMethod" @change="onEntityChange">
+              <el-option v-for="item in options" :key="item.value" :label="item.label || ''" :value="item.value || ''">
+                <span style="float: left;">{{ item.label }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+            font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item> -->
+          <!-- <el-form-item label-width="130" label="Код компании" prop="newEntityId">
+            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
+              filterable style="width: 300px" :filter-method="filterMethod" @change="onEntityChange">
+              <el-option v-for="item in options" :key="item.entity_id" :label="getLabel(item)" :value="item.entity_id">
+                <span style="float: left;">{{ getLabel(item) }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+            font-size: 13px;  margin-left: 10px;">{{ item.entity_id }}</span>
+              </el-option>
+            </el-select>
+          </el-form-item> -->
           <el-form-item label-width="130" label="Название компании" prop="newEntityName">
             <el-input v-model="kuMain.newEntityName" size="small" style="width: 300px">
             </el-input>
@@ -32,12 +52,12 @@
           <el-form-item label-width="130" label="Код поставщика" prop="newVendorId">
             <div>
               <el-select v-model="kuMain.newVendorId" size="small" placeholder="Выберите поставщика" clearable
-                filterable style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
+                filterable :filter-method="filterMethod"  style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left;">{{ item.value }}</span>
+                  <span style="float: left;">{{ item.label }}</span>
                   <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
                 </el-option>
               </el-select>
             </div>
@@ -61,7 +81,7 @@
             <el-input v-model="kuMain.newVendorName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Номер счета">
+          <el-form-item label-width="170" label="Код клиента">
             <el-input v-model="kuMain.newDocu_account" size="small" clearable placeholder="Введите номер счета"
               style="width: 300px">
             </el-input>
@@ -75,7 +95,7 @@
           <el-form-item label-width="170" label="Дата договора" prop="newDocu_date"
             :validate-status="docuDateValidation">
             <el-date-picker v-model="kuMain.newDocu_date" style="width: 300px" size="small" format="DD.MM.YYYY"
-               clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
+              clearable el-rowrable placeholder="Выберите дату договора"></el-date-picker>
           </el-form-item>
           <el-form-item label-width="170" label="Предмет договора">
             <el-input v-model="kuMain.newDocu_subject" style="width: 300px" clearable :rows="4" size="small"
@@ -96,13 +116,13 @@
           <el-form-item :validate-status="dateStartValidation" :error="dateStartError" style="margin-bottom: 10px;"
             label-width="170" label="Начальная дата" prop="newDateStart">
             <el-date-picker v-model="kuMain.newDateStart" style="width: 300px" size="small" format="DD.MM.YYYY"
-               clearable el-rowrable placeholder="Выберите начальную дату"
+              clearable el-rowrable placeholder="Выберите начальную дату"
               @change="onChangeAndValidateDateStart"></el-date-picker>
           </el-form-item>
           <el-form-item :validate-status="dateEndValidation" :error="dateEndError" label-width="170"
             label="Конечная дата" prop="newDateEnd">
             <el-date-picker v-model="kuMain.newDateEnd" style="width: 300px" size="small"
-              placeholder="Выберите конечную дату" format="DD.MM.YYYY"  clearable
+              placeholder="Выберите конечную дату" format="DD.MM.YYYY" clearable
               @change="onChangeAndValidateDateEnd"></el-date-picker>
           </el-form-item>
           <el-divider content-position="left" style=" color: #337ecc">Наcтройка</el-divider>
@@ -223,7 +243,45 @@ const submitForm = async (formEl: FormInstance | undefined) => {
 }
 
 //вывод данных юридического лица
+// const options = ref<Array<{ entity_id: string; name: string }>>([]);
+
+// const filterMethod = (query: string, option: { name: string }) => {
+//   return option.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
+// };
+
+
+// const getLabel = (item: { name: string }) => {
+//   return item.name || ''; // Если name пустой или undefined, возвращает пустую строку
+// };
+
+// watch(
+//   () => store.dataEntity,
+//   (dataEntity: any[]) => {
+//     options.value = dataEntity.map((item) => ({
+//       entity_id: item.entity_id,
+//       name: item.name || '', // Если name пустой или null, сохраняет пустую строку
+//     }));
+//   }
+// );
+
+// onMounted(async () => {
+//   try {
+//     await store.fetchKuEntity({
+//       entity_id: "",
+//       name: "",
+//       merge_id: "",
+//     });
+//   } catch (error) {
+//     console.error("Ошибка при загрузке данных юр. лица", error);
+//   }
+// });
 const options = ref<Array<{ label: string; value: string }>>([]);
+// const filterMethod = (query: string, option: { label: string; value: string }) => {
+//   return (
+//     option.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+//     option.value.toLowerCase().indexOf(query.toLowerCase()) > -1
+//   );
+// };
 watch(
   () => store.dataEntity,
   (dataEntity: IEntityInKu[]) => {
@@ -248,9 +306,16 @@ onMounted(async () => {
 //вывод данных поставщика
 
 const options2 = ref<Array<{ label: string; value: string }>>([]);
+
 watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
   options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
+// const filterMethod = (query: string, option: { label: string; value: string }) => {
+//   return (
+//     option.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
+//     option.value.toLowerCase().indexOf(query.toLowerCase()) > -1
+//   );
+// };
 
 const onEntityChange = async () => {
   //для галочки
@@ -296,6 +361,8 @@ const onEntityChange = async () => {
   }
   // store.removeFilterExInvoice("vendor_id")
 };
+
+
 
 const labelNewSubsidiaries = computed(() => {
   const entity = store.dataEntity.find(item => item.entity_id === kuMain.newEntityId);
@@ -434,7 +501,10 @@ const disableSelectEntityTooltip = computed(() => {
   return store.disableSubsidiaries ? 'У выбранной компании нет дочерних компаний' : '';
 });
 
-
+const filterMethod = (query: string, item: { label: string }) => {
+  return item.label.toLowerCase().includes(query.toLowerCase())
+  // return item.value.toLowerCase().includes(query.toLowerCase())
+}
 </script>
 
 <style scoped>

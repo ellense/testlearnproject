@@ -8,9 +8,9 @@
             <el-select v-model="store.kuIdEntityId" size="small" clearable filterable style="width: 300px"
               @change="onEntityChange" :disabled="isEditButtonDisabled">
               <el-option v-for="item in options" :key="item.value" :label="item.value" :value="item.value">
-                <span style="float: left;">{{ item.value }}</span>
-                  <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                <span style="float: left;">{{ item.label }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -34,9 +34,9 @@
                 filterable style="width: 300px" @change="onVendorChange" :disabled="isEditButtonDisabled"
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left;">{{ item.value }}</span>
-                  <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                  <span style="float: left;">{{ item.label }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
                 </el-option>
               </el-select>
             </div>
@@ -64,7 +64,7 @@
             <el-input v-model="store.kuIdVendorName" size="small" style="width: 300px" :disabled="isEditButtonDisabled">
             </el-input>
           </el-form-item>
-          <el-form-item label-width="170" label="Номер счета">
+          <el-form-item label-width="170" label="Код клиента">
             <el-input v-model="store.kuIdDocu_account" size="small" style="width: 300px"
               :disabled="isEditButtonDisabled">
             </el-input>

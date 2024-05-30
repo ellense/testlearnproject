@@ -9,9 +9,9 @@
             <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
               filterable style="width: 300px" @change="onEntityChange">
               <el-option v-for="item in options" :key="item.label" :label="item.value" :value="item.value">
-                <span style="float: left;">{{ item.value }}</span>
+                <span style="float: left;">{{ item.label }}</span>
                 <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
               </el-option>
             </el-select>
           </el-form-item>
@@ -35,9 +35,9 @@
                 filterable style="width: 300px" @change="onCustomerChange" :disabled="!kuMain.newEntityId"
                 :title="disableSelectCustomerTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left;">{{ item.value }}</span>
-                  <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
+                  <span style="float: left;">{{ item.label }}</span>
+                <span style="float: right; color: var(--el-text-color-secondary);
+                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
                 </el-option>
               </el-select>
             </div>
