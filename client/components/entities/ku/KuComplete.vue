@@ -14,13 +14,11 @@ import { useKuStore } from "~~/stores/kuStore";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import dayjs from "dayjs";
 import { ElMessage } from 'element-plus'
-import type { IRequirementPost, IPercentPost, IVACPost, IManagerForKuPost, IExInvoiceForKuPost, IManagerForKu } from "~/utils/types/tabsKuTypes";
+import type { IRequirementPost, IPercentPost, IVACPost, IExInvoiceForKuPost, IManagerForKu } from "~/utils/types/tabsKuTypes";
 
 const store = useKuIdStore();
 const router = useRouter();
 const loading = ref(false);
-
-
 
 // Хук При попытке перехода на другую страницу или нажатии кнопки "Назад" в браузере
 onBeforeRouteLeave((to, from, next) => {
@@ -41,7 +39,6 @@ onBeforeRouteLeave((to, from, next) => {
 
   }
 })
-
 
 //проверка полей формы
 const isFormValid = () => {
@@ -72,7 +69,6 @@ const isFormValid = () => {
   );
 };
 
-
 //отменить
 const addClose = () => {
   if (store.hasChanges() && store.$state.kuIdStatus === "Создано") {
@@ -86,12 +82,9 @@ const addClose = () => {
     })
   } else {
     router.push({ path: "/" });
-
     useKuAddStore().clearNewData()
     store.clearData()
   }
-
-
 };
 const isEditButtonDisabled = computed(() => {
   return store.kuIdStatus !== 'Создано';
@@ -228,12 +221,12 @@ const postVAC = async (response: any, dataArray: any) => {
   const requirementsArray = dataArray.map((item: IVACPost) => ({
     ku: response.ku_id,
     type_partner: item.type_partner,
-      vendor: item.vendor,
-      vendor_name: item.vendor_name,
-      retention: item.retention,
-      status: item.status,
-      entity: item.entity,
-      entity_name: item.entity_name,
+    vendor: item.vendor,
+    vendor_name: item.vendor_name,
+    retention: item.retention,
+    status: item.status,
+    entity: item.entity,
+    entity_name: item.entity_name,
   }));
 
   return await Promise.all(requirementsArray.map(async (newItem: any) => {
@@ -425,4 +418,3 @@ const deleteManager = () => {
   width: 100% !important
 }
 </style>
-~/utils/types/serviceTypes

@@ -245,10 +245,14 @@ import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IGraphicC } from "~/utils/types/graphicCustomerTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 import type { ICustomerIdAndName } from "~/utils/types/customerTypes";
+
 const store = useGraphicСStore();
 const storeKuAdd = useKuCAddStore();
+
 const { getGraphic, pagination, countRowTable } = storeToRefs(store);
+
 const loading = ref()
+
 const handleCellDblClick = (row: IGraphicC, column: any, cell: any, event: MouseEvent) => {
   if (column.property === 'sum_approved') {
     if (row.status === 'Начислено') {
@@ -364,6 +368,7 @@ const changeKu = () => {
 watch(KuParams, (value) => {
   optionsKu.value = value;
 });
+
 //фильтр юр лица
 const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
 const optionsLegalEntity = ref<Array<{ label: string; value: string }>>([]);
@@ -386,6 +391,7 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных юр. лица", error);
   }
 });
+
 //фильтр поставщика
 const Customer = ref<string[]>(filterGraphicValue.value.customer_id || []);
 const optionsCustomer = ref<Array<{ label: string; value: string }>>([]);
@@ -404,6 +410,7 @@ const onCustomerChange = async () => {
   store.setFilterValue('customer_id', Customer.value);
   toggleTriggerFilter();
 };
+
 //фильтр по периоду
 const Period = ref<string[]>(filterGraphicValue.value.period || []);
 const optionsPeriod = ref<Array<{ label: string; value: string }>>([
@@ -416,6 +423,7 @@ const onPeriodChange = async () => {
   store.setFilterValue('period', Period.value);
   toggleTriggerFilter();
 };
+
 //фильтр по статусу
 const Status = ref<string[]>(filterGraphicValue.value.status || []);
 const optionsStatus = ref<Array<{ label: string; value: string }>>([

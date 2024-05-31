@@ -1,12 +1,13 @@
 <template>
   <el-scrollbar class="scrollTable">
-    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border @sort-change="handleSortChange" stripe>
+    <el-table :data="tableData" style="width: 100%" height="calc(100vh - 130px)" v-loading="loading" border
+      @sort-change="handleSortChange" stripe>
       <el-table-column label="Код статьи" prop="article_code" width="400" show-overflow-tooltip sortable />
-      <el-table-column prop="article_name" label="Наименование статьи услуги"  show-overflow-tooltip sortable />
+      <el-table-column prop="article_name" label="Наименование статьи услуги" show-overflow-tooltip sortable />
       <el-table-column label="Операция" align="center">
         <template #default="scope">
-          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.row)"
-            >Удалить</el-button>
+          <el-button text type="danger" :icon="Delete" size="small"
+            @click.prevent="deleteRow(scope.row)">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -14,7 +15,7 @@
   <div v-if="pagination?.count && pagination.count > countRowTable" class="pagination">
     <el-pagination v-model:pageSize="pageSize" small :page-sizes="[50, 100, 300, 500]"
       :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
+      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
   </div>
 </template>
 
@@ -51,12 +52,12 @@ const paginationChange = (page: number) => {
   }
 };
 
-const handleSortChange = async ({ page, prop, order  }: { page: number, prop: string, order: string }) => {
+const handleSortChange = async ({ page, prop, order }: { page: number, prop: string, order: string }) => {
   try {
     store.pagination = null
     store.sortProp = prop; // поле, по которому сортируем
     store.sortOrder = order === 'ascending' ? 'asc' : 'desc'; // порядок сортировки
-    console.log("(поле, порядок) = (", store.sortProp,",", store.sortOrder, ")");
+    console.log("(поле, порядок) = (", store.sortProp, ",", store.sortOrder, ")");
     await store.getArticleFromAPIWithFilter(page, store.sortProp, store.sortOrder);
   } catch (error) {
     console.error("Ошибка при загрузке данных", error);
@@ -69,7 +70,7 @@ watch(getArticle, (value) => {
 
 onMounted(async () => {
   try {
-    loading.value = true; 
+    loading.value = true;
     await store.getArticleFromAPIWithFilter();
     loading.value = false;
   } catch (error) {
@@ -89,26 +90,26 @@ const deleteRow = async (row: IArticle) => {
         type: 'warning',
       }
     );
-  const id = row.id;
-  if (id !== null) {
-    try {
-      await SERVICE.deleteArticle({id});
-      store.tableDataArticle = store.tableDataArticle.filter(item => item.id !== id);
-      ElMessage({
+    const id = row.id;
+    if (id !== null) {
+      try {
+        await SERVICE.deleteArticle({ id });
+        store.tableDataArticle = store.tableDataArticle.filter(item => item.id !== id);
+        ElMessage({
           type: 'success',
           message: 'Элемент успешно удален!'
         });
-    } catch (error) {
-      console.error("Ошибка при удалении статьи услуги на бэкенд:", error);
-      ElMessage({
+      } catch (error) {
+        console.error("Ошибка при удалении статьи услуги на бэкенд:", error);
+        ElMessage({
           type: 'error',
           message: 'Ошибка при удалении элемента!'
         });
+      }
+    } else {
+      console.error("ID строки не может быть null");
     }
-  } else {
-    console.error("ID строки не может быть null");
-  }
-} catch {
+  } catch {
     ElMessage({
       type: 'info',
       message: 'Удаление отменено'
@@ -122,4 +123,3 @@ const deleteRow = async (row: IArticle) => {
   z-index: 9;
 }
 </style>
-~/utils/types/serviceTypes

@@ -1,9 +1,8 @@
 import { defineStore } from "pinia";
 import { useKuAddStore } from "~~/stores/kuAddStore";
 import _ from 'lodash';
-import type { IProduct } from "~/utils/types/productTypes";
 import type { IKuIdStore } from "~/utils/types/storesTypes";
-import type { IExInvoiceForKu, IContractPost } from "~/utils/types/tabsKuTypes";
+import type {  IContractPost } from "~/utils/types/tabsKuTypes";
 
 export const useKuIdStore = defineStore("KuIdStore", {
     state: (): IKuIdStore => ({
@@ -127,7 +126,6 @@ export const useKuIdStore = defineStore("KuIdStore", {
         getVAC: (state) => state.tableDataVAC,
         getIExInvoiceForKu: (state) => state.tableDataExInvoiceSelect,
         getManagerForKu: (state) => state.tableDataManagerSelect,
-
     },
 
     actions: {
@@ -135,9 +133,11 @@ export const useKuIdStore = defineStore("KuIdStore", {
         setKuIdVendorName(name: string) {
             this.kuIdVendorName = name;
         },
+
         setKuIdCustomerCode(code: string) {
             this.kuIdDocu_account = code;
         },
+
         //получение ku_id
         async getKuDetail_API(kuId: string) {
             try {
@@ -233,6 +233,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         async getExRequirementForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuExRequirements({
                 ku_id, page_size: this.$state.countRowTable,
@@ -254,6 +255,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //получение бонуса ku_id
         async getBonusForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuRequirementBonus({
@@ -276,6 +278,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //получение поставщиков и договоров ku_id
         async getVACForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuVAC({
@@ -298,6 +301,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //получение искл. накладных ku_id
         async getExInvoiceForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuExInvoiceForKuId({
@@ -320,6 +324,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //получение кат. менеджеров ku_id
         async getManagerForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuManager({
@@ -343,6 +348,7 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //получение долж. лиц ku_id
         async getOfficialForKuId_API(ku_id?: string, page?: number) {
             await KU.getKuOfficial({
@@ -377,15 +383,15 @@ export const useKuIdStore = defineStore("KuIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //создание контракта
         async createKuContract(newItem: IContractPost) {
             try {
-                const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+                const response = await KU.postKuContractCreate(newItem);
                 console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
-                this.kuIdContract = response.name; // сохраняем имя в состоянии хранилища
+                this.kuIdContract = response.name; 
             } catch (error) {
                 console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
-                // Можно обработать ошибку здесь, если нужно
             }
         },
         hasChanges() {
@@ -436,9 +442,8 @@ export const useKuIdStore = defineStore("KuIdStore", {
             );
         },
         clearData() {
-            // Очищаем таблицу условий
+            // Очищаем таблицы
             this.tableDataInRequirement.length = 0;
-
             this.tableDataExRequirement.length = 0;
             this.tableDataPercent.length = 0;
             this.tableDataVAC.length = 0 

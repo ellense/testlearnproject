@@ -1,12 +1,10 @@
 <template>
-  <el-dialog v-model="useReportStore().dialogFormReportInvoice" title="Предварительный отчет по расчету c поставщиком по накладным" close-on-click-modal >
-    <div class="reportTableWrapper__table" >
-      <!-- v-if="tableData.length > 0" -->
-      <!-- :disable-panel-setting="true" :disable-panel-filter="true" :readonly="true"  -->
-      <vue-excel-editor v-model="tableDataReport" no-footer height="500px"
-      :localized-label="localizedExcelTableLabel" >
+  <el-dialog v-model="useReportStore().dialogFormReportInvoice"
+    title="Предварительный отчет по расчету c поставщиком по накладным" close-on-click-modal>
+    <div class="reportTableWrapper__table">
+      <vue-excel-editor v-model="tableDataReport" no-footer height="500px" :localized-label="localizedExcelTableLabel">
         <vue-excel-column v-for="column in columnTable" :key="column.field" :field="column.field" :label="column.label"
-          :type="column.type" :width="`${column.width}px`" :summary="column.summary" :init-style="column.style"  />
+          :type="column.type" :width="`${column.width}px`" :summary="column.summary" :init-style="column.style" />
       </vue-excel-editor>
       <div v-if="!getGraphicDone">Данных с такими параметрами нет</div>
     </div>
@@ -114,7 +112,7 @@ function exportAsExcel() {
   ];
 
   // Установим значения в header из хранилища перед экспортом
-  const graphicData = useReportStore().graphic[0]; // Первый элемент массива graphic
+  const graphicData = useReportStore().graphic[0];
   if (graphicData) {
     const period = `${dayjs(graphicData.date_start).format('DD.MM.YYYY')} - ${dayjs(graphicData.date_end).format('DD.MM.YYYY')}`;
     header[1].value = period;
@@ -171,7 +169,7 @@ function exportAsExcel() {
           }
         } else {
           newRow.push({
-            v: "", // или другое значение, которое вы хотите использовать для null
+            v: "",
             t: "s",
           });
         }
@@ -220,7 +218,7 @@ function exportAsExcel() {
   });
   ws["!cols"] = colsInfo; // размеры колонок
   utils.book_append_sheet(wb, ws, "Акт с поставщиком по накладным");
-  writeFile(wb, "Акт сверки взаиморасчетов с "+ graphicData.vendor_name + " по накладным " + graphicData.ku_id + ".xlsx");
+  writeFile(wb, "Акт сверки взаиморасчетов с " + graphicData.vendor_name + " по накладным " + graphicData.ku_id + ".xlsx");
 }
 
 </script>

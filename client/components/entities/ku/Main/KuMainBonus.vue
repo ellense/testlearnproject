@@ -10,7 +10,7 @@
         <template #default="{ row }">
           <el-checkbox v-model="row.fix" @change="onFixChange(row)" :disabled="isEditButtonDisabled"></el-checkbox>
         </template>
-      </el-table-column> -->
+</el-table-column> -->
       <el-table-column prop="criterion" label="Критерий в руб." width="200">
         <template #default="{ row }">
           <el-input v-model="row.criterion" @change="onCriteriaChange(row)" clearable size="small"

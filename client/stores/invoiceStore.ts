@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import type { EntityId } from "~/utils/types/entityTypes";
 import type { IParamInvoices } from "~/utils/types/invoiceTypes";
 import type { IInvoiceStore } from "~/utils/types/storesTypes";
 export const useInvoiceStore = defineStore("IInvoiceStore", {
@@ -35,45 +34,6 @@ export const useInvoiceStore = defineStore("IInvoiceStore", {
       this.$state.searchNumber = query;
     },
 
-    // //для фильтрации
-    // getLegalEntityFromApi() {
-    //   console.log('Запрос данных о юридических лицах...');
-    //   ENTITY.getEntityById()
-    //     .then((legalEntity) => {
-    //       console.log('Получены данные о юридических лицах:', legalEntity);
-    //       this.setLegalEntity(legalEntity);
-    //     })
-    //     .catch((e) => console.error('Ошибка при получении данных о юридических лицах:', e));
-    // },
-    // setLegalEntity(data: EntityId[]) {
-    //   console.log('Устанавливаются данные о юридических лицах:', data);
-    //   this.$state.legalEntity = data.map(
-    //     // (legalEntity) => legalEntity.external_code
-    //     (legalEntity) => legalEntity.entity_id
-    //   )
-    // },
-
-    // async fetchVendorsListForEntityInInvoice(page?: number) {
-    //   try {
-    //     const vendors = await VENDOR.getVendorsForEntityInKU({
-    //       page_size: this.$state.countRowTable,
-    //       page,
-    //       entity_id: this.$state.legalEntity[0],
-    //     });
-    //     this.$state.vendor = vendors.results;
-    //     this.$state.pagination = {
-    //       count: vendors.count,
-    //       previous: vendors.previous,
-    //       next: vendors.next,
-    //     };
-    //   } catch (error) {
-    //     console.error(
-    //       "Произошла ошибка при получении данных о поставщиках для юридического лица в накладных",
-    //       error
-    //     );
-    //     return Promise.reject(error);
-    //   }
-    // },
     setFilterValue<
       T extends keyof IParamInvoices,
       U extends IParamInvoices[T],

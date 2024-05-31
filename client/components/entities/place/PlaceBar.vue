@@ -66,12 +66,6 @@ const saveRow = async () => {
   }
 
   store.dialogFormPlaceVisible = false
-
-  // tableData.value.push({ shop_code: store.newShop_id , shop_name: store.newShop_name, address: store.newAddress });
-  // console.log("данные услуг :", store.tableDataPlace)
-  // store.dialogFormPlaceVisible = false
-  // store.pagination = null
-  // await store.getPlaceFromAPIWithFilter();
 }
 </script>
 

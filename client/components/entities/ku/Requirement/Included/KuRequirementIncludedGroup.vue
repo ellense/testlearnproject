@@ -151,63 +151,6 @@ const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
   }
   return undefined;
 };
-// //дерево
-// const value = ref()
-// const treeData = ref<ITree[]>([]);
-// const treeRef = ref<InstanceType<typeof ElTree>>()
-
-// const defaultProps = {
-//   children: 'children',
-//   label: 'name',
-//   isLeaf: 'isLeaf',
-// };
-
-// //изменение поля дерева
-// let selectedCategoryName = '';
-// const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
-//   store2.valueBrand_nameIn = "";
-//   store2.valueProducer_nameIn = "";
-//   store2.setFilterProducer("l4", []);
-//   store2.setFilterBrand('producer_name', undefined);
-//   await store2.fetchAllProducersForInclided();
-//   await store2.fetchAllBrandsForIncluded();
-//   console.log('Отмеченные ключи:', checkedKeys);
-
-//   if (checkedKeys && checkedKeys.length > 0) {
-//     const selectedCategoryKey = checkedKeys; // Получаем ключ выбранной категории
-//     console.log('Выбранный ключ категории:', selectedCategoryKey);
-//     // Находим соответствующий элемент в дереве данных
-//     const selectedCategory = findCategoryByKey(treeData.value, selectedCategoryKey);
-
-//     if (selectedCategory) {
-//       selectedCategoryName = selectedCategory.name; // Сохраняем имя выбранной категории для отправки в условия
-//     }
-//     store2.setFilterProducer("l4", selectedCategoryKey);
-//     store2.setFilterBrand("l4", selectedCategoryKey);
-   
-//     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
-//       store2.fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
-//       store2.fetchAllBrandsForIncluded();
-//       console.log('Выполнены запросы по фильтру категории.');
-//     }
-//   }
-// }
-
-// // Функция для поиска категории по ключу в дереве данных
-// const findCategoryByKey = (tree: ITree[], key: any): ITree | undefined => {
-//   for (const node of tree) {
-//     if (node.classifier_code === key) {
-//       return node;
-//     }
-//     if (node.children) {
-//       const result = findCategoryByKey(node.children, key);
-//       if (result) {
-//         return result;
-//       }
-//     }
-//   }
-//   return undefined;
-// };
 
 //добавление условий по категории
 const AddCategoryItem = async () => {
@@ -240,7 +183,6 @@ const AddCategoryItem = async () => {
   }
 };
 
-
 </script>
 
 <style scoped>
@@ -256,4 +198,3 @@ const AddCategoryItem = async () => {
   margin: 20px 0 20px 0;
 }
 </style>
-~/utils/types/serviceTypes

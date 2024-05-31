@@ -6,25 +6,18 @@ import type { IKuStore } from "~/utils/types/storesTypes";
 
 export const useKuStore = defineStore("KuStore", {
   state: (): IKuStore => ({
-    //селекты для множественного выбора
     multipleSelection: [],
     multipleTableRef: null,
-    //данные 
     tableData: [],
-    //пагинация в таблицах
     pagination: null,
     countRowTable: 50,
-    //
     sortProp: "",
     sortOrder: "",
     legalEntity: [],
-    //поиски
     search: "",
     filterEntityId: [],
     filterVendorId: [],
-    //параметры для фильтров при запросах
-    filterKuValue: {
-    },
+    filterKuValue: {},
   }),
 
   getters: {

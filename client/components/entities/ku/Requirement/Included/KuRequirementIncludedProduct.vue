@@ -3,9 +3,10 @@
     close-on-press-escape draggable>
     <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
-      store.kuIdVendorName }}</span></h4>
+    store.kuIdVendorName }}</span></h4>
     <div class="buttonBar_search">
-      <el-input v-model="searchProductInKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+      <el-input v-model="searchProductInKu" size="small" placeholder="Поиск" style="width: 200px"
+        :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
       <el-table style="width: 100%" height="300" :data="tableData" @selection-change="store2.handleSelectionChange3"
@@ -19,8 +20,8 @@
     </el-scrollbar>
     <div v-if="pagination?.count" class="pagination">
       <el-pagination v-model:pageSize="pageSize" small :page-sizes="[20, 50, 100, 300, 500]"
-      :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
-      @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count"/>
+        :page-count="Math.ceil(pagination.count / pageSize)" layout="sizes, prev, pager, next, total"
+        @size-change="handleSizeChange" @current-change="paginationChange" :total="pagination.count" />
     </div>
     <template #footer>
       <span class="dialog-footer">
@@ -100,7 +101,7 @@ const AddProductItem = () => {
       producer: "",
       brand: "",
     });
-    console.log("store.tableDataRequirementПРОДУКТЫ",store.tableDataInRequirement);
+    console.log("store.tableDataRequirementПРОДУКТЫ", store.tableDataInRequirement);
   });
   toggleSelection()
   store.dialogFormProductInVisible = false;

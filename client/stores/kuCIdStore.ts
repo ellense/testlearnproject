@@ -1,7 +1,5 @@
 import { defineStore } from "pinia";
-import { useKuAddStore } from "~~/stores/kuAddStore";
 import _ from 'lodash';
-import type { IProduct } from "~/utils/types/productTypes";
 import type { IKuCIdStore } from "~/utils/types/storesTypes";
 import type { IContractPost } from "~/utils/types/tabsKuTypes";
 
@@ -99,6 +97,7 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
         setKuIdCustomerName(name: string) {
             this.kuIdCustomerName = name;
         },
+
         //получение ku_id
         async getKuDetail_API(kuId: string) {
             try {
@@ -147,6 +146,7 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                 console.error("Ошибка при получении данных ку_айди клиентов:", error);
             }
         },
+
         async getServiceForKuId_API(ku_id?: string, page?: number) {
             await KUC.getKuService({
                 ku_id, page_size: this.$state.countRowTable,
@@ -168,6 +168,7 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         //получение поставщиков и договоров ku_id
         async getVACForKuId_API(ku_id?: string, page?: number) {
             await KUC.getKuVAC({
@@ -190,6 +191,7 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                     return Promise.reject(error);
                 });
         },
+
         async getManagerForKuId_API(ku_id?: string, page?: number) {
             await KUC.getKuManager({
                 ku_id, page_size: this.$state.countRowTable,
@@ -256,6 +258,8 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                 console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
             }
         },
+
+        
         hasChanges() {
             const tablesChanged = !_.isEqual(this.tableDataServiceSelect, this.initialState.tableDataServiceSelect);
             const tablesChanged2 = !_.isEqual(this.tableDataVAC, this.initialState.tableDataVAC);
@@ -290,10 +294,13 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
                 tablesChanged3
             );
         },
+
         clearData() {
             // Очищаем таблицу условий
             this.tableDataManagerSelect.length = 0;
+            this.tableDataServiceSelect.length = 0;
             this.tableDataContract.length = 0;
+            this.tableDataVAC.length = 0;
             // Сбрасываем флаги видимости диалоговых окон
             this.dialogFormVAC = false;
             this.dialogFormService = false;
@@ -359,7 +366,6 @@ export const useKuCIdStore = defineStore("KuCIdStore", {
             this.initialState.kuIdDocEntity = '';
         }
     },
-
 })
 
 

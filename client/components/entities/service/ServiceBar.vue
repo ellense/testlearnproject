@@ -4,7 +4,6 @@
       <h3>Услуги</h3>
       <el-divider direction="vertical" />
       <el-button type="success" plain @click="store.dialogFormServiceVisible = true" size="small">Добавить</el-button>
-      <!-- <el-button type="primary" plain @click="" size="small">Создать отчет</el-button> -->
     </div>
     <div class="directoryBar_filter">
       <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;"
@@ -63,11 +62,7 @@ const saveRow = async () => {
   } catch (error) {
     console.error("Ошибка при добавлении услуг на сервер", error);
   }
-  // tableData.value.push({id: null, service_code: store.newService_id , service_name: store.newService_name, });
-  // console.log("данные услуг :", store.tableDataService)
   store.dialogFormServiceVisible = false
-  // store.pagination = null
-  // await store.getServiceFromAPIWithFilter();
 }
 </script>
 

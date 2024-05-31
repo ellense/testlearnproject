@@ -1,14 +1,11 @@
 <template>
-    <!-- <vue-resizable minWidth=300 maxWidth=900 width="800px" active="[ 'l']" style="border: 1px solid var(--el-border-color);  height: calc(100vh - 140px);
-  border-radius: 2px; "> -->
     <div class="Tree">
         <h3>Категории товаров:</h3>
         <el-scrollbar class="scrollTree">
-            <el-tree :data="treeData" :props="defaultProps"  show-checkbox ref="treeRef" node-key="classifier_code"
+            <el-tree :data="treeData" :props="defaultProps" show-checkbox ref="treeRef" node-key="classifier_code"
                 @check="getCheckedKeys" :filter-node-method="filterNode" check-on-click-node v-loading="loading" />
         </el-scrollbar>
     </div>
-    <!-- </vue-resizable> -->
 </template>
 
 <script setup lang="ts">
@@ -90,9 +87,7 @@ const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
 
 
 const getCheckedKeys = (checkedKeys: any, checkedNodes: any) => {
-    // console.log('Отмеченные узлы:', checkedNodes);
     const keysOfLevel4 = checkedNodes.checkedKeys.filter((key: string) => key.length === 10);
-    //   console.log('Ключи категорий 4 уровня:', keysOfLevel4);
     useProductStore().pagination = null;
     useProductStore().setFilterValue('categories_l4', keysOfLevel4);
     toggleTriggerFilter();
@@ -121,10 +116,8 @@ h3 {
 
 .Tree {
     margin-left: 10px;
-    /* border: 1px solid var(--el-border-color); */
     height: calc(100vh - 130px);
     min-width: 250px;
     max-width: 700px;
-    /* border-radius: 2px; */
 }
 </style>

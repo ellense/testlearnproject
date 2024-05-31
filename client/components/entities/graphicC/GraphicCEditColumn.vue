@@ -21,13 +21,14 @@ import { ElMessage } from "element-plus";
 import { useGraphicСStore } from "~~/stores/graphicСStore";
 import dayjs from "dayjs";
 
-
 const store = useGraphicСStore()
+
 // Функция для обработки нажатия клавиши Enter
 const handleEnterKeyPress = (event: KeyboardEvent) => {
-    event.preventDefault(); // Остановить стандартное действие события (отправка формы)
-    editApproved(); // Вызвать вашу функцию editApproved()
+    event.preventDefault();
+    editApproved();
 };
+
 //изменение поля утверждено
 const editApproved = async () => {
     const selectedRows = store.selectedRowEditApproved
@@ -49,7 +50,6 @@ const editApproved = async () => {
         sum_bonus: selectedRows.sum_bonus,
         sum_approved: store.editApproved,
     };
-
     try {
         const response = await GRAPHICC.updateGraphic(data);
         console.log("Поле успешно обновлено:", response);

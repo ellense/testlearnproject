@@ -6,19 +6,14 @@ import type { IKuList } from "~/utils/types/kuVendorTypes";
 
 export const useKuCStore = defineStore("KuCStore", {
   state: (): IKuCStore => ({
-    //селекты для множественного выбора
     multipleSelection: [],
     multipleTableRef: null,
-    //данные 
     tableData: [],
-    //пагинация в таблицах
     pagination: null,
     countRowTable: 50,
-    //
     sortProp: "",
     sortOrder: "",
     legalEntity: [],
-    //параметры для фильтров при запросах
     filterEntityId: [],
     filterVendorId: [],
     filterKuValue: {},
@@ -100,7 +95,6 @@ export const useKuCStore = defineStore("KuCStore", {
         delete this.$state.filterKuValue[field]
       }
     },
-
 
     //получения юр лица для фильтра в ку
     getLegalEntityFilterForKuFromApi() {

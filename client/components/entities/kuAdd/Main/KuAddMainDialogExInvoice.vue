@@ -136,4 +136,3 @@ import type { IExInvoiceForKu } from "~/utils/types/tabsKuTypes";
     store.dialogFormExInvoiceVisible = false;
   };
   </script>
-  ~/utils/types/serviceTypes

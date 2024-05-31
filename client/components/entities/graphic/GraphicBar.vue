@@ -215,9 +215,6 @@ const approveGraphic = async () => {
   }
 };
 
-
-
-
 //удаление графиков
 const deleteGraphic = async () => {
   try {

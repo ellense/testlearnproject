@@ -86,7 +86,6 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
     }),
 
     getters: {
-        // getKu: (state) => state.tableData,
         getServiceAll: (state) => state.tableDataServiceAll,
         getManagerAll: (state) => state.tableDataManagerAll,
         getEntity: (state) => state.dataEntity,
@@ -121,7 +120,6 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.$state.countRowTable = count;
         },
 
-
         setRuleFormRef(formRef: FormInstance | null) {
             this.ruleFormRef = formRef;
         },
@@ -143,6 +141,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 });
             });
         },
+
         //получение данных о юр.лице для создания
         async fetchKuEntity(data: IEntityInKu) {
             try {
@@ -159,6 +158,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 console.error("Произошла ошибка", error);
             }
         },
+
         //получение данных о поставщиках для VAC
         async fetchAllVendorIdForEntity() {
             try {
@@ -197,6 +197,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
                 delete this.$state.filterVendorValue[field]
             }
         },
+
         //получение данных о клиентаъх для создания
         async fetchAllCustomerIdForEntity() {
             try {
@@ -256,9 +257,6 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             }
         },
 
-
-        ////////////////////////////////////////////////////////////////////
-
         //получение услуг
         async getServiceFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
             this.setFilterValueServices('page', page);
@@ -289,7 +287,6 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
             this.$state.filterService[field] = value
         },
 
-
         //получение статей услуг
         async getArticleFromAPIWithFilter(page?: number, sort_by?: string, sort_order?: string) {
             this.setFilterValueArticle('page', page);
@@ -319,6 +316,7 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         >(field: T, value: U) {
             this.$state.filterArticle[field] = value
         },
+
         //получение менеджеров
         async getManagersFromAPIWithFilter(page?: number) {
             await MANAGER.getManager({
@@ -401,12 +399,11 @@ export const useKuCAddStore = defineStore("KuCAddStore", {
         //создание контракта
         async createKuContract(newItem: IContractPost) {
             try {
-                const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+                const response = await KU.postKuContractCreate(newItem);
                 console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
-                this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
+                this.kuAddMain.newContract = response.name; 
             } catch (error) {
                 console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
-                // Можно обработать ошибку здесь, если нужно
             }
         },
     }

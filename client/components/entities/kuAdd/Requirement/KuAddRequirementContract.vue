@@ -1,9 +1,9 @@
 <template>
-        <el-button size="small" type="primary" plain round
-            @click="store.dialogFormContractVisible = true">Добавить</el-button>
-        <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0">Удалить
-            все</el-button>
-        <el-button size="small" type="success" plain round @click="FormContract()">Cформировать поле контакт</el-button>
+    <el-button size="small" type="primary" plain round
+        @click="store.dialogFormContractVisible = true">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataContract.length = 0">Удалить
+        все</el-button>
+    <el-button size="small" type="success" plain round @click="FormContract()">Cформировать поле контакт</el-button>
     <div class="scrollTableRequirement">
         <el-table style="width: 100%; min-height:100px; height:26vh" height="26vh" :data="tableData" border
             empty-text="" align="center">

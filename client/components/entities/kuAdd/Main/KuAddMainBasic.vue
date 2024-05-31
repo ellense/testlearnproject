@@ -9,32 +9,12 @@
             <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
               filterable style="width: 300px" @change="onEntityChange">
               <el-option v-for="item in options" :key="item.label" :label="item.value" :value="item.value">
-                <span style="float: left;">{{ item.label }}</span>
+                <span style="float: left;">{{ item.value }}</span>
                 <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
               </el-option>
             </el-select>
           </el-form-item>
-          <!-- <el-form-item label-width="130" label="Код компании" prop="newEntityId">
-            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
-              filterable style="width: 300px" :filter-method="filterMethod" @change="onEntityChange">
-              <el-option v-for="item in options" :key="item.value" :label="item.label || ''" :value="item.value || ''">
-                <span style="float: left;">{{ item.label }}</span>
-                <span style="float: right; color: var(--el-text-color-secondary);
-            font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item> -->
-          <!-- <el-form-item label-width="130" label="Код компании" prop="newEntityId">
-            <el-select v-model="kuMain.newEntityId" size="small" placeholder="Выберите код компании" clearable
-              filterable style="width: 300px" :filter-method="filterMethod" @change="onEntityChange">
-              <el-option v-for="item in options" :key="item.entity_id" :label="getLabel(item)" :value="item.entity_id">
-                <span style="float: left;">{{ getLabel(item) }}</span>
-                <span style="float: right; color: var(--el-text-color-secondary);
-            font-size: 13px;  margin-left: 10px;">{{ item.entity_id }}</span>
-              </el-option>
-            </el-select>
-          </el-form-item> -->
           <el-form-item label-width="130" label="Название компании" prop="newEntityName">
             <el-input v-model="kuMain.newEntityName" size="small" style="width: 300px">
             </el-input>
@@ -52,12 +32,12 @@
           <el-form-item label-width="130" label="Код поставщика" prop="newVendorId">
             <div>
               <el-select v-model="kuMain.newVendorId" size="small" placeholder="Выберите поставщика" clearable
-                filterable :filter-method="filterMethod"  style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
+                filterable  style="width: 300px" @change="onVendorChange" :disabled="!kuMain.newEntityId"
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
-                  <span style="float: left;">{{ item.label }}</span>
+                  <span style="float: left;">{{ item.value }}</span>
                   <span style="float: right; color: var(--el-text-color-secondary);
-                    font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
+                    font-size: 13px;  margin-left: 10px;">{{ item.label }}</span>
                 </el-option>
               </el-select>
             </div>
@@ -242,46 +222,8 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 
-//вывод данных юридического лица
-// const options = ref<Array<{ entity_id: string; name: string }>>([]);
-
-// const filterMethod = (query: string, option: { name: string }) => {
-//   return option.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
-// };
-
-
-// const getLabel = (item: { name: string }) => {
-//   return item.name || ''; // Если name пустой или undefined, возвращает пустую строку
-// };
-
-// watch(
-//   () => store.dataEntity,
-//   (dataEntity: any[]) => {
-//     options.value = dataEntity.map((item) => ({
-//       entity_id: item.entity_id,
-//       name: item.name || '', // Если name пустой или null, сохраняет пустую строку
-//     }));
-//   }
-// );
-
-// onMounted(async () => {
-//   try {
-//     await store.fetchKuEntity({
-//       entity_id: "",
-//       name: "",
-//       merge_id: "",
-//     });
-//   } catch (error) {
-//     console.error("Ошибка при загрузке данных юр. лица", error);
-//   }
-// });
 const options = ref<Array<{ label: string; value: string }>>([]);
-// const filterMethod = (query: string, option: { label: string; value: string }) => {
-//   return (
-//     option.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-//     option.value.toLowerCase().indexOf(query.toLowerCase()) > -1
-//   );
-// };
+
 watch(
   () => store.dataEntity,
   (dataEntity: IEntityInKu[]) => {
@@ -310,12 +252,6 @@ const options2 = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store.dataVendorId, (vendors: IVendorIdAndName[]) => {
   options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
 });
-// const filterMethod = (query: string, option: { label: string; value: string }) => {
-//   return (
-//     option.label.toLowerCase().indexOf(query.toLowerCase()) > -1 ||
-//     option.value.toLowerCase().indexOf(query.toLowerCase()) > -1
-//   );
-// };
 
 const onEntityChange = async () => {
   //для галочки
@@ -359,10 +295,7 @@ const onEntityChange = async () => {
     kuMain.newSubsidiaries = false;
     store.tableDataExInvoiceAll.length = 0
   }
-  // store.removeFilterExInvoice("vendor_id")
 };
-
-
 
 const labelNewSubsidiaries = computed(() => {
   const entity = store.dataEntity.find(item => item.entity_id === kuMain.newEntityId);
@@ -380,7 +313,7 @@ const onVendorChange = async () => {
   if (kuMain.newVendorId && kuMain.newVendorId.length > 0) {
     store.setFilterVendor('vendor_id', kuMain.newVendorId);
     store.getVendorNameFromAPIWithFilter()
-    store.getCustomerCodeFromAPIWithFilter(kuMain.newVendorId)
+    store.getCustomerCodeFromAPIWithFilter(kuMain.newVendorId) //получение связанного клиента через dirparty
     kuMain.newVendorIdExInvoice = kuMain.newVendorId
 
     try {
@@ -465,7 +398,7 @@ const validateDocuDate = () => {
     // Если поле не заполнено
     docuDateValidation.value = 'error';
   } else {
-    docuDateValidation.value = 'success'; // Может быть 'error', 'validating' или undefined
+    docuDateValidation.value = 'success';
   }
 };
 
@@ -501,9 +434,8 @@ const disableSelectEntityTooltip = computed(() => {
   return store.disableSubsidiaries ? 'У выбранной компании нет дочерних компаний' : '';
 });
 
-const filterMethod = (query: string, item: { label: string }) => {
+const filterMethod = (query: string, item: { label: string }) => { //функция для фильтрации в локапе по наименованию (не работала на момент написания)
   return item.label.toLowerCase().includes(query.toLowerCase())
-  // return item.value.toLowerCase().includes(query.toLowerCase())
 }
 </script>
 
@@ -517,8 +449,6 @@ const filterMethod = (query: string, item: { label: string }) => {
 .kuAddMainCol {
   display: flex;
   flex-direction: column;
-
-
 }
 
 .el-form-item {

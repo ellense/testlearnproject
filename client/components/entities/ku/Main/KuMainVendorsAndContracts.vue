@@ -1,8 +1,9 @@
 <template>
   <el-scrollbar height="45vh">
-    <el-button size="small" type="primary" plain round @click="store.dialogFormVACVisible = true"
-      class="buttonAdd" :disabled="isEditButtonDisabled">Добавить</el-button>
-    <el-button size="small" type="danger" plain round @click="store.tableDataVAC.length = 0" class="buttonAdd" :disabled="isEditButtonDisabled">Удалить
+    <el-button size="small" type="primary" plain round @click="store.dialogFormVACVisible = true" class="buttonAdd"
+      :disabled="isEditButtonDisabled">Добавить</el-button>
+    <el-button size="small" type="danger" plain round @click="store.tableDataVAC.length = 0" class="buttonAdd"
+      :disabled="isEditButtonDisabled">Удалить
       все</el-button>
     <el-table :data="tableData" border style="width: 100%; margin-top: 10px;" height="40vh"
       empty-text="Добавьте поставщиков">
@@ -19,10 +20,10 @@
       </el-table-column>
       <el-table-column align="center" label="Операция">
         <template #default="scope">
-          <el-button text type="success" :icon="DocumentRemove" size="small"
-            @click.prevent="ExInvoice(scope.row)" :disabled="isEditButtonDisabled">Исключить накладные</el-button>
-          <el-button text type="danger" :icon="Delete" size="small"
-            @click.prevent="deleteRow(scope.$index)" :disabled="isEditButtonDisabled">Удалить</el-button>
+          <el-button text type="success" :icon="DocumentRemove" size="small" @click.prevent="ExInvoice(scope.row)"
+            :disabled="isEditButtonDisabled">Исключить накладные</el-button>
+          <el-button text type="danger" :icon="Delete" size="small" @click.prevent="deleteRow(scope.$index)"
+            :disabled="isEditButtonDisabled">Удалить</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -59,7 +60,7 @@
         </span>
       </template>
     </el-dialog>
-    <EntitiesKuMainDialogExInvoice/>
+    <EntitiesKuMainDialogExInvoice />
   </el-scrollbar>
 </template>
 
@@ -69,7 +70,7 @@ import { useKuAddStore } from "~~/stores/kuAddStore";
 import { useKuIdStore } from "~~/stores/kuIdStore";
 import { ElTable } from 'element-plus'
 import dayjs from "dayjs";
-import { Delete,DocumentRemove } from '@element-plus/icons-vue'
+import { Delete, DocumentRemove } from '@element-plus/icons-vue'
 import type { IEntityInKu } from "~/utils/types/entityTypes";
 import type { IVendorIdAndName } from "~/utils/types/vendorTypes";
 import type { IVendorAndContract } from "~/utils/types/tabsKuTypes";
@@ -108,8 +109,8 @@ const onEntityChange = async () => {
   //для поставщика
   store2.dataVendorId = [];
   store2.setFilterVendor('entity_id', store.kuIdEntityIdVAC);
-  if (store.kuIdEntityIdVAC) { 
-    store2.fetchAllVendorIdForEntity(); 
+  if (store.kuIdEntityIdVAC) {
+    store2.fetchAllVendorIdForEntity();
     console.log('Выполнен запрос на получение данных поставщика по фильтру юр.лица.');
   } else {
     store2.removeFilterVendor("entity_id")
@@ -134,19 +135,19 @@ const AddManagers = async () => {
   const selectedVendor = optionsVendor.value.find(option => option.value === store.kuIdVendorIdVAC);
   const vendorName = selectedVendor ? selectedVendor.label : '';
 
-    store.tableDataVAC.push({
-      id: null,
-      type_partner: "Поставщик",
-      vendor: store.kuIdVendorIdVAC,
-      vendor_name: vendorName,
-      retention: "Все",
-      status: "На удержании",
-      entity: store.kuIdEntityIdVAC,
-      entity_name: entityName
-    });
-    store.kuIdEntityIdVAC = "";
-    store.kuIdVendorIdVAC = "";
-    store.dialogFormVACVisible = false;
+  store.tableDataVAC.push({
+    id: null,
+    type_partner: "Поставщик",
+    vendor: store.kuIdVendorIdVAC,
+    vendor_name: vendorName,
+    retention: "Все",
+    status: "На удержании",
+    entity: store.kuIdEntityIdVAC,
+    entity_name: entityName
+  });
+  store.kuIdEntityIdVAC = "";
+  store.kuIdVendorIdVAC = "";
+  store.dialogFormVACVisible = false;
 };
 //удаление строк
 const deleteRow = (index: number) => {
@@ -154,7 +155,7 @@ const deleteRow = (index: number) => {
 }
 //получение накладных
 const ExInvoice = async (row: IVendorAndContract) => {
-  if(store.kuIdDateStart || store.kuIdDateEnd) {
+  if (store.kuIdDateStart || store.kuIdDateEnd) {
     store.kuIdVendorIdExInvoice = row.vendor
     store.kuIdVendorNameExInvoice = row.vendor_name
     store2.setFilterExInvoice('start_date', dayjs(store.kuIdDateStart).format("YYYY-MM-DD"));
@@ -162,12 +163,10 @@ const ExInvoice = async (row: IVendorAndContract) => {
     store2.setFilterExInvoice('vendor_id', row.vendor);
     await store2.getInvoicesFromAPIWithFilter();
     store.dialogFormExInvoiceVisible = true
-  } else{
+  } else {
     ElMessage.error("Выберите даты действия КУ на вкладке 'Основное'")
-  } 
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>

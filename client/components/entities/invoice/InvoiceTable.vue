@@ -65,7 +65,7 @@
         <el-table-column prop="vendor_id" label="Код" width="140" sortable show-overflow-tooltip />
         <el-table-column prop="vendor_name" label="Наименование" width="250" show-overflow-tooltip />
       </el-table-column>
-     
+    
       <el-table-column>
         <template #header>
           <div class="column-header" :style="{ color: dateRange ? '#409EFF' : 'inherit' }">

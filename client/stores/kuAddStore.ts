@@ -272,12 +272,10 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 useKuIdStore().setKuIdCustomerCode(results.customer_id)
                 console.log('Получены данные CustomerCode:', this.$state.kuAddMain.newDocu_account, useKuIdStore().kuIdDocu_account);
             } catch (error) {
-                console.error("Ошибка при получении данных CustomerCode:", error);
+                console.error("Ошибка при получении данных связанного клиента (нет подходящего):", error);
             }
         },
-
-
-        ////////////////////////////////////////////////////////////////////
+        //категории
         setFilterCategory<
             T extends keyof GetAllCategory,
             U extends GetAllCategory[T],
@@ -302,8 +300,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
                 return node;
             });
         },
-
-        // Метод для загрузки данных
         async fetchCategories() {
             try {
                 const result = await CATEGORY.getCategory2({
@@ -447,9 +443,6 @@ export const useKuAddStore = defineStore("KuAddStore", {
             this.$state.filterProductIncluded[field] = value
         },
 
-
-        //////////////////////// ИСКЛЮЧЕННЫЕ УСЛОВИЯ   //////////////////////////////////////////////
-
         //получение данных о товарах для условий с фильтром и поиск 
         async getProductFromExcludedWithFilter(page?: number) {
             this.setFilterProductEx('page', page);
@@ -492,7 +485,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
         >(field: T, value: U) {
             this.$state.filterProductExcluded[field] = value
         },
-        ////////////////////////////////////////////////////////////////////////////////////
+
         //получение накладных
         async getInvoicesFromAPIWithFilter(page?: number) {
             console.log('Выполняется запрос искл.накладных с фильтрацией...');
@@ -531,6 +524,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             }
             console.log("фильтр накладных очищен")
         },
+
         //для поиска накладных по номеру накладной
         async performSearchOfInvoice(searchQuery: string) {
             try {
@@ -544,6 +538,7 @@ export const useKuAddStore = defineStore("KuAddStore", {
             console.log('Устанавливается запрос поиска по номеру:', query);
             this.$state.searchExInvoiceNumber = query;
         },
+
         //получение менеджеров
         async getManagersFromAPIWithFilter(page?: number) {
             await MANAGER.getManager({
@@ -648,12 +643,12 @@ export const useKuAddStore = defineStore("KuAddStore", {
         //создание контракта
         async createKuContract(newItem: IContractPost) {
             try {
-                const response = await KU.postKuContractCreate(newItem); // используем функцию из вашего модуля API
+                const response = await KU.postKuContractCreate(newItem);
                 console.log("Экземпляр для контракта успешно отправлен на бэкенд:", response);
-                this.kuAddMain.newContract = response.name; // сохраняем имя в состоянии хранилища
+                this.kuAddMain.newContract = response.name;
             } catch (error) {
                 console.error("Ошибка при отправке экземпляра для контракта на бэкенд:", error);
-                // Можно обработать ошибку здесь, если нужно
+
             }
         },
     }

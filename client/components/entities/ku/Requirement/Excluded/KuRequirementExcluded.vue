@@ -1,10 +1,13 @@
 <template>
     <div>
-        <el-button size="small" type="primary" plain round @click="dialogOpenProduct()" :disabled="isEditButtonDisabled">+ Условие по
+        <el-button size="small" type="primary" plain round @click="dialogOpenProduct()"
+            :disabled="isEditButtonDisabled">+ Условие по
             товарам</el-button>
-        <el-button size="small" type="primary" plain round @click="dialogOpenCategory()" :disabled="isEditButtonDisabled">+ Условие по
+        <el-button size="small" type="primary" plain round @click="dialogOpenCategory()"
+            :disabled="isEditButtonDisabled">+ Условие по
             категории</el-button>
-        <el-button size="small" type="danger" plain round @click="store.tableDataExRequirement.length = 0" :disabled="isEditButtonDisabled">Удалить
+        <el-button size="small" type="danger" plain round @click="store.tableDataExRequirement.length = 0"
+            :disabled="isEditButtonDisabled">Удалить
             все</el-button>
     </div>
     <el-scrollbar class="scrollTableRequirement">

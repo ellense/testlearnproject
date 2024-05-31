@@ -5,7 +5,6 @@
         <el-button size="small" type="primary" plain round @click="dialogOpenProduct()"
             :disabled="store.disableButtonsIncluded" :title="disableButtonTooltip">+ Условие по
             товарам</el-button>
-        <!-- :loading="categoryDialogLoading"  -->
         <el-button size="small" type="primary" plain round @click="dialogOpenCategory()"
             :disabled="store.disableButtonsIncluded" :title="disableButtonTooltip">+ Условие по
             категории</el-button>

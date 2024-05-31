@@ -45,7 +45,6 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="store.dialogFormShopAndServiceVisible = false">Отмена</el-button>
-                <!-- <el-button @click="saveSelect()">Сохранить</el-button> -->
                 <el-button @click="createAct()">Сформировать акт</el-button>
             </span>
         </template>
@@ -143,7 +142,6 @@ function loadFile(url: string, callback: (error: any, content: any) => void) {
     PizZipUtils.getBinaryContent(url, callback);
 }
 
-
 const createAct = async () => {
     try {
         const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
@@ -224,10 +222,6 @@ const createAct = async () => {
 }; 
 
 //https://docxtemplater.com/docs/tag-types/#creating-multiple-table-rows - динамически добавлять строки в таблицу
-
-
-
-
 
 
 </script>

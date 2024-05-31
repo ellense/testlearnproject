@@ -3,19 +3,20 @@
     <h3>Клиенты</h3>
     <div class="directoryBar_filter">
       <el-select v-model="LegalEntity" multiple clearable filterable collapse-tags collapse-tags-tooltip
-                :max-collapse-tags="1" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
-                size="small">
-                <el-option v-for="item in optionsLegalEntity" :key="item.value" :label="item.label" :value="item.value">
-                  <span style="float: left">{{ item.label }}</span>
-                  <span style="
+        :max-collapse-tags="1" placeholder="Фильтр по юр. лицу" style="width: 300px" @change="changeLegalEntity"
+        size="small">
+        <el-option v-for="item in optionsLegalEntity" :key="item.value" :label="item.label" :value="item.value">
+          <span style="float: left">{{ item.label }}</span>
+          <span style="
                     margin-left: 10px;
                     float: right;
                     color: var(--el-text-color-secondary);
                     font-size: 13px;
                   ">{{ item.value }}</span>
-                </el-option>
-              </el-select>
-      <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;" :prefix-icon="Search" size="small"></el-input>
+        </el-option>
+      </el-select>
+      <el-input v-model="searchQuery" placeholder="Поиск" style="max-width: 400px; min-width: 100px; width: 300px;"
+        :prefix-icon="Search" size="small"></el-input>
     </div>
   </div>
 </template>
@@ -33,7 +34,7 @@ const { juristicPersons } = storeToRefs(useCustomerStore());
 const { filterValue } = storeToRefs(useCustomerStore())
 const triggerFilter = ref<boolean>(true);
 const toggleTriggerFilter = () => (triggerFilter.value = !triggerFilter.value);
-const shopLegalEntity = ref<string[]>(filterValue.value.entity_id|| []);
+const shopLegalEntity = ref<string[]>(filterValue.value.entity_id || []);
 const shopLegalEntityList = ref<string[]>(juristicPersons.value);
 
 
@@ -69,7 +70,7 @@ const changeLegalEntity = () => {
   toggleTriggerFilter();
 };
 watch(() => useKuCAddStore().dataEntity, (dataEntity: IEntityInKu[]) => {
-    optionsLegalEntity.value = dataEntity.map((item) => ({label: item.name,value: item.entity_id,}));
+  optionsLegalEntity.value = dataEntity.map((item) => ({ label: item.name, value: item.entity_id, }));
 });
 onMounted(async () => {
   try {

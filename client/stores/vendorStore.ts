@@ -6,9 +6,9 @@ import type { IVendor, IParamVendorsForEntityInVendor } from "~/utils/types/vend
 
 export const useVendorStore = defineStore("IVendorStore", {
   state: (): IVendorStore => ({
-    dataVendor: [], // Массив поставщиков
-    pagination: null, // Пагинация результатов запроса
-    countRowTable: 100, // Количество строк в таблице
+    dataVendor: [], 
+    pagination: null, 
+    countRowTable: 100,
     entityName: [],
     dataEntity: [],
     search: "",
@@ -27,9 +27,7 @@ export const useVendorStore = defineStore("IVendorStore", {
     //для поиска
     async performSearch(searchQuery: string) {
       try {
-        // Устанавливаем значение для поиска в хранилище
         this.setSearchQuery(searchQuery);
-        // Вызываем метод для получения данных с учетом поискового запроса
         await this.getVendorFromAPIWithFilter();
       } catch (error) {
         console.error('Ошибка при выполнении поиска', error);

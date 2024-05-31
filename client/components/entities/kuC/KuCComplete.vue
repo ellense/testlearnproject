@@ -21,9 +21,7 @@ const router = useRouter()
 import { onBeforeRouteLeave } from 'vue-router'
 import { ElMessageBox } from 'element-plus'
 import { ref } from 'vue'
-import type { IKuCList } from "~/utils/types/kuCustomerTypes";
-import type { IManagerForKu, IManagerForKuPost, IOfficialForKuPost, IServiceAndArticle, IServicesPost, IVACPost } from "~/utils/types/tabsKuTypes";
-import KuCAdd from "~/components/features/KuCAdd.vue";
+import type { IManagerForKuPost,  IServiceAndArticle, IServicesPost, IVACPost } from "~/utils/types/tabsKuTypes";
 
 const clearDataBeforeLeave = () => {
   store.clearData()
@@ -49,7 +47,6 @@ onBeforeRouteLeave((to, from, next) => {
     next()
   }
 })
-
 
 const changeKuToBackend = async () => {
   try {
@@ -142,7 +139,6 @@ const postService = async (response: any, dataArray: any) => {
   }));
 };
 
-
 const postManager = async (response: any, dataArray: any) => {
   const itemsArray = dataArray.map((item: IManagerForKuPost) => ({
     ku: response.ku_id,
@@ -161,13 +157,13 @@ const postManager = async (response: any, dataArray: any) => {
 
 const postVAC = async (response: any, dataArray: any) => {
   const requirementsArray = dataArray.map((item: IVACPost) => ({
-    ku_key_id: response.ku_id,
+    ku: response.ku_id,
     type_partner: item.type_partner,
-    vendor_id: item.vendor_id,
+    vendor: item.vendor,
     vendor_name: item.vendor_name,
-    vendor_retention: item.vendor_retention,
-    vendor_status: item.vendor_status,
-    entity_id: item.entity_id,
+    retention: item.retention,
+    status: item.status,
+    entity: item.entity,
     entity_name: item.entity_name,
   }));
 
@@ -180,7 +176,6 @@ const postVAC = async (response: any, dataArray: any) => {
     }
   }));
 };
-
 
 const createOfficialArray = () => {
   return {
@@ -280,7 +275,6 @@ const addClose = () => {
     }).catch(() => {
     });
   } else {
-    // router.push("kuC");
     router.push({ path: "/kuC" });
     clearDataBeforeLeave
   }

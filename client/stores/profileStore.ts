@@ -12,9 +12,6 @@ export const useProfileStore = defineStore("ProfileStore", {
   }),
 
   getters: {
-    firstProfile(): IProfile | undefined {
-      return this.data.length > 0 ? this.data[0] : undefined;
-    },
   },
 
   actions: {},

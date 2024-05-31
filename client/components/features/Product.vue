@@ -3,7 +3,6 @@
 <div class="product">
   <EntitiesProductProductsTable />
   <EntitiesProductTree/>
-  
 </div>
 </template>
 

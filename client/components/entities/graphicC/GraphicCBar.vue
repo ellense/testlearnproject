@@ -9,7 +9,8 @@
         </el-button>
         <template #dropdown>
           <el-dropdown-menu>
-            <el-dropdown-item><el-button @click="store.dialogFormShopAndServiceVisible = true" link size="small" :disabled="isButtonsDisabledAct">Приложение к договору</el-button></el-dropdown-item>
+            <el-dropdown-item><el-button @click="store.dialogFormShopAndServiceVisible = true" link size="small"
+                :disabled="isButtonsDisabledAct">Приложение к договору</el-button></el-dropdown-item>
           </el-dropdown-menu>
         </template>
       </el-dropdown>
@@ -192,27 +193,27 @@ const deleteGraphic = async () => {
         type: 'warning',
       }
     );
-  const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
-  try {
-    for (const graph_id of selectedRows) {
-      const results = await GRAPHICC.deleteGraphic({ graph_id });
-      console.log("успешно удалилось", results);
-      if (selectedRows.length === 1) {
-        ElMessage.success(`График расчета ${selectedRows} успешно удален`);
-      } else {
-        ElMessage.success(`Успешно удалены графики №: ${selectedRows.join(", ")}`);
+    const selectedRows = store.multipleSelectionGraphic.map((row) => row.graph_id);
+    try {
+      for (const graph_id of selectedRows) {
+        const results = await GRAPHICC.deleteGraphic({ graph_id });
+        console.log("успешно удалилось", results);
+        if (selectedRows.length === 1) {
+          ElMessage.success(`График расчета ${selectedRows} успешно удален`);
+        } else {
+          ElMessage.success(`Успешно удалены графики №: ${selectedRows.join(", ")}`);
+        }
       }
+    } catch (error) {
+      console.error("Ошибка при удалении строк:", error);
+      ElMessage.error("Ошибка при удалении графика");
+    } finally {
+      store.dataGraphic = store.dataGraphic.filter(
+        (row) => !selectedRows.includes(row.graph_id)
+      );
+      store.multipleSelectionGraphic = [];
     }
-  } catch (error) {
-    console.error("Ошибка при удалении строк:", error);
-    ElMessage.error("Ошибка при удалении графика");
-  } finally {
-    store.dataGraphic = store.dataGraphic.filter(
-      (row) => !selectedRows.includes(row.graph_id)
-    );
-    store.multipleSelectionGraphic = [];
-  }
-} catch {
+  } catch {
     ElMessage({
       type: 'info',
       message: 'Удаление отменено'
@@ -233,7 +234,7 @@ const disableButtonDeleteTooltip = computed(() => {
 });
 
 const isButtonsDisabledAct = computed(() => {
-  return store.multipleSelectionGraphic.length > 1 || store.multipleSelectionGraphic.length === 0 || store.multipleSelectionGraphic[0].status!=="Утверждено";
+  return store.multipleSelectionGraphic.length > 1 || store.multipleSelectionGraphic.length === 0 || store.multipleSelectionGraphic[0].status !== "Утверждено";
 });
 
 

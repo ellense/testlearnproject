@@ -91,11 +91,6 @@
             <el-input v-model="kuMain.newCustomerName" size="small" style="width: 300px">
             </el-input>
           </el-form-item>
-          <!-- <el-form-item label-width="170" label="Номер счета" prop="newDocu_account">
-            <el-input v-model="kuMain.newDocu_account" size="small" clearable placeholder="Введите номер счета"
-              style="width: 300px">
-            </el-input>
-          </el-form-item> -->
           <el-form-item label-width="170" label="Номер договора" prop="newDocu_number">
             <el-input v-model="kuMain.newDocu_number" size="small" clearable placeholder="Введите номер договора"
               style="width: 300px">
@@ -219,19 +214,6 @@ const submitForm = async (formEl: FormInstance | undefined) => {
   })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //вывод данных юридического лица
 const options = ref<Array<{ label: string; value: string }>>([]);
 watch(
@@ -319,8 +301,6 @@ const onCustomerChange = async () => {
     store.getCustomerNameFromAPIWithFilter()
   } else {
   }
-
-
 };
 
 // Проверка полей формы
@@ -407,15 +387,12 @@ watch(() => kuMain.newEntityId, (newValue, oldValue) => {
   }
 });
 
-
 const disableSelectCustomerTooltip = computed(() => {
   return !kuMain.newEntityId ? 'Выбор заблокирован. Для доступа сначала выберите юридическое лицо' : '';
 });
 const disableSelectEntityTooltip = computed(() => {
   return store.disableSubsidiaries ? 'У выбранной компании нет дочерних компаний' : '';
 });
-
-
 </script>
 
 <style scoped>
@@ -428,8 +405,6 @@ const disableSelectEntityTooltip = computed(() => {
 .kuAddMainCol {
   display: flex;
   flex-direction: column;
-
-
 }
 
 .el-form-item {

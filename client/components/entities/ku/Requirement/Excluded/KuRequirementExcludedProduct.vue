@@ -3,13 +3,14 @@
     close-on-press-escape draggable>
     <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
-      store.kuIdVendorName }}</span></h4>
+    store.kuIdVendorName }}</span></h4>
     <div class="buttonBar_search">
-      <el-input v-model="searchProductExKu" size="small" placeholder="Поиск" style="width: 200px" :prefix-icon="Search" />
+      <el-input v-model="searchProductExKu" size="small" placeholder="Поиск" style="width: 200px"
+        :prefix-icon="Search" />
     </div>
     <el-scrollbar class="scrollTableFiltres">
-      <el-table style="width: 100%" height="300" :data="tableData"
-        @selection-change="store2.handleSelectionChange3" ref="multipleTableRef" v-loading="loading" stripe>
+      <el-table style="width: 100%" height="300" :data="tableData" @selection-change="store2.handleSelectionChange3"
+        ref="multipleTableRef" v-loading="loading" stripe>
         <el-table-column property="selection" type="selection" width="55" show-overflow-tooltip />
         <el-table-column prop="itemid" label="ID" width="100" show-overflow-tooltip />
         <el-table-column prop="name" label="Наименование" width="300" show-overflow-tooltip />

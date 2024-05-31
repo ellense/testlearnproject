@@ -54,7 +54,6 @@ const saveRow = async () => {
     article_code: store.newArticle_id,
     article_name: store.newArticle_name,
   };
-
   try {
     const response = await SERVICE.postArticles(data);
     console.log("статья услуги успешно отправлена:", response);
@@ -63,7 +62,6 @@ const saveRow = async () => {
   } catch (error) {
     console.error("Ошибка при добавлении статьи услуги на сервер", error);
   }
-
   store.dialogFormArticleVisible = false
 }
 </script>

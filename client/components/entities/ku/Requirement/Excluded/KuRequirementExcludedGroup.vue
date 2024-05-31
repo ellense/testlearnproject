@@ -1,10 +1,10 @@
 <template>
   <el-dialog v-model="store.dialogFormCategoryExVisible" width="530px"
-    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal close-on-press-escape
-    draggable>
+    title="Выбор включенных: категории, производителя и торговой марки для КУ" close-on-click-modal
+    close-on-press-escape draggable>
     <h4>Код поставщика: <span style="font-weight: 400;">{{ store.kuIdVendorId }}</span></h4>
     <h4 style="margin-bottom:10px;">Наименование поставщика: <span style="font-weight: 400;">{{
-      store.kuIdVendorName }}</span></h4>
+    store.kuIdVendorName }}</span></h4>
     <div class="selectCategory">
       <div>
         <div class="custom-label">Категория</div>
@@ -126,7 +126,7 @@ const getCheckedKeys = async (checkedKeys: any, checkedNodes: any) => {
     }
     store2.setFilterProducer("l4", selectedCategoryKey);
     store2.setFilterBrand("l4", selectedCategoryKey);
-   
+
     if (selectedCategoryKey.length > 0) { // Проверка, что выбрана категория
       store2.fetchAllProducersForInclided(); // Выполнить запрос с фильтром по категории
       store2.fetchAllBrandsForIncluded();
@@ -198,4 +198,3 @@ const AddCategoryItem = async () => {
   margin: 20px 0 20px 0;
 }
 </style>
-~/utils/types/serviceTypes

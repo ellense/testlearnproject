@@ -1,6 +1,5 @@
 <template>
   <el-header>
-    <!-- <el-icon size="20px" color="#337ecc" class="icon" style="transition: 0.3s;"><Fold /></el-icon> -->
     <div>
       <h1>Управление коммерческими условиями контрагентов</h1>
     </div>
@@ -8,7 +7,6 @@
 </template>
 
 <script setup lang="ts">
-import { Fold } from "@element-plus/icons-vue";
 </script>
 
 <style scoped>
@@ -23,11 +21,12 @@ import { Fold } from "@element-plus/icons-vue";
 }
 .icon:hover {
   cursor: pointer;
-  color:#79bbff;
-  
+  color:#79bbff; 
 }
+
 h1 {
   color: #337ecc;
   font-size: 17px;
 }
+
 </style>

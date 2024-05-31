@@ -65,35 +65,6 @@ export const useProductStore = defineStore("ProductStore", {
         })
         .catch((error) => Promise.reject(error));
     },
-    // async filterProductsByCategories(selectedCategories: string[]) {
-    //   try {
-    //     // Устанавливаем выбранные категории в хранилище
-    //     this.setFilterValue('categories', selectedCategories.join(','));
-    
-    //     // Вызываем метод для получения товаров с учетом выбранных категорий
-    //     await this.getProductFromAPIWithFilter();
-    //   } catch (error) {
-    //     console.error('Ошибка при фильтрации товаров по категориям', error);
-    //   }
-    // }
-    // async filterProductsByCategories(selectedCategories: string[] | string) {
-    //   try {
-    //     if (Array.isArray(selectedCategories) || typeof selectedCategories === 'string') {
-    //       console.log('Выбранные категории для фильтрации:', selectedCategories);
-          
-    //       // Устанавливаем выбранные категории в хранилище
-    //       this.setFilterValue('categories', selectedCategories);
-    
-    //       // Вызываем метод для получения товаров с учетом выбранных категорий
-    //       await this.getProductFromAPIWithFilter();
-          
-    //       console.log('Товары успешно отфильтрованы по категориям');
-    //     } else {
-    //       throw new Error('selectedCategories должен быть массивом или строкой');
-    //     }
-    //   } catch (error) {
-    //     console.error('Ошибка при фильтрации товаров по категориям', error);
-    //   }
-    // }
+
   },
 });

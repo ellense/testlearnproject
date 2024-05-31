@@ -59,8 +59,6 @@ const store = useKuAddStore();
 .kuAddMainCol {
   display: flex;
   flex-direction: column;
-
-
 }
 
 .el-form-item {

@@ -285,7 +285,6 @@ const handleSuccess = (response: IKuList, responses: any[], response2: any[], re
   console.log("Должн. лица успешно отправлены на бэкенд:", response6);
   useKuStore().getKuFromAPIWithFilter();
   router.push("kuV");
-  // ElMessage.success("Коммерческое условие успешно создано.");
   ElMessage({
     message: 'Коммерческое условие успешно создано.',
     duration: 5000,
@@ -364,4 +363,3 @@ const addClose = () => {
   justify-content: flex-start;
 }
 </style>
-~/utils/types/serviceTypes

@@ -35,7 +35,7 @@
                 :title="disableSelectVendorTooltip">
                 <el-option v-for="item in options2" :key="item.value" :label="item.value" :value="item.value">
                   <span style="float: left;">{{ item.label }}</span>
-                <span style="float: right; color: var(--el-text-color-secondary);
+                  <span style="float: right; color: var(--el-text-color-secondary);
                     font-size: 13px;  margin-left: 10px;">{{ item.value }}</span>
                 </el-option>
               </el-select>
@@ -169,7 +169,6 @@ onMounted(async () => {
 });
 
 //вывод данных поставщика
-
 const options2 = ref<Array<{ label: string; value: string }>>([]);
 watch(() => store2.dataVendorId, (vendors: IVendorIdAndName[]) => {
   options2.value = vendors.map(item => ({ label: item.name, value: item.vendor_id }));
@@ -247,9 +246,6 @@ const onVendorChange = async () => {
     useKuAddStore().tableDataExInvoiceAll.length = 0
   }
 };
-const onTypeChange = async () => {
-
-}
 
 // Проверка полей формы
 const dateStartValidation = ref<"error" | "success" | "validating" | undefined>('success');

@@ -281,7 +281,6 @@ export const useGraphicСStore = defineStore("GraphicСStore", {
       )
     },
 
-
     //получения ку для фильтра в графике
     getKuIdFilterForGraphicFromApi() {
       const params: IParamKu_Id = {

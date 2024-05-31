@@ -23,9 +23,10 @@ import dayjs from "dayjs";
 
 // Функция для обработки нажатия клавиши Enter
 const handleEnterKeyPress = (event: KeyboardEvent) => {
-    event.preventDefault(); // Остановить стандартное действие события (отправка формы)
-    editApproved(); // Вызвать вашу функцию editApproved()
+    event.preventDefault();
+    editApproved(); 
 };
+
 //изменение поля утверждено
 const editApproved = async () => {
     const selectedRows = useGraphicStore().selectedRowEditApproved

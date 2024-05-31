@@ -364,6 +364,7 @@ const changeKu = () => {
 watch(KuParams, (value) => {
   optionsKu.value = value;
 });
+
 //фильтр юр лица
 const LegalEntity = ref<string[]>(filterGraphicValue.value.entity_id || []);
 const optionsLegalEntity = ref<Array<{ label: string; value: string }>>([]);
@@ -386,6 +387,7 @@ onMounted(async () => {
     console.error("Ошибка при загрузке данных юр. лица", error);
   }
 });
+
 //фильтр поставщика
 const Vendor = ref<string[]>(filterGraphicValue.value.vendor_id || []);
 const optionsVendor = ref<Array<{ label: string; value: string }>>([]);
@@ -403,6 +405,7 @@ const onVendorChange = async () => {
   useGraphicStore().setFilterValue('vendor_id', Vendor.value);
   toggleTriggerFilter();
 };
+
 //фильтр по периоду
 const Period = ref<string[]>(filterGraphicValue.value.period || []);
 const optionsPeriod = ref<Array<{ label: string; value: string }>>([
@@ -415,6 +418,7 @@ const onPeriodChange = async () => {
   useGraphicStore().setFilterValue('period', Period.value);
   toggleTriggerFilter();
 };
+
 //фильтр по статусу
 const Status = ref<string[]>(filterGraphicValue.value.status || []);
 const optionsStatus = ref<Array<{ label: string; value: string }>>([
@@ -456,7 +460,7 @@ const dateRange = ref()
 const dateRange2 = ref()
 const dateRange3 = ref()
 const dateRange4 = ref()
-const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');// Функция для форматирования даты в формат "YYYY-MM-DD"
+const formatDate = (date: Date) => dayjs(date).format('YYYY-MM-DD');
 
 const changeDateRange = (newDateRange: Date[]) => {
   if (newDateRange && Array.isArray(newDateRange) && newDateRange.length === 2) {

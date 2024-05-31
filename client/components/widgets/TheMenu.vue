@@ -20,8 +20,8 @@
           </el-menu-item>
         </nuxt-link>
         <el-divider content-position="left" style=" color: #337ecc;">КУ клиентов</el-divider>
-        <nuxt-link to="kuC">
-          <el-menu-item index="4">
+        <nuxt-link to="/kuC">
+          <el-menu-item index="3">
             <el-icon>
               <Document />
             </el-icon>
@@ -29,17 +29,17 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/graphicC">
-          <el-menu-item index="5">
+          <el-menu-item index="4">
             <el-icon>
               <Calendar />
             </el-icon>
             <span>Графики расчетов</span>
           </el-menu-item>
         </nuxt-link>
-        
+
         <el-divider content-position="left" style=" color: #337ecc;">Справочники</el-divider>
         <nuxt-link to="/entity">
-          <el-menu-item index="10">
+          <el-menu-item index="5">
             <el-icon>
               <Suitcase />
             </el-icon>
@@ -48,7 +48,7 @@
         </nuxt-link>
 
         <nuxt-link to="/vendor">
-          <el-menu-item index="11">
+          <el-menu-item index="6">
             <el-icon>
               <Box />
             </el-icon>
@@ -56,7 +56,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/customer">
-          <el-menu-item index="12">
+          <el-menu-item index="7">
             <el-icon>
               <CreditCard />
             </el-icon>
@@ -64,7 +64,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/invoiceV">
-          <el-menu-item index="14">
+          <el-menu-item index="8">
             <el-icon>
               <Memo />
             </el-icon>
@@ -72,7 +72,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/product">
-          <el-menu-item index="13">
+          <el-menu-item index="9">
             <el-icon>
               <ShoppingCartFull />
             </el-icon>
@@ -80,7 +80,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/service">
-          <el-menu-item index="6">
+          <el-menu-item index="10">
             <el-icon>
               <Notebook />
             </el-icon>
@@ -88,7 +88,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/article">
-          <el-menu-item index="7">
+          <el-menu-item index="11">
             <el-icon>
               <Tickets />
             </el-icon>
@@ -96,7 +96,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/pricelist">
-          <el-menu-item index="8">
+          <el-menu-item index="12">
             <el-icon>
               <Money />
             </el-icon>
@@ -104,7 +104,7 @@
           </el-menu-item>
         </nuxt-link>
         <nuxt-link to="/place">
-          <el-menu-item index="9">
+          <el-menu-item index="13">
             <el-icon>
               <LocationInformation />
             </el-icon>
@@ -163,7 +163,6 @@ import {
 import { storeToRefs } from "pinia";
 import { useAuthStore } from "~/stores/authStore";
 import { useProfileStore } from "~~/stores/profileStore";
-const { firstProfile } = storeToRefs(useProfileStore());
 const logOut = () => useAuthStore().logout();
 </script>
 
