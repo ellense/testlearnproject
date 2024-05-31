@@ -3,7 +3,7 @@ import type { ICustomerFull, ICustomerIdAndName, IParamCustomers, IParamCustomer
 import type { IArticle, IParamServices, IPlace, IPricelist, IService } from "./serviceTypes";
 import type { IEntity, IParamEntities, IEntityInKu, IEntityFull } from "./entityTypes";
 import type { Pagination } from "./generalTypes";
-import type { IInvoice, IParamInvoices } from "./invoiceTypes";
+import type { IInvoice, IParamInvoices, IInvoiceFull } from "./invoiceTypes";
 import type { IKuList, IParamKus } from "./kuVendorTypes";
 import type { IVendor, IParamVendorsForEntityInVendor, IVendorId, IParamVendorsForEntity, IVendorIdAndName, IVendorName, IVendorFull } from "./vendorTypes";
 import type { GraphicForExcelReportInvoice, GraphicForExcelReportProduct, GetAllInvoicesAndProductForGraphic } from "./actTypes";
@@ -357,6 +357,7 @@ export interface IVendorStore {
     countRowTable: number;
     graphic: IGraphicInfo[]
     invoices: GraphicForExcelReportInvoice[]
+    invoicesFull: IInvoiceFull[]
     products: GraphicForExcelReportProduct[]
     kuid: string
     vendorid: string

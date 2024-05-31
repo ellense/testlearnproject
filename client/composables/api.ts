@@ -5,7 +5,7 @@ import type { IParamCustomers, ICustomerReturnData, IParamCustomersKU, ICustomer
 import type { IParamEntities, IEntity, IEntityInKu, EntityId, IEntityFull } from "~/utils/types/entityTypes";
 import type { GetAllGraphicС, GetAllGraphicСsReturnData, IGraphicСInfo } from "~/utils/types/graphicCustomerTypes";
 import type { GetAllGraphic, GetAllGraphicsReturnData, IGraphicId, IGraphicInfo } from "~/utils/types/graphicVendorTypes";
-import type { IParamInvoices, IInvoicesReturnData } from "~/utils/types/invoiceTypes";
+import type { IParamInvoices, IInvoicesReturnData, IInvoicesFullReturnData } from "~/utils/types/invoiceTypes";
 import type { IParamKusC, IKusCReturnData, IKuCList, IKuCPost, IKuCUpdate, IKuCPostGraphic } from "~/utils/types/kuCustomerTypes";
 import type { IParamKus, IKusReturnData, IParamKu_Id, IKu_IdReturnData, IKuPost, IKuList, IKuId, IKuUpdate, IKuDeleteGraph, IKuPostGraphic } from "~/utils/types/kuVendorTypes";
 import type { GetAllProducer, GetAllProducersReturnData } from "~/utils/types/producerTypes";
@@ -31,6 +31,10 @@ export const INVOICE = {
   getInvoicesList: (
     params?: IParamInvoices
   ): Promise<IInvoicesReturnData> =>
+    $Get("api/vend_doc_list", { params, isBearer: false }),
+  getInvoicesFullListForReport: (
+    params?: GetAllInvoicesAndProductForGraphic
+  ): Promise<IInvoicesFullReturnData> =>
     $Get("api/vend_doc_list", { params, isBearer: false }),
 };
 export const ENTITY = {
@@ -59,7 +63,7 @@ export const VENDOR = {
     $Get("api/vendor_filter/", { params, isBearer: false }),
   getVendorDetail: (data: IVendorId): Promise<IVendorFull> =>
     $Get(`api/vendor_detail/${data.vendor_id}/`, { data, isBearer: false }),
-  getCustomerForVendorInKU: (data: IVendorId, params?: IParamVendorsForEntity ): Promise<ICustomerId> =>
+  getCustomerForVendorInKU: (data: IVendorId, params?: IParamVendorsForEntity): Promise<ICustomerId> =>
     $Get(`api/get_customer_dir_party/${data.vendor_id}/`, { data, params, isBearer: false }),
 };
 export const CUSTOMER = {
@@ -70,7 +74,7 @@ export const CUSTOMER = {
   ): Promise<ICustomerForEntityReturnData> =>
     $Get("api/customer_list/", { params, isBearer: false }),
   getCustomerDetail: (data: ICustomerId): Promise<ICustomerFull> =>
-      $Get(`api/customer_detail/${data.customer_id}/`, { data, isBearer: false }),
+    $Get(`api/customer_detail/${data.customer_id}/`, { data, isBearer: false }),
 };
 
 export const PRODUCT = {
@@ -165,7 +169,7 @@ export const GRAPHIC = {
   updateGraphic: (data: IGraphicInfo) =>
     $Put(`api/graph_detail/${data.graph_id}/`, { data, isBearer: false }),
   getInfoInvoicesForGraphic: (params: GetAllInvoicesAndProductForGraphic): Promise<GetAllInvoicesForGraphicReturnData> =>
-    $Get("api/included_invoice_list/", { params, isBearer: false }),
+    $Get("api/included_venddoc_list/", { params, isBearer: false }),
   getInfoProductsForGraphic: (params: GetAllInvoicesAndProductForGraphic): Promise<GetAllProductsForGraphicReturnData> =>
     $Get("api/included_product_list/", { params, isBearer: false }),
   getNumeralsGraphic: (data: IGraphicId): Promise<IGraphicNumeralsAndSumQty> =>
@@ -261,7 +265,7 @@ export const KUC = {
   deleteService: (data: IRequirementId) =>
     $Delete(`api/included_service_detail/${data.id}/`, { data, isBearer: false }),
   deleteVAC: (data: IRequirementId) =>
-      $Delete(`api/included_vendor_customer_detail/${data.id}/`, { data, isBearer: false }),
+    $Delete(`api/included_vendor_customer_detail/${data.id}/`, { data, isBearer: false }),
   deleteManager: (data: IRequirementId) =>
     $Delete(`api/manager_ku_customer_detail/${data.id}/`, { data, isBearer: false }),
   updateOfficial: (data: IOfficialForKu) =>

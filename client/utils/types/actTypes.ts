@@ -8,13 +8,16 @@ import type { Pagination } from "./generalTypes";
   
   }
   export interface GraphicForExcelReportInvoice {
+    graph: number | null;
     invoice_number: string;
     invoice_date: Date | string;
     purch_number: string;
     purch_date: Date | string;
     invoice_status: string;
-    product_amount: number | null;
+    sum: number | null;
+    sum_tax: number | null;
     total_qty: number | null;
+    venddoc: string
   }
   export interface GraphicForExcelReportProduct {
     product_id: string;
@@ -31,6 +34,7 @@ import type { Pagination } from "./generalTypes";
     page_size?: number;
     page?: number;
     graph_id?: number | null;
+    doc_id?: string
   }
   export interface GetAllInvoicesForGraphicReturnData extends Pagination {
     results: GraphicForExcelReportInvoice[];

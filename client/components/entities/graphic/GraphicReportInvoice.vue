@@ -74,10 +74,21 @@ const columnTable: ColumnTable[] = [
     label: "Кол-во (шт,л,кг.)",
     type: "number",
     width: 100,
+    summ: true,
+    summary: 'sum',
   },
   {
-    field: "product_amount",
+    field: "sum",
     label: "Сумма без НДС",
+    type: "number",
+    width: 150,
+    summ: true,
+    summary: 'sum',
+    style: { fontWeight: 'bold' }
+  },
+  {
+    field: "sum_tax",
+    label: "Сумма с НДС",
     type: "number",
     width: 150,
     summ: true,
